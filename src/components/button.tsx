@@ -33,7 +33,7 @@ const Button: React.FC<IProps> = ({
   return (
     <TouchableOpacity
       className={`flex w-full h-[50px] justify-center items-center flex-row !bg-primary rounded-md ${buttonStyleClassName}`}
-      style={{ width: W("85%"), ...buttonStyle }}
+      style={{ width: W("90%"), ...buttonStyle }}
       onPress={() => {
         Keyboard.dismiss();
         onPress && onPress();

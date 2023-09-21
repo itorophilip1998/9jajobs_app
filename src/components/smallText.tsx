@@ -10,7 +10,7 @@ interface IProps {
 const SmallText: React.FC<IProps> = ({ className, children, style }) => {
   return (
     <Text
-      className={`px-[19px] text-center text-[15px] font-ManropeRegular text-dark02 ${className}`}
+      className={`px-[19px] text-center text-[15px] font-RedHatDisplayRegular text-dark02 ${className}`}
       style={style}
     >
       {children}

@@ -7,7 +7,7 @@ import {
   Modal,
   SuccessModalContent,
 } from "../components";
-import { SET_ERROR, UNSET_ERROR, UNSET_SUCCESS } from "../store/formDataSlice";
+import { UNSET_ERROR, UNSET_SUCCESS } from "../store/formDataSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -15,6 +15,8 @@ import { RootState } from "../store";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import Welcome from "../screens/onbodyScreen/welcome";
+import Body from "../screens/onbodyScreen/body";
+import Finish from "../screens/onbodyScreen/finish";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -34,12 +36,12 @@ const NavigationSetup = () => {
   //   const dispatch = useDispatch();
   //   const OnBoarded = useSelector((state: RootState) => state.auth.onBoarded);
 
-  const [expoPushToken, setExpoPushToken] = React.useState("");
-  const [notification, setNotification] = React.useState<
-    boolean | Notifications.Notification
-  >(false);
-  const notificationListener = React.useRef<Notifications.Subscription>();
-  const responseListener = React.useRef<Notifications.Subscription>();
+//   const [expoPushToken, setExpoPushToken] = React.useState("");
+//   const [notification, setNotification] = React.useState<
+//     boolean | Notifications.Notification
+//   >(false);
+//   const notificationListener = React.useRef<Notifications.Subscription>();
+//   const responseListener = React.useRef<Notifications.Subscription>();
 
   // async function schedulePushNotification() {
   //   await Notifications.scheduleNotificationAsync({
@@ -51,59 +53,59 @@ const NavigationSetup = () => {
   //   });
   // }
 
-  async function registerForPushNotificationsAsync() {
-    let token;
+//   async function registerForPushNotificationsAsync() {
+//     let token;
 
-    if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-      });
-    }
+//     if (Platform.OS === "android") {
+//       await Notifications.setNotificationChannelAsync("default", {
+//         name: "default",
+//         importance: Notifications.AndroidImportance.MAX,
+//         vibrationPattern: [0, 250, 250, 250],
+//         lightColor: "#FF231F7C",
+//       });
+//     }
 
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
+//     const { status: existingStatus } =
+//       await Notifications.getPermissionsAsync();
+//     let finalStatus = existingStatus;
+//     if (existingStatus !== "granted") {
+//       const { status } = await Notifications.requestPermissionsAsync();
+//       finalStatus = status;
+//     }
+//     if (finalStatus !== "granted") {
+//       alert("Failed to get push token for push notification!");
+//       return;
+//     }
+//     token = (await Notifications.getExpoPushTokenAsync()).data;
+//     console.log(token);
 
-    return token;
-  }
+//     return token;
+//   }
 
-  React.useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token || "")
-    );
+//   React.useEffect(() => {
+//     registerForPushNotificationsAsync().then((token) =>
+//       setExpoPushToken(token || "")
+//     );
 
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
+//     notificationListener.current =
+//       Notifications.addNotificationReceivedListener((notification) => {
+//         setNotification(notification);
+//       });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+//     responseListener.current =
+//       Notifications.addNotificationResponseReceivedListener((response) => {
+//         console.log(response);
+//       });
 
-    return () => {
-      if (notificationListener.current && responseListener.current) {
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        );
-        Notifications.removeNotificationSubscription(responseListener.current);
-      }
-    };
-  }, []);
+//     return () => {
+//       if (notificationListener.current && responseListener.current) {
+//         Notifications.removeNotificationSubscription(
+//           notificationListener.current
+//         );
+//         Notifications.removeNotificationSubscription(responseListener.current);
+//       }
+//     };
+//   }, []);
 
   //   React.useEffect(() => {
   //     if (LoggedIn && authToken && expoPushToken.length > 0) {
@@ -130,6 +132,8 @@ const NavigationSetup = () => {
       >
         <Stack.Group>
           <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="Body" component={Body} />
+          <Stack.Screen name="Finish" component={Finish} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

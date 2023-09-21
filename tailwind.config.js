@@ -3,7 +3,10 @@ module.exports = {
   content: ["./App.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      colors: {},
+      colors: {
+        primary: "#1A911B",
+        primaryBG: ""
+      },
       fontFamily: {
         RedHatDisplayBlack: ["RedHatDisplay-Black"],
         RedHatDisplayBlackItalic: ["RedHatDisplay-BlackItalic"],

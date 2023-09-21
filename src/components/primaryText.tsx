@@ -12,7 +12,7 @@ const PrimaryText: React.FC<IProps> = ({ children, onPress, className, style }) 
   return (
     <TouchableWithoutFeedback onPress={() => onPress()}>
       <Text
-        className={`!text-primary text-[15px] font-semibold font-ManropeBold ${className}`}
+        className={`!text-primary text-[15px] font-semibold font-RedHatDisplaySemiBold ${className}`}
         style={style}
       >
         {children}

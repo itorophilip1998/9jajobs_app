@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     width: W("13%"),
     height: H("8%"),
     textAlign: "center",
-    fontFamily: FONTS.ManropeSemiBold,
+    fontFamily: FONTS.RedHatDisplaySemiBold,
     fontSize: 22,
     marginHorizontal: 5,
     borderRadius: 10
