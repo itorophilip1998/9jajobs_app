@@ -75,7 +75,7 @@ const InputField: React.FC<IProps> = ({
           placeholderTextColor={placeholderTextColor}
           keyboardType={type || "default"}
           secureTextEntry={secure}
-          className={`min-h-[50px] w-[100%] py-[10px] px-[16px] text-[15px] font-semibold font-ManropeRegular rounded-[5px] bg-[#F7F9FB] ${className}`}
+          className={`min-h-[50px] w-[100%] py-[10px] px-[16px] text-[15px] text-white font-semibold font-RedHatDisplayRegular rounded-[5px] bg-transparent ${className}`}
           onChangeText={(value) => onTextChange(value)}
           value={defaultValue}
           onFocus={() => {

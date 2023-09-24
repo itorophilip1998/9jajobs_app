@@ -5,12 +5,15 @@ import { PrimaryText, SmallText, Button } from "../../components";
 import Checkbox from "expo-checkbox";
 import logo from "../../../assets/images/logo.png";
 import Toast from "react-native-toast-message";
+import { useDispatch } from "react-redux";
+import { SET_ON_BOARD } from "../../store/authSlice";
 
 const Finish = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const dispatch = useDispatch()
   const [isChecked, setChecked] = React.useState(false);
   return (
     <View className="flex-1 bg-black py-9 justify-between items-center px-4">
@@ -42,11 +45,11 @@ const Finish = ({
           buttonStyleClassName="bg-primary"
           onPress={() => {
             if (isChecked) {
-              navigation.navigate("Body");
+              dispatch(SET_ON_BOARD(true))
             } else {
               Toast.show({
                 type: "error",
-                text1: "Agree to terms and Condition.",
+                text1: "Accept terms and Conditions to continue.",
               });
             }
           }}

@@ -9,9 +9,10 @@ export interface IFormData {
   successMessage: string;
 
   authData: {
-    phoneNumber: string;
     fullName: string;
     email: string;
+    phoneNumber: string;
+    referralCode: string;
     password: string;
     confirmPassword: string;
   };
@@ -25,9 +26,10 @@ const initialState: IFormData = {
   successMessage: "",
 
   authData: {
-    phoneNumber: "",
     fullName: "",
     email: "",
+    phoneNumber: "",
+    referralCode: "",
     password: "",
     confirmPassword: "",
   },
@@ -59,6 +61,9 @@ export const formDataSlice = createSlice({
     SET_PHONE_NUMBER: (state, action: PayloadAction<string>) => {
       state.authData.phoneNumber = action.payload;
     },
+    SET_REFERRAL_CODE: (state, action: PayloadAction<string>) => {
+      state.authData.phoneNumber = action.payload;
+    },
     SET_FULL_NAME: (state, action: PayloadAction<string>) => {
       state.authData.fullName= action.payload;
     },
@@ -82,6 +87,7 @@ export const {
   SET_CONFIRM_PASSWORD,
   SET_PHONE_NUMBER,
   SET_EMAIL,
+  SET_REFERRAL_CODE,
   SET_SUCCESS,
   UNSET_ERROR,
   UNSET_SUCCESS,

@@ -1,9 +1,10 @@
 {
   "expo": {
-    "name": "9jajobs",
-    "slug": "9jajobs",
+    "name": "9jajob",
+    "slug": "9jajob",
     "version": "1.0.0",
     "orientation": "portrait",
+    "owner": "9jajob",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -14,7 +15,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jobs.ng",
+      "bundleIdentifier": "com.job.ng",
       "buildNumber": "1.0.0"
     },
     "android": {
@@ -22,8 +23,9 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#023215"
       },
-      "package": "com.jobs.ng",
-      "versionCode": 1
+      "package": "com.job.ng",
+      "versionCode": 1,
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,10 +40,15 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/wallet-icon.png",
+          "icon": "./assets/images/logo.png",
           "color": "#ffffff"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c91674f1-e6bd-4aff-8c1c-4d3aa7fea73c"
+      }
+    }
   }
 }

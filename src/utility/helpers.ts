@@ -2,7 +2,7 @@ import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 import { SET_ERROR } from "../store/formDataSlice";
 import moment from "moment";
 import * as FileSystem from "expo-file-system";
-
+import Toast from "react-native-toast-message";
 
 export const FormatNumber = (number: number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -114,11 +114,7 @@ export const DateString = (
   return dateString;
 };
 
-export const VALIDATE_USER_DATA = (
-  data: any,
-  execute: (arg0: any) => void,
-  dispatch: Dispatch<AnyAction>
-) => {
+export const VALIDATE_USER_DATA = (data: any, execute: (arg0: any) => void) => {
   for (const [key, value] of Object.entries(data)) {
     if (value === "") {
       let errorMessage = "";
@@ -133,7 +129,7 @@ export const VALIDATE_USER_DATA = (
           errorMessage = key.charAt(0).toUpperCase() + key.slice(1);
           break;
       }
-      dispatch(SET_ERROR(`${errorMessage} is invalid`));
+      Toast.show({ type: "error", text1: `${errorMessage} is invalid` });
       return false;
     }
   }

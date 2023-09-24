@@ -9,6 +9,8 @@ import React from "react";
 import { PersistGate } from "redux-persist/integration/react";
 import AppNavigator from "./src/navigation";
 import Toast from "react-native-toast-message";
+import { ToastConfig, BaseToast, ErrorToast } from "react-native-toast-message";
+import { FONTS } from "./src/utility/fonts";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,6 +23,45 @@ export default function App() {
     return null;
   }
 
+  const toastConfig: ToastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        style={{
+          borderLeftColor: "#4BAF4F",
+          backgroundColor: "#161B22",
+        }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: "400",
+          fontFamily: FONTS.RedHatDisplayRegular,
+          color: "#fff",
+        }}
+        text2Style={{ fontSize: 12, fontFamily: FONTS.RedHatDisplayRegular }}
+      />
+    ),
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        style={{
+          borderLeftColor: "red",
+          backgroundColor: "#161B22",
+        }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: "400",
+          color: "#fff",
+          fontFamily: FONTS.RedHatDisplayRegular,
+        }}
+        text2Style={{
+          fontSize: 12,
+          fontFamily: FONTS.RedHatDisplayRegular,
+        }}
+      />
+    ),
+  };
+
   return (
     <View className={`flex-1 w-[${width}px] h-[${height}px]`}>
       <StatusBar style="auto" />
@@ -29,7 +70,7 @@ export default function App() {
           <AppNavigator />
         </PersistGate>
       </Provider>
-      <Toast />
+      <Toast config={toastConfig} />
     </View>
   );
 }

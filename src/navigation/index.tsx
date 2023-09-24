@@ -17,6 +17,10 @@ import { Platform } from "react-native";
 import Welcome from "../screens/onbodyScreen/welcome";
 import Body from "../screens/onbodyScreen/body";
 import Finish from "../screens/onbodyScreen/finish";
+import Signin from "../screens/auth/signin";
+import TabNavigation from "./tabNavigation";
+import Search from "../screens/modals/search";
+import Filter from "../screens/modals/filter";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -29,19 +33,19 @@ Notifications.setNotificationHandler({
 const Stack = createNativeStackNavigator();
 
 const NavigationSetup = () => {
-  //   const LoggedIn = useSelector((state: RootState) => state.auth.loggedIn);
+  const LoggedIn = useSelector((state: RootState) => state.auth.loggedIn);
   //   const authToken = useSelector(
   //     (state: RootState) => state.auth.authData?.token
   //   );
   //   const dispatch = useDispatch();
-  //   const OnBoarded = useSelector((state: RootState) => state.auth.onBoarded);
+  const OnBoarded = useSelector((state: RootState) => state.auth.onBoarded);
 
-//   const [expoPushToken, setExpoPushToken] = React.useState("");
-//   const [notification, setNotification] = React.useState<
-//     boolean | Notifications.Notification
-//   >(false);
-//   const notificationListener = React.useRef<Notifications.Subscription>();
-//   const responseListener = React.useRef<Notifications.Subscription>();
+  //   const [expoPushToken, setExpoPushToken] = React.useState("");
+  //   const [notification, setNotification] = React.useState<
+  //     boolean | Notifications.Notification
+  //   >(false);
+  //   const notificationListener = React.useRef<Notifications.Subscription>();
+  //   const responseListener = React.useRef<Notifications.Subscription>();
 
   // async function schedulePushNotification() {
   //   await Notifications.scheduleNotificationAsync({
@@ -53,59 +57,59 @@ const NavigationSetup = () => {
   //   });
   // }
 
-//   async function registerForPushNotificationsAsync() {
-//     let token;
+  //   async function registerForPushNotificationsAsync() {
+  //     let token;
 
-//     if (Platform.OS === "android") {
-//       await Notifications.setNotificationChannelAsync("default", {
-//         name: "default",
-//         importance: Notifications.AndroidImportance.MAX,
-//         vibrationPattern: [0, 250, 250, 250],
-//         lightColor: "#FF231F7C",
-//       });
-//     }
+  //     if (Platform.OS === "android") {
+  //       await Notifications.setNotificationChannelAsync("default", {
+  //         name: "default",
+  //         importance: Notifications.AndroidImportance.MAX,
+  //         vibrationPattern: [0, 250, 250, 250],
+  //         lightColor: "#FF231F7C",
+  //       });
+  //     }
 
-//     const { status: existingStatus } =
-//       await Notifications.getPermissionsAsync();
-//     let finalStatus = existingStatus;
-//     if (existingStatus !== "granted") {
-//       const { status } = await Notifications.requestPermissionsAsync();
-//       finalStatus = status;
-//     }
-//     if (finalStatus !== "granted") {
-//       alert("Failed to get push token for push notification!");
-//       return;
-//     }
-//     token = (await Notifications.getExpoPushTokenAsync()).data;
-//     console.log(token);
+  //     const { status: existingStatus } =
+  //       await Notifications.getPermissionsAsync();
+  //     let finalStatus = existingStatus;
+  //     if (existingStatus !== "granted") {
+  //       const { status } = await Notifications.requestPermissionsAsync();
+  //       finalStatus = status;
+  //     }
+  //     if (finalStatus !== "granted") {
+  //       alert("Failed to get push token for push notification!");
+  //       return;
+  //     }
+  //     token = (await Notifications.getExpoPushTokenAsync()).data;
+  //     console.log(token);
 
-//     return token;
-//   }
+  //     return token;
+  //   }
 
-//   React.useEffect(() => {
-//     registerForPushNotificationsAsync().then((token) =>
-//       setExpoPushToken(token || "")
-//     );
+  //   React.useEffect(() => {
+  //     registerForPushNotificationsAsync().then((token) =>
+  //       setExpoPushToken(token || "")
+  //     );
 
-//     notificationListener.current =
-//       Notifications.addNotificationReceivedListener((notification) => {
-//         setNotification(notification);
-//       });
+  //     notificationListener.current =
+  //       Notifications.addNotificationReceivedListener((notification) => {
+  //         setNotification(notification);
+  //       });
 
-//     responseListener.current =
-//       Notifications.addNotificationResponseReceivedListener((response) => {
-//         console.log(response);
-//       });
+  //     responseListener.current =
+  //       Notifications.addNotificationResponseReceivedListener((response) => {
+  //         console.log(response);
+  //       });
 
-//     return () => {
-//       if (notificationListener.current && responseListener.current) {
-//         Notifications.removeNotificationSubscription(
-//           notificationListener.current
-//         );
-//         Notifications.removeNotificationSubscription(responseListener.current);
-//       }
-//     };
-//   }, []);
+  //     return () => {
+  //       if (notificationListener.current && responseListener.current) {
+  //         Notifications.removeNotificationSubscription(
+  //           notificationListener.current
+  //         );
+  //         Notifications.removeNotificationSubscription(responseListener.current);
+  //       }
+  //     };
+  //   }, []);
 
   //   React.useEffect(() => {
   //     if (LoggedIn && authToken && expoPushToken.length > 0) {
@@ -130,10 +134,33 @@ const NavigationSetup = () => {
           animation: "slide_from_right",
         })}
       >
+        {!OnBoarded && (
+          <Stack.Group>
+            <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="Body" component={Body} />
+            <Stack.Screen name="Finish" component={Finish} />
+          </Stack.Group>
+        )}
         <Stack.Group>
-          <Stack.Screen name="Welcome" component={Welcome} />
-          <Stack.Screen name="Body" component={Body} />
-          <Stack.Screen name="Finish" component={Finish} />
+          <Stack.Screen name="Signin" component={Signin} />
+          <Stack.Screen name="TabNavigation" component={TabNavigation} />
+        </Stack.Group>
+        {/* {!LoggedIn ? (
+        ) : (
+          <Stack.Group>
+            <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="Body" component={Body} />
+            <Stack.Screen name="Finish" component={Finish} />
+          </Stack.Group>
+        )} */}
+        <Stack.Group
+          screenOptions={{
+            presentation: "fullScreenModal",
+            animation: "slide_from_bottom",
+          }}
+        >
+          <Stack.Screen name="Search" component={Search} />
+          <Stack.Screen name="Filter" component={Filter} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

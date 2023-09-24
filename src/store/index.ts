@@ -3,15 +3,19 @@ import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import formDataReducer from "./formDataSlice";
+import authReducer from "./authSlice";
+import searchReducer from "./searchSlice";
 
 const reducers = combineReducers({
   formData: formDataReducer,
+  auth: authReducer,
+  search: searchReducer
 });
 
 const persistConfig = {
   key: "state",
   storage: AsyncStorage,
-//   whitelist: ["auth"],
+  whitelist: ["auth"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
