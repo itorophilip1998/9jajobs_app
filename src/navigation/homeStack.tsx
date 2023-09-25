@@ -1,0 +1,25 @@
+import { View, Text } from "react-native";
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Dashboard from "../screens/dashboard/dashboard";
+import Category from "../screens/dashboard/category";
+import Freelancers from "../screens/dashboard/freelancers";
+
+const Stack = createNativeStackNavigator();
+
+const HomeStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={() => ({
+        headerShown: false,
+        animation: "slide_from_right",
+      })}
+    >
+      <Stack.Screen name="Dashboard" component={Dashboard} />
+      <Stack.Screen name="Category" component={Category} />
+      <Stack.Screen name="Freelancers" component={Freelancers} />
+    </Stack.Navigator>
+  );
+};
+
+export default HomeStack;

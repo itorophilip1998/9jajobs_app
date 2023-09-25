@@ -1,25 +1,26 @@
 import {
   View,
   Text,
+  FlatList,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
-  FlatList,
-  Pressable,
 } from "react-native";
 import React from "react";
-import TitleWithButton from "../../components/titleWithButton";
-import { width, height } from "../../utility/constant";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CATEGORIES } from "../../data/category";
+import { Spacer } from "../../components";
 import CategoryCard from "../../components/categoryCard";
+import TitleWithButton from "../../components/titleWithButton";
+import { CATEGORIES } from "../../data/category";
+import { width, height } from "../../utility/constant";
 import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
-import { Spacer } from "../../components";
+import UserProfileCard from "../../components/userProfileCard";
+import { MAIN_USERS } from "../../data/listing";
 
-const Category = ({
+const Freelancers = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
@@ -31,22 +32,16 @@ const Category = ({
       style={{ width: width, height: height }}
     >
       <SafeAreaView className="flex-1 w-full bg-black py-4">
-        <TitleWithButton title="Categories" fire={() => navigation.goBack()} />
+        <TitleWithButton title="Gardens" fire={() => navigation.goBack()} />
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={CATEGORIES}
+          data={MAIN_USERS}
           keyExtractor={(item) => item.id.toString()}
-          columnWrapperStyle={{ justifyContent: "space-between" }}
-          numColumns={3}
           ItemSeparatorComponent={() => (
-            <Spacer value={H("1%")} axis="vertical" />
+            <Spacer value={H("3%")} axis="vertical" />
           )}
           renderItem={({ item }) => (
-            <CategoryCard
-              onPress={() => navigation.navigate("Freelancers")}
-              key={item.id.toString()}
-              item={item}
-            />
+            <UserProfileCard item={{}} onPress={() => {}} />
           )}
         />
       </SafeAreaView>
@@ -54,4 +49,4 @@ const Category = ({
   );
 };
 
-export default Category;
+export default Freelancers;

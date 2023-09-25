@@ -70,10 +70,17 @@ const Dashboard = ({
           <Spacer axis="vertical" value={H(3)} />
           <View className="flex-row justify-between flex-wrap">
             {CATEGORIES.filter((_item, idx) => idx !== 6).map((item) => (
-              <CategoryCard key={item.id.toString()} item={item} />
+              <CategoryCard
+                onPress={() => navigation.navigate("Freelancers")}
+                key={item.id.toString()}
+                item={item}
+              />
             ))}
           </View>
-          <PrimaryText onPress={() => {}} className="text-center">
+          <PrimaryText
+            onPress={() => navigation.navigate("Category")}
+            className="text-center"
+          >
             See More
           </PrimaryText>
           <Spacer axis="vertical" value={H(3)} />

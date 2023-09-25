@@ -1,17 +1,30 @@
-import { View, Text, Image } from "react-native";
+import {
+  Image,
+  TouchableOpacity,
+  GestureResponderEvent,
+} from "react-native";
 import React from "react";
 import SmallText from "./smallText";
 
-const CategoryCard = ({item}: {item: { title: string; image: string; id: number }}) => {
+const CategoryCard = ({
+  item,
+  onPress,
+}: {
+  item: { title: string; image: string; id: number };
+  onPress: (event: GestureResponderEvent) => void;
+}) => {
   return (
-    <View className="w-[31%] mb-4 px-2 py-2 bg-[#1b1b1b]  rounded-md">
+    <TouchableOpacity
+      onPress={onPress}
+      className="w-[31%] mb-4 px-2 py-2 bg-[#1b1b1b]  rounded-md"
+    >
       <Image
         source={{ uri: item.image }}
         alt=""
         className="w-full h-[70px] rounded-md mb-2"
       />
       <SmallText className="text-white">{item.title}</SmallText>
-    </View>
+    </TouchableOpacity>
   );
 };
 

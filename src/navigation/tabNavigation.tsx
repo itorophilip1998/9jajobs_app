@@ -8,8 +8,7 @@ import {
   Ionicons,
   FontAwesome5,
 } from "@expo/vector-icons";
-import Dashboard from "../screens/dashboard/dashboard";
-import { View } from "react-native";
+import HomeStack from "./homeStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,8 +20,6 @@ const TabNavigation = () => {
         tabBarStyle: {
           backgroundColor: "#0F0F0F",
           borderTopWidth: 0,
-          // borderTopRightRadius: 20,
-          // borderTopLeftRadius: 20,
           height: 70,
           paddingTop: 10,
         },
@@ -38,7 +35,7 @@ const TabNavigation = () => {
         },
         tabBarIcon: ({ focused, color, size }) => {
           // let iconColor = focused ? COLORS.primary : "#696969";
-          if (route.name === "Dashboard") {
+          if (route.name === "HomeStack") {
             return <Foundation name="home" size={size} color={color} />;
           } else if (route.name === "Listing") {
             return <FontAwesome name="star" size={size} color={color} />;
@@ -59,29 +56,29 @@ const TabNavigation = () => {
       })}
     >
       <Tab.Screen
-        name="Dashboard"
+        name="HomeStack"
         options={{ tabBarLabel: "Home" }}
-        component={Dashboard}
+        component={HomeStack}
       />
       <Tab.Screen
         name="Listing"
         options={{ tabBarLabel: "Listings" }}
-        component={Dashboard}
+        component={HomeStack}
       />
       <Tab.Screen
         name="Post"
         options={{ tabBarLabel: "Post" }}
-        component={Dashboard}
+        component={HomeStack}
       />
       <Tab.Screen
         name="Message"
         options={{ tabBarLabel: "Messages" }}
-        component={Dashboard}
+        component={HomeStack}
       />
       <Tab.Screen
         name="Setting"
         options={{ tabBarLabel: "Profile" }}
-        component={Dashboard}
+        component={HomeStack}
       />
     </Tab.Navigator>
   );
