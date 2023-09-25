@@ -20,7 +20,7 @@ export const searchSlice = createSlice({
     SET_TYPE: (state, action: PayloadAction<"location" | "name">) => {
       state.type = action.payload;
     },
-    SET_NAME: (state, action: PayloadAction<string>) => {
+    SET_SEARCH: (state, action: PayloadAction<string>) => {
       state.search = action.payload;
     },
     SET_LOCATION: (state, action: PayloadAction<string>) => {
@@ -29,6 +29,6 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { SET_LOCATION, SET_NAME, SET_TYPE } = searchSlice.actions;
+export const { SET_LOCATION, SET_SEARCH, SET_TYPE } = searchSlice.actions;
 
 export default searchSlice.reducer;

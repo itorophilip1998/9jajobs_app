@@ -15,7 +15,7 @@ const BottomSheet = React.forwardRef(
       <RBSheet
         ref={ref}
         height={props.height || 700}
-        openDuration={props.duration || 300}
+        openDuration={3000}
         customStyles={{
           container: {
             flex: 1,
@@ -23,7 +23,7 @@ const BottomSheet = React.forwardRef(
             height: "100%",
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
-          }
+          },
         }}
       >
         {props.children}

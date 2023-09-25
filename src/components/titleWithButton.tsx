@@ -23,28 +23,29 @@ const TitleWithButton: React.FC<IProps> = ({
   fire,
   rightFire,
   rightIcon,
-  color = "#212121",
+  color = "#696969",
 }) => {
   return (
-    <View className="relative flex flex-row items-center w-full justify-center">
+    <View className="relative flex flex-row items-center w-full justify-center py-4">
       {left && (
         <Pressable onPress={() => fire && fire()} className="absolute left-2">
-          <Feather name="chevron-left" size={32} color={color} />
+          <Feather name="arrow-left-circle" size={30} color={color} />
         </Pressable>
       )}
       <Text
-        className={`text-black text-[24px] font-semibold font-CabinetGroteskBold ${style}`}
+        className={`text-[#D4E1D2] text-[22px] font-semibold font-CabinetGroteskBold ${style}`}
       >
         {title}
       </Text>
-      {right && (
+      <View />
+      {/* {right && (
         <Pressable
           onPress={() => rightFire && rightFire()}
           className="absolute right-2"
         >
           {rightIcon ? rightIcon : <Filter stroke={color} />}
         </Pressable>
-      )}
+      )} */}
     </View>
   );
 };
