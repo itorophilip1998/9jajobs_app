@@ -9,6 +9,7 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import HomeStack from "./homeStack";
+import Listing from "../screens/listing";
 
 const Tab = createBottomTabNavigator();
 
@@ -63,7 +64,7 @@ const TabNavigation = () => {
       <Tab.Screen
         name="Listing"
         options={{ tabBarLabel: "Listings" }}
-        component={HomeStack}
+        component={Listing}
       />
       <Tab.Screen
         name="Post"

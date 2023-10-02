@@ -56,6 +56,7 @@ const Search = ({
               // onBlur={() => {
               //   onBlur && onBlur();
               // }}
+              placeholderTextColor={"#626262"}
               placeholder={"Search for Category"}
               autoCapitalize={"none"}
             />

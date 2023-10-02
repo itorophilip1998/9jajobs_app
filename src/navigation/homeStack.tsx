@@ -4,6 +4,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Dashboard from "../screens/dashboard/dashboard";
 import Category from "../screens/dashboard/category";
 import Freelancers from "../screens/dashboard/freelancers";
+import FreelancerProfile from "../screens/dashboard/freelancerProfile";
+import Reviews from "../screens/dashboard/reviews";
+import AddReview from "../screens/dashboard/addReview";
+import Report from "../screens/dashboard/report";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +22,10 @@ const HomeStack = () => {
       <Stack.Screen name="Dashboard" component={Dashboard} />
       <Stack.Screen name="Category" component={Category} />
       <Stack.Screen name="Freelancers" component={Freelancers} />
+      <Stack.Screen name="FreelancerProfile" component={FreelancerProfile} />
+      <Stack.Screen name="Reviews" component={Reviews} />
+      <Stack.Screen name="AddReview" component={AddReview} />
+      <Stack.Screen name="Report" component={Report} />
     </Stack.Navigator>
   );
 };

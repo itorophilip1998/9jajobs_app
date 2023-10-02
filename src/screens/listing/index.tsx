@@ -19,12 +19,14 @@ import {
 } from "react-native-responsive-screen";
 import UserProfileCard from "../../components/userProfileCard";
 import { MAIN_USERS } from "../../data/listing";
+import RBSheet from "react-native-raw-bottom-sheet";
 
-const Freelancers = ({
+const Listing = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+//   const sortRef = React.useState<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -32,7 +34,12 @@ const Freelancers = ({
       style={{ width: width, height: height }}
     >
       <SafeAreaView className="flex-1 w-full bg-black py-4">
-        <TitleWithButton title="Gardens" fire={() => navigation.goBack()} />
+        <TitleWithButton
+          title="All Listing"
+          fire={() => navigation.goBack()}
+        //   right
+        //   rightFire={() => {}}
+        />
         <FlatList
           showsVerticalScrollIndicator={false}
           data={MAIN_USERS}
@@ -52,4 +59,4 @@ const Freelancers = ({
   );
 };
 
-export default Freelancers;
+export default Listing;

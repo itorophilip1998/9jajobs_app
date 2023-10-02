@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import React from "react";
 import { width, height } from "../../utility/constant";
@@ -171,16 +172,16 @@ const Signin = ({
               placeholder="Email Address"
               type={"email-address"}
               autoCapitalize={"none"}
-              className="border-[#626262] border"
+              className="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
               onTextChange={(value) => dispatch(SET_PASSWORD(value))}
               defaultValue={password}
               placeholder="Enter Password"
-              type={"visible-password"}
+              type={"default"}
               autoCapitalize={"none"}
-              className="border-[#626262] border"
+              className="border-[#626262] border-b rounded-none p-0"
               secure={!visible}
               suffixIcon={
                 <Feather
@@ -196,7 +197,9 @@ const Signin = ({
               <PrimaryText
                 className="!text-[#626262]"
                 onPress={function (): void {
-                  throw new Error("Function not implemented.");
+                  Linking.openURL(
+                    "https://9jajob.com/customer/forget-password"
+                  );
                 }}
               >
                 Forgot Password?
@@ -213,7 +216,7 @@ const Signin = ({
               placeholder="Full Name"
               type={"default"}
               autoCapitalize={"words"}
-              className="border-[#626262] border"
+              className="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
@@ -222,7 +225,7 @@ const Signin = ({
               placeholder="Email Address"
               type={"email-address"}
               autoCapitalize={"none"}
-              className="border-[#626262] border"
+              className="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
@@ -231,7 +234,7 @@ const Signin = ({
               placeholder="Phone Number"
               type={"numeric"}
               autoCapitalize={"none"}
-              className="border-[#626262] border"
+              className="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
@@ -240,16 +243,16 @@ const Signin = ({
               placeholder="Referral Code"
               type={"default"}
               autoCapitalize={"none"}
-              className="border-[#626262] border"
+              className="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
               onTextChange={(value) => dispatch(SET_PASSWORD(value))}
               defaultValue={password}
               placeholder="Password"
-              type={"visible-password"}
+              type={"default"}
               autoCapitalize={"none"}
-              className="border-[#626262] border"
+              className="border-[#626262] border-b rounded-none p-0"
               secure={!visible1}
               suffixIcon={
                 <Feather
@@ -265,9 +268,9 @@ const Signin = ({
               onTextChange={(value) => dispatch(SET_CONFIRM_PASSWORD(value))}
               defaultValue={confirmPassword}
               placeholder="Confirm Password"
-              type={"visible-password"}
+              type={"default"}
               autoCapitalize={"none"}
-              className="border-[#626262] border"
+              className="border-[#626262] border-b rounded-none p-0"
               secure={!visible2}
               suffixIcon={
                 <Feather

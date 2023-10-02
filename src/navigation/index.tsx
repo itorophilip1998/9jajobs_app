@@ -142,7 +142,7 @@ const NavigationSetup = () => {
           </Stack.Group>
         )}
         <Stack.Group>
-          {/* <Stack.Screen name="Signin" component={Signin} /> */}
+          <Stack.Screen name="Signin" component={Signin} />
           <Stack.Screen name="TabNavigation" component={TabNavigation} />
         </Stack.Group>
         {/* {!LoggedIn ? (

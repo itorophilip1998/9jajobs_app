@@ -2,6 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import Filter from "../../assets/icons/filter.svg";
+import SliderIcon from "./sliderIcon";
 
 interface IProps {
   left?: boolean;
@@ -28,7 +29,7 @@ const TitleWithButton: React.FC<IProps> = ({
   return (
     <View className="relative flex flex-row items-center w-full justify-center py-4">
       {left && (
-        <Pressable onPress={() => fire && fire()} className="absolute left-2">
+        <Pressable onPress={() => fire && fire()} className="absolute left-0">
           <Feather name="arrow-left-circle" size={30} color={color} />
         </Pressable>
       )}
@@ -38,14 +39,14 @@ const TitleWithButton: React.FC<IProps> = ({
         {title}
       </Text>
       <View />
-      {/* {right && (
+      {right && (
         <Pressable
           onPress={() => rightFire && rightFire()}
           className="absolute right-2"
         >
-          {rightIcon ? rightIcon : <Filter stroke={color} />}
+          {rightIcon ? rightIcon : <SliderIcon onPress={() => {}} />}
         </Pressable>
-      )} */}
+      )}
     </View>
   );
 };

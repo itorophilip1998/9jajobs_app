@@ -64,7 +64,7 @@ export default function App() {
 
   return (
     <View className={`flex-1 w-[${width}px] h-[${height}px] bg-black`}>
-      <StatusBar style="auto" backgroundColor="#000" />
+      <StatusBar style="light" />
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <AppNavigator />

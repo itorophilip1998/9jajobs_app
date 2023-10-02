@@ -21,7 +21,7 @@ const UserProfileCard = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-row h-[auto] w-full rounded-md overflow-hidden"
+      className="flex-row h-[auto] w-full rounded-md overflow-hidden bg-[#1b1b1b]"
     >
       <Image
         source={{
@@ -50,6 +50,18 @@ const UserProfileCard = ({
           <SmallText className="text-primary p-0 text-[13px] pl-1">
             4.2km away
           </SmallText>
+        </View>
+        <View className="flex-row items-center justify-between mt-2 w-full">
+          <TouchableOpacity className="bg-black py-2 w-[47%] justify-center items-center px-4 rounded-full">
+            <SmallText className="text-white p-0 text-[15px] pl-1">
+              Call
+            </SmallText>
+          </TouchableOpacity>
+          <TouchableOpacity className="bg-black py-2 px-4 w-[47%] justify-center items-center rounded-full">
+            <SmallText className="text-white p-0 text-[15px] pl-1">
+              Chat
+            </SmallText>
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>

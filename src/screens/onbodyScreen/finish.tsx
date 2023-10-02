@@ -25,7 +25,6 @@ const Finish = ({
       <View>
         <View className="px-3 flex-row items-center">
           <Checkbox
-            // style={styles.checkbox}
             color={"#1A911B"}
             value={isChecked}
             onValueChange={setChecked}

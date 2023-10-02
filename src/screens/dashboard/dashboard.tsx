@@ -97,7 +97,10 @@ const Dashboard = ({
               <Spacer value={H("3%")} axis="horizontal" />
             )}
             renderItem={({ item }) => (
-              <Pressable className="w-[220px]" onPress={() => {}}>
+              <Pressable
+                className="w-[220px]"
+                onPress={() => navigation.navigate("FreelancerProfile")}
+              >
                 <UserCard item={item} />
               </Pressable>
             )}
@@ -116,7 +119,10 @@ const Dashboard = ({
               <Spacer value={H("3%")} axis="horizontal" />
             )}
             renderItem={({ item }) => (
-              <Pressable className="w-[220px]" onPress={() => {}}>
+              <Pressable
+                className="w-[220px]"
+                onPress={() => navigation.navigate("FreelancerProfile")}
+              >
                 <UserCard item={item} />
               </Pressable>
             )}

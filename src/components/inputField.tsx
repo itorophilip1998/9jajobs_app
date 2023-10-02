@@ -51,7 +51,7 @@ const InputField: React.FC<IProps> = ({
   secure,
   style,
   autoCapitalize,
-  placeholderTextColor,
+  placeholderTextColor = "#626262",
   multiline = false,
   numberOfLines,
   onFocus,
@@ -64,7 +64,7 @@ const InputField: React.FC<IProps> = ({
   return (
     <>
       <View
-        className="relative w-[100%] flex justify-center"
+        className="relative w-[100%] flex h-full"
         style={{ width: W("90%"), height: "auto", ...containerStyle }}
       >
         <TextInput

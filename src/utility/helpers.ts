@@ -175,3 +175,14 @@ export const transformTransaction = (transactions: any) => {
 
   return Object.entries(newFormatted);
 };
+
+export function isValidDate(day: number, month: number, year: number): boolean {
+  const date = new Date(year, month - 1, day); // Note: Month is 0-indexed in JavaScript Dates
+
+  // Check if the input values match the created date
+  return (
+    date.getDate() === day &&
+    date.getMonth() === month - 1 &&
+    date.getFullYear() === year
+  );
+}
