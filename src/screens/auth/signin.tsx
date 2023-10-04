@@ -6,8 +6,9 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Linking,
-} from "react-native";
+  Linking
+} from "react-native"; 
+
 import React from "react";
 import { width, height } from "../../utility/constant";
 import logo from "../../../assets/images/logo.png";
@@ -43,6 +44,7 @@ import {
 } from "../../utility/helpers";
 import Toast from "react-native-toast-message";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+ 
 
 const Signin = ({
   navigation,
@@ -118,7 +120,7 @@ const Signin = ({
       }
     });
   };
-
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -206,7 +208,7 @@ const Signin = ({
               </PrimaryText>
             </View>
             <Spacer axis="vertical" value={H(2)} />
-            <Button text="Login" onPress={validateSignIn} />
+            <Button text="Login" onPress={validateSignIn}   />
           </>
         ) : (
           <>

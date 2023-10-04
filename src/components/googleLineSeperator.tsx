@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import SmallText from "./smallText";
+import { mediumFonts } from "../style/Typography";
 
 const GoogleLineSeperator = () => {
   return (
@@ -13,15 +14,15 @@ const GoogleLineSeperator = () => {
     >
       <View
         style={{
-          borderTopColor: "#B6B6B6",
+          borderTopColor: "#252323F5",
           borderTopWidth: 1,
           width: "40%",
         }}
       />
-      <SmallText className="!text-[#B6B6B6]">or</SmallText>
+      <SmallText className="!text-[#B6B6B6]" style={mediumFonts}>or</SmallText>
       <View
         style={{
-          borderTopColor: "#B6B6B6",
+          borderTopColor: "#252323F5",
           borderTopWidth: 1,
           width: "40%",
         }}

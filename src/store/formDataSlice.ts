@@ -27,10 +27,10 @@ const initialState: IFormData = {
 
   authData: {
     fullName: "",
-    email: "",
+    email: "user@gmail.com",
     phoneNumber: "",
     referralCode: "",
-    password: "",
+    password: "password123",
     confirmPassword: "",
   },
 };

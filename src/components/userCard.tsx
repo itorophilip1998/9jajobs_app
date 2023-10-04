@@ -9,6 +9,7 @@ import Spacer from "./spacer";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { FirstLetterUppercase } from "../utility/helpers";
 import { COLORS } from "../utility/colors";
+import { shadowBox } from "../style/Typography";
 
 const UserCard = ({
   item,
@@ -25,7 +26,7 @@ const UserCard = ({
   };
 }) => {
   return (
-    <View className="w-full h-full px-3 bg-[#1b1b1b] rounded-lg">
+    <View className="w-full h-full px-3 bg-[#0F0F0F]  rounded-lg" style={{ ...shadowBox, }}> 
         <>
           <Spacer axis="vertical" value={H(0.5)} />
           <SmallText className="text-left text-[#696969] text-[13px] p-0">

@@ -5,6 +5,7 @@ import {
 } from "react-native";
 import React from "react";
 import SmallText from "./smallText";
+import { shadowBox } from "../style/Typography";
 
 const CategoryCard = ({
   item,
@@ -16,7 +17,8 @@ const CategoryCard = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="w-[31%] mb-4 px-2 py-2 bg-[#1b1b1b]  rounded-md"
+      className="w-[31%] mb-4 px-2 py-2 bg-[#0F0F0F]  rounded-md"
+      style={shadowBox}
     >
       <Image
         source={{ uri: item.image }}
