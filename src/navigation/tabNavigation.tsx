@@ -10,6 +10,7 @@ import {
 } from "@expo/vector-icons";
 import HomeStack from "./homeStack";
 import Listing from "../screens/listing";
+import Post from "../screens/post";
 
 const Tab = createBottomTabNavigator();
 
@@ -69,7 +70,7 @@ const TabNavigation = () => {
       <Tab.Screen
         name="Post"
         options={{ tabBarLabel: "Post" }}
-        component={HomeStack}
+        component={Post}
       />
       <Tab.Screen
         name="Message"
