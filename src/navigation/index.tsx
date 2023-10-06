@@ -21,6 +21,7 @@ import Signin from "../screens/auth/signin";
 import TabNavigation from "./tabNavigation";
 import Search from "../screens/modals/search";
 import Filter from "../screens/modals/filter";
+import Chat from "../screens/message/chat";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -144,6 +145,7 @@ const NavigationSetup = () => {
         <Stack.Group>
           <Stack.Screen name="Signin" component={Signin} />
           <Stack.Screen name="TabNavigation" component={TabNavigation} />
+          <Stack.Screen name="Chat" component={Chat} />
         </Stack.Group>
         {/* {!LoggedIn ? (
         ) : (

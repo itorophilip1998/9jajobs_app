@@ -11,6 +11,7 @@ import {
 import HomeStack from "./homeStack";
 import Listing from "../screens/listing";
 import Post from "../screens/post";
+import MessageStack from "./messageStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -75,7 +76,7 @@ const TabNavigation = () => {
       <Tab.Screen
         name="Message"
         options={{ tabBarLabel: "Messages" }}
-        component={HomeStack}
+        component={MessageStack}
       />
       <Tab.Screen
         name="Setting"
