@@ -8,7 +8,3 @@ export const gradientButton:Object =  {
     borderRadius: 40, 
      
 };
-export const buttonTextStyle:Object =  {  
-    fontSize: 20,
-    fontWeight:400,
-};

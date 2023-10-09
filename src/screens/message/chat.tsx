@@ -3,11 +3,11 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   FlatList,
   Linking,
   Pressable,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { width, height } from "../../utility/constant";
@@ -34,7 +34,7 @@ const Chat = ({
       className="flex-1 items-center bg-black"
       style={{ width: width, height: height }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black py-4">
+      <SafeAreaView className="flex-1 w-full bg-black">
         <View className="relative flex flex-row items-center w-full justify-between px-3 py-4 bg-[#0f0f0f]">
           <View className="flex-row items-center justify-between">
             <Pressable onPress={() => navigation.goBack()}>

@@ -3,8 +3,9 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
+  
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import RBSheet from "react-native-raw-bottom-sheet";

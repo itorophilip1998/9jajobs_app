@@ -16,7 +16,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "usesIcloudStorage": true
     },
     "android": {
       "adaptiveIcon": {
@@ -42,6 +43,12 @@
         {
           "icon": "./assets/images/logo.png",
           "color": "#ffffff"
+        }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
         }
       ]
     ],

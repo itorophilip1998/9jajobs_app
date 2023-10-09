@@ -12,6 +12,7 @@ import HomeStack from "./homeStack";
 import Listing from "../screens/listing";
 import Post from "../screens/post";
 import MessageStack from "./messageStack";
+import ProfileStack from "./profileStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -81,7 +82,7 @@ const TabNavigation = () => {
       <Tab.Screen
         name="Setting"
         options={{ tabBarLabel: "Profile" }}
-        component={HomeStack}
+        component={ProfileStack}
       />
     </Tab.Navigator>
   );

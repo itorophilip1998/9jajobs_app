@@ -3,10 +3,10 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   FlatList,
   Pressable,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import TitleWithButton from "../../components/titleWithButton";
 import { width, height } from "../../utility/constant";

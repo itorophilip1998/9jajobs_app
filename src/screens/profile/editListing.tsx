@@ -12,7 +12,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { BottomSheet, Button, InputField, SmallText, Spacer } from "../../components";
+import {
+  BottomSheet,
+  Button,
+  InputField,
+  SmallText,
+  Spacer,
+} from "../../components";
 import TitleWithButton from "../../components/titleWithButton";
 import { width, height } from "../../utility/constant";
 import {
@@ -27,7 +33,7 @@ import { COLORS } from "../../utility/colors";
 import { FONTS } from "../../utility/fonts";
 import { ResizeMode, Video } from "expo-av";
 
-const Post = ({
+const EditListing = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
@@ -84,7 +90,7 @@ const Post = ({
         <SafeAreaView className="flex-1 w-full bg-[#0f0f0f]">
           <View className="w-full px-3">
             <TitleWithButton
-              title="Post New Ad"
+              title="Edit Listing"
               fire={() => navigation.goBack()}
               //   right
               //   rightFire={() => {}}
@@ -301,7 +307,7 @@ const Post = ({
               </View>
             </View>
             <Spacer axis="vertical" value={H(3)} />
-            <Button text="Post Ad"/>
+            <Button text="Update Listing" />
             <Spacer axis="vertical" value={H(5)} />
           </ScrollView>
         </SafeAreaView>
@@ -335,7 +341,6 @@ const Post = ({
           />
         </View>
       </BottomSheet>
-
 
       {/* AMENITIES BOTTOM SHEET POPUP */}
       <BottomSheet ref={amenitiesRef} duration={0}>
@@ -417,4 +422,4 @@ const Post = ({
   );
 };
 
-export default Post;
+export default EditListing;

@@ -12,11 +12,7 @@ import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
-import {
-  customButtonStyle,
-  gradientButton,
-  buttonTextStyle,
-} from "../style/buttons";
+import { gradientButton } from "../style/buttons";
 interface IProps {
   text: string;
   icon?: JSX.Element;
@@ -38,8 +34,8 @@ const Button: React.FC<IProps> = ({
 }) => {
   return (
     <TouchableOpacity
-      className={`flex w-full h-[50px] justify-center items-center flex-row !bg-primary  ${buttonStyleClassName}`}
-      style={{ width: W("90%"), ...buttonStyle, ...customButtonStyle }}
+      className={`flex w-full h-[50px] justify-center items-center flex-row ${buttonStyleClassName}`}
+      style={{ width: W("90%"), ...buttonStyle }}
       onPress={() => {
         Keyboard.dismiss();
         onPress && onPress();
@@ -48,15 +44,20 @@ const Button: React.FC<IProps> = ({
       <LinearGradient
         colors={["#023215", "#1A911B"]}
         style={gradientButton}
-        className={`flex w-full h-[50px] justify-center items-center flex-row !bg-primary  ${buttonStyleClassName}`}
+        className={`flex w-full h-[50px] justify-center items-center flex-row  ${buttonStyleClassName}`}
       >
         {icon && icon}
-        <Text
-          className={`text-white text-lg font-semibold text-[15px] font-ManropeSemiBold ${textStyleClassName}`}
-          style={{ marginLeft: icon ? 8 : 0, ...textStyle, ...buttonTextStyle }}
-        >
-          {text}
-        </Text>
+        {text.length > 0 && (
+          <Text
+            className={`text-white font-semibold text-[15px] font-ManropeSemiBold ${textStyleClassName}`}
+            style={{
+              marginLeft: icon ? 8 : 0,
+              ...textStyle,
+            }}
+          >
+            {text}
+          </Text>
+        )}
       </LinearGradient>
     </TouchableOpacity>
   );

@@ -4,7 +4,6 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -20,6 +19,7 @@ import {
 import UserProfileCard from "../../components/userProfileCard";
 import { MAIN_USERS } from "../../data/listing";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Listing = ({
   navigation,

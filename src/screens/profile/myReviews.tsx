@@ -21,7 +21,7 @@ import { COLORS } from "../../utility/colors";
 import { FirstLetterUppercase } from "../../utility/helpers";
 import ReviewCard from "../../components/reviewCard";
 
-const Reviews = ({
+const MyReviews = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
@@ -36,7 +36,7 @@ const Reviews = ({
         <TitleWithButton title="Reviews" fire={() => navigation.goBack()} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Spacer value={H("1%")} axis="vertical" />
-          <View className="flex-row h-[auto] w-full">
+          {/* <View className="flex-row h-[auto] w-full">
             <Image
               source={{
                 uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
@@ -71,13 +71,12 @@ const Reviews = ({
               </View>
             </View>
           </View>
+          <Spacer value={H("3%")} axis="vertical" /> */}
+          <ReviewCard />
           <Spacer value={H("3%")} axis="vertical" />
           <ReviewCard />
           <Spacer value={H("3%")} axis="vertical" />
-          <Button
-            text="Add Review"
-            onPress={() => navigation.navigate("AddReview")}
-          />
+          <ReviewCard />
           <Spacer value={H("3%")} axis="vertical" />
         </ScrollView>
       </SafeAreaView>
@@ -85,4 +84,4 @@ const Reviews = ({
   );
 };
 
-export default Reviews;
+export default MyReviews;

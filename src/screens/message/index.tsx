@@ -3,11 +3,12 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
+  
   Pressable,
   TouchableOpacity,
 } from "react-native";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { width, height } from "../../utility/constant";
 import { Feather } from "@expo/vector-icons";
@@ -37,7 +38,7 @@ const Message = ({
             <Feather name="arrow-left-circle" size={30} color={"#696969"} />
           </Pressable>
           <View className="flex-row items-center justify-between">
-            <View className="w-[80%] bg-[#1E1E1E] ml-[15%] h-[48px] rounded-full flex-row justify-center overflow-hidden">
+            <View className="w-[83%] bg-[#1E1E1E] mx-auto h-[48px] rounded-full flex-row justify-center overflow-hidden">
               <TouchableOpacity
                 className="w-[50%] justify-center items-center rounded-full"
                 style={{

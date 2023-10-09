@@ -208,7 +208,11 @@ const Signin = ({
               </PrimaryText>
             </View>
             <Spacer axis="vertical" value={H(2)} />
-            <Button text="Login" onPress={validateSignIn}   />
+            <Button
+              text="Login"
+              onPress={validateSignIn}
+              textStyleClassName="text-[18px]"
+            />
           </>
         ) : (
           <>
@@ -284,7 +288,11 @@ const Signin = ({
               onSuffixTap={() => setVisible2(!visible2)}
             />
             <Spacer axis="vertical" value={H(2)} />
-            <Button text="Signup" onPress={validateSignUp} />
+            <Button
+              text="Signup"
+              onPress={validateSignUp}
+              textStyleClassName="text-[18px]"
+            />
           </>
         )}
         <Spacer axis="vertical" value={H(7)} />

@@ -34,7 +34,7 @@ const TitleWithButton: React.FC<IProps> = ({
         </Pressable>
       )}
       <Text
-        className={`text-[#D4E1D2] text-[22px] font-semibold font-CabinetGroteskBold ${style}`}
+        className={`text-[#D4E1D2] text-[22px] font-RedHatDisplaySemiBold ${style}`}
       >
         {title}
       </Text>

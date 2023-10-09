@@ -24,7 +24,7 @@ const ReviewCard = () => {
         <SmallText className="text-[#696969] text-left p-0 text-[15px] pr-2 font-RedHatDisplaySemiBold">
           2/04/2022
         </SmallText>
-        <Feather name="more-vertical" size={24} color={COLORS.primary} />
+        {/* <Feather name="more-vertical" size={24} color={COLORS.primary} /> */}
       </View>
       <SmallText className="text-[#696969] text-left p-0 text-[16px] pt-2 font-RedHatDisplaySemiBold">
         Lorem ipsum dolor sit amet consectetur. Dis nullam enim pharetra

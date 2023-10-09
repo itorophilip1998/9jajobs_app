@@ -186,3 +186,23 @@ export function isValidDate(day: number, month: number, year: number): boolean {
     date.getFullYear() === year
   );
 }
+
+
+
+export const toggleStringInArray = (
+  targetArray: string[],
+  targetString: string
+): string[] => {
+  const stringIndex = targetArray.indexOf(targetString);
+
+  if (stringIndex !== -1) {
+    // String exists, remove it
+    targetArray.splice(stringIndex, 1);
+  } else {
+    // String doesn't exist, add it
+    targetArray.push(targetString);
+  }
+
+  return [...targetArray]; // Return a new array to trigger a state update
+};
+
