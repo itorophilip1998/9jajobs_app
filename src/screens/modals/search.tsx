@@ -27,6 +27,7 @@ const Search = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   const { location, search, type } = useSelector(
     (state: RootState) => state.search
   );
@@ -39,12 +40,26 @@ const Search = ({
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "white",
+      }}
     >
-      <SafeAreaView className="flex-1 bg-black px-3 py-4">
+      <SafeAreaView
+        style={{ backgroundColor: darkMode ? "black" : "white" }}
+        className="flex-1 bg-black px-3 py-4"
+      >
         <View className="w-full flex-row items-center justify-between">
-          <Pressable className="w-[50%] px-3 py-2 border bg-[#1b1b1b] border-primary rounded-full flex-row justify-between items-center">
-            <AntDesign name="search1" size={20} color="#D4E1D2" />
+          <Pressable
+            style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
+            className="w-[50%] px-3 py-2 border bg-[#1b1b1b] border-primary rounded-full flex-row justify-between items-center"
+          >
+            <AntDesign
+              name="search1"
+              size={20}
+              color={darkMode ? "#D4E1D2" : "#696969"}
+            />
             <TextInput
               keyboardType={"web-search"}
               className={`h-full w-[80%] text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
@@ -58,14 +73,23 @@ const Search = ({
               // }}
               placeholderTextColor={"#626262"}
               placeholder={"Search for Category"}
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               autoCapitalize={"none"}
             />
           </Pressable>
           <Pressable
+            style={{
+              backgroundColor: darkMode ? "#1b1b1b" : "transparent",
+              borderWidth: darkMode ? 0 : 1,
+              borderColor: COLORS.primary,
+            }}
             onPress={() => ref.current?.open()}
             className="w-[30%] px-3 py-2 bg-[#1b1b1b] rounded-full flex-row items-center justify-between"
           >
-            <SmallText className="text-[#D4E1D2] text-left p-0 pr-2">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#696969" }}
+              className="text-[#D4E1D2] text-left p-0 pr-2"
+            >
               {/* {location === "" ? "Location" : location} */}
               Location
             </SmallText>
@@ -75,13 +99,16 @@ const Search = ({
           <AntDesign
             name="closecircleo"
             size={20}
-            color={"#D4E1D2"}
+            color={darkMode ? "#D4E1D2" : "#696969"}
             onPress={() => navigation.goBack()}
           />
         </View>
       </SafeAreaView>
       <BottomSheet ref={ref} duration={0}>
-        <View className="flex-1 bg-[#1b1b1b] py-3 px-3">
+        <View
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+          className="flex-1 bg-[#1b1b1b] py-3 px-3"
+        >
           <GooglePlacesAutocomplete
             placeholder="Search City"
             enableHighAccuracyLocation

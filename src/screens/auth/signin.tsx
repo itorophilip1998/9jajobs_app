@@ -6,8 +6,8 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Linking
-} from "react-native"; 
+  Linking,
+} from "react-native";
 
 import React from "react";
 import { width, height } from "../../utility/constant";
@@ -44,7 +44,7 @@ import {
 } from "../../utility/helpers";
 import Toast from "react-native-toast-message";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
- 
+import { LinearGradient } from "expo-linear-gradient";
 
 const Signin = ({
   navigation,
@@ -55,6 +55,7 @@ const Signin = ({
   const [authState, setAuthState] = React.useState<"login" | "register">(
     "login"
   );
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   const {
     fullName,
     confirmPassword,
@@ -120,12 +121,16 @@ const Signin = ({
       }
     });
   };
-  
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center px-4 bg-black"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -133,35 +138,130 @@ const Signin = ({
       >
         <View className="flex-row justify-start items-center w-full pt-10">
           <Image source={logo} className="h-[60px] w-[60px]" />
-          <Title className="!text-white ml-3">9jajob</Title>
+          <Title
+            className="!text-white ml-3"
+            style={{ color: darkMode ? "white" : "black" }}
+          >
+            9jajob
+          </Title>
         </View>
         <Spacer axis="vertical" value={H(3)} />
         <View className="flex-row items-center justify-between">
-          <View className="w-[70%] bg-[#1E1E1E] ml-[15%] h-[48px] rounded-full flex-row justify-center overflow-hidden">
+          <View
+            style={{ backgroundColor: darkMode ? "#1E1E1E" : "white" }}
+            className="w-[70%] bg-[#1E1E1E] ml-[15%] h-[48px] rounded-full flex-row justify-center overflow-hidden"
+          >
             <TouchableOpacity
               className="w-[50%] justify-center items-center rounded-full"
               style={{
-                backgroundColor:
-                  authState === "login" ? "#0F0F0F" : "transparent",
-                borderWidth: authState === "login" ? 1 : 0,
-                borderColor: authState === "login" ? "#696969" : "transparent",
+                backgroundColor: darkMode
+                  ? authState === "login"
+                    ? "#0F0F0F"
+                    : "transparent"
+                  : authState === "login"
+                  ? COLORS.primary
+                  : "transparent",
+                borderWidth: darkMode
+                  ? authState === "login"
+                    ? 1
+                    : 0
+                  : authState === "login"
+                  ? 0
+                  : 0,
+                borderColor: darkMode
+                  ? authState === "login"
+                    ? "#696969"
+                    : "transparent"
+                  : authState === "login"
+                  ? "#696969"
+                  : "transparent",
               }}
               onPress={() => setAuthState("login")}
             >
-              <SmallText className="!text-[16px] !text-white">Login</SmallText>
+              {darkMode ? (
+                <SmallText className="!text-[16px] !text-white">
+                  Login
+                </SmallText>
+              ) : authState === "login" ? (
+                <LinearGradient
+                  className="w-[100%] justify-center items-center rounded-full h-full"
+                  colors={["#023215", "#1A911B"]}
+                >
+                  <SmallText
+                    style={{
+                      color: authState === "login" ? "white" : "#696969",
+                    }}
+                    className="!text-[16px] !text-white"
+                  >
+                    Login
+                  </SmallText>
+                </LinearGradient>
+              ) : (
+                <SmallText
+                  style={{
+                    color: authState === "register" ? "#696969" : "white",
+                  }}
+                  className="!text-[16px] !text-white"
+                >
+                  Login
+                </SmallText>
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               className="w-[50%] justify-center items-center rounded-full"
               style={{
-                backgroundColor:
-                  authState === "register" ? "#0F0F0F" : "transparent",
-                borderWidth: authState === "register" ? 1 : 0,
-                borderColor:
-                  authState === "register" ? "#696969" : "transparent",
+                backgroundColor: darkMode
+                  ? authState === "register"
+                    ? "#0F0F0F"
+                    : "transparent"
+                  : authState === "register"
+                  ? COLORS.primary
+                  : "transparent",
+                borderWidth: darkMode
+                  ? authState === "register"
+                    ? 1
+                    : 0
+                  : authState === "register"
+                  ? 0
+                  : 0,
+                borderColor: darkMode
+                  ? authState === "register"
+                    ? "#696969"
+                    : "transparent"
+                  : authState === "register"
+                  ? "#696969"
+                  : "transparent",
               }}
               onPress={() => setAuthState("register")}
             >
-              <SmallText className="!text-[16px] !text-white">Signup</SmallText>
+              {darkMode ? (
+                <SmallText className="!text-[16px] !text-white">
+                  Signup
+                </SmallText>
+              ) : authState === "register" ? (
+                <LinearGradient
+                  className="w-[100%] justify-center items-center rounded-full h-full"
+                  colors={["#023215", "#1A911B"]}
+                >
+                  <SmallText
+                    style={{
+                      color: authState === "register" ? "white" : "#696969",
+                    }}
+                    className="!text-[16px] !text-white"
+                  >
+                    Signup
+                  </SmallText>
+                </LinearGradient>
+              ) : (
+                <SmallText
+                  style={{
+                    color: authState === "login" ? "#696969" : "white",
+                  }}
+                  className="!text-[16px] !text-white"
+                >
+                  Signup
+                </SmallText>
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -172,6 +272,7 @@ const Signin = ({
               onTextChange={(value) => dispatch(SET_EMAIL(value))}
               defaultValue={email}
               placeholder="Email Address"
+              placeholderTextColor={darkMode ? "white" : "black"}
               type={"email-address"}
               autoCapitalize={"none"}
               className="border-[#626262] border-b rounded-none p-0"

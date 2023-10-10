@@ -3,6 +3,9 @@ import React from "react";
 import { Feather } from "@expo/vector-icons";
 import Filter from "../../assets/icons/filter.svg";
 import SliderIcon from "./sliderIcon";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { GradientText } from "./gradientText";
 
 interface IProps {
   left?: boolean;
@@ -26,6 +29,7 @@ const TitleWithButton: React.FC<IProps> = ({
   rightIcon,
   color = "#696969",
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View className="relative flex flex-row items-center w-full justify-center py-4">
       {left && (
@@ -33,11 +37,19 @@ const TitleWithButton: React.FC<IProps> = ({
           <Feather name="arrow-left-circle" size={30} color={color} />
         </Pressable>
       )}
-      <Text
-        className={`text-[#D4E1D2] text-[22px] font-RedHatDisplaySemiBold ${style}`}
-      >
-        {title}
-      </Text>
+      {darkMode ? (
+        <Text
+          className={`text-[#D4E1D2] text-[22px] font-RedHatDisplaySemiBold ${style}`}
+        >
+          {title}
+        </Text>
+      ) : (
+        <GradientText
+          className={`text-[#D4E1D2] text-[22px] font-RedHatDisplaySemiBold ${style}`}
+        >
+          {title}
+        </GradientText>
+      )}
       <View />
       {right && (
         <Pressable

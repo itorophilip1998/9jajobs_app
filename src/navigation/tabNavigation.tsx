@@ -13,16 +13,19 @@ import Listing from "../screens/listing";
 import Post from "../screens/post";
 import MessageStack from "./messageStack";
 import ProfileStack from "./profileStack";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#0F0F0F",
+          backgroundColor: darkMode ? "#0F0F0F" : "white",
           borderTopWidth: 0,
           height: 70,
           paddingTop: 10,

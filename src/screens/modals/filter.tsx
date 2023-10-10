@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  Platform,
-  
-} from "react-native";
+import { View, Text, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -19,17 +13,27 @@ const Filter = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 items-center bg-black px-3"
-      style={{ width: width, height: height }}
+      className="flex-1 items-center bg-black"
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black py-4">
-        <TitleWithButton
-          title="Filter Search"
-          fire={() => navigation.goBack()}
-        />
+      <SafeAreaView className="flex-1 w-full">
+        <View
+          style={{ backgroundColor: darkMode ? "#0f0f0f" : "#FFFFFF" }}
+          className="relative flex flex-row items-center w-full justify-between px-3 bg-[#0f0f0f]"
+        >
+          <TitleWithButton
+            title="Filter Search"
+            fire={() => navigation.goBack()}
+          />
+        </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

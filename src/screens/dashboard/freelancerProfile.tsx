@@ -35,12 +35,17 @@ import { FirstLetterUppercase } from "../../utility/helpers";
 import Checkbox from "expo-checkbox";
 import VideoCard from "../../components/videoCard";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { GradientText } from "../../components/gradientText";
+import { shadowBoxDark } from "../../style/Typography";
 
 const FreelancerProfile = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   const [homeDelivery, setHomeDelivery] = React.useState<boolean>(false);
   const [nationWideDelivery, setNationWideDelivery] =
     React.useState<boolean>(false);
@@ -57,9 +62,13 @@ const FreelancerProfile = ({
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black px-4"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "white",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black py-4">
+      <SafeAreaView className="flex-1 w-full py-4">
         <ScrollView showsVerticalScrollIndicator={false}>
           <TitleWithButton title="" fire={() => navigation.goBack()} />
           <Image
@@ -73,9 +82,15 @@ const FreelancerProfile = ({
           <View className="flex-row items-center justify-between mt-2 w-full">
             <View className="w-[50%]">
               <View className="flex-row items-center mb-1 w-full">
-                <SmallText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold">
-                  {FirstLetterUppercase("collins Vincent")}
-                </SmallText>
+                {darkMode ? (
+                  <SmallText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold">
+                    {FirstLetterUppercase("collins Vincent")}
+                  </SmallText>
+                ) : (
+                  <GradientText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold">
+                    {FirstLetterUppercase("collins Vincent")}
+                  </GradientText>
+                )}
                 <MaterialIcons
                   name="verified"
                   size={18}
@@ -83,12 +98,18 @@ const FreelancerProfile = ({
                 />
               </View>
               <Spacer value={H("0.5%")} axis="vertical" />
-              <SmallText className="text-[#D4E1D2] text-left p-0 text-[15px]">
-                {FirstLetterUppercase("Abuja, Nigeria")}
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              >
+                {FirstLetterUppercase("Real Estate")}
               </SmallText>
               <Spacer value={H("1%")} axis="vertical" />
               <View className="flex-row justify-between items-center mb-1 w-full">
-                <SmallText className="text-[#696969] text-left p-0 text-[15px]">
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
                   {FirstLetterUppercase("1.2 Km Away")}
                 </SmallText>
 
@@ -102,7 +123,12 @@ const FreelancerProfile = ({
             </View>
             <View className="flex-row items-center justify-between w-[45%]">
               <TouchableOpacity className="items-center">
-                <View className="p-2 rounded-full bg-[#121212] mb-2">
+                <View
+                  style={
+                    !darkMode && { ...shadowBoxDark, backgroundColor: "white" }
+                  }
+                  className="p-2 rounded-full bg-[#121212] mb-2"
+                >
                   <Ionicons name="call" size={23} color={COLORS.primary} />
                 </View>
                 <SmallText className="text-primary text-left p-0 text-[15px]">
@@ -110,7 +136,12 @@ const FreelancerProfile = ({
                 </SmallText>
               </TouchableOpacity>
               <TouchableOpacity className="items-center">
-                <View className="p-2 rounded-full bg-[#121212] mb-2">
+                <View
+                  style={
+                    !darkMode && { ...shadowBoxDark, backgroundColor: "white" }
+                  }
+                  className="p-2 rounded-full bg-[#121212] mb-2"
+                >
                   <Ionicons
                     name="md-chatbox-ellipses-outline"
                     size={23}
@@ -125,7 +156,12 @@ const FreelancerProfile = ({
                 className="items-center"
                 onPress={() => navigation.navigate("Report")}
               >
-                <View className="p-2 rounded-full bg-[#121212] mb-2">
+                <View
+                  style={
+                    !darkMode && { ...shadowBoxDark, backgroundColor: "white" }
+                  }
+                  className="p-2 rounded-full bg-[#121212] mb-2"
+                >
                   <AntDesign
                     name="exclamationcircleo"
                     size={23}
@@ -141,32 +177,68 @@ const FreelancerProfile = ({
           <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center">
             <AntDesign name="idcard" size={30} color={COLORS.primary} />
-            <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
-              Contact Information
-            </SmallText>
+            {darkMode ? (
+              <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
+                Contact Information
+              </SmallText>
+            ) : (
+              <GradientText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
+                Contact Information
+              </GradientText>
+            )}
           </View>
           <Spacer value={H("2%")} axis="vertical" />
-          <View className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]">
-            <SmallText className="text-[#696969] text-left p-0 text-[15px]">
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
               Phone Number
             </SmallText>
-            <SmallText className="text-[#D4E1D2] text-left p-0 text-[15px]">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
               07041528380
             </SmallText>
           </View>
-          <View className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]">
-            <SmallText className="text-[#696969] text-left p-0 text-[15px]">
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
               Email Address
             </SmallText>
-            <SmallText className="text-[#D4E1D2] text-left p-0 text-[15px]">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
               vincentovie39@gmail.com
             </SmallText>
           </View>
-          <View className="py-3 flex-row justify-between items-center border-y border-y-[#0F0F0F]">
-            <SmallText className="text-[#696969] text-left p-0 text-[15px]">
+          <View
+            style={{
+              borderTopColor: darkMode ? "#0F0F0F" : "#69696926",
+              borderBottomColor: darkMode ? "#0F0F0F" : "#69696926",
+            }}
+            className="py-3 flex-row justify-between items-center border-y border-y-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
               Location
             </SmallText>
-            <SmallText className="text-[#D4E1D2] text-left p-0 text-[15px]">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
               Abuja, Nigeria
             </SmallText>
           </View>
@@ -174,7 +246,10 @@ const FreelancerProfile = ({
           <View className="w-full flex-row justify-between items-center">
             <View className="flex-row items-center">
               <Octicons name="megaphone" size={28} color={COLORS.primary} />
-              <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold"
+              >
                 Amenities
               </SmallText>
             </View>
@@ -189,7 +264,10 @@ const FreelancerProfile = ({
               value={homeDelivery}
               onValueChange={setHomeDelivery}
             />
-            <SmallText className="text-[15px] !text-[#696969] text-left !pl-3">
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[15px] !text-[#696969] text-left !pl-3"
+            >
               Home Delivery
             </SmallText>
           </View>
@@ -200,16 +278,25 @@ const FreelancerProfile = ({
               value={nationWideDelivery}
               onValueChange={setNationWideDelivery}
             />
-            <SmallText className="text-[15px] !text-[#696969] text-left !pl-3">
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[15px] !text-[#696969] text-left !pl-3"
+            >
               Nationwide Delivery
             </SmallText>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
-          <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold">
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+          >
             About
           </SmallText>
           <Spacer value={H("2%")} axis="vertical" />
-          <SmallText className="text-[#D4E1D2] text-left p-0 text-[15px] font-RedHatDisplayRegular">
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[15px] font-RedHatDisplayRegular"
+          >
             Lorem ipsum dolor sit amet consectetur. Dis nullam enim pharetra
             bibendum purus. Blandit faucibus facilisis blandit mauris
             consectetur ultrices in mattis. Aliquet orci morbi sapien elementum.
@@ -217,7 +304,10 @@ const FreelancerProfile = ({
             fames. Adipiscing etiam netus velit magna magnis ac placerat orci.
           </SmallText>
           <Spacer value={H("3%")} axis="vertical" />
-          <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold">
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+          >
             Photos
           </SmallText>
           <Spacer value={H("3%")} axis="vertical" />
@@ -255,7 +345,10 @@ const FreelancerProfile = ({
             />
           </ScrollView>
           <Spacer value={H("3%")} axis="vertical" />
-          <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold">
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+          >
             Videos
           </SmallText>
           <Spacer value={H("3%")} axis="vertical" />
@@ -280,11 +373,15 @@ const FreelancerProfile = ({
       <BottomSheet ref={bookRef} duration={3000} height={100}>
         <ScrollView
           showsVerticalScrollIndicator={false}
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
           className="flex-1 bg-[#1b1b1b] py-5 px-3"
         >
           <View className="w-full flex-row justify-between items-center">
             <View className="w-[23%]">
-              <SmallText className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
+              >
                 Day
               </SmallText>
               <InputField
@@ -294,13 +391,17 @@ const FreelancerProfile = ({
                 defaultValue={day}
                 placeholder="02"
                 className="border border-[#696969] bg-[#000000]"
+                style={{ backgroundColor: darkMode ? "black" : "white" }}
                 containerStyle={{ width: "100%" }}
                 type={"numeric"}
                 autoCapitalize={"none"}
               />
             </View>
             <View className="w-[30%]">
-              <SmallText className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
+              >
                 Month
               </SmallText>
               <InputField
@@ -308,6 +409,7 @@ const FreelancerProfile = ({
                   setMonth(value);
                 }}
                 defaultValue={month}
+                style={{ backgroundColor: darkMode ? "black" : "white" }}
                 placeholder="05"
                 className="border border-[#696969] bg-[#000000]"
                 containerStyle={{ width: "100%" }}
@@ -316,7 +418,10 @@ const FreelancerProfile = ({
               />
             </View>
             <View className="w-[30%]">
-              <SmallText className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
+              >
                 Year
               </SmallText>
               <InputField
@@ -324,6 +429,7 @@ const FreelancerProfile = ({
                   setYear(value);
                 }}
                 placeholder="2022"
+                style={{ backgroundColor: darkMode ? "black" : "white" }}
                 defaultValue={year}
                 className="border border-[#696969] bg-[#000000]"
                 containerStyle={{ width: "100%" }}
@@ -335,13 +441,17 @@ const FreelancerProfile = ({
           <Spacer value={H("3%")} axis="vertical" />
           <View className="w-[60%] flex-row justify-between items-center">
             <View className="w-[40%]">
-              <SmallText className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+              >
                 Time
               </SmallText>
               <InputField
                 onTextChange={function (value: string): void {
                   setHour(value);
                 }}
+                style={{ backgroundColor: darkMode ? "black" : "white" }}
                 defaultValue={hour}
                 placeholder="14"
                 className="border border-[#696969] bg-[#000000]"
@@ -350,11 +460,17 @@ const FreelancerProfile = ({
                 autoCapitalize={"none"}
               />
             </View>
-            <SmallText className="text-[#D4E1D2] text-left p-0 text-[40px] mt-5 font-RedHatDisplayRegular">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[40px] mt-5 font-RedHatDisplayRegular"
+            >
               :
             </SmallText>
             <View className="w-[40%]">
-              <SmallText className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
+              >
                 {" "}
               </SmallText>
               <InputField
@@ -362,6 +478,7 @@ const FreelancerProfile = ({
                   setMinutes(value);
                 }}
                 defaultValue={minutes}
+                style={{ backgroundColor: darkMode ? "black" : "white" }}
                 placeholder="60"
                 className="border border-[#696969] bg-[#000000]"
                 containerStyle={{ width: "100%" }}
@@ -372,10 +489,11 @@ const FreelancerProfile = ({
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           {/* <View className="w-full">
-            <SmallText className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular">
+            <SmallText style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }} className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular">
               Location
             </SmallText>
             <InputField
+            style={{ backgroundColor: darkMode ? "black" : "white" }}
               onTextChange={function (value: string): void {
                 setLocation(value);
               }}

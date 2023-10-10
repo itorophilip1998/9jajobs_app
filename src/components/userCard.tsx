@@ -10,6 +10,8 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { FirstLetterUppercase } from "../utility/helpers";
 import { COLORS } from "../utility/colors";
 import { shadowBox } from "../style/Typography";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const UserCard = ({
   item,
@@ -25,15 +27,22 @@ const UserCard = ({
     sponsored: boolean;
   };
 }) => {
+  const {darkMode} = useSelector((state: RootState) => state.auth)
   return (
-    <View className="w-full h-full px-3 bg-[#0F0F0F]  rounded-lg" style={{ ...shadowBox, }}> 
-        <>
-          <Spacer axis="vertical" value={H(0.5)} />
-          <SmallText className="text-left text-[#696969] text-[13px] p-0">
-            {item.sponsored && "sponsored"}
-          </SmallText>
-          <Spacer axis="vertical" value={H(0.5)} />
-        </>
+    <View
+      style={{ backgroundColor: darkMode ? "#0F0F0F" : "white", ...shadowBox }}
+      className="w-full h-full px-3 bg-[#0F0F0F]  rounded-lg"
+    >
+      <>
+        <Spacer axis="vertical" value={H(0.5)} />
+        <SmallText
+          style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+          className="text-left text-[#696969] text-[13px] p-0"
+        >
+          {item.sponsored && "sponsored"}
+        </SmallText>
+        <Spacer axis="vertical" value={H(0.5)} />
+      </>
       <Image
         source={{ uri: item.image }}
         alt=""
@@ -41,7 +50,10 @@ const UserCard = ({
       />
       <View className="w-full flex-row justify-between items-center">
         <View className="flex-row items-center">
-          <SmallText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2">
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2"
+          >
             {FirstLetterUppercase(item.name || "")}
           </SmallText>
           {item.verified && (
@@ -51,7 +63,10 @@ const UserCard = ({
       </View>
       <Spacer axis="vertical" value={H(0.5)} />
       <View className="w-full flex-row justify-between items-center">
-        <SmallText className="text-[#D4E1D2] text-left p-0 text-[13px] w-[40%]">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+          className="text-[#D4E1D2] text-left p-0 text-[13px] w-[40%]"
+        >
           {FirstLetterUppercase(item.location || "")}
         </SmallText>
         <View className="flex-row items-center">
@@ -60,7 +75,10 @@ const UserCard = ({
             {item.rating}
           </SmallText>
         </View>
-        <SmallText className="text-[#D4E1D2] text-right p-0 text-[13px] w-[40%]">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+          className="text-[#D4E1D2] text-right p-0 text-[13px] w-[40%]"
+        >
           {FirstLetterUppercase(item.career || "")}
         </SmallText>
       </View>

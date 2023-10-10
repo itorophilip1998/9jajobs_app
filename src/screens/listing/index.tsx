@@ -20,29 +20,39 @@ import UserProfileCard from "../../components/userProfileCard";
 import { MAIN_USERS } from "../../data/listing";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Listing = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-//   const sortRef = React.useState<RBSheet | null>(null);
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 items-center bg-black px-3"
-      style={{ width: width, height: height }}
+      className="flex-1 items-center bg-black"
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black py-4">
-        <TitleWithButton
-          title="All Listing"
-          fire={() => navigation.goBack()}
-        //   right
-        //   rightFire={() => {}}
-        />
+      <SafeAreaView className="flex-1 w-full">
+        <View
+          style={{ backgroundColor: darkMode ? "#0f0f0f" : "#FFFFFF" }}
+          className="relative flex flex-row items-center w-full justify-between px-3 mb-3 bg-[#0f0f0f]"
+        >
+          <TitleWithButton
+            title="All Listing"
+            fire={() => navigation.goBack()}
+          />
+        </View>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={MAIN_USERS}
+          className="px-3"
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
             <Spacer value={H("3%")} axis="vertical" />

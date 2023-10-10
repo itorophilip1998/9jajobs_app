@@ -9,6 +9,8 @@ import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface IProps {
   className?: string;
@@ -60,6 +62,7 @@ const InputField: React.FC<IProps> = ({
   const [textValue, setValue] = React.useState("");
   const [isPlaceHolder, togglePlaceholder] = React.useState(true);
   const InputRef = React.useRef(null);
+  const {darkMode} = useSelector((state: RootState) => state.auth)
 
   return (
     <>
@@ -84,7 +87,7 @@ const InputField: React.FC<IProps> = ({
           onBlur={() => {
             onBlur && onBlur();
           }}
-          style={style}
+          style={{color: darkMode ? "white" : "black", ...style}}
           placeholder={placeholder || ""}
           autoCapitalize={autoCapitalize || "none"}
         />

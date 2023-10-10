@@ -19,7 +19,7 @@ const GoogleLineSeperator = () => {
           width: "40%",
         }}
       />
-      <SmallText className="!text-[#B6B6B6]" style={mediumFonts}>or</SmallText>
+      <SmallText className="!text-[#696969]" style={mediumFonts}>or</SmallText>
       <View
         style={{
           borderTopColor: "#252323F5",

@@ -19,19 +19,26 @@ import {
 } from "react-native-responsive-screen";
 import UserProfileCard from "../../components/userProfileCard";
 import { MAIN_USERS } from "../../data/listing";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Freelancers = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black px-3"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black py-4">
+      <SafeAreaView className="flex-1 w-full">
         <TitleWithButton title="Gardens" fire={() => navigation.goBack()} />
         <FlatList
           showsVerticalScrollIndicator={false}

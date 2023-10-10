@@ -20,21 +20,33 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { COLORS } from "../../utility/colors";
 import { FirstLetterUppercase } from "../../utility/helpers";
 import ReviewCard from "../../components/reviewCard";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Reviews = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const {darkMode} = useSelector((state: RootState) => state.auth)
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 items-center bg-black px-4"
-      style={{ width: width, height: height }}
+      className="flex-1 items-center bg-black"
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black py-4">
-        <TitleWithButton title="Reviews" fire={() => navigation.goBack()} />
-        <ScrollView showsVerticalScrollIndicator={false}>
+      <SafeAreaView className="flex-1 w-full">
+        <View
+          style={{ backgroundColor: darkMode ? "#0f0f0f" : "#FFFFFF" }}
+          className="relative flex flex-row items-center w-full justify-between px-3 bg-[#0f0f0f] mb-3"
+        >
+          <TitleWithButton title="Reviews" fire={() => navigation.goBack()} />
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false} className="px-3">
           <Spacer value={H("1%")} axis="vertical" />
           <View className="flex-row h-[auto] w-full">
             <Image
@@ -46,7 +58,10 @@ const Reviews = ({
             />
             <View className="flex-1 py-2 px-3">
               <View className="flex-row items-center mb-1 w-full">
-                <SmallText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium">
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium"
+                >
                   {FirstLetterUppercase("collins Vincent")}
                 </SmallText>
                 <MaterialIcons
@@ -55,7 +70,10 @@ const Reviews = ({
                   color={COLORS.primary}
                 />
               </View>
-              <SmallText className="text-[#D4E1D2] text-left p-0 text-[15px] w-full">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[15px] w-full"
+              >
                 {FirstLetterUppercase("Fashion Designer")}
               </SmallText>
               <View className="flex-row items-center  mt-2 w-full">

@@ -18,19 +18,26 @@ import {
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
 import { Spacer } from "../../components";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Category = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black px-3"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black py-4">
+      <SafeAreaView className="flex-1 w-full">
         <TitleWithButton title="Categories" fire={() => navigation.goBack()} />
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -46,6 +53,7 @@ const Category = ({
               onPress={() => navigation.navigate("Freelancers")}
               key={item.id.toString()}
               item={item}
+              color={darkMode ? "#0F0F0F" : "white"}
             />
           )}
         />

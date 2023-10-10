@@ -1,5 +1,6 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   ErrorModalContent,
@@ -13,7 +14,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
 import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import Welcome from "../screens/onbodyScreen/welcome";
 import Body from "../screens/onbodyScreen/body";
 import Finish from "../screens/onbodyScreen/finish";
@@ -22,6 +23,13 @@ import TabNavigation from "./tabNavigation";
 import Search from "../screens/modals/search";
 import Filter from "../screens/modals/filter";
 import Chat from "../screens/message/chat";
+import Toast, {
+  BaseToast,
+  ErrorToast,
+  ToastConfig,
+} from "react-native-toast-message";
+import { width, height } from "../utility/constant";
+import { FONTS } from "../utility/fonts";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -178,26 +186,73 @@ const AppNavigator = () => {
     successMessage,
   } = useSelector((state: RootState) => state.formData);
   const dispatch = useDispatch();
+  const { darkMode } = useSelector((state: RootState) => state.auth);
+
+  const toastConfig: ToastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        style={{
+          borderLeftColor: "#4BAF4F",
+          backgroundColor: darkMode ? "#161B22" : "#F0F0F0",
+        }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: "400",
+          fontFamily: FONTS.RedHatDisplayRegular,
+          color: darkMode ? "white" : "black",
+        }}
+        text2Style={{ fontSize: 12, fontFamily: FONTS.RedHatDisplayRegular }}
+      />
+    ),
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        style={{
+          borderLeftColor: "red",
+          backgroundColor: darkMode ? "#161B22" : "#F0F0F0",
+        }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: "400",
+          color: darkMode ? "white" : "black",
+          fontFamily: FONTS.RedHatDisplayRegular,
+        }}
+        text2Style={{
+          fontSize: 12,
+          fontFamily: FONTS.RedHatDisplayRegular,
+        }}
+      />
+    ),
+  };
   return (
     <>
-      <NavigationSetup />
-      <Modal showModal={loader}>
-        <Loader />
-      </Modal>
-      <Modal showModal={error || success}>
-        {error && (
-          <ErrorModalContent
-            message={errorMessage}
-            fire={() => dispatch(UNSET_ERROR())}
-          />
-        )}
-        {success && (
-          <SuccessModalContent
-            message={successMessage}
-            fire={() => dispatch(UNSET_SUCCESS())}
-          />
-        )}
-      </Modal>
+      <View
+        className={`flex-1 w-[${width}px] h-[${height}px] bg-black`}
+        style={{ backgroundColor: darkMode ? "black" : "#fff" }}
+      >
+        <StatusBar style={darkMode ? "light" : "dark"} />
+        <NavigationSetup />
+        <Modal showModal={loader}>
+          <Loader />
+        </Modal>
+        <Modal showModal={error || success}>
+          {error && (
+            <ErrorModalContent
+              message={errorMessage}
+              fire={() => dispatch(UNSET_ERROR())}
+            />
+          )}
+          {success && (
+            <SuccessModalContent
+              message={successMessage}
+              fire={() => dispatch(UNSET_SUCCESS())}
+            />
+          )}
+        </Modal>
+        <Toast config={toastConfig} />
+      </View>
     </>
   );
 };

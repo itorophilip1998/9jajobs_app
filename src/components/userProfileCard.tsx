@@ -11,6 +11,10 @@ import { COLORS } from "../utility/colors";
 import { FirstLetterUppercase } from "../utility/helpers";
 import SmallText from "./smallText";
 import { shadowBox } from "../style/Typography";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { LinearGradient } from "expo-linear-gradient";
+import { GradientText } from "./gradientText";
 
 const UserProfileCard = ({
   item,
@@ -19,10 +23,12 @@ const UserProfileCard = ({
   onPress: (event: GestureResponderEvent) => void;
   item: {};
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <TouchableOpacity
       onPress={onPress}
       className="flex-row h-[auto] w-full rounded-md overflow-hidden bg-[#0F0F0F]"
+      style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}
     >
       <Image
         source={{
@@ -33,7 +39,10 @@ const UserProfileCard = ({
       />
       <View className="w-[58%] py-3 px-3">
         <View className="flex-row items-center mb-1 w-full">
-          <SmallText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium">
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium"
+          >
             {FirstLetterUppercase("collins Vincent")}
           </SmallText>
           {/* {item.verified && (
@@ -41,11 +50,17 @@ const UserProfileCard = ({
               )} */}
           <MaterialIcons name="verified" size={18} color={COLORS.primary} />
         </View>
-        <SmallText className="text-[#D4E1D2] text-left p-0 text-[15px] w-full">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+          className="text-[#D4E1D2] text-left p-0 text-[15px] w-full"
+        >
           {FirstLetterUppercase("Fashion Designer")}
         </SmallText>
         <View className="flex-row items-center justify-between mt-2 w-full">
-          <SmallText className="text-[#696969] text-right p-0 text-[13px]">
+          <SmallText
+            style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+            className="text-[#696969] text-right p-0 text-[13px]"
+          >
             {FirstLetterUppercase("Abuja, Nigeria")}
           </SmallText>
           <SmallText className="text-primary p-0 text-[13px] pl-1">
@@ -53,21 +68,50 @@ const UserProfileCard = ({
           </SmallText>
         </View>
         <View className="flex-row items-center justify-between mt-2 w-full">
+          {darkMode ? (
+            <TouchableOpacity
+              style={[
+                darkMode && shadowBox,
+                {
+                  backgroundColor: "black",
+                },
+              ]}
+              className="bg-black w-[47%] py-2 px-4 justify-center items-center rounded-full"
+            >
+              <SmallText className="text-white p-0 text-[15px] pl-1">
+                Call
+              </SmallText>
+            </TouchableOpacity>
+          ) : (
+            <LinearGradient
+              colors={["#023215", "#1A911B"]}
+              start={{ x: 0.0, y: 1.0 }}
+              end={{ x: 1.0, y: 1.0 }}
+              className="bg-black w-[47%] px-[1px] py-[1px] justify-center items-center rounded-full"
+            >
+              <TouchableOpacity className="bg-white py-2 px-4 w-[100%] justify-center items-center rounded-full">
+                <GradientText className="text-white p-0 text-[15px] pl-1">
+                  Call
+                </GradientText>
+              </TouchableOpacity>
+            </LinearGradient>
+          )}
           <TouchableOpacity
-            style={shadowBox}
-            className="bg-black py-2 w-[47%] justify-center items-center px-4 rounded-full"
-          >
-            <SmallText className="text-white p-0 text-[15px] pl-1">
-              Call
-            </SmallText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={shadowBox}
+            style={[
+              shadowBox,
+              { backgroundColor: darkMode ? "black" : "#D4E1D2" },
+            ]}
             className="bg-black py-2 px-4 w-[47%] justify-center items-center rounded-full"
           >
-            <SmallText className="text-white p-0 text-[15px] pl-1">
-              Chat
-            </SmallText>
+            {darkMode ? (
+              <SmallText className="text-white p-0 text-[15px] pl-1">
+                Chat
+              </SmallText>
+            ) : (
+              <GradientText className="text-white p-0 text-[15px] pl-1">
+                Chat
+              </GradientText>
+            )}
           </TouchableOpacity>
         </View>
       </View>

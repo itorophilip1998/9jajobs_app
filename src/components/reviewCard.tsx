@@ -4,8 +4,11 @@ import { FirstLetterUppercase } from "../utility/helpers";
 import SmallText from "./smallText";
 import { COLORS } from "../utility/colors";
 import { Feather } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const ReviewCard = () => {
+  const {darkMode} = useSelector((state: RootState) => state.auth)
   return (
     <View className="w-full">
       <View className="w-full flex-row justify-between items-center">
@@ -17,7 +20,10 @@ const ReviewCard = () => {
             alt=""
             className="w-[50px] h-[50px] rounded-full mr-3"
           />
-          <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] pr-2 font-RedHatDisplaySemiBold">
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[19px] pr-2 font-RedHatDisplaySemiBold"
+          >
             {FirstLetterUppercase("Faith Abiodon")}
           </SmallText>
         </View>
@@ -26,7 +32,10 @@ const ReviewCard = () => {
         </SmallText>
         {/* <Feather name="more-vertical" size={24} color={COLORS.primary} /> */}
       </View>
-      <SmallText className="text-[#696969] text-left p-0 text-[16px] pt-2 font-RedHatDisplaySemiBold">
+      <SmallText
+        style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+        className="text-[#696969] text-left p-0 text-[16px] pt-2 font-RedHatDisplayRegular"
+      >
         Lorem ipsum dolor sit amet consectetur. Dis nullam enim pharetra
         bibendum purus. Blandit faucibus facilisis blandit mauris consectetur
         ultrices in mattis. Aliquet orci morbi sapien elementum. Adipiscing
