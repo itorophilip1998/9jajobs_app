@@ -18,6 +18,9 @@ import { MESSAGES } from "../../data/messages";
 import UserProfileCard from "../../components/userProfileCard";
 import navigation from "../../navigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { GradientText } from "../../components/gradientText";
 
 const MessageSection = ({
   navigation,
@@ -26,10 +29,18 @@ const MessageSection = ({
 }) => {
   const [status, setStatus] = React.useState<"all" | "unread" | "spam">("all");
   const [search, setSearch] = React.useState<string>("");
+  const {darkMode} = useSelector((state: RootState) => state.auth)
   return (
     <View className="flex-1">
-      <View className="w-[93%] px-3 py-2 border bg-[#1b1b1b] border-primary rounded-full flex-row justify-between items-center mx-auto">
-        <AntDesign name="search1" size={20} color="#D4E1D2" />
+      <View
+        style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+        className="w-[93%] mx-auto px-3 py-2 border bg-[#1b1b1b] border-primary rounded-full flex-row justify-between items-center"
+      >
+        <AntDesign
+          name="search1"
+          size={20}
+          color={darkMode ? "#D4E1D2" : "#696969"}
+        />
         <TextInput
           keyboardType={"web-search"}
           className={`h-full w-[90%] text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
@@ -42,7 +53,8 @@ const MessageSection = ({
           //   onBlur && onBlur();
           // }}
           placeholderTextColor={"#626262"}
-          placeholder={"Search here"}
+          placeholder={"Search for Category"}
+          style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
           autoCapitalize={"none"}
         />
       </View>
@@ -80,7 +92,8 @@ const MessageSection = ({
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => navigation.navigate("Chat")}
-            className="bg-[#0F0F0F] py-3 px-3 flex-row justify-between"
+            style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}
+            className="bg-[#0F0F0F] py-2 px-3 flex-row justify-between"
           >
             <View className="w-[50%] flex-row items-center">
               <Image
@@ -89,10 +102,16 @@ const MessageSection = ({
                 className="w-[60px] h-[60px] rounded-full mr-3"
               />
               <View className="h-[60px] justify-center">
-                <SmallText className="text-[#D4E1D2] text-left p-0 text-[18px] mb-2">
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                  className="text-[#D4E1D2] text-left p-0 text-[18px] mb-1"
+                >
                   {item.name}
                 </SmallText>
-                <SmallText className="text-left p-0 text-[14px] text-[#696969]">
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+                  className="text-left p-0 text-[14px] text-[#696969]"
+                >
                   {item.lastMessage}
                 </SmallText>
               </View>
@@ -102,9 +121,9 @@ const MessageSection = ({
                 {item.date}
               </SmallText>
               {!item.read && (
-                <SmallText className="text-primary text-right p-0 text-[14px]">
+                <GradientText className="text-primary font-RedHatDisplayRegular text-right p-0 text-[14px]">
                   New
-                </SmallText>
+                </GradientText>
               )}
 
               {/* <View className="w-[10px] h-[10px] rounded-full bg-primary"/> */}

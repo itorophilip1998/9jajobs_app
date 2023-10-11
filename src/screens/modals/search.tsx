@@ -144,7 +144,7 @@ const Search = ({
               textInput: {
                 fontFamily: FONTS.RedHatDisplayRegular,
                 backgroundColor: "transparent",
-                color: "#D4E1D2",
+                color: darkMode ? "#D4E1D2" : "#0f0f0f",
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,

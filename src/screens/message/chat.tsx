@@ -20,6 +20,8 @@ import { InputField, SmallText, Spacer, Title } from "../../components";
 import { COLORS } from "../../utility/colors";
 import { CHAT_MESSAGE } from "../../data/messages";
 import { FreelancerChat, UserChat } from "../../components/chatCards";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Chat = ({
   navigation,
@@ -27,15 +29,23 @@ const Chat = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [message, setMessage] = React.useState<string>("");
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   //   const sortRef = React.useState<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 items-center bg-black"
-      style={{ width: width, height: height }}
+      className="flex-1 items-center"
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black">
-        <View className="relative flex flex-row items-center w-full justify-between px-3 py-4 bg-[#0f0f0f]">
+      <SafeAreaView className="flex-1 w-full">
+        <View
+          style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
+          className="relative flex flex-row items-center w-full justify-between px-3 py-1 bg-[#0f0f0f]"
+        >
           <View className="flex-row items-center justify-between">
             <Pressable onPress={() => navigation.goBack()}>
               <Feather name="arrow-left-circle" size={30} color={"#696969"} />
@@ -49,7 +59,10 @@ const Chat = ({
                 className="w-[50px] h-[50px] rounded-full mr-3"
               />
               <View className="h-[60px] justify-center">
-                <SmallText className="text-[#D4E1D2] text-left p-0 text-[20px]">
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                  className="text-[#D4E1D2] text-left p-0 text-[20px]"
+                >
                   Collins Vincent
                 </SmallText>
                 <SmallText className="text-left p-0 text-[14px] text-[#696969]">
@@ -64,9 +77,6 @@ const Chat = ({
               className="mr-3"
             >
               <Ionicons name="ios-call" size={24} color={COLORS.primary} />
-            </Pressable>
-            <Pressable onPress={() => Linking.openURL("tel:+2347041528380")}>
-              <Entypo name="dots-three-vertical" size={24} color="#D4E1D2" />
             </Pressable>
           </View>
         </View>
@@ -88,7 +98,10 @@ const Chat = ({
             )
           }
         />
-        <View className="flex flex-row items-center w-full justify-between px-3 py-4 bg-[#0f0f0f]">
+        <View
+          style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
+          className="flex flex-row items-center w-full justify-between px-3 py-4 bg-[#0f0f0f]"
+        >
           <InputField
             onTextChange={(value) => setMessage(value)}
             defaultValue={message}
