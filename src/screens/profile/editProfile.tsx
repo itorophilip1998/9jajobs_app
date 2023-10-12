@@ -24,7 +24,7 @@ import { SET_DARK_MODE } from "../../store/authSlice";
 import { COLORS } from "../../utility/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { FONTS } from "../../utility/fonts";
-import { GooglePlacesAutocomplete,  } from "react-native-google-places-autocomplete";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const EditProfile = ({
   navigation,
@@ -59,9 +59,13 @@ const EditProfile = ({
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black pb-4">
+      <SafeAreaView className="flex-1 w-full pb-4">
         <ScrollView className="flex-1">
           <View className="w-full h-[170px] items-center mb-[40px]">
             <Image
@@ -81,50 +85,74 @@ const EditProfile = ({
               buttonStyleClassName="rounded-lg absolute bottom-[-15px] bg-transparent"
             />
           </View>
-          <View className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]">
-            <SmallText className="text-left p-0 text-[#D4E1D2] text-[18px] pb-2">
+          <View
+            style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
+            className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-left p-0 text-[#D4E1D2] text-[18px] pb-2"
+            >
               Dark mode
             </SmallText>
             <Switch
-              trackColor={{ false: "#696969", true: "#696969" }}
+              trackColor={{ false: "#c6c6c6", true: "#696969" }}
               thumbColor={COLORS.primary}
-              ios_backgroundColor="#696969"
+              ios_backgroundColor={darkMode ? "#696969" : "#c6c6c6"}
               onValueChange={(e) => {
                 dispatch(SET_DARK_MODE(e));
               }}
               value={darkMode}
             />
           </View>
-          <View className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]">
-            <SmallText className="text-left p-0 text-[#D4E1D2] text-[18px] pb-2">
+          <View
+            style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
+            className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-left p-0 text-[#D4E1D2] text-[18px] pb-2"
+            >
               Notification
             </SmallText>
             <Switch
-              trackColor={{ false: "#696969", true: "#696969" }}
+              trackColor={{ false: "#c6c6c6", true: "#696969" }}
               thumbColor={COLORS.primary}
-              ios_backgroundColor="#696969"
+              ios_backgroundColor={darkMode ? "#696969" : "#c6c6c6"}
               onValueChange={(e) => {
                 dispatch(SET_DARK_MODE(e));
               }}
               value={darkMode}
             />
           </View>
-          <View className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]">
-            <SmallText className="text-left p-0 text-[#D4E1D2] text-[18px] pb-2">
+          <View
+            style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
+            className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-left p-0 text-[#D4E1D2] text-[18px] pb-2"
+            >
               Language
             </SmallText>
             <SmallText className="text-right p-0 text-[#696969] text-[18px] pb-2">
               English
             </SmallText>
           </View>
-          <View className="w-full flex-row justify-end items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]">
+          <View
+            style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
+            className="w-full flex-row justify-end items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]"
+          >
             <Button
               text="Logout"
               buttonStyle={{ width: W(23), height: H(5) }}
               textStyleClassName="text-[14px]"
             />
           </View>
-          <SmallText className="text-left p-0 text-[#D4E1D2] text-[20px] py-3 px-3">
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+            className="text-left p-0 text-[#D4E1D2] text-[20px] py-3 px-3"
+          >
             Edit Profile
           </SmallText>
           <View className="w-full px-3">
@@ -136,6 +164,7 @@ const EditProfile = ({
               defaultValue={name}
               placeholder="John Doe"
               type={"default"}
+              containerStyle={{ width: "100%" }}
               autoCapitalize={"words"}
               className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
             />
@@ -145,6 +174,7 @@ const EditProfile = ({
             <InputField
               onTextChange={(value) => setEmail(value)}
               defaultValue={email}
+              containerStyle={{ width: "100%" }}
               placeholder="abc@gmail.com"
               type={"email-address"}
               autoCapitalize={"none"}
@@ -156,6 +186,7 @@ const EditProfile = ({
             <InputField
               onTextChange={(value) => setPhone(value)}
               defaultValue={phone}
+              containerStyle={{ width: "100%" }}
               placeholder="Enter phone number"
               type={"numeric"}
               autoCapitalize={"none"}
@@ -187,16 +218,20 @@ const EditProfile = ({
               placeholder="Enter your password"
               type={"default"}
               secure
+              containerStyle={{ width: "100%" }}
               autoCapitalize={"none"}
               className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
             />
-            <Button text="Save Changes" />
+            <Button text="Save Changes" buttonStyle={{ width: "100%" }} />
           </View>
         </ScrollView>
       </SafeAreaView>
       {/* POPUP FOR GOOGLE PLACES LOCATION FOR LOCATION */}
       <BottomSheet ref={locationRef} duration={0}>
-        <View className="flex-1 bg-[#1b1b1b] py-3 px-3">
+        <View
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+          className="flex-1 bg-[#1b1b1b] py-3 px-3"
+        >
           <GooglePlacesAutocomplete
             placeholder="Search City"
             enableHighAccuracyLocation
@@ -231,7 +266,7 @@ const EditProfile = ({
               textInput: {
                 fontFamily: FONTS.RedHatDisplayRegular,
                 backgroundColor: "transparent",
-                color: "#D4E1D2",
+                color: darkMode ? "#D4E1D2" : "#0f0f0f",
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,

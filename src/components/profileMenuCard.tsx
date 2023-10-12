@@ -3,6 +3,9 @@ import React from "react";
 import { SvgProps } from "react-native-svg";
 import SmallText from "./smallText";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { shadowBoxDark } from "../style/Typography";
 
 const ProfileMenuCard = ({
   item,
@@ -11,6 +14,7 @@ const ProfileMenuCard = ({
   item: { name: string; path: string; icon: React.FC<SvgProps> };
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -26,9 +30,16 @@ const ProfileMenuCard = ({
         }
       }}
       className="w-[47%] h-[50px] flex-row items-center bg-[#0f0f0f] py-3 px-3 mb-3 rounded-full"
+      style={[
+        !darkMode && shadowBoxDark,
+        { backgroundColor: darkMode ? "#0f0f0f" : "white" },
+      ]}
     >
       <item.icon />
-      <SmallText className="p-0 text-left text-white pl-2">
+      <SmallText
+        style={{ color: darkMode ? "white" : "#0f0f0f" }}
+        className="p-0 text-left text-white pl-2"
+      >
         {item.name}
       </SmallText>
     </TouchableOpacity>

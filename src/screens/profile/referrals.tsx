@@ -16,26 +16,36 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SmallText, Spacer } from "../../components";
 import TitleWithButton from "../../components/titleWithButton";
 import { width, height } from "../../utility/constant";
-import { shadowBox } from "../../style/Typography";
+import { shadowBox, shadowBoxDark } from "../../style/Typography";
 import { COLORS } from "../../utility/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { REFERRAL_HISTORY } from "../../data/transactions";
 import { FirstLetterUppercase } from "../../utility/helpers";
 import * as Clipboard from "expo-clipboard";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Referrals = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-[#0f0f0f] pb-4">
-        <View className="relative flex flex-row items-center w-full justify-between px-3 py-2 bg-[#0f0f0f]">
+      <SafeAreaView className="flex-1 w-full pb-4">
+        <View
+          style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
+          className="relative flex flex-row items-center w-full justify-between px-3 bg-[#0f0f0f]"
+        >
           <TitleWithButton title="Referrals" fire={() => navigation.goBack()} />
         </View>
         <Spacer value={H("3%")} axis="vertical" />
@@ -45,7 +55,10 @@ const Referrals = ({
           </SmallText>
           <Spacer value={H("3%")} axis="vertical" />
           <View
-            style={shadowBox}
+            style={[
+              darkMode ? shadowBox : shadowBoxDark,
+              { backgroundColor: darkMode ? "black" : "#FFFFFF" },
+            ]}
             className="items-center w-full px-5 py-4 bg-black rounded-2xl"
           >
             <View className="w-auto flex-row justify-between items-center mb-2">
@@ -77,7 +90,10 @@ const Referrals = ({
             <View className="mx-auto flex-row items-center mt-2">
               <SmallText className="text-[#696969] text-center text-[18px] p-0 mr-2">
                 Code:{" "}
-                <SmallText className="text-[#FFFFFF] text-center text-[18px] p-0">
+                <SmallText
+                  style={{ color: darkMode ? "#FFFFFF" : COLORS.primary }}
+                  className="text-[#FFFFFF] text-center text-[18px] p-0"
+                >
                   93jskkl43
                 </SmallText>
               </SmallText>
@@ -93,14 +109,23 @@ const Referrals = ({
           </View>
           <Spacer value={H("4%")} axis="vertical" />
         </View>
-        <View className="flex-1 w-full py-3 bg-black">
+        <View
+          style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
+          className="flex-1 w-full py-3 bg-black"
+        >
           <FlatList
             ListHeaderComponent={
               <View className="w-full flex-row justify-between items-center mb-4">
-                <SmallText className="text-[#696969] text-left p-0 text-[20px]">
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+                  className="text-[#696969] text-left p-0 text-[20px]"
+                >
                   Total Referrals
                 </SmallText>
-                <SmallText className="text-[#696969] font-RedHatDisplayBold text-left p-0 text-[20px]">
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+                  className="text-[#696969] font-RedHatDisplayBold text-left p-0 text-[20px]"
+                >
                   20
                 </SmallText>
               </View>
@@ -115,15 +140,21 @@ const Referrals = ({
             renderItem={({ item }) => (
               <Pressable className="w-full">
                 <View className="flex-row justify-between items-center w-full mb-1">
-                  <SmallText className="text-[#BDB7C5] text-left p-0 text-[18px]">
+                  <SmallText
+                    style={{ color: darkMode ? "#BDB7C5" : "#0f0f0f" }}
+                    className="text-[#BDB7C5] text-left p-0 text-[18px]"
+                  >
                     {item.name}
                   </SmallText>
-                  <SmallText className="text-[#BDB7C5] text-right p-0 text-[18px]">
+                  <SmallText
+                    style={{ color: darkMode ? "#BDB7C5" : "#0f0f0f" }}
+                    className="text-[#BDB7C5] text-right p-0 text-[18px]"
+                  >
                     ₦{item.amount.toLocaleString()}
                   </SmallText>
                 </View>
                 <View className="flex-row justify-between items-center w-full">
-                  <SmallText className="text-[#696969] text-left p-0 text-[15px]">
+                  <SmallText className="text-primary text-left p-0 text-[15px]">
                     {item.status}
                   </SmallText>
                   <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px]">

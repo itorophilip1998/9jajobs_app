@@ -23,44 +23,73 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 import search from "../modals/search";
 import { MAIN_USERS } from "../../data/listing";
 import { COLORS } from "../../utility/colors";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { shadowBoxDark } from "../../style/Typography";
 
 const MyListing = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   const [id, setID] = React.useState<string>("");
   const [search, setSearch] = React.useState<string>("");
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black py-4">
-        <View className="relative flex flex-row items-center w-full bg-[#0f0f0f] justify-between px-3 py-4">
+      <SafeAreaView className="flex-1 w-full">
+        <View
+          style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
+          className="relative flex flex-row items-center w-full bg-[#0f0f0f] justify-between px-3 py-4"
+        >
           <View className="flex-row items-center w-[65%]">
             <Pressable onPress={() => navigation.goBack()} className="mr-3">
               <Feather name="arrow-left-circle" size={30} color={"#696969"} />
             </Pressable>
-            <Pressable className="w-[90%] px-3 py-2 border bg-[#1b1b1b] border-[#696969] focus:border-primary rounded-full flex-row justify-between items-center">
-              <AntDesign name="search1" size={20} color="#696969" />
+            <Pressable
+              style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
+              className="w-[90%] px-3 py-2 border bg-[#1b1b1b] border-primary rounded-full flex-row justify-between items-center"
+            >
+              <AntDesign
+                name="search1"
+                size={20}
+                color={darkMode ? "#D4E1D2" : "#696969"}
+              />
               <TextInput
                 keyboardType={"web-search"}
-                className={`h-full w-[90%] text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
+                className={`h-full w-[87%] text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
                 onChangeText={(value) => setSearch(value)}
                 value={search}
-                placeholderTextColor={"#D4E1D2"}
+                // onFocus={() => {
+                //   onFocus && onFocus();
+                // }}
+                // onBlur={() => {
+                //   onBlur && onBlur();
+                // }}
+                placeholderTextColor={"#626262"}
                 placeholder={"Search here"}
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 autoCapitalize={"none"}
               />
             </Pressable>
           </View>
-          <TouchableOpacity className="bg-black py-2 px-4 w-auto justify-center items-center rounded-full">
-            <SmallText className="text-white p-0 text-[15px] pl-1">
-              Sort by
-            </SmallText>
-          </TouchableOpacity>
+          {darkMode ? (
+            <TouchableOpacity className="bg-black py-2 px-4 w-auto justify-center items-center rounded-full">
+              <SmallText className="text-white p-0 text-[15px] pl-1">
+                Sort by
+              </SmallText>
+            </TouchableOpacity>
+          ) : (
+            <Button text="Sort by" buttonStyle={{ width: 80, height: 40 }} />
+          )}
         </View>
 
         <FlatList
@@ -68,10 +97,16 @@ const MyListing = ({
             <>
               <Spacer value={H("3%")} axis="vertical" />
               <View className="px-3 flex-row justify-between items-center">
-                <SmallText className="text-[#696969] text-[20px] text-left p-0 w-[45%]">
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+                  className="text-[#696969] text-[20px] text-left p-0 w-[45%]"
+                >
                   Brand Name
                 </SmallText>
-                <SmallText className="text-[#696969] text-[20px] text-left p-0 w-[45%]">
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+                  className="text-[#696969] text-[20px] text-left p-0 w-[45%]"
+                >
                   Action
                 </SmallText>
               </View>
@@ -83,7 +118,10 @@ const MyListing = ({
           data={MAIN_USERS}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
-            <View className="border-b-[2px] border-b-[#0f0f0f]" />
+            <View
+              style={{ borderBottomColor: darkMode ? "#0f0f0f" : "#696969" }}
+              className="border-b-[1px] border-b-[#0f0f0f]"
+            />
           )}
           renderItem={({ item }) => (
             <Pressable
@@ -104,6 +142,12 @@ const MyListing = ({
               </SmallText>
               <View className="w-[47%] flex-row justify-between items-center">
                 <TouchableOpacity
+                  style={[
+                    !darkMode && shadowBoxDark,
+                    {
+                      backgroundColor: darkMode ? "#0f0f0f" : "white",
+                    },
+                  ]}
                   onPress={() => navigation.navigate("EditListing")}
                   className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
                 >
@@ -112,7 +156,15 @@ const MyListing = ({
                     Edit
                   </SmallText>
                 </TouchableOpacity>
-                <TouchableOpacity className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg">
+                <TouchableOpacity
+                  style={[
+                    !darkMode && shadowBoxDark,
+                    {
+                      backgroundColor: darkMode ? "#0f0f0f" : "white",
+                    },
+                  ]}
+                  className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
+                >
                   <AntDesign name="delete" size={15} color={COLORS.primary} />
                   <SmallText className="text-primary p-0 text-[13px] pl-1">
                     Delete
@@ -124,7 +176,10 @@ const MyListing = ({
           ListFooterComponent={
             <View className="px-3">
               <Spacer value={H("6%")} axis="vertical" />
-              <SmallText className="text-[#D4E1D2] text-[20px] text-left p-0">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                className="text-[#D4E1D2] text-[20px] text-left p-0"
+              >
                 Details
               </SmallText>
               <Spacer value={H("4%")} axis="vertical" />

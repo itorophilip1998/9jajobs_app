@@ -32,6 +32,9 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { COLORS } from "../../utility/colors";
 import { FONTS } from "../../utility/fonts";
 import { ResizeMode, Video } from "expo-av";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { shadowBoxDark } from "../../style/Typography";
 
 const EditListing = ({
   navigation,
@@ -48,6 +51,7 @@ const EditListing = ({
   const [amenities, setAmenities] = React.useState<string>("");
   const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
   const [selectedVideos, setSelectedVideos] = React.useState<string[]>([]);
+  const { darkMode } = useSelector((state: RootState) => state.auth);
 
   const pickImages = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -85,10 +89,17 @@ const EditListing = ({
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1 items-center bg-[#0f0f0f]"
-        style={{ width: width, height: height }}
+        style={{
+          width: width,
+          height: height,
+          backgroundColor: darkMode ? "black" : "#D4E1D2",
+        }}
       >
-        <SafeAreaView className="flex-1 w-full bg-[#0f0f0f]">
-          <View className="w-full px-3">
+        <SafeAreaView className="flex-1 w-full">
+          <View
+            style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
+            className="relative flex flex-row items-center w-full justify-between px-3 mb-3 bg-[#0f0f0f]"
+          >
             <TitleWithButton
               title="Edit Listing"
               fire={() => navigation.goBack()}
@@ -96,8 +107,14 @@ const EditListing = ({
               //   rightFire={() => {}}
             />
           </View>
-          <ScrollView className="flex-1 px-3 bg-black rounded-t-xl py-3">
-            <SmallText className="text-[#D4E1D2] text-left p-0">
+          <ScrollView
+            style={{ backgroundColor: darkMode ? "#0f0f0f" : "transparent" }}
+            className="flex-1 px-3 bg-black rounded-t-xl py-3"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Business Name
             </SmallText>
             <Spacer axis="vertical" value={H(2)} />
@@ -108,10 +125,14 @@ const EditListing = ({
               containerStyle={{ width: "100%" }}
               type={"default"}
               autoCapitalize={"none"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
             />
             <Spacer axis="vertical" value={H(2)} />
-            <SmallText className="text-[#D4E1D2] text-left p-0">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Description
             </SmallText>
             <Spacer axis="vertical" value={H(2)} />
@@ -121,16 +142,21 @@ const EditListing = ({
               placeholder="Describe your business here"
               containerStyle={{ width: "100%" }}
               type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
               className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
             />
             <Spacer axis="vertical" value={H(2)} />
-            <SmallText className="text-[#D4E1D2] text-left p-0">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Category
             </SmallText>
             <Spacer axis="vertical" value={H(2)} />
             <InputField
               onTextChange={(value) => setCategory(value)}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               defaultValue={category}
               placeholder="Select your business category"
               type={"default"}
@@ -144,13 +170,17 @@ const EditListing = ({
               onSuffixTap={() => categoryRef.current?.open()}
             />
             <Spacer axis="vertical" value={H(2)} />
-            <SmallText className="text-[#D4E1D2] text-left p-0">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Location
             </SmallText>
             <Spacer axis="vertical" value={H(2)} />
             <InputField
               onTextChange={(value) => setLocation(value)}
               defaultValue={location}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               placeholder="Select your business location"
               type={"default"}
               containerStyle={{ width: "100%" }}
@@ -163,12 +193,16 @@ const EditListing = ({
               onSuffixTap={() => locationRef.current?.open()}
             />
             <Spacer axis="vertical" value={H(2)} />
-            <SmallText className="text-[#D4E1D2] text-left p-0">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Email
             </SmallText>
             <Spacer axis="vertical" value={H(2)} />
             <InputField
               onTextChange={(value) => setEmail(value)}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               defaultValue={email}
               placeholder="Enter your business email address"
               type={"default"}
@@ -177,13 +211,17 @@ const EditListing = ({
               className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
             />
             <Spacer axis="vertical" value={H(2)} />
-            <SmallText className="text-[#D4E1D2] text-left p-0">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Phone Number
             </SmallText>
             <Spacer axis="vertical" value={H(2)} />
             <InputField
               onTextChange={(value) => setPhone(value)}
               defaultValue={phone}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               placeholder="Enter your business phone number"
               containerStyle={{ width: "100%" }}
               type={"default"}
@@ -191,7 +229,10 @@ const EditListing = ({
               className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
             />
             <Spacer axis="vertical" value={H(2)} />
-            <SmallText className="text-[#D4E1D2] text-left p-0">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Website
             </SmallText>
             <Spacer axis="vertical" value={H(2)} />
@@ -200,12 +241,16 @@ const EditListing = ({
               defaultValue={website}
               placeholder="Enter your business website link"
               type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
               containerStyle={{ width: "100%" }}
               className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
             />
             <Spacer axis="vertical" value={H(2)} />
-            <SmallText className="text-[#D4E1D2] text-left p-0">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Amenities
             </SmallText>
             <Spacer axis="vertical" value={H(2)} />
@@ -215,6 +260,7 @@ const EditListing = ({
               placeholder="Select amenities for your business"
               type={"default"}
               containerStyle={{ width: "100%" }}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
               className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
               editable={false}
@@ -226,7 +272,10 @@ const EditListing = ({
             <Spacer axis="vertical" value={H(2)} />
             <View className="flex-row w-full justify-between items-start">
               <View className="w-[47%] flex-row flex-wrap justify-between items-center">
-                <SmallText className="w-full text-[#D4E1D2] text-left p-0 pb-3">
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                  className="w-full text-[#D4E1D2] text-left p-0 pb-3"
+                >
                   Add at least 2 images
                 </SmallText>
                 {selectedImages.map((item, idx) => (
@@ -258,13 +307,26 @@ const EditListing = ({
                 ))}
                 <Pressable
                   onPress={pickImages}
+                  style={[
+                    !darkMode && shadowBoxDark,
+                    {
+                      backgroundColor: darkMode ? "#0F0F0F" : "#FFFFFF",
+                    },
+                  ]}
                   className="w-[45%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
                 >
-                  <Entypo name="plus" size={27} color="#D4E1D2" />
+                  <Entypo
+                    name="plus"
+                    size={27}
+                    color={darkMode ? "#D4E1D2" : COLORS.primary}
+                  />
                 </Pressable>
               </View>
               <View className="w-[47%] flex-row flex-wrap justify-between items-center">
-                <SmallText className="w-full text-[#D4E1D2] text-left p-0 pb-3">
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                  className="w-full text-[#D4E1D2] text-left p-0 pb-3"
+                >
                   Add Videos
                 </SmallText>
                 {selectedVideos.map((item, idx) => (
@@ -300,9 +362,19 @@ const EditListing = ({
                 ))}
                 <Pressable
                   onPress={pickVideos}
-                  className="w-[48%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
+                  style={[
+                    !darkMode && shadowBoxDark,
+                    {
+                      backgroundColor: darkMode ? "#0F0F0F" : "#FFFFFF",
+                    },
+                  ]}
+                  className="w-[45%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
                 >
-                  <Entypo name="plus" size={27} color="#D4E1D2" />
+                  <Entypo
+                    name="plus"
+                    size={27}
+                    color={darkMode ? "#D4E1D2" : COLORS.primary}
+                  />
                 </Pressable>
               </View>
             </View>
@@ -315,7 +387,10 @@ const EditListing = ({
 
       {/* CATEGORY BOTTOM SHEET POPUP */}
       <BottomSheet ref={categoryRef} duration={0}>
-        <View className="w-full flex-1 px-5 bg-[#0f0f0f]">
+        <View
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+          className="w-full flex-1 px-5 bg-[#0f0f0f]"
+        >
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
@@ -332,7 +407,10 @@ const EditListing = ({
                   categoryRef.current?.close();
                 }}
               >
-                <SmallText className="text-left text-[#D4E1D2] p-0 font-ManropeSemiBold text-[15px]">
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                  className="text-left text-[#D4E1D2] p-0 font-ManropeSemiBold text-[15px]"
+                >
                   {item.title}
                 </SmallText>
               </Pressable>
@@ -344,7 +422,10 @@ const EditListing = ({
 
       {/* AMENITIES BOTTOM SHEET POPUP */}
       <BottomSheet ref={amenitiesRef} duration={0}>
-        <View className="w-full flex-1 px-5 bg-[#0f0f0f]">
+        <View
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+          className="w-full flex-1 px-5 bg-[#0f0f0f]"
+        >
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
@@ -361,7 +442,10 @@ const EditListing = ({
                   amenitiesRef.current?.close();
                 }}
               >
-                <SmallText className="text-left text-[#D4E1D2] p-0 font-ManropeSemiBold text-[15px]">
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                  className="text-left text-[#D4E1D2] p-0 font-ManropeSemiBold text-[15px]"
+                >
                   {item}
                 </SmallText>
               </Pressable>
@@ -373,7 +457,10 @@ const EditListing = ({
 
       {/* POPUP FOR GOOGLE PLACES LOCATION FOR LOCATION */}
       <BottomSheet ref={locationRef} duration={0}>
-        <View className="flex-1 bg-[#1b1b1b] py-3 px-3">
+        <View
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+          className="flex-1 bg-[#1b1b1b] py-3 px-3"
+        >
           <GooglePlacesAutocomplete
             placeholder="Search City"
             enableHighAccuracyLocation
@@ -408,7 +495,7 @@ const EditListing = ({
               textInput: {
                 fontFamily: FONTS.RedHatDisplayRegular,
                 backgroundColor: "transparent",
-                color: "#D4E1D2",
+                color: darkMode ? "#D4E1D2" : "#0f0f0f",
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,

@@ -30,6 +30,9 @@ import FeedBackIcon from "../../../assets/icons/feedback.svg";
 import FaqIcon from "../../../assets/icons/faq.svg";
 import AboutIcon from "../../../assets/icons/about.svg";
 import ProfileMenuCard from "../../components/profileMenuCard";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { GradientText } from "../../components/gradientText";
 
 const routes = [
   { path: "MyWallet", name: "My Wallet", icon: WalletIcon },
@@ -51,18 +54,32 @@ const Profile = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   //   const sortRef = React.useState<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <View className="h-[30%] bg-[#0f0f0f] w-full pt-5" />
+      <View
+        style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
+        className="h-[40%] bg-[#0f0f0f] w-full pt-5"
+      />
       <SafeAreaView className="absolute left-0 top-0 flex-1 w-full h-full px-3 py-4">
-        <Title className="text-center text-[#D4E1D2] text-[24px] py-4 ">
-          My Account
-        </Title>
+        {darkMode ? (
+          <Title className="text-center text-[#D4E1D2] text-[24px] py-4 ">
+            My Account
+          </Title>
+        ) : (
+          <GradientText className="text-center font-RedHatDisplaySemiBold text-[#D4E1D2] text-[24px] py-4">
+            My Account
+          </GradientText>
+        )}
         <Image
           source={{
             uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
@@ -72,10 +89,20 @@ const Profile = ({
         />
         <View className="flex-row item-center justify-center pl-4">
           <View>
-            <SmallText className="text-center p-0 font-RedHatDisplayBold text-[#D4E1D2] text-[22px]">
-              Victor Daniel
-            </SmallText>
-            <SmallText className="text-center p-0 text-[#696969] text-[18px] pb-2">
+            {darkMode ? (
+              <SmallText className="text-center p-0 font-RedHatDisplayBold text-[#D4E1D2] text-[22px]">
+                Victor Daniel
+              </SmallText>
+            ) : (
+              <GradientText className="text-center p-0 font-RedHatDisplayBold text-[#D4E1D2] text-[22px]">
+                Victor Daniel
+              </GradientText>
+            )}
+
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+              className="text-center p-0 text-[#696969] text-[18px] pb-2"
+            >
               Victordaniel@gmail.com
             </SmallText>
           </View>

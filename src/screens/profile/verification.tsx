@@ -32,6 +32,8 @@ import Checkbox from "expo-checkbox";
 import { toggleStringInArray } from "../../utility/helpers";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { FONTS } from "../../utility/fonts";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Verification = ({
   navigation,
@@ -48,6 +50,7 @@ const Verification = ({
   const [location, setLocation] = React.useState<string>("");
   const [homeAddress, setHomeAddress] = React.useState<string>("");
   const [isChecked, setChecked] = React.useState<boolean>(false);
+  const { darkMode } = useSelector((state: RootState) => state.auth);
 
   const pickFile = async () => {
     try {
@@ -87,10 +90,17 @@ const Verification = ({
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 items-center bg-black"
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
     >
-      <SafeAreaView className="flex-1 w-full bg-black pb-4">
-        <View className="relative flex flex-row items-center w-full justify-between px-3 py-2 bg-[#0f0f0f]">
+      <SafeAreaView className="flex-1 w-full pb-4">
+        <View
+          style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
+          className="relative flex flex-row items-center w-full justify-between px-3 bg-[#0f0f0f]"
+        >
           <TitleWithButton
             title="Verification"
             fire={() => navigation.goBack()}
@@ -125,7 +135,10 @@ const Verification = ({
           <Spacer value={H("2%")} axis="vertical" />
           <View className="flex-row w-full justify-between items-start">
             <View className="w-[30%] flex-row flex-wrap justify-between items-center">
-              <SmallText className="w-full text-[#D4E1D2] text-left p-0 pb-3">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                className="w-full text-[#D4E1D2] text-left p-0 pb-3"
+              >
                 Upload ID card front
               </SmallText>
               {idFront ? (
@@ -150,14 +163,22 @@ const Verification = ({
               ) : (
                 <Pressable
                   onPress={() => pickImages("idFront")}
+                  style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
                   className="w-[80%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
                 >
-                  <Entypo name="plus" size={27} color="#D4E1D2" />
+                  <Entypo
+                    name="plus"
+                    size={27}
+                    color={darkMode ? "#D4E1D2" : COLORS.primary}
+                  />
                 </Pressable>
               )}
             </View>
             <View className="w-[30%] flex-row flex-wrap justify-between items-center">
-              <SmallText className="w-full text-[#D4E1D2] text-left p-0 pb-3">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                className="w-full text-[#D4E1D2] text-left p-0 pb-3"
+              >
                 Upload ID card back
               </SmallText>
               {idBack ? (
@@ -181,26 +202,41 @@ const Verification = ({
                 </View>
               ) : (
                 <Pressable
+                  style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
                   onPress={() => pickImages("idBack")}
                   className="w-[80%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
                 >
-                  <Entypo name="plus" size={27} color="#D4E1D2" />
+                  <Entypo
+                    name="plus"
+                    size={27}
+                    color={darkMode ? "#D4E1D2" : COLORS.primary}
+                  />
                 </Pressable>
               )}
             </View>
             <View className="w-[30%] flex-row flex-wrap justify-between items-center">
-              <SmallText className="w-full text-[#D4E1D2] text-left p-0 pb-3">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                className="w-full text-[#D4E1D2] text-left p-0 pb-3"
+              >
                 Upload CAC Certificate
               </SmallText>
 
               <Pressable
                 onPress={pickFile}
+                style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
                 className="w-[80%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
               >
                 <Entypo
                   name={cac ? "check" : "plus"}
                   size={27}
-                  color={cac ? COLORS.primary : "#D4E1D2"}
+                  color={
+                    darkMode
+                      ? cac
+                        ? COLORS.primary
+                        : "#D4E1D2"
+                      : COLORS.primary
+                  }
                 />
               </Pressable>
             </View>
@@ -339,7 +375,10 @@ const Verification = ({
       </SafeAreaView>
       {/* POPUP FOR GOOGLE PLACES LOCATION FOR LOCATION */}
       <BottomSheet ref={locationRef} duration={0}>
-        <View className="flex-1 bg-[#1b1b1b] py-3 px-3">
+        <View
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+          className="flex-1 bg-[#1b1b1b] py-3 px-3"
+        >
           <GooglePlacesAutocomplete
             placeholder="Enter your Business Location"
             enableHighAccuracyLocation
@@ -374,7 +413,7 @@ const Verification = ({
               textInput: {
                 fontFamily: FONTS.RedHatDisplayRegular,
                 backgroundColor: "transparent",
-                color: "#D4E1D2",
+                color: darkMode ? "#D4E1D2" : "#0f0f0f",
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,
@@ -387,7 +426,10 @@ const Verification = ({
 
       {/* POPUP FOR GOOGLE PLACES LOCATION FOR HOME ADDRESS */}
       <BottomSheet ref={homeAddressRef} duration={0}>
-        <View className="flex-1 bg-[#1b1b1b] py-3 px-3">
+        <View
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+          className="flex-1 bg-[#1b1b1b] py-3 px-3"
+        >
           <GooglePlacesAutocomplete
             placeholder="Enter your Home Address"
             enableHighAccuracyLocation
@@ -422,7 +464,7 @@ const Verification = ({
               textInput: {
                 fontFamily: FONTS.RedHatDisplayRegular,
                 backgroundColor: "transparent",
-                color: "#D4E1D2",
+                color: darkMode ? "#D4E1D2" : "#0f0f0f",
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,
