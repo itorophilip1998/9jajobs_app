@@ -68,7 +68,7 @@ const Profile = ({
     >
       <View
         style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
-        className="h-[40%] bg-[#0f0f0f] w-full pt-5"
+        className="h-[200px] bg-[#0f0f0f] w-full pt-5"
       />
       <SafeAreaView className="absolute left-0 top-0 flex-1 w-full h-full px-3 py-4">
         {darkMode ? (

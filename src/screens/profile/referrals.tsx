@@ -24,6 +24,7 @@ import { FirstLetterUppercase } from "../../utility/helpers";
 import * as Clipboard from "expo-clipboard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import Toast from "react-native-toast-message";
 
 const Referrals = ({
   navigation,
@@ -102,7 +103,13 @@ const Referrals = ({
                 size={24}
                 color={COLORS.primary}
                 onPress={async () => {
-                  await Clipboard.setStringAsync("93jskkl43");
+                  const set = await Clipboard.setStringAsync("93jskkl43");
+                  if (set) {
+                    Toast.show({
+                      type: "success",
+                      text1: "Copied to Clipboard",
+                    });
+                  }
                 }}
               />
             </View>
