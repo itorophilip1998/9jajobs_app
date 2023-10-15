@@ -19,6 +19,7 @@ import { SET_TYPE } from "../../store/searchSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
+import NearUserCard from "../../components/nearUserCard";
 
 const Dashboard = ({
   navigation,
@@ -172,10 +173,10 @@ const Dashboard = ({
             )}
             renderItem={({ item }) => (
               <Pressable
-                className="w-[220px] py-1 px-1"
+                className="w-[260px] py-1 px-1"
                 onPress={() => navigation.navigate("FreelancerProfile")}
               >
-                <UserCard item={item} />
+                <NearUserCard item={item} />
               </Pressable>
             )}
           />
