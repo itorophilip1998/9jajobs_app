@@ -41,11 +41,11 @@ const Dashboard = ({
         >
           {darkMode ? (
             <Title className="!text-[#626262] font-RedHatDisplaySemiBold mt-3">
-             What are you looking for
+             What are you looking for!
             </Title>
           ) : (
             <GradientText className="!text-[#626262] text-[27px] font-RedHatDisplaySemiBold mt-3">
-              What are you looking for
+              What are you looking for!
             </GradientText>
           )}
 
