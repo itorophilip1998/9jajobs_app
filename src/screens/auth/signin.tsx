@@ -67,7 +67,6 @@ const Signin = ({
   const [visible, setVisible] = React.useState(false);
   const [visible1, setVisible1] = React.useState(false);
   const [visible2, setVisible2] = React.useState(false);
-
   const dispatch = useDispatch();
 
   const validateSignIn = () => {
