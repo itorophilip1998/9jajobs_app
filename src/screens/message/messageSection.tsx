@@ -87,7 +87,7 @@ const MessageSection = ({
         data={MESSAGES}
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => (
-          <Spacer value={H("3%")} axis="vertical" />
+          <Spacer value={H("1%")} axis="vertical" />
         )}
         renderItem={({ item }) => (
           <TouchableOpacity

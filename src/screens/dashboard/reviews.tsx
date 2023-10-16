@@ -95,6 +95,7 @@ const Reviews = ({
           <Button
             text="Add Review"
             onPress={() => navigation.navigate("AddReview")}
+            buttonStyle={{width: "100%"}}
           />
           <Spacer value={H("3%")} axis="vertical" />
         </ScrollView>

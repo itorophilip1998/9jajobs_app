@@ -19,6 +19,9 @@ import { Button, InputField, SmallText, Spacer } from "../../components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { LinearGradient } from "expo-linear-gradient";
+// @ts-ignore
+import StarRating from "react-native-star-rating";
+import { COLORS } from "../../utility/colors";
 
 const AddReview = ({
   navigation,
@@ -26,6 +29,7 @@ const AddReview = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [review, setReview] = React.useState<string>("");
+  const [rating, setRating] = React.useState<number>(0);
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <KeyboardAvoidingView
@@ -53,6 +57,17 @@ const AddReview = ({
             Add a review by typing inside the box
           </SmallText>
           <Spacer axis="vertical" value={H("3%")} />
+          <View className="w-[70%] mx-auto">
+            <StarRating
+              disabled={false}
+              maxStars={5}
+              rating={rating}
+              selectedStar={(rating: number) => setRating(rating)}
+              fullStarColor={COLORS.primary} // Adjust colors based on mode
+              emptyStarColor={COLORS.primary}
+            />
+          </View>
+          <Spacer axis="vertical" value={H("3%")} />
           {darkMode ? (
             <InputField
               defaultValue={review}
@@ -77,7 +92,11 @@ const AddReview = ({
                 onTextChange={(value) => setReview(value)}
                 type={"default"}
                 autoCapitalize={"sentences"}
-                containerStyle={{ width: "100%", backgroundColor: "white", borderRadius: 8 }}
+                containerStyle={{
+                  width: "100%",
+                  backgroundColor: "white",
+                  borderRadius: 8,
+                }}
                 multiline={true}
                 numberOfLines={7}
                 placeholder="Enter your review"

@@ -22,7 +22,7 @@ const CategoryCard = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="w-[31%] mb-4 px-2 py-2 bg-[#0F0F0F]  rounded-md"
+      className="w-[31%] mb-4 px-2 py-2 bg-[#0F0F0F]  rounded-md mr-3"
       style={{
         backgroundColor: color,
         ...shadowBox,
@@ -35,7 +35,7 @@ const CategoryCard = ({
       />
       <SmallText
         style={{ color: darkMode ? "white" : "#0F0F0F" }}
-        className="text-white"
+        className="text-white p-0 text-[13px] font-RedHatDisplayMedium"
       >
         {item.title}
       </SmallText>

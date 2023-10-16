@@ -3,12 +3,12 @@ import React from "react";
 import { FirstLetterUppercase } from "../utility/helpers";
 import SmallText from "./smallText";
 import { COLORS } from "../utility/colors";
-import { Feather } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
 const ReviewCard = () => {
-  const {darkMode} = useSelector((state: RootState) => state.auth)
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View className="w-full">
       <View className="w-full flex-row justify-between items-center">
@@ -20,12 +20,20 @@ const ReviewCard = () => {
             alt=""
             className="w-[50px] h-[50px] rounded-full mr-3"
           />
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[19px] pr-2 font-RedHatDisplaySemiBold"
-          >
-            {FirstLetterUppercase("Faith Abiodon")}
-          </SmallText>
+          <View className="pr-2">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+            >
+              {FirstLetterUppercase("Faith Abiodon")}
+            </SmallText>
+            <View className="flex-row items-center">
+              <AntDesign name="star" size={15} color={COLORS.primary} />
+              <SmallText className="text-primary p-0 text-[13px] pl-1">
+                4.2
+              </SmallText>
+            </View>
+          </View>
         </View>
         <SmallText className="text-[#696969] text-left p-0 text-[15px] pr-2 font-RedHatDisplaySemiBold">
           2/04/2022

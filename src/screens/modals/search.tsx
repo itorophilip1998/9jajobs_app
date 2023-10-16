@@ -53,7 +53,7 @@ const Search = ({
         <View className="w-full flex-row items-center justify-between">
           <Pressable
             style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
-            className="w-[50%] px-3 py-2 border bg-[#1b1b1b] border-primary rounded-full flex-row justify-between items-center"
+            className="w-[60%] px-3 py-2 border bg-[#1b1b1b] border-primary rounded-full flex-row justify-between items-center"
           >
             <AntDesign
               name="search1"
@@ -95,7 +95,7 @@ const Search = ({
             </SmallText>
             <AntDesign name="downcircleo" size={13} color={COLORS.primary} />
           </Pressable>
-          <SliderIcon onPress={() => navigation.navigate("Filter")} />
+          {/* <SliderIcon onPress={() => navigation.navigate("Filter")} /> */}
           <AntDesign
             name="closecircleo"
             size={20}

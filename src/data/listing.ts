@@ -1,8 +1,7 @@
 export const MAIN_USERS = [
   {
     id: 1,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/c1Rw7V3/Rectangle-30.png",
     verified: false,
     rating: 3.2,
     location: "Ada George",
@@ -12,8 +11,7 @@ export const MAIN_USERS = [
   },
   {
     id: 2,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/dm4wspg/Rectangle-39.png",
     verified: true,
     rating: 3.2,
     location: "Ada George",
@@ -23,8 +21,7 @@ export const MAIN_USERS = [
   },
   {
     id: 3,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/rbCFc33/Rectangle-53.png",
     verified: false,
     rating: 3.2,
     location: "Ada George",
@@ -34,8 +31,7 @@ export const MAIN_USERS = [
   },
   {
     id: 4,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/hKJtGrZ/Rectangle-33-3.png",
     verified: true,
     rating: 3.2,
     location: "Ada George",
@@ -45,8 +41,7 @@ export const MAIN_USERS = [
   },
   {
     id: 5,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/3TzCqnN/Rectangle-49-1.png",
     verified: false,
     rating: 3.2,
     location: "Ada George",
@@ -60,13 +55,12 @@ export const MAIN_USERS = [
 export const SPONSORED_MAIN_USERS = [
   {
     id: 1,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/c1Rw7V3/Rectangle-30.png",
     verified: false,
     rating: 3.2,
     location: "Ada George",
-    name: "Collins Vincent",
-    career: "Frontend developer",
+    name: "Kings Property",
+    career: "Real Estate",
     sponsored: true,
   },
   {
@@ -76,25 +70,23 @@ export const SPONSORED_MAIN_USERS = [
     verified: true,
     rating: 3.2,
     location: "Ada George",
-    name: "Collins Vincent",
-    career: "Frontend developer",
+    name: "Vera Nathan",
+    career: "Artist",
     sponsored: true,
   },
   {
     id: 3,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/dm4wspg/Rectangle-39.png",
     verified: false,
     rating: 3.2,
     location: "Ada George",
-    name: "Collins Vincent",
+    name: "Johnny Foods",
     career: "Frontend developer",
     sponsored: true,
   },
   {
     id: 4,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/hKJtGrZ/Rectangle-33-3.png",
     verified: true,
     rating: 3.2,
     location: "Ada George",
@@ -104,12 +96,11 @@ export const SPONSORED_MAIN_USERS = [
   },
   {
     id: 5,
-    image:
-      "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    image: "https://i.ibb.co/3TzCqnN/Rectangle-49-1.png",
     verified: false,
     rating: 3.2,
     location: "Ada George",
-    name: "Collins Vincent",
+    name: "Itoro Philip",
     career: "Frontend developer",
     sponsored: true,
   },

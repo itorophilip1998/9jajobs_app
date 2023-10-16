@@ -79,7 +79,13 @@ const TabNavigation = () => {
       />
       <Tab.Screen
         name="Message"
-        options={{ tabBarLabel: "Messages" }}
+        options={{
+          tabBarLabel: "Messages",
+          tabBarBadge: 4,
+          tabBarBadgeStyle: {
+            top: -5
+          }
+        }}
         component={MessageStack}
       />
       <Tab.Screen
