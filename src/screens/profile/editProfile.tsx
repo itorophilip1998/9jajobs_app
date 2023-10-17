@@ -125,7 +125,7 @@ const EditProfile = ({
               value={darkMode}
             />
           </View>
-          <View
+          {/* <View
             style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
             className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]"
           >
@@ -138,10 +138,10 @@ const EditProfile = ({
             <SmallText className="text-right p-0 text-[#696969] text-[18px] pb-2">
               English
             </SmallText>
-          </View>
+          </View> */}
           <View
             style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
-            className="w-full flex-row justify-end items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]"
+            className="w-full flex-row justify-end items-center px-3 py-4 pb-5 border-b-2 border-b-[#0F0F0F]"
           >
             <Button
               text="Logout"

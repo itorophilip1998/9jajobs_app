@@ -6,8 +6,9 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
-  Pressable,
+  Pressable 
 } from "react-native";
+ 
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {

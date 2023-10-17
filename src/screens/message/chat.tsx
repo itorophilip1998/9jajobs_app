@@ -63,7 +63,7 @@ const Chat = ({
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="text-[#D4E1D2] text-left p-0 text-[20px]"
                 >
-                  Collins Vincent
+                  Sammy UI
                 </SmallText>
                 <SmallText className="text-left p-0 text-[14px] text-[#696969]">
                   Online

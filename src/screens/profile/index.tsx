@@ -43,10 +43,10 @@ const routes = [
   { path: "Verification", name: "Verification", icon: VerifyIcon },
   { path: "MyListing", name: "My Listing", icon: ListingIcon },
   { path: "BoostPost", name: "Boost Post", icon: BoostIcon },
-  { path: "https://9jajob.com", name: "Privacy Policy", icon: PrivacyIcon },
-  { path: "https://9jajob.com", name: "Feedback", icon: FeedBackIcon },
-  { path: "https://9jajob.com", name: "FAQ", icon: FaqIcon },
-  { path: "https://9jajob.com", name: "About", icon: AboutIcon },
+  { path: "https://9jajob.com/privacy-policy", name: "Privacy Policy", icon: PrivacyIcon },
+  { path: "https://9jajob.com/contact", name: "Feedback", icon: FeedBackIcon },
+  { path: "https://9jajob.com/faq", name: "FAQ", icon: FaqIcon },
+  { path: "https://9jajob.com/about", name: "About", icon: AboutIcon },
 ];
 
 const Profile = ({
@@ -82,7 +82,7 @@ const Profile = ({
         )}
         <Image
           source={{
-            uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+            uri: "https://i.ibb.co/rbCFc33/Rectangle-53.png",
           }}
           alt=""
           className=" w-[70%] mx-auto h-[170px] my-3 rounded-lg"

@@ -51,6 +51,7 @@ const Post = ({
   const [facebook, setFacebook] = React.useState<string>("");
   const [instagram, setInstagram] = React.useState<string>("");
   const [twitter, setTwitter] = React.useState<string>("");
+  const [linkedIn, setLinkedIn] = React.useState<string>("");
   const [amenities, setAmenities] = React.useState<string>("");
   const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
   const [selectedVideos, setSelectedVideos] = React.useState<string[]>([]);
@@ -307,6 +308,17 @@ const Post = ({
               onTextChange={(value) => setTwitter(value)}
               defaultValue={twitter}
               placeholder="Twitter Handle"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <InputField
+              onTextChange={(value) => setLinkedIn(value)}
+              defaultValue={linkedIn}
+              placeholder="LinkedIn Handle"
               type={"default"}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}

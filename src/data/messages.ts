@@ -51,6 +51,6 @@ export const CHAT_MESSAGE = [
   {
     user: true,
     id: 4,
-    message: "Am fine. I have a job for you. Its a mobile appliction project duhelfkuehewkuhredliadfwriu",
+    message: "Im loading MObile Property",
   },
 ];

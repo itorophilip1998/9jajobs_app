@@ -21,18 +21,18 @@ const UserProfileCard = ({
   onPress,
 }: {
   onPress: (event: GestureResponderEvent) => void;
-  item: {};
+  item:Object;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-row h-[auto] w-full rounded-md overflow-hidden bg-[#0F0F0F]"
-      style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}
-    >
+      className="flex-row h-[auto] w-full  rounded-md overflow-hidden bg-[#0F0F0F]"
+      style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}  >
       <Image
         source={{
-          uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+          uri: item.item.image,
         }}
         alt=""
         className="w-[40%] my-3 ml-3"
@@ -43,7 +43,7 @@ const UserProfileCard = ({
             style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
             className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium"
           >
-            {FirstLetterUppercase("collins Vincent")}
+            {FirstLetterUppercase("Sammy UI")}
           </SmallText>
           {/* {item.verified && (
               <MaterialIcons name="verified" size={18} color={COLORS.primary} />
