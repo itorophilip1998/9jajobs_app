@@ -17,7 +17,7 @@ const NotificationSection = () => {
       showsVerticalScrollIndicator={false}
       data={MESSAGES}
       keyExtractor={(item) => item.id.toString()}
-      ItemSeparatorComponent={() => <Spacer value={H("3%")} axis="vertical" />}
+      ItemSeparatorComponent={() => <Spacer value={H("1%")} axis="vertical" />}
       renderItem={({ item }) => (
         <View
           style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}

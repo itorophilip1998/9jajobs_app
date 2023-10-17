@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, Pressable, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Pressable,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PrimaryText, SmallText, Spacer, Title } from "../../components";
@@ -8,7 +15,7 @@ import {
 } from "react-native-responsive-screen";
 import { CATEGORIES } from "../../data/category";
 import CategoryCard from "../../components/categoryCard";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { COLORS } from "../../utility/colors";
 import SliderIcon from "../../components/sliderIcon";
 import { MAIN_USERS, SPONSORED_MAIN_USERS } from "../../data/listing";
@@ -41,11 +48,11 @@ const Dashboard = ({
         >
           {darkMode ? (
             <Title className="!text-[#626262] font-RedHatDisplaySemiBold mt-3">
-             What are you looking for!
+              What are you looking for?
             </Title>
           ) : (
             <GradientText className="!text-[#626262] text-[27px] font-RedHatDisplaySemiBold mt-3">
-              What are you looking for!
+              What are you looking for?
             </GradientText>
           )}
 
@@ -57,7 +64,7 @@ const Dashboard = ({
                 navigation.navigate("Search");
               }}
               style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
-              className="w-[58%] px-3 py-2 border border-primary rounded-full flex-row items-center"
+              className="w-[66%] px-3 py-2 border border-primary rounded-full flex-row items-center"
             >
               <AntDesign
                 name="search1"
@@ -93,7 +100,7 @@ const Dashboard = ({
               </SmallText>
               <AntDesign name="downcircleo" size={13} color={COLORS.primary} />
             </Pressable>
-            <SliderIcon onPress={() => navigation.navigate("Filter")} />
+            {/* <SliderIcon onPress={() => navigation.navigate("Filter")} /> */}
           </View>
           <Spacer axis="vertical" value={H(3)} />
           {darkMode ? (
@@ -107,7 +114,28 @@ const Dashboard = ({
           )}
 
           <Spacer axis="vertical" value={H(3)} />
-          <View className="flex-row justify-between flex-wrap">
+          <View>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={CATEGORIES.filter((_item, idx) => idx < 6)}
+              keyExtractor={(item) => item.id.toString()}
+              scrollEnabled={false}
+              // columnWrapperStyle={{ justifyContent: "space-between" }}
+              numColumns={3}
+              ItemSeparatorComponent={() => (
+                <Spacer value={H("1%")} axis="vertical" />
+              )}
+              renderItem={({ item }) => (
+                <CategoryCard
+                  onPress={() => navigation.navigate("Freelancers")}
+                  key={item.id.toString()}
+                  item={item}
+                  color={darkMode ? "#0F0F0F" : "#D4E1D2"}
+                />
+              )}
+            />
+          </View>
+          {/* <View className="flex-row flex-wrap w-full">
             {CATEGORIES.filter((_item, idx) => idx !== 6).map((item) => (
               <CategoryCard
                 onPress={() => navigation.navigate("Freelancers")}
@@ -116,14 +144,24 @@ const Dashboard = ({
                 color={darkMode ? "#0F0F0F" : "#D4E1D2"}
               />
             ))}
-          </View>
-          <PrimaryText
+          </View> */}
+          <TouchableOpacity
             onPress={() => navigation.navigate("Category")}
-            className="text-center"
-            style={!darkMode && { color: !darkMode && "#0F0F0F" }}
+            className="flex-row items-center mx-auto"
           >
-            See More
-          </PrimaryText>
+            <Entypo
+              name="chevron-small-down"
+              size={24}
+              color={darkMode ? "#D4E1D2" : "#0F0F0F"}
+            />
+            <PrimaryText
+              onPress={() => navigation.navigate("Category")}
+              className="text-center"
+              style={!darkMode && { color: !darkMode && "#0F0F0F" }}
+            >
+              See More
+            </PrimaryText>
+          </TouchableOpacity>
           <Spacer axis="vertical" value={H(3)} />
           {darkMode ? (
             <SmallText className="!text-white p-0 text-left font-RedHatDisplaySemiBold text-[20px]">
@@ -141,7 +179,7 @@ const Dashboard = ({
             horizontal
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
-              <Spacer value={H("3%")} axis="horizontal" />
+              <Spacer value={H("1%")} axis="horizontal" />
             )}
             renderItem={({ item }) => (
               <Pressable
@@ -169,7 +207,7 @@ const Dashboard = ({
             horizontal
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
-              <Spacer value={H("3%")} axis="horizontal" />
+              <Spacer value={H("1%")} axis="horizontal" />
             )}
             renderItem={({ item }) => (
               <Pressable

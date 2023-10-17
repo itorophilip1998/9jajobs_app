@@ -39,6 +39,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
 import { shadowBoxDark } from "../../style/Typography";
+import map from "../../../assets/images/map.png";
 
 const FreelancerProfile = ({
   navigation,
@@ -76,7 +77,7 @@ const FreelancerProfile = ({
               uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
             }}
             alt=""
-            className=" w-[160px] h-[160px] rounded-full mx-auto"
+            className=" w-[270px] h-[270px] rounded-full mx-auto"
           />
           <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center justify-between mt-2 w-full">
@@ -366,7 +367,9 @@ const FreelancerProfile = ({
           {/* <Spacer value={H("3%")} axis="vertical" /> */}
 
           <Spacer value={H("3%")} axis="vertical" />
-          <Button text="Book Now" onPress={() => bookRef.current?.open()} />
+          <Image source={map} className="w-full h-[150px] object-cover" />
+          <Spacer value={H("3%")} axis="vertical" />
+          <Button text="Book Now" onPress={() => bookRef.current?.open()} buttonStyle={{width: "100%"}}/>
           <Spacer value={H("1%")} axis="vertical" />
         </ScrollView>
       </SafeAreaView>

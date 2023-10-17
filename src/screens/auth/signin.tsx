@@ -144,7 +144,7 @@ const Signin = ({
             9jajob
           </Title>
         </View>
-        <Spacer axis="vertical" value={H(3)} />
+        <Spacer axis="vertical" value={H(12)} />
         <View className="flex-row items-center justify-between">
           <View
             style={{ backgroundColor: darkMode ? "#1E1E1E" : "white" }}

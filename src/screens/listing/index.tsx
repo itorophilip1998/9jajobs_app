@@ -42,7 +42,7 @@ const Listing = ({
       <SafeAreaView className="flex-1 w-full">
         <View
           style={{ backgroundColor: darkMode ? "#0f0f0f" : "#FFFFFF" }}
-          className="relative flex flex-row items-center w-full justify-between px-3 mb-3 bg-[#0f0f0f]"
+          className="relative flex flex-row items-center w-full justify-between px-3 mb-5 bg-[#0f0f0f]"
         >
           <TitleWithButton
             title="All Listing"
@@ -55,7 +55,7 @@ const Listing = ({
           className="px-3"
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
-            <Spacer value={H("3%")} axis="vertical" />
+            <Spacer value={H("1%")} axis="vertical" />
           )}
           renderItem={({ item }) => (
             <UserProfileCard

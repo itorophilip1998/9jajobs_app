@@ -43,7 +43,7 @@ const Category = ({
           showsVerticalScrollIndicator={false}
           data={CATEGORIES}
           keyExtractor={(item) => item.id.toString()}
-          columnWrapperStyle={{ justifyContent: "space-between" }}
+          // columnWrapperStyle={{ justifyContent: "space-between" }}
           numColumns={3}
           ItemSeparatorComponent={() => (
             <Spacer value={H("1%")} axis="vertical" />

@@ -48,6 +48,9 @@ const Post = ({
   const [email, setEmail] = React.useState<string>("");
   const [phone, setPhone] = React.useState<string>("");
   const [website, setWebsite] = React.useState<string>("");
+  const [facebook, setFacebook] = React.useState<string>("");
+  const [instagram, setInstagram] = React.useState<string>("");
+  const [twitter, setTwitter] = React.useState<string>("");
   const [amenities, setAmenities] = React.useState<string>("");
   const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
   const [selectedVideos, setSelectedVideos] = React.useState<string[]>([]);
@@ -268,6 +271,47 @@ const Post = ({
                 <Feather name="chevron-down" size={24} color="#626262" />
               }
               onSuffixTap={() => amenitiesRef.current?.open()}
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
+              Social Media
+            </SmallText>
+            <Spacer axis="vertical" value={H(2)} />
+            <InputField
+              onTextChange={(value) => setFacebook(value)}
+              defaultValue={facebook}
+              placeholder="Facebook Handle"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <InputField
+              onTextChange={(value) => setInstagram(value)}
+              defaultValue={instagram}
+              placeholder="Instagram Handle"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <InputField
+              onTextChange={(value) => setTwitter(value)}
+              defaultValue={twitter}
+              placeholder="Twitter Handle"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
             />
             <Spacer axis="vertical" value={H(2)} />
             <View className="flex-row w-full justify-between items-start">
