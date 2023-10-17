@@ -121,7 +121,7 @@ const Post = ({
             >
               Business Name
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setBusiness(value)}
               defaultValue={business}
@@ -139,16 +139,17 @@ const Post = ({
             >
               Description
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setDescription(value)}
               defaultValue={description}
               placeholder="Describe your business here"
               containerStyle={{ width: "100%" }}
+              multiline
               type={"default"}
-              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" , height: 150,}}
               autoCapitalize={"none"}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
+              className="border-[#626262] focus:border-primary border rounded-lg  px-3"
             />
             <Spacer axis="vertical" value={H(2)} />
             <SmallText
@@ -157,7 +158,7 @@ const Post = ({
             >
               Category
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setCategory(value)}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
@@ -180,7 +181,7 @@ const Post = ({
             >
               Location
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setLocation(value)}
               defaultValue={location}
@@ -203,7 +204,7 @@ const Post = ({
             >
               Email
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setEmail(value)}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
@@ -221,7 +222,7 @@ const Post = ({
             >
               Phone Number
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setPhone(value)}
               defaultValue={phone}
@@ -239,7 +240,7 @@ const Post = ({
             >
               Website
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setWebsite(value)}
               defaultValue={website}
@@ -257,7 +258,7 @@ const Post = ({
             >
               Amenities
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setAmenities(value)}
               defaultValue={amenities}
@@ -281,7 +282,7 @@ const Post = ({
             >
               Social Media
             </SmallText>
-            <Spacer axis="vertical" value={H(2)} />
+            <Spacer axis="vertical" value={H(1)} />
             <InputField
               onTextChange={(value) => setFacebook(value)}
               defaultValue={facebook}
