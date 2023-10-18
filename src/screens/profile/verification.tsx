@@ -6,9 +6,9 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
-  Pressable 
+  Pressable,
 } from "react-native";
- 
+
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
@@ -45,6 +45,7 @@ const Verification = ({
   const [email, setEmail] = React.useState<string>("");
   const [regNo, setRegNo] = React.useState<string>("");
   const [idFront, setIdFront] = React.useState<string | null>(null);
+  const [skill, setSkill] = React.useState<string | null>(null);
   const [idBack, setIdBack] = React.useState<string | null>(null);
   const [cac, setCac] = React.useState<string | null>(null);
   const [services, setServices] = React.useState<string[]>([]);
@@ -68,7 +69,7 @@ const Verification = ({
     }
   };
 
-  const pickImages = async (type: "idFront" | "idBack") => {
+  const pickImages = async (type: "idFront" | "idBack" | "skill") => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 4],
@@ -80,6 +81,8 @@ const Verification = ({
         setIdFront(result.assets[0].uri);
       } else if (type === "idBack") {
         setIdBack(result.assets[0].uri);
+      } else if (type === "skill") {
+        setSkill(result.assets[0].uri);
       }
     }
   };
@@ -135,7 +138,7 @@ const Verification = ({
           />
           <Spacer value={H("2%")} axis="vertical" />
           <View className="flex-row w-full justify-between items-start">
-            <View className="w-[30%] flex-row flex-wrap justify-between items-center">
+            <View className="w-[23%] flex-row flex-wrap justify-between items-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="w-full text-[#D4E1D2] text-left p-0 pb-3"
@@ -143,7 +146,7 @@ const Verification = ({
                 Upload ID card front
               </SmallText>
               {idFront ? (
-                <View className="w-[100%] h-[60px] mb-3 relative">
+                <View className="w-[85%] h-[60px] mb-3 relative">
                   <Image
                     source={{ uri: idFront }}
                     className="w-full h-full object-cover"
@@ -175,7 +178,7 @@ const Verification = ({
                 </Pressable>
               )}
             </View>
-            <View className="w-[30%] flex-row flex-wrap justify-between items-center">
+            <View className="w-[23%] flex-row flex-wrap justify-between items-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="w-full text-[#D4E1D2] text-left p-0 pb-3"
@@ -183,7 +186,7 @@ const Verification = ({
                 Upload ID card back
               </SmallText>
               {idBack ? (
-                <View className="w-[100%] h-[60px] mb-3 relative">
+                <View className="w-[85%] h-[60px] mb-3 relative">
                   <Image
                     source={{ uri: idBack }}
                     className="w-full h-full object-cover"
@@ -215,12 +218,52 @@ const Verification = ({
                 </Pressable>
               )}
             </View>
-            <View className="w-[30%] flex-row flex-wrap justify-between items-center">
+            <View className="w-[23%] flex-row flex-wrap justify-between items-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="w-full text-[#D4E1D2] text-left p-0 pb-3"
               >
-                Upload CAC Certificate
+                Skill Certificate
+              </SmallText>
+              {skill ? (
+                <View className="w-[85%] h-[60px] mb-3 relative">
+                  <Image
+                    source={{ uri: skill }}
+                    className="w-full h-full object-cover"
+                  />
+                  <Ionicons
+                    name="ios-close-circle"
+                    size={24}
+                    color="black"
+                    style={{
+                      position: "absolute",
+                      top: -17,
+                      right: -17,
+                      color: "red",
+                    }}
+                    onPress={() => setSkill(null)}
+                  />
+                </View>
+              ) : (
+                <Pressable
+                  style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
+                  onPress={() => pickImages("skill")}
+                  className="w-[80%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
+                >
+                  <Entypo
+                    name="plus"
+                    size={27}
+                    color={darkMode ? "#D4E1D2" : COLORS.primary}
+                  />
+                </Pressable>
+              )}
+            </View>
+            <View className="w-[23%] flex-row flex-wrap justify-between items-center">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                className="w-full text-[#D4E1D2] text-left p-0 pb-3"
+              >
+                CAC Certificate
               </SmallText>
 
               <Pressable
@@ -365,12 +408,15 @@ const Verification = ({
               value={isChecked}
               onValueChange={setChecked}
             />
-            <SmallText className="text-[15px] !text-[#696969] text-left !pl-3">
+            <SmallText
+              onPress={() => navigation.navigate("Terms")}
+              className="text-[15px] !text-[#696969] text-left !pl-3"
+            >
               By applying, you agree to our add and apply Policy
             </SmallText>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
-          <Button text="Verify" buttonStyle={{ width: "100%" }} />
+          <Button text="Apply" buttonStyle={{ width: "100%" }} />
           <Spacer value={H("3%")} axis="vertical" />
         </ScrollView>
       </SafeAreaView>

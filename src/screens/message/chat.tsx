@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { width, height } from "../../utility/constant";
+import * as ImagePicker from "expo-image-picker";
 import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
@@ -31,6 +32,23 @@ const Chat = ({
   const [message, setMessage] = React.useState<string>("");
   const { darkMode } = useSelector((state: RootState) => state.auth);
   //   const sortRef = React.useState<RBSheet | null>(null);
+
+  const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
+
+  const pickImages = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [4, 3],
+      quality: 1,
+      allowsMultipleSelection: true, // Enable multiple selection
+    });
+
+    if (!result.canceled) {
+      for (let i = 0; i < result.assets.length; i++) {
+        setSelectedImages((prev) => [...prev, result.assets[i].uri || ""]);
+      }
+    }
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -108,9 +126,12 @@ const Chat = ({
             placeholder="Write your message here"
             type={"default"}
             autoCapitalize={"none"}
-            containerStyle={{ width: "87%" }}
+            containerStyle={{ width: "80%" }}
             className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
           />
+          <Pressable onPress={pickImages}>
+            <Feather name="paperclip" size={24} color={COLORS.primary} />
+          </Pressable>
           <Pressable onPress={() => {}}>
             <FontAwesome name="send" size={24} color={COLORS.primary} />
           </Pressable>

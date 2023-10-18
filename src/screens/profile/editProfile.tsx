@@ -41,6 +41,7 @@ const EditProfile = ({
   const [location, setLocation] = React.useState<string>("Abuja, Nigeria");
   const [password, setPassword] = React.useState<string>("12345678");
   const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
+  const [visible, setVisible] = React.useState<boolean>(false)
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -217,10 +218,18 @@ const EditProfile = ({
               defaultValue={password}
               placeholder="Enter your password"
               type={"default"}
-              secure
               containerStyle={{ width: "100%" }}
               autoCapitalize={"none"}
               className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+              secure={!visible}
+              suffixIcon={
+                <Feather
+                  name={visible ? "eye-off" : "eye"}
+                  size={20}
+                  color="#626262"
+                />
+              }
+              onSuffixTap={() => setVisible(!visible)}
             />
             <Button text="Save Changes" buttonStyle={{ width: "100%" }} />
           </View>

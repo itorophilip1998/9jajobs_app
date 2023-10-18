@@ -48,14 +48,15 @@ const Post = ({
   const [email, setEmail] = React.useState<string>("");
   const [phone, setPhone] = React.useState<string>("");
   const [website, setWebsite] = React.useState<string>("");
+  const [whatsapp, setWhatsapp] = React.useState<string>("");
   const [facebook, setFacebook] = React.useState<string>("");
   const [instagram, setInstagram] = React.useState<string>("");
   const [twitter, setTwitter] = React.useState<string>("");
   const [linkedIn, setLinkedIn] = React.useState<string>("");
   const [amenities, setAmenities] = React.useState<string>("");
-  const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
   const [selectedVideos, setSelectedVideos] = React.useState<string[]>([]);
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
 
   const pickImages = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -119,6 +120,29 @@ const Post = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
               className="text-[#D4E1D2] text-left p-0"
             >
+              Category
+            </SmallText>
+            <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setCategory(value)}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              defaultValue={category}
+              placeholder="Select your business category"
+              type={"default"}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
+              editable={false}
+              suffixIcon={
+                <Feather name="chevron-down" size={24} color="#626262" />
+              }
+              onSuffixTap={() => categoryRef.current?.open()}
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
               Business Name
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
@@ -147,34 +171,15 @@ const Post = ({
               containerStyle={{ width: "100%" }}
               multiline
               type={"default"}
-              style={{ backgroundColor: darkMode ? "transparent" : "white" , height: 150,}}
+              style={{
+                backgroundColor: darkMode ? "transparent" : "white",
+                height: 150,
+              }}
               autoCapitalize={"none"}
               className="border-[#626262] focus:border-primary border rounded-lg  px-3"
             />
             <Spacer axis="vertical" value={H(2)} />
-            <SmallText
-              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
-              className="text-[#D4E1D2] text-left p-0"
-            >
-              Category
-            </SmallText>
-            <Spacer axis="vertical" value={H(1)} />
-            <InputField
-              onTextChange={(value) => setCategory(value)}
-              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
-              defaultValue={category}
-              placeholder="Select your business category"
-              type={"default"}
-              autoCapitalize={"none"}
-              containerStyle={{ width: "100%" }}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
-              editable={false}
-              suffixIcon={
-                <Feather name="chevron-down" size={24} color="#626262" />
-              }
-              onSuffixTap={() => categoryRef.current?.open()}
-            />
-            <Spacer axis="vertical" value={H(2)} />
+
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
               className="text-[#D4E1D2] text-left p-0"
@@ -283,6 +288,17 @@ const Post = ({
               Social Media
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setWhatsapp(value)}
+              defaultValue={whatsapp}
+              placeholder="Whatsapp Number"
+              type={"numeric"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
             <InputField
               onTextChange={(value) => setFacebook(value)}
               defaultValue={facebook}
@@ -436,7 +452,7 @@ const Post = ({
               </View>
             </View>
             <Spacer axis="vertical" value={H(3)} />
-            <Button text="Post Ad" />
+            <Button text="Post Ad" buttonStyle={{ width: "100%" }} />
             <Spacer axis="vertical" value={H(5)} />
           </ScrollView>
         </SafeAreaView>

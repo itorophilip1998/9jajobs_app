@@ -30,6 +30,7 @@ import Toast, {
 } from "react-native-toast-message";
 import { width, height } from "../utility/constant";
 import { FONTS } from "../utility/fonts";
+import Terms from "../screens/dashboard/terms";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -171,6 +172,7 @@ const NavigationSetup = () => {
         >
           <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Filter" component={Filter} />
+          <Stack.Screen name="Terms" component={Terms} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

@@ -29,7 +29,7 @@ const MessageSection = ({
 }) => {
   const [status, setStatus] = React.useState<"all" | "unread" | "spam">("all");
   const [search, setSearch] = React.useState<string>("");
-  const {darkMode} = useSelector((state: RootState) => state.auth)
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View className="flex-1">
       <View
@@ -66,13 +66,16 @@ const MessageSection = ({
         >
           All
         </PrimaryText>
-        <PrimaryText
-          onPress={() => setStatus("unread")}
-          style={{ color: status === "unread" ? "#1A911B" : "#696969" }}
-          className="mx-2"
-        >
-          Unread
-        </PrimaryText>
+        <View>
+          <View className="w-[10px] h-[10px] bg-red-500 rounded-full absolute right-0 z-10" />
+          <PrimaryText
+            onPress={() => setStatus("unread")}
+            style={{ color: status === "unread" ? "#1A911B" : "#696969" }}
+            className="mx-2"
+          >
+            Unread
+          </PrimaryText>
+        </View>
         <PrimaryText
           onPress={() => setStatus("spam")}
           style={{ color: status === "spam" ? "#1A911B" : "#696969" }}
@@ -120,10 +123,15 @@ const MessageSection = ({
               <SmallText className="text-right p-0 text-[14px] text-[#696969] mb-2">
                 {item.date}
               </SmallText>
-              {!item.read && (
+              {/* {!item.read && (
                 <GradientText className="text-primary font-RedHatDisplayRegular text-right p-0 text-[14px]">
                   New
                 </GradientText>
+              )} */}
+              {!item.read && (
+                <SmallText className="text-red-500 font-RedHatDisplayRegular text-right p-0 text-[14px]">
+                  New
+                </SmallText>
               )}
 
               {/* <View className="w-[10px] h-[10px] rounded-full bg-primary"/> */}

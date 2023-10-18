@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Pressable,
+  ScrollView,
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -16,7 +17,14 @@ import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
-import { Button, PrimaryText, SmallText, Spacer } from "../../components";
+import {
+  BottomSheet,
+  Button,
+  InputField,
+  PrimaryText,
+  SmallText,
+  Spacer,
+} from "../../components";
 import FundIcon from "../../../assets/icons/fund.svg";
 import PaymentIcon from "../../../assets/icons/payment.svg";
 import WithdrawIcon from "../../../assets/icons/withdraw.svg";
@@ -26,13 +34,18 @@ import { FirstLetterUppercase } from "../../utility/helpers";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 const MyWallet = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [acctNo, setAcctNo] = React.useState<string>("");
+  const [bankName, setBankName] = React.useState<string>("");
+  const [acctName, setAcctName] = React.useState<string>("");
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const withdrawRef = React.useRef<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -70,7 +83,7 @@ const MyWallet = ({
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           <View className="w-full flex-row justify-between items-center">
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Payment")}>
               <FundIcon />
               <SmallText
                 style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
@@ -88,7 +101,7 @@ const MyWallet = ({
                 Payment
               </SmallText>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => withdrawRef.current?.open()}>
               <WithdrawIcon />
               <SmallText
                 style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
@@ -154,6 +167,76 @@ const MyWallet = ({
           )}
         />
       </SafeAreaView>
+      <BottomSheet ref={withdrawRef} duration={3000} height={100}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
+          className="flex-1 bg-[#1b1b1b] py-5 px-3"
+        >
+          <View className="w-full">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+            >
+              Account Number
+            </SmallText>
+            <InputField
+              style={{ backgroundColor: darkMode ? "black" : "white" }}
+              onTextChange={function (value: string): void {
+                setAcctNo(value);
+              }}
+              placeholder="input your account number"
+              defaultValue={acctNo}
+              className="border border-[#696969] bg-[#000000]"
+              containerStyle={{ width: "100%" }}
+              type={"numeric"}
+              autoCapitalize={"none"}
+            />
+            <Spacer value={H("2%")} axis="vertical" />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+            >
+              Bank Name
+            </SmallText>
+            <InputField
+              style={{ backgroundColor: darkMode ? "black" : "white" }}
+              onTextChange={function (value: string): void {
+                setBankName(value);
+              }}
+              placeholder="input your bank name"
+              defaultValue={bankName}
+              className="border border-[#696969] bg-[#000000]"
+              containerStyle={{ width: "100%" }}
+              type={"default"}
+              autoCapitalize={"none"}
+            />
+            <Spacer value={H("2%")} axis="vertical" />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+            >
+              Account Name
+            </SmallText>
+            <InputField
+              style={{ backgroundColor: darkMode ? "black" : "white" }}
+              onTextChange={function (value: string): void {
+                setAcctName(value);
+              }}
+              placeholder="input your account name"
+              defaultValue={acctName}
+              className="border border-[#696969] bg-[#000000]"
+              containerStyle={{ width: "100%" }}
+              type={"default"}
+              autoCapitalize={"none"}
+            />
+            <Spacer value={H("2%")} axis="vertical" />
+          </View>
+          <Spacer value={H("3%")} axis="vertical" />
+          <Button text="Withdraw" buttonStyle={{ width: "100%" }} />
+          <Spacer value={H("6%")} axis="vertical" />
+        </ScrollView>
+      </BottomSheet>
     </KeyboardAvoidingView>
   );
 };

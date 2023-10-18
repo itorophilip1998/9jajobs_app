@@ -136,12 +136,13 @@ const Signin = ({
         className="flex-1 w-full"
       >
         <View className="flex-row justify-start items-center w-full pt-10">
-          <Image source={logo} className="h-[60px] w-[60px]" />
+          {/* <Image source={logo} className="h-[60px] w-[60px]" /> */}
           <Title
-            className="!text-white ml-3"
+            // className="!text-white ml-3 font-RedHatDisplayBold"
+            className="!text-white font-RedHatDisplayBold"
             style={{ color: darkMode ? "white" : "black" }}
           >
-            9jajob
+            9JAJOB
           </Title>
         </View>
         <Spacer axis="vertical" value={H(12)} />

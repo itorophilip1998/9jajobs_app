@@ -8,6 +8,8 @@ import FreelancerProfile from "../screens/dashboard/freelancerProfile";
 import Reviews from "../screens/dashboard/reviews";
 import AddReview from "../screens/dashboard/addReview";
 import Report from "../screens/dashboard/report";
+import NearestListing from "../screens/dashboard/nearestListing";
+import TrendingListing from "../screens/dashboard/trendingList";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +22,8 @@ const HomeStack = () => {
       })}
     >
       <Stack.Screen name="Dashboard" component={Dashboard} />
+      <Stack.Screen name="NearestListing" component={NearestListing} />
+      <Stack.Screen name="TrendingListing" component={TrendingListing} />
       <Stack.Screen name="Category" component={Category} />
       <Stack.Screen name="Freelancers" component={Freelancers} />
       <Stack.Screen name="FreelancerProfile" component={FreelancerProfile} />

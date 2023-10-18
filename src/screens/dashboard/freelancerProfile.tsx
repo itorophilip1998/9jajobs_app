@@ -6,6 +6,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Linking,
+  Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
@@ -40,6 +42,11 @@ import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
 import { shadowBoxDark } from "../../style/Typography";
 import map from "../../../assets/images/map.png";
+import Facebook from "../../../assets/icons/facebook.svg";
+import Instagram from "../../../assets/icons/instagram.svg";
+import Whatsapp from "../../../assets/icons/whatsapp.svg";
+import Linkedin from "../../../assets/icons/linkedin.svg";
+import Twitter from "../../../assets/icons/twitter.svg";
 
 const FreelancerProfile = ({
   navigation,
@@ -69,7 +76,7 @@ const FreelancerProfile = ({
         backgroundColor: darkMode ? "black" : "white",
       }}
     >
-      <SafeAreaView className="flex-1 w-full py-4">
+      <SafeAreaView className="flex-1 w-full pt-4">
         <ScrollView showsVerticalScrollIndicator={false}>
           <TitleWithButton title="" fire={() => navigation.goBack()} />
           <Image
@@ -130,19 +137,6 @@ const FreelancerProfile = ({
                   }
                   className="p-2 rounded-full bg-[#121212] mb-2"
                 >
-                  <Ionicons name="call" size={23} color={COLORS.primary} />
-                </View>
-                <SmallText className="text-primary text-left p-0 text-[15px]">
-                  Call
-                </SmallText>
-              </TouchableOpacity>
-              <TouchableOpacity className="items-center">
-                <View
-                  style={
-                    !darkMode && { ...shadowBoxDark, backgroundColor: "white" }
-                  }
-                  className="p-2 rounded-full bg-[#121212] mb-2"
-                >
                   <Ionicons
                     name="md-chatbox-ellipses-outline"
                     size={23}
@@ -153,6 +147,20 @@ const FreelancerProfile = ({
                   Chat
                 </SmallText>
               </TouchableOpacity>
+              <TouchableOpacity className="items-center">
+                <View
+                  style={
+                    !darkMode && { ...shadowBoxDark, backgroundColor: "white" }
+                  }
+                  className="p-2 rounded-full bg-[#121212] mb-2"
+                >
+                  <Ionicons name="call" size={23} color={COLORS.primary} />
+                </View>
+                <SmallText className="text-primary text-left p-0 text-[15px]">
+                  Call
+                </SmallText>
+              </TouchableOpacity>
+
               <TouchableOpacity
                 className="items-center"
                 onPress={() => navigation.navigate("Report")}
@@ -174,6 +182,127 @@ const FreelancerProfile = ({
                 </SmallText>
               </TouchableOpacity>
             </View>
+          </View>
+          <Spacer value={H("3%")} axis="vertical" />
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+          >
+            About
+          </SmallText>
+          <Spacer value={H("2%")} axis="vertical" />
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[15px] font-RedHatDisplayRegular"
+          >
+            Lorem ipsum dolor sit amet consectetur. Dis nullam enim pharetra
+            bibendum purus. Blandit faucibus facilisis blandit mauris
+            consectetur ultrices in mattis. Aliquet orci morbi sapien elementum.
+            Adipiscing proin venenatis morbi nascetur erat praesent fermentum
+            fames. Adipiscing etiam netus velit magna magnis ac placerat orci.
+          </SmallText>
+          <Spacer value={H("3%")} axis="vertical" />
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+          >
+            Photos
+          </SmallText>
+          <Spacer value={H("3%")} axis="vertical" />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <Image
+              source={{
+                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+              }}
+              alt=""
+              className="w-[150px] h-[100px] rounded-lg"
+            />
+            <Spacer value={W("5%")} axis="horizontal" />
+            <Image
+              source={{
+                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+              }}
+              alt=""
+              className="w-[150px] h-[100px] rounded-lg"
+            />
+            <Spacer value={W("5%")} axis="horizontal" />
+            <Image
+              source={{
+                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+              }}
+              alt=""
+              className="w-[150px] h-[100px] rounded-lg"
+            />
+            <Spacer value={W("5%")} axis="horizontal" />
+            <Image
+              source={{
+                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+              }}
+              alt=""
+              className="w-[150px] h-[100px] rounded-lg"
+            />
+          </ScrollView>
+          <Spacer value={H("3%")} axis="vertical" />
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+          >
+            Videos
+          </SmallText>
+          <Spacer value={H("3%")} axis="vertical" />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <VideoCard />
+            <Spacer value={W("5%")} axis="horizontal" />
+            <VideoCard />
+            <Spacer value={W("5%")} axis="horizontal" />
+            <VideoCard />
+            <Spacer value={W("5%")} axis="horizontal" />
+            <VideoCard />
+            <Spacer value={W("5%")} axis="horizontal" />
+            <VideoCard />
+          </ScrollView>
+          <Spacer value={H("3%")} axis="vertical" />
+          <View className="w-full flex-row justify-between items-center">
+            <View className="flex-row items-center">
+              <Octicons name="megaphone" size={28} color={COLORS.primary} />
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold"
+              >
+                Amenities
+              </SmallText>
+            </View>
+            <PrimaryText onPress={() => navigation.navigate("Reviews")}>
+              See Reviews
+            </PrimaryText>
+          </View>
+          <Spacer value={H("3%")} axis="vertical" />
+          <View className=" flex-row items-center">
+            <Checkbox
+              color={"#1A911B"}
+              value={homeDelivery}
+              onValueChange={setHomeDelivery}
+            />
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[15px] !text-[#696969] text-left !pl-3"
+            >
+              Home Delivery
+            </SmallText>
+          </View>
+          <Spacer value={H("2%")} axis="vertical" />
+          <View className=" flex-row items-center">
+            <Checkbox
+              color={"#1A911B"}
+              value={nationWideDelivery}
+              onValueChange={setNationWideDelivery}
+            />
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[15px] !text-[#696969] text-left !pl-3"
+            >
+              Nationwide Delivery
+            </SmallText>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center">
@@ -228,7 +357,7 @@ const FreelancerProfile = ({
               borderTopColor: darkMode ? "#0F0F0F" : "#69696926",
               borderBottomColor: darkMode ? "#0F0F0F" : "#69696926",
             }}
-            className="py-3 flex-row justify-between items-center border-y border-y-[#0F0F0F]"
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
           >
             <SmallText
               style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
@@ -243,133 +372,69 @@ const FreelancerProfile = ({
               Abuja, Nigeria
             </SmallText>
           </View>
-          <Spacer value={H("3%")} axis="vertical" />
-          <View className="w-full flex-row justify-between items-center">
+          <View
+            style={{
+              borderTopColor: darkMode ? "#0F0F0F" : "#69696926",
+              borderBottomColor: darkMode ? "#0F0F0F" : "#69696926",
+            }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Website
+            </SmallText>
+            <SmallText
+              onPress={() =>
+                Linking.openURL("https://vincentcollins.netlify.app/")
+              }
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
+              https://vincentcollins.netlify.app/
+            </SmallText>
+          </View>
+          <View
+            style={{
+              borderTopColor: darkMode ? "#0F0F0F" : "#69696926",
+              borderBottomColor: darkMode ? "#0F0F0F" : "#69696926",
+            }}
+            className="py-2 flex-row justify-between items-center border-y border-y-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Social Media
+            </SmallText>
             <View className="flex-row items-center">
-              <Octicons name="megaphone" size={28} color={COLORS.primary} />
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold"
-              >
-                Amenities
-              </SmallText>
+              <Pressable className="ml-1">
+                <Facebook height={30} width={30} />
+              </Pressable>
+              <Pressable className="ml-1">
+                <Instagram height={30} width={30} />
+              </Pressable>
+              <Pressable className="ml-1">
+                <Whatsapp height={30} width={30} />
+              </Pressable>
+              <Pressable className="ml-1">
+                <Twitter height={30} width={30} />
+              </Pressable>
+              <Pressable className="ml-1">
+                <Linkedin height={30} width={30} />
+              </Pressable>
             </View>
-            <PrimaryText onPress={() => navigation.navigate("Reviews")}>
-              See Reviews
-            </PrimaryText>
           </View>
-          <Spacer value={H("3%")} axis="vertical" />
-          <View className=" flex-row items-center">
-            <Checkbox
-              color={"#1A911B"}
-              value={homeDelivery}
-              onValueChange={setHomeDelivery}
-            />
-            <SmallText
-              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
-              className="text-[15px] !text-[#696969] text-left !pl-3"
-            >
-              Home Delivery
-            </SmallText>
-          </View>
-          <Spacer value={H("2%")} axis="vertical" />
-          <View className=" flex-row items-center">
-            <Checkbox
-              color={"#1A911B"}
-              value={nationWideDelivery}
-              onValueChange={setNationWideDelivery}
-            />
-            <SmallText
-              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
-              className="text-[15px] !text-[#696969] text-left !pl-3"
-            >
-              Nationwide Delivery
-            </SmallText>
-          </View>
-          <Spacer value={H("3%")} axis="vertical" />
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
-          >
-            About
-          </SmallText>
-          <Spacer value={H("2%")} axis="vertical" />
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[15px] font-RedHatDisplayRegular"
-          >
-            Lorem ipsum dolor sit amet consectetur. Dis nullam enim pharetra
-            bibendum purus. Blandit faucibus facilisis blandit mauris
-            consectetur ultrices in mattis. Aliquet orci morbi sapien elementum.
-            Adipiscing proin venenatis morbi nascetur erat praesent fermentum
-            fames. Adipiscing etiam netus velit magna magnis ac placerat orci.
-          </SmallText>
-          <Spacer value={H("3%")} axis="vertical" />
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
-          >
-            Photos
-          </SmallText>
-          <Spacer value={H("3%")} axis="vertical" />
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
-              alt=""
-              className="w-[90px] h-[90px] rounded-full"
-            />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
-              alt=""
-              className="w-[90px] h-[90px] rounded-full"
-            />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
-              alt=""
-              className="w-[90px] h-[90px] rounded-full"
-            />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
-              alt=""
-              className="w-[90px] h-[90px] rounded-full"
-            />
-          </ScrollView>
-          <Spacer value={H("3%")} axis="vertical" />
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
-          >
-            Videos
-          </SmallText>
-          <Spacer value={H("3%")} axis="vertical" />
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <VideoCard />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <VideoCard />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <VideoCard />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <VideoCard />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <VideoCard />
-          </ScrollView>
-          {/* <Spacer value={H("3%")} axis="vertical" /> */}
 
           <Spacer value={H("3%")} axis="vertical" />
           <Image source={map} className="w-full h-[150px] object-cover" />
           <Spacer value={H("3%")} axis="vertical" />
-          <Button text="Book Now" onPress={() => bookRef.current?.open()} buttonStyle={{width: "100%"}}/>
+          <Button
+            text="Book Now"
+            onPress={() => bookRef.current?.open()}
+            buttonStyle={{ width: "100%" }}
+          />
           <Spacer value={H("1%")} axis="vertical" />
         </ScrollView>
       </SafeAreaView>

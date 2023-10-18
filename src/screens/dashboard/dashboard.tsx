@@ -46,16 +46,9 @@ const Dashboard = ({
           className="flex-1 bg-black px-3"
           style={{ backgroundColor: darkMode ? "black" : "white" }}
         >
-          {darkMode ? (
-            <Title className="!text-[#626262] font-RedHatDisplaySemiBold mt-3">
-              What are you looking for?
-            </Title>
-          ) : (
-            <GradientText className="!text-[#626262] text-[27px] font-RedHatDisplaySemiBold mt-3">
-              What are you looking for?
-            </GradientText>
-          )}
-
+          <GradientText className="!text-[#626262] text-[27px] font-RedHatDisplaySemiBold mt-3">
+            What are you looking for?
+          </GradientText>
           <Spacer axis="vertical" value={H(3)} />
           <View className="w-full flex-row items-center justify-between">
             <Pressable
@@ -163,15 +156,22 @@ const Dashboard = ({
             </PrimaryText>
           </TouchableOpacity>
           <Spacer axis="vertical" value={H(3)} />
-          {darkMode ? (
-            <SmallText className="!text-white p-0 text-left font-RedHatDisplaySemiBold text-[20px]">
-              Trending
-            </SmallText>
-          ) : (
-            <GradientText className="!text-[#626262] text-[20px] font-RedHatDisplaySemiBold mt-3">
-              Trending
-            </GradientText>
-          )}
+          <View className="w-full flex-row justify-between items-center">
+            {darkMode ? (
+              <SmallText className="!text-white p-0 text-left font-RedHatDisplaySemiBold text-[20px]">
+                Trending
+              </SmallText>
+            ) : (
+              <GradientText className="!text-[#626262] text-[20px] font-RedHatDisplaySemiBold mt-3">
+                Trending
+              </GradientText>
+            )}
+            <Pressable onPress={() => navigation.navigate("TrendingListing")}>
+              <GradientText className="!text-[#626262] text-[15px] font-RedHatDisplayMedium mt-3">
+                View All
+              </GradientText>
+            </Pressable>
+          </View>
           <Spacer axis="vertical" value={H(3)} />
           <FlatList
             showsHorizontalScrollIndicator={false}
@@ -191,15 +191,23 @@ const Dashboard = ({
             )}
           />
           <Spacer axis="vertical" value={H(3)} />
-          {darkMode ? (
-            <SmallText className="!text-white p-0 text-left font-RedHatDisplaySemiBold text-[20px]">
-              Nearest Listing
-            </SmallText>
-          ) : (
-            <GradientText className="!text-[#626262] text-[20px] font-RedHatDisplaySemiBold mt-3">
-              Nearest Listing
-            </GradientText>
-          )}
+          <View className="w-full flex-row justify-between items-center">
+            {darkMode ? (
+              <SmallText className="!text-white p-0 text-left font-RedHatDisplaySemiBold text-[20px]">
+                Nearest Listing
+              </SmallText>
+            ) : (
+              <GradientText className="!text-[#626262] text-[20px] font-RedHatDisplaySemiBold mt-3">
+                Nearest Listing
+              </GradientText>
+            )}
+            <Pressable onPress={() => navigation.navigate("NearestListing")}>
+              <GradientText className="!text-[#626262] text-[15px] font-RedHatDisplayMedium">
+                View All
+              </GradientText>
+            </Pressable>
+          </View>
+
           <Spacer axis="vertical" value={H(3)} />
           <FlatList
             showsHorizontalScrollIndicator={false}

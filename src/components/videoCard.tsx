@@ -25,7 +25,7 @@ const VideoCard = () => {
         <FontAwesome5
           name="play-circle"
           size={29}
-          color={COLORS.primary}
+          color={COLORS.danger}
           onPress={() => {
             video.current?._setFullscreen(true).then((res) => res.isLoaded ? video.current?.pauseAsync()
               : video.current?.playAsync());

@@ -38,7 +38,8 @@ const ProfileMenuCard = ({
       <item.icon />
       <SmallText
         style={{ color: darkMode ? "white" : "#0f0f0f" }}
-        className="p-0 text-left text-white pl-2"
+        className="p-0 text-left text-white pl-2 w-[75%]"
+        numberOfLine={1}
       >
         {item.name}
       </SmallText>

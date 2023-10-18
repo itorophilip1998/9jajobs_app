@@ -12,13 +12,13 @@ const Welcome = ({
   return (
     <View className="flex-1 bg-[#023215] py-9 justify-between items-center px-4">
       <View className="w-full items-end mt-3">
-        <PrimaryText className="!text-white " onPress={() => navigation.navigate("Finish")}>
+        <PrimaryText className="!text-white" onPress={() => navigation.navigate("Finish")}>
           Skip
         </PrimaryText>
       </View>
       <View className="w-full items-center">
-        <Image source={logo} alt="" className="h-[100px] w-[100px]" />
-        <SmallText className="!text-white text-[30px]">9jajob</SmallText>
+        {/* <Image source={logo} alt="" className="h-[100px] w-[100px]" /> */}
+        <SmallText className="!text-white text-[30px] font-RedHatDisplayBold">9JAJOB</SmallText>
       </View>
       <View>
         <SmallText className="text-[18px] !text-white px-9">

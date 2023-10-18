@@ -19,8 +19,10 @@ const Finish = ({
     <View className="flex-1 bg-black py-9 justify-between items-center px-4">
       <View className="w-full items-end mt-3"></View>
       <View className="w-full items-center">
-        <Image source={logo} alt="" className="h-[100px] w-[100px]" />
-        <SmallText className="!text-white text-[30px]">9jajob</SmallText>
+        {/* <Image source={logo} alt="" className="h-[100px] w-[100px]" /> */}
+        <SmallText className="!text-white text-[30px] font-RedHatDisplayBold">
+          9JAJOB
+        </SmallText>
       </View>
       <View>
         <View className="px-3 flex-row items-center">
@@ -29,25 +31,11 @@ const Finish = ({
             value={isChecked}
             onValueChange={setChecked}
           />
-          <SmallText className="text-[15px] !text-[#696969] text-left !pl-3">
-            By clicking, you agree to our{" "}
-            <Text
-              className="text-primary"
-              onPress={() =>
-                Linking.openURL("https://www.9jajob.com/terms-and-conditions")
-              }
-            >
-              Terms & Conditions
-            </Text>{" "}
-            and{" "}
-            <Text
-              className="text-primary"
-              onPress={() =>
-                Linking.openURL("https://www.9jajob.com/privacy-policy")
-              }
-            >
-              Privacy Policy
-            </Text>
+          <SmallText
+            onPress={() => navigation.navigate("Terms")}
+            className="text-[15px] !text-[#696969] text-left !pl-3"
+          >
+            By clicking, you agree to our Terms & Conditions and Privacy Policy
           </SmallText>
         </View>
         <View className="flex-row justify-center my-5">

@@ -6,6 +6,7 @@ interface IProps {
   className?: string;
   children: any;
   style?: StyleProp<TextStyle>;
+  onPress?: () => void;
 }
 
 const SmallText: React.FC<IProps> = ({
@@ -13,9 +14,11 @@ const SmallText: React.FC<IProps> = ({
   children,
   style,
   numberOfLine,
+  onPress,
 }) => {
   return (
     <Text
+      onPress={onPress}
       numberOfLines={numberOfLine}
       className={`px-[19px] text-center text-[15px] font-RedHatDisplayRegular text-dark02 ${className}`}
       style={style}

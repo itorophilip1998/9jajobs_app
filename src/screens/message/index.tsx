@@ -48,7 +48,7 @@ const Message = ({
           <View className="flex-row items-center justify-between">
             <View
               style={{ backgroundColor: darkMode ? "#1E1E1E" : "white" }}
-              className="w-[83%] bg-[#1E1E1E] mx-auto h-[48px] rounded-full flex-row justify-center overflow-hidden"
+              className="w-[85%] bg-[#1E1E1E] mx-auto h-[48px] rounded-full flex-row justify-center overflow-hidden"
             >
               <TouchableOpacity
                 className="w-[50%] justify-center items-center rounded-full"
@@ -65,12 +65,12 @@ const Message = ({
               >
                 {darkMode ? (
                   <SmallText
-                    className="!text-[16px] !text-white"
+                    className="!text-[16px] !text-white font-RedHatDisplaySemiBold"
                     style={{
                       color: type === "message" ? "#1A911B" : "#696969",
                     }}
                   >
-                    Messages 
+                    Messages
                   </SmallText>
                 ) : type === "message" ? (
                   <LinearGradient
@@ -81,19 +81,19 @@ const Message = ({
                       style={{
                         color: type === "message" ? "white" : "#696969",
                       }}
-                      className="!text-[16px] !text-white"
+                      className="!text-[16px] !text-white font-RedHatDisplaySemiBold"
                     >
-                      Messages 
+                      Messages
                     </SmallText>
                   </LinearGradient>
                 ) : (
                   <SmallText
-                    className="!text-[16px] !text-white"
+                    className="!text-[16px] !text-white font-RedHatDisplaySemiBold"
                     style={{
                       color: type === "notification" ? "#696969" : "#1A911B",
                     }}
                   >
-                    Messages 
+                    Messages
                   </SmallText>
                 )}
               </TouchableOpacity>
@@ -112,7 +112,7 @@ const Message = ({
               >
                 {darkMode ? (
                   <SmallText
-                    className="!text-[16px] !text-white"
+                    className="!text-[16px] !text-white font-RedHatDisplaySemiBold"
                     style={{
                       color: type === "notification" ? "#1A911B" : "#696969",
                     }}
@@ -128,14 +128,14 @@ const Message = ({
                       style={{
                         color: type === "notification" ? "white" : "#696969",
                       }}
-                      className="!text-[16px] !text-white"
+                      className="!text-[16px] !text-white font-RedHatDisplaySemiBold"
                     >
                       Notification
                     </SmallText>
                   </LinearGradient>
                 ) : (
                   <SmallText
-                    className="!text-[16px] !text-white"
+                    className="!text-[16px] !text-white font-RedHatDisplaySemiBold"
                     style={{
                       color: type === "message" ? "#696969" : "#1A911B",
                     }}
