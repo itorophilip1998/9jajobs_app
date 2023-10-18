@@ -21,7 +21,7 @@ const UserProfileCard = ({
   onPress,
 }: {
   onPress: (event: GestureResponderEvent) => void;
-  item:Object;
+  item:any;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   
@@ -32,7 +32,7 @@ const UserProfileCard = ({
       style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}  >
       <Image
         source={{
-          uri: item.item.image,
+          uri: item.image,
         }}
         alt=""
         resizeMode="cover"
