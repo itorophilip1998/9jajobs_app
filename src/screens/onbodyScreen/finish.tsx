@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Linking } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { PrimaryText, SmallText, Button } from "../../components";
@@ -13,7 +13,7 @@ const Finish = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [isChecked, setChecked] = React.useState(false);
   return (
     <View className="flex-1 bg-black py-9 justify-between items-center px-4">
@@ -30,8 +30,24 @@ const Finish = ({
             onValueChange={setChecked}
           />
           <SmallText className="text-[15px] !text-[#696969] text-left !pl-3">
-            By clicking, you agree to our <Text>Terms & Conditions</Text> and{" "}
-            <Text>Privacy Policy</Text>
+            By clicking, you agree to our{" "}
+            <Text
+              className="text-primary"
+              onPress={() =>
+                Linking.openURL("https://www.9jajob.com/terms-and-conditions")
+              }
+            >
+              Terms & Conditions
+            </Text>{" "}
+            and{" "}
+            <Text
+              className="text-primary"
+              onPress={() =>
+                Linking.openURL("https://www.9jajob.com/privacy-policy")
+              }
+            >
+              Privacy Policy
+            </Text>
           </SmallText>
         </View>
         <View className="flex-row justify-center my-5">
@@ -41,10 +57,9 @@ const Finish = ({
         </View>
         <Button
           text={"Next"}
-          buttonStyleClassName="bg-primary"
           onPress={() => {
             if (isChecked) {
-              dispatch(SET_ON_BOARD(true))
+              dispatch(SET_ON_BOARD(true));
             } else {
               Toast.show({
                 type: "error",

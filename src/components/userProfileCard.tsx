@@ -35,15 +35,17 @@ const UserProfileCard = ({
           uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
         }}
         alt=""
-        className="w-[40%] my-3 ml-3"
+        resizeMode="cover"
+        className="w-[40%] my-3 ml-3 object-cover"
       />
       <View className="w-[58%] py-3 px-3">
         <View className="flex-row items-center mb-1 w-full">
           <SmallText
+            numberOfLine={1}
             style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium"
+            className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium max-w-[90%]"
           >
-            {FirstLetterUppercase("collins Vincent")}
+            {FirstLetterUppercase("Servizio Rapido Technologies")}
           </SmallText>
           {/* {item.verified && (
               <MaterialIcons name="verified" size={18} color={COLORS.primary} />

@@ -32,6 +32,7 @@ const CategoryCard = ({
         source={{ uri: item.image }}
         alt=""
         className="w-full h-[70px] rounded-md mb-2"
+        resizeMode="cover"
       />
       <SmallText
         style={{ color: darkMode ? "white" : "#0F0F0F" }}

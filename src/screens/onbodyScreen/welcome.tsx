@@ -29,7 +29,7 @@ const Welcome = ({
           <View className="border-2 mx-1 border-white rounded-full h-[10px] w-[10px]" />
           <View className="border-2 mx-1 border-white rounded-full h-[10px] w-[10px]" />
         </View>
-        <Button text={"Next"} buttonStyleClassName="bg-primary" onPress={() => navigation.navigate("Body")} />
+        <Button text={"Next"} onPress={() => navigation.navigate("Body")} />
       </View>
     </View>
   );

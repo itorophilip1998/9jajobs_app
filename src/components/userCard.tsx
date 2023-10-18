@@ -27,7 +27,7 @@ const UserCard = ({
     sponsored: boolean;
   };
 }) => {
-  const {darkMode} = useSelector((state: RootState) => state.auth)
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View
       style={{ backgroundColor: darkMode ? "#0F0F0F" : "white", ...shadowBox }}
@@ -46,20 +46,20 @@ const UserCard = ({
       <Image
         source={{ uri: item.image }}
         alt=""
-        className="w-full h-[130px] rounded-md mb-2"
+        className="w-full h-[130px] rounded-md mb-2 object-cover"
+        resizeMode="cover"
       />
-      <View className="w-full flex-row justify-between items-center">
-        <View className="flex-row items-center">
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2"
-          >
-            {FirstLetterUppercase(item.name || "")}
-          </SmallText>
-          {item.verified && (
-            <MaterialIcons name="verified" size={18} color={COLORS.primary} />
-          )}
-        </View>
+      <View className="flex-row items-center w-full">
+        <SmallText
+          numberOfLine={1}
+          style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+          className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 max-w-[90%]"
+        >
+          {FirstLetterUppercase(item.name || "")}
+        </SmallText>
+        {item.verified && (
+          <MaterialIcons name="verified" size={18} color={COLORS.primary} />
+        )}
       </View>
       <Spacer axis="vertical" value={H(0.5)} />
       <View className="w-full flex-row justify-between items-center">

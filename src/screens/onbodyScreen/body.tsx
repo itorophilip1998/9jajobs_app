@@ -37,7 +37,6 @@ const Body = ({
         </View>
         <Button
           text={"Next"}
-          buttonStyleClassName="bg-primary"
           onPress={() => navigation.navigate("Finish")}
         />
       </View>
