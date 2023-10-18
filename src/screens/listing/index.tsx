@@ -59,7 +59,7 @@ const Listing = ({
           )}
           renderItem={({ item }) => (
             <UserProfileCard
-              item={{}}
+              item={{item}}
               onPress={() => navigation.navigate("FreelancerProfile")}
             />
           )}

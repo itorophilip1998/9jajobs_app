@@ -70,7 +70,7 @@ const Message = ({
                       color: type === "message" ? "#1A911B" : "#696969",
                     }}
                   >
-                    Messages (12)
+                    Messages 
                   </SmallText>
                 ) : type === "message" ? (
                   <LinearGradient
@@ -83,7 +83,7 @@ const Message = ({
                       }}
                       className="!text-[16px] !text-white"
                     >
-                      Messages (12)
+                      Messages 
                     </SmallText>
                   </LinearGradient>
                 ) : (
@@ -93,7 +93,7 @@ const Message = ({
                       color: type === "notification" ? "#696969" : "#1A911B",
                     }}
                   >
-                    Messages (12)
+                    Messages 
                   </SmallText>
                 )}
               </TouchableOpacity>
@@ -117,7 +117,7 @@ const Message = ({
                       color: type === "notification" ? "#1A911B" : "#696969",
                     }}
                   >
-                    Notification(24)
+                    Notification
                   </SmallText>
                 ) : type === "notification" ? (
                   <LinearGradient
@@ -130,7 +130,7 @@ const Message = ({
                       }}
                       className="!text-[16px] !text-white"
                     >
-                      Notification(24)
+                      Notification
                     </SmallText>
                   </LinearGradient>
                 ) : (
@@ -140,7 +140,7 @@ const Message = ({
                       color: type === "message" ? "#696969" : "#1A911B",
                     }}
                   >
-                    Notification(24)
+                    Notification
                   </SmallText>
                 )}
               </TouchableOpacity>

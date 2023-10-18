@@ -36,7 +36,7 @@ const Reviews = ({
       style={{
         width: width,
         height: height,
-        backgroundColor: darkMode ? "black" : "#D4E1D2",
+        backgroundColor: darkMode ? "red" : "#D4E1D2",
       }}
     >
       <SafeAreaView className="flex-1 w-full">
@@ -62,7 +62,7 @@ const Reviews = ({
                   style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                   className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium"
                 >
-                  {FirstLetterUppercase("collins Vincent")}
+                  {FirstLetterUppercase("Sammy UI")}
                 </SmallText>
                 <MaterialIcons
                   name="verified"
@@ -74,7 +74,7 @@ const Reviews = ({
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-[#D4E1D2] text-left p-0 text-[15px] w-full"
               >
-                {FirstLetterUppercase("Fashion Designer")}
+                {FirstLetterUppercase("Sammy UI")}
               </SmallText>
               <View className="flex-row items-center  mt-2 w-full">
                 <SmallText className="text-[#696969] text-right p-0 text-[13px]">

@@ -85,11 +85,11 @@ const FreelancerProfile = ({
               <View className="flex-row items-center mb-1 w-full">
                 {darkMode ? (
                   <SmallText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold">
-                    {FirstLetterUppercase("collins Vincent")}
+                    {FirstLetterUppercase("Sammy UI")}
                   </SmallText>
                 ) : (
                   <GradientText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold">
-                    {FirstLetterUppercase("collins Vincent")}
+                    {FirstLetterUppercase("Sammuel UI")}
                   </GradientText>
                 )}
                 <MaterialIcons
