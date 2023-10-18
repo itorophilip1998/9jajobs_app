@@ -36,7 +36,7 @@ const Reviews = ({
       style={{
         width: width,
         height: height,
-        backgroundColor: darkMode ? "red" : "#D4E1D2",
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
       }}
     >
       <SafeAreaView className="flex-1 w-full">
