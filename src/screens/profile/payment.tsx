@@ -68,7 +68,7 @@ const Transfer = () => {
         className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
       />
       <Spacer axis="vertical" value={H(3)} />
-      <Button text="Verify ID" buttonStyle={{ width: "100%" }} />
+      <Button text="Apply" buttonStyle={{ width: "100%" }} />
       <Spacer axis="vertical" value={H(3)} />
     </View>
   );

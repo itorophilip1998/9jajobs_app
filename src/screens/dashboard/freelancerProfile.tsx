@@ -40,7 +40,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
-import { shadowBoxDark } from "../../style/Typography";
+import { shadowBox, shadowBoxDark } from "../../style/Typography";
 import map from "../../../assets/images/map.png";
 import Facebook from "../../../assets/icons/facebook.svg";
 import Instagram from "../../../assets/icons/instagram.svg";
@@ -66,6 +66,7 @@ const FreelancerProfile = ({
   const [hour, setHour] = React.useState<string>("");
   const [minutes, setMinutes] = React.useState<string>("");
   const [location, setLocation] = React.useState<string>("");
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -79,13 +80,24 @@ const FreelancerProfile = ({
       <SafeAreaView className="flex-1 w-full pt-4">
         <ScrollView showsVerticalScrollIndicator={false}>
           <TitleWithButton title="" fire={() => navigation.goBack()} />
-          <Image
-            source={{
-              uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+          <View
+            style={{
+              shadowColor: "#969191", // Shadow color
+              shadowOffset: { width: 0, height: 3 }, // Shadow offset
+              shadowOpacity: 0.4, // Shadow opacity
+              shadowRadius: 15, // Shadow radius
+              elevation: 5,
             }}
-            alt=""
-            className=" w-[270px] h-[270px] rounded-full mx-auto"
-          />
+            className="w-[270px] h-[270px] rounded-full mx-auto bg-[#0f0f0f]"
+          >
+            <Image
+              source={{
+                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
+              }}
+              alt=""
+              className="w-full h-full rounded-full"
+            />
+          </View>
           <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center justify-between mt-2 w-full">
             <View className="w-[50%]">
@@ -133,7 +145,9 @@ const FreelancerProfile = ({
               <TouchableOpacity className="items-center">
                 <View
                   style={
-                    !darkMode && { ...shadowBoxDark, backgroundColor: "white" }
+                    !darkMode
+                      ? { ...shadowBoxDark, backgroundColor: "white" }
+                      : { ...shadowBox, backgroundColor: "#0f0f0f" }
                   }
                   className="p-2 rounded-full bg-[#121212] mb-2"
                 >
@@ -150,7 +164,9 @@ const FreelancerProfile = ({
               <TouchableOpacity className="items-center">
                 <View
                   style={
-                    !darkMode && { ...shadowBoxDark, backgroundColor: "white" }
+                    !darkMode
+                      ? { ...shadowBoxDark, backgroundColor: "white" }
+                      : { ...shadowBox, backgroundColor: "#0f0f0f" }
                   }
                   className="p-2 rounded-full bg-[#121212] mb-2"
                 >
@@ -167,7 +183,9 @@ const FreelancerProfile = ({
               >
                 <View
                   style={
-                    !darkMode && { ...shadowBoxDark, backgroundColor: "white" }
+                    !darkMode
+                      ? { ...shadowBoxDark, backgroundColor: "white" }
+                      : { ...shadowBox, backgroundColor: "#0f0f0f" }
                   }
                   className="p-2 rounded-full bg-[#121212] mb-2"
                 >
@@ -285,6 +303,7 @@ const FreelancerProfile = ({
             />
             <SmallText
               style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              onPress={() => setHomeDelivery(!homeDelivery)}
               className="text-[15px] !text-[#696969] text-left !pl-3"
             >
               Home Delivery
@@ -300,6 +319,7 @@ const FreelancerProfile = ({
             <SmallText
               style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
               className="text-[15px] !text-[#696969] text-left !pl-3"
+              onPress={() => setNationWideDelivery(!nationWideDelivery)}
             >
               Nationwide Delivery
             </SmallText>
@@ -428,7 +448,13 @@ const FreelancerProfile = ({
           </View>
 
           <Spacer value={H("3%")} axis="vertical" />
-          <Image source={map} className="w-full h-[150px] object-cover" />
+          <Pressable
+            onPress={() =>
+              navigation.navigate("MapScreen", { name: "Collins Vincent" })
+            }
+          >
+            <Image source={map} className="w-full h-[150px] object-cover" />
+          </Pressable>
           <Spacer value={H("3%")} axis="vertical" />
           <Button
             text="Book Now"

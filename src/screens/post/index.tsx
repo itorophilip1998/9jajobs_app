@@ -57,6 +57,7 @@ const Post = ({
   const [selectedVideos, setSelectedVideos] = React.useState<string[]>([]);
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
+  const [logo, setLogo] = React.useState<string | null>(null);
 
   const pickImages = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -70,6 +71,19 @@ const Post = ({
       for (let i = 0; i < result.assets.length; i++) {
         setSelectedImages((prev) => [...prev, result.assets[i].uri || ""]);
       }
+    }
+  };
+
+  const pickOneImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [4, 4],
+      quality: 1,
+      allowsEditing: true,
+    });
+
+    if (!result.canceled) {
+      setLogo(result.assets[0].uri);
     }
   };
 
@@ -344,7 +358,52 @@ const Post = ({
             />
             <Spacer axis="vertical" value={H(2)} />
             <View className="flex-row w-full justify-between items-start">
-              <View className="w-[47%] flex-row flex-wrap justify-between items-center">
+              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                  className="w-full text-[#D4E1D2] text-left p-0 pb-3"
+                >
+                  Add Company Logo
+                </SmallText>
+                {logo ? (
+                  <View className="w-[45%] h-[60px] mb-3 relative">
+                    <Image
+                      source={{ uri: logo }}
+                      className="w-full h-full object-cover"
+                    />
+                    <Ionicons
+                      name="ios-close-circle"
+                      size={24}
+                      color="black"
+                      style={{
+                        position: "absolute",
+                        top: -17,
+                        right: -17,
+                        color: "red",
+                      }}
+                      onPress={() => setLogo(null)}
+                    />
+                  </View>
+                ) : (
+                  <Pressable
+                    onPress={pickOneImage}
+                    style={[
+                      !darkMode && shadowBoxDark,
+                      {
+                        backgroundColor: darkMode ? "#0F0F0F" : "#FFFFFF",
+                      },
+                    ]}
+                    className="w-[45%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
+                  >
+                    <Entypo
+                      name="plus"
+                      size={27}
+                      color={darkMode ? "#D4E1D2" : COLORS.primary}
+                    />
+                  </Pressable>
+                )}
+              </View>
+              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
@@ -395,12 +454,12 @@ const Post = ({
                   />
                 </Pressable>
               </View>
-              <View className="w-[47%] flex-row flex-wrap justify-between items-center">
+              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
                 >
-                  Add Videos
+                  Add Video (Optional)
                 </SmallText>
                 {selectedVideos.map((item, idx) => (
                   <View

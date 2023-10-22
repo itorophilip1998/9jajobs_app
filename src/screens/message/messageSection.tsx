@@ -123,16 +123,16 @@ const MessageSection = ({
               <SmallText className="text-right p-0 text-[14px] text-[#696969] mb-2">
                 {item.date}
               </SmallText>
-              {/* {!item.read && (
+              {!item.read && (
                 <GradientText className="text-primary font-RedHatDisplayRegular text-right p-0 text-[14px]">
                   New
                 </GradientText>
-              )} */}
-              {!item.read && (
+              )}
+              {/* {!item.read && (
                 <SmallText className="text-red-500 font-RedHatDisplayRegular text-right p-0 text-[14px]">
                   New
                 </SmallText>
-              )}
+              )} */}
 
               {/* <View className="w-[10px] h-[10px] rounded-full bg-primary"/> */}
             </View>

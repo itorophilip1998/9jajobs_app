@@ -412,7 +412,20 @@ const Verification = ({
               onPress={() => navigation.navigate("Terms")}
               className="text-[15px] !text-[#696969] text-left !pl-3"
             >
-              By applying, you agree to our add and apply Policy
+              By applying, you agree to our{" "}
+              <Text
+                className="text-primary underline"
+                onPress={() => navigation.navigate("Terms")}
+              >
+                Terms & Conditions
+              </Text>{" "}
+              and{" "}
+              <Text
+                className="text-primary underline"
+                onPress={() => navigation.navigate("Privacy")}
+              >
+                Privacy Policy
+              </Text>
             </SmallText>
           </View>
           <Spacer value={H("3%")} axis="vertical" />

@@ -31,6 +31,7 @@ import Toast, {
 import { width, height } from "../utility/constant";
 import { FONTS } from "../utility/fonts";
 import Terms from "../screens/dashboard/terms";
+import Privacy from "../screens/dashboard/privacy";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -173,6 +174,7 @@ const NavigationSetup = () => {
           <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Filter" component={Filter} />
           <Stack.Screen name="Terms" component={Terms} />
+          <Stack.Screen name="Privacy" component={Privacy} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

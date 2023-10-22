@@ -10,6 +10,7 @@ import AddReview from "../screens/dashboard/addReview";
 import Report from "../screens/dashboard/report";
 import NearestListing from "../screens/dashboard/nearestListing";
 import TrendingListing from "../screens/dashboard/trendingList";
+import MapScreen from "../screens/dashboard/map";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ const HomeStack = () => {
       <Stack.Screen name="Reviews" component={Reviews} />
       <Stack.Screen name="AddReview" component={AddReview} />
       <Stack.Screen name="Report" component={Report} />
+      <Stack.Screen name="MapScreen" component={MapScreen} />
     </Stack.Navigator>
   );
 };
