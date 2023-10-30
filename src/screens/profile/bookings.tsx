@@ -3,7 +3,6 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
@@ -19,6 +18,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Booked = () => {
   const { darkMode } = useSelector((state: RootState) => state.auth);

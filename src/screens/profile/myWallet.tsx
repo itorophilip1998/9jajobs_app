@@ -4,7 +4,6 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   TouchableOpacity,
   Pressable,
   ScrollView,
@@ -13,6 +12,7 @@ import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { width, height } from "../../utility/constant";
 import TitleWithButton from "../../components/titleWithButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
@@ -35,6 +35,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { paystackProps } from "react-native-paystack-webview";
 
 const MyWallet = ({
   navigation,
@@ -44,8 +45,10 @@ const MyWallet = ({
   const [acctNo, setAcctNo] = React.useState<string>("");
   const [bankName, setBankName] = React.useState<string>("");
   const [acctName, setAcctName] = React.useState<string>("");
+  const [amount, setAmount] = React.useState<string>("");
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const withdrawRef = React.useRef<RBSheet | null>(null);
+  const fundRef = React.useRef<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -83,7 +86,7 @@ const MyWallet = ({
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           <View className="w-full flex-row justify-between items-center">
-            <TouchableOpacity onPress={() => navigation.navigate("Payment")}>
+            <TouchableOpacity onPress={() => fundRef.current?.open()}>
               <FundIcon />
               <SmallText
                 style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
@@ -234,6 +237,46 @@ const MyWallet = ({
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           <Button text="Withdraw" buttonStyle={{ width: "100%" }} />
+          <Spacer value={H("6%")} axis="vertical" />
+        </ScrollView>
+      </BottomSheet>
+
+      <BottomSheet ref={fundRef} duration={3000} height={100}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
+          className="flex-1 bg-[#1b1b1b] py-5 px-3"
+        >
+          <View className="w-full">
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+            >
+              Amount
+            </SmallText>
+            <InputField
+              style={{ backgroundColor: darkMode ? "black" : "white" }}
+              onTextChange={function (value: string): void {
+                setAmount(value);
+              }}
+              placeholder="Enter Amount"
+              defaultValue={amount}
+              className="border border-[#696969] bg-[#000000]"
+              containerStyle={{ width: "100%" }}
+              type={"numeric"}
+              autoCapitalize={"none"}
+            />
+            <Spacer value={H("2%")} axis="vertical" />
+          </View>
+          <Spacer value={H("3%")} axis="vertical" />
+          <Button
+            text="Fund Now"
+            buttonStyle={{ width: "100%" }}
+            onPress={() => {
+              fundRef.current?.close();
+              navigation.navigate("Paystack");
+            }}
+          />
           <Spacer value={H("6%")} axis="vertical" />
         </ScrollView>
       </BottomSheet>

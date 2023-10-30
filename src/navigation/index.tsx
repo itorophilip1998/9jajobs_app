@@ -32,6 +32,7 @@ import { width, height } from "../utility/constant";
 import { FONTS } from "../utility/fonts";
 import Terms from "../screens/dashboard/terms";
 import Privacy from "../screens/dashboard/privacy";
+import PaystackScreen from "../screens/profile/paystack";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -156,6 +157,7 @@ const NavigationSetup = () => {
           <Stack.Screen name="Signin" component={Signin} />
           <Stack.Screen name="TabNavigation" component={TabNavigation} />
           <Stack.Screen name="Chat" component={Chat} />
+          <Stack.Screen name="Paystack" component={PaystackScreen} />
         </Stack.Group>
         {/* {!LoggedIn ? (
         ) : (
