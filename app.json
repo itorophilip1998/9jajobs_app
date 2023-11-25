@@ -7,6 +7,10 @@
     "owner": "9jajob",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
+    "scheme": [
+      "job",
+      "com.googleusercontent.apps.576653944433-bc46d1ja08f9u1novh0rg5i7o2oh22n0"
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,16 +21,25 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
       "buildNumber": "1.0.0",
-      "usesIcloudStorage": true
+      "usesIcloudStorage": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyDADxCsbzRzu3czMCsOURExEQrZSewTaEM"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#023215"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.job.ng",
       "versionCode": 1,
-      "permissions": ["android.permission.RECORD_AUDIO"]
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCmFKr9vWNnn33c3Dh1YSejHz_i_2r1fq0"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -59,5 +72,3 @@
     }
   }
 }
-
-

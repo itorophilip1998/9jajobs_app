@@ -15,10 +15,12 @@ import MessageStack from "./messageStack";
 import ProfileStack from "./profileStack";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { useAuthorize } from "../hooks/useAuthorized";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
+  const { authenticate } = useAuthorize();
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <Tab.Navigator
@@ -74,7 +76,9 @@ const TabNavigation = () => {
       />
       <Tab.Screen
         name="Post"
-        options={{ tabBarLabel: "Post" }}
+        options={{
+          tabBarLabel: "Post",
+        }}
         component={Post}
       />
       <Tab.Screen
@@ -83,8 +87,8 @@ const TabNavigation = () => {
           tabBarLabel: "Messages",
           tabBarBadge: 4,
           tabBarBadgeStyle: {
-            top: -5
-          }
+            top: -5,
+          },
         }}
         component={MessageStack}
       />

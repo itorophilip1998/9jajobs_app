@@ -16,7 +16,6 @@ import {
 } from "react-native-responsive-screen";
 import { MESSAGES } from "../../data/messages";
 import UserProfileCard from "../../components/userProfileCard";
-import navigation from "../../navigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";

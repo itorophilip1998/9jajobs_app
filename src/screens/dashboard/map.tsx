@@ -7,12 +7,12 @@ import {
 } from "react-native";
 import React from "react";
 import TitleWithButton from "../../components/titleWithButton";
-import navigation from "../../navigation";
 import { width, height } from "../../utility/constant";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { RouteProp } from "@react-navigation/native";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
 const MapScreen = ({
   navigation,
@@ -38,11 +38,35 @@ const MapScreen = ({
           className="relative flex flex-row items-center w-full justify-between px-3 bg-[#0f0f0f] mb-3"
         >
           <TitleWithButton
-            title={route.params?.name}
+            title={route.params?.data?.listing_name}
             fire={() => navigation.goBack()}
           />
         </View>
-        {/* MAP GOES HERE */}
+        <MapView
+          onPress={() =>
+            navigation.navigate("MapScreen", { data: route.params?.data })
+          }
+          className="flex-1 w-full h-[200px]"
+          provider={PROVIDER_GOOGLE}
+          initialRegion={{
+            latitude: Number(route.params?.data?.address_latitude),
+            longitude: Number(route.params?.data?.address_longitude),
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: Number(route.params?.data?.address_latitude),
+              longitude: Number(route.params?.data?.address_longitude),
+            }}
+            title={route.params?.data?.listing_name}
+            description={route.params?.data?.listing_description?.replaceAll(
+              /<\/?[^>]+(>|$)/gi,
+              ""
+            )}
+          />
+        </MapView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

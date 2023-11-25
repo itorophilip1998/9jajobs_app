@@ -35,12 +35,26 @@ import { ResizeMode, Video } from "expo-av";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { shadowBoxDark } from "../../style/Typography";
+import { useAuthorize } from "../../hooks/useAuthorized";
+import { useIsFocused } from "@react-navigation/native";
 
 const Post = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const { loggedIn, access_token } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const focused = useIsFocused();
+
+  React.useEffect(() => {
+    if (focused) {
+      if (!Boolean(loggedIn && access_token)) {
+        navigation.navigate("Signin");
+      }
+    }
+  }, [focused, loggedIn, access_token]);
   const [business, setBusiness] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
   const [category, setCategory] = React.useState<string>("");
@@ -599,7 +613,7 @@ const Post = ({
             debounce={400}
             onPress={(data, details = null) => {}}
             query={{
-              key: "AIzaSyDrzxYICs65yHUDjc4mPMU7T_m_PqQzSLI",
+              key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
             }}
             fetchDetails={true}
@@ -616,7 +630,7 @@ const Post = ({
                 <Text
                   style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#D4E1D2",
+                    color: "#c6c6c6",
                   }}
                 >
                   {rowData.description}
@@ -627,7 +641,7 @@ const Post = ({
               textInput: {
                 fontFamily: FONTS.RedHatDisplayRegular,
                 backgroundColor: "transparent",
-                color: darkMode ? "#D4E1D2" : "#0f0f0f",
+                color: darkMode ? "#c6c6c6" : "#0f0f0f",
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,

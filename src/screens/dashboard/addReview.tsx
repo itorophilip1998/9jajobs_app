@@ -22,15 +22,63 @@ import { LinearGradient } from "expo-linear-gradient";
 // @ts-ignore
 import StarRating from "react-native-star-rating";
 import { COLORS } from "../../utility/colors";
+import { RouteProp, useIsFocused } from "@react-navigation/native";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { postRate } from "../../api/rating";
+import { useDispatch } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const AddReview = ({
   navigation,
+  route,
 }: {
+  route: RouteProp<any>;
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const dispatch = useDispatch();
   const [review, setReview] = React.useState<string>("");
   const [rating, setRating] = React.useState<number>(0);
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, loggedIn, access_token } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const focused = useIsFocused();
+
+  React.useEffect(() => {
+    if (focused) {
+      if (!Boolean(loggedIn && access_token)) {
+        Toast.show({
+          type: "error",
+          text1: "Login to add a review.",
+        });
+        navigation.navigate("Signin");
+      }
+    }
+  }, [focused, loggedIn, access_token]);
+
+  const addReview = () => {
+    dispatch(SET_LOADER(true));
+    postRate(
+      {
+        user_id: route.params?.data.user.id,
+        description: review,
+        rate: String(rating),
+      },
+      (response) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "success",
+          text1: "Successfully Rated",
+        });
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -104,7 +152,18 @@ const AddReview = ({
             </LinearGradient>
           )}
           <Spacer axis="vertical" value={H("3%")} />
-          <Button text="Submit Review" buttonStyle={{ width: "100%" }} />
+          <Button
+            text="Submit Review"
+            onPress={() =>
+              rating <= 0
+                ? Toast.show({
+                    type: "error",
+                    text1: "Please select rating.",
+                  })
+                : addReview()
+            }
+            buttonStyle={{ width: "100%" }}
+          />
           <Spacer axis="vertical" value={H("3%")} />
         </ScrollView>
       </SafeAreaView>

@@ -10,7 +10,6 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { SET_ERROR, SET_LOADER, SET_SUCCESS } from "../store/formDataSlice";
-import { sendEmailOTP } from "../api/auth";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
@@ -45,18 +44,18 @@ const CountDowner = (forwardEmail?: string | null) => {
 
   React.useEffect(() => {
     if (ref.current === 0) {
-      dispatch(SET_LOADER(true));
-      sendEmailOTP(
-        { email: forwardEmail ? forwardEmail : email },
-        (response) => {
-          dispatch(SET_LOADER(false));
-          dispatch(SET_SUCCESS(response.message));
-        },
-        (error) => {
-          dispatch(SET_LOADER(false));
-          dispatch(SET_ERROR(error));
-        }
-      );
+      // dispatch(SET_LOADER(true));
+      // sendEmailOTP(
+      //   { email: forwardEmail ? forwardEmail : email },
+      //   (response) => {
+      //     dispatch(SET_LOADER(false));
+      //     dispatch(SET_SUCCESS(response.message));
+      //   },
+      //   (error) => {
+      //     dispatch(SET_LOADER(false));
+      //     dispatch(SET_ERROR(error));
+      //   }
+      // );
       ref.current = 1;
     }
   }, []);

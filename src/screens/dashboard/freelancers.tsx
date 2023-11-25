@@ -19,15 +19,45 @@ import {
 } from "react-native-responsive-screen";
 import UserProfileCard from "../../components/userProfileCard";
 import { MAIN_USERS } from "../../data/listing";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { RouteProp, useIsFocused } from "@react-navigation/native";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { getAllListing } from "../../api/category";
+import Toast from "react-native-toast-message";
 
 const Freelancers = ({
   navigation,
+  route,
 }: {
   navigation: NativeStackNavigationProp<any>;
+  route: RouteProp<any>;
 }) => {
+  const dispatch = useDispatch();
+  const focus = useIsFocused();
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const [listings, setListing] = React.useState<any[]>([]);
+  // console.log(route.params?.data);
+
+  React.useEffect(() => {
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getAllListing(
+        { listing_category_id: route.params?.data.id },
+        (response) => {
+          dispatch(SET_LOADER(false));
+          setListing(response.listing);
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus, route.params?.data]);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -39,18 +69,24 @@ const Freelancers = ({
       }}
     >
       <SafeAreaView className="flex-1 w-full">
-        <TitleWithButton title="Gardens" fire={() => navigation.goBack()} />
+        <TitleWithButton
+          title={route.params?.data.listing_category_name}
+          fire={() => navigation.goBack()}
+        />
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={MAIN_USERS}
-          keyExtractor={(item) => item.id.toString()}
+          data={listings}
+          keyExtractor={(item, idx) => idx.toString()}
           ItemSeparatorComponent={() => (
             <Spacer value={H("1%")} axis="vertical" />
           )}
-          renderItem={( item ) => (
+          renderItem={({ item }) => (
             <UserProfileCard
+              navigation={navigation}
               item={item}
-              onPress={() => navigation.navigate("FreelancerProfile")}
+              onPress={() =>
+                navigation.navigate("FreelancerProfile", { data: item })
+              }
             />
           )}
         />

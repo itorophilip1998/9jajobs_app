@@ -1,0 +1,145 @@
+import axios from "axios";
+import { BASE_URL } from "./config";
+import { store } from "../store";
+import { LOGIN, SET_PROFILE, SET_TOKEN } from "../store/authSlice";
+
+export const refreshToken = async (
+  execute: (arg: any) => void,
+  error: (arg: string) => void
+) => {
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/auth/refresh`,
+    headers: {
+      Authorization: `Bearer ${store.getState().auth.access_token}`,
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    store.dispatch(LOGIN(false));
+    store.dispatch(SET_TOKEN(null));
+    store.dispatch(SET_PROFILE(null));
+    console.log("refresh", err?.response?.data);
+    if (typeof err?.response?.data === "string") {
+      error(err?.response?.data);
+    } else if (!err?.response?.data) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data === "object") {
+      error(Object.values(err?.response?.data).flat().join("\n"));
+    }
+  }
+};
+
+export const signUp = async (
+  data: {
+    name: string;
+    email: string;
+    phone: string;
+    referral_code: string | false;
+    password: string;
+    re_password: string;
+  },
+  execute: (e: any) => void,
+  error: (e: string) => void
+) => {
+  const formData = new FormData();
+  formData.append("name", data.name);
+  formData.append("email", data.email);
+  formData.append("phone_number", data.phone);
+  data.referral_code && formData.append("referral_code", data.referral_code);
+  formData.append("password", data.password);
+  formData.append("re_password", data.re_password);
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/auth/register`,
+    data: data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    console.log("register", err?.response?.data);
+    if (typeof err?.response?.data?.error === "string") {
+      error(err?.response?.data?.error || "Something went wrong. Try again.");
+    } else if (!err?.response?.data?.error) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data?.error === "object") {
+      error(Object.values(err?.response?.data?.error).flat().join("\n"));
+    }
+  }
+};
+
+export const signIn = async (
+  data: {
+    email: string;
+    password: string;
+  },
+  execute: (e: any) => void,
+  error: (e: string) => void
+) => {
+  const formData = new FormData();
+  formData.append("email", data.email);
+  formData.append("password", data.password);
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/auth/login`,
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    console.log("login", err?.response?.data);
+    if (typeof err?.response?.data?.error === "string") {
+      error(err?.response?.data?.error);
+    } else if (!err?.response?.data?.error) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data?.error === "object") {
+      error(Object.values(err?.response?.data?.error).flat().join("\n"));
+    }
+  }
+};
+
+export const logout = async (
+  execute: (e: any) => void,
+  error: (e: string) => void
+) => {
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/auth/logout`,
+    headers: {
+      Authorization: `Bearer ${store.getState().auth.access_token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    console.log("logout", err?.response?.data);
+    if (err?.response?.status === 401) {
+      store.dispatch(LOGIN(false));
+      store.dispatch(SET_TOKEN(null));
+      store.dispatch(SET_PROFILE(null));
+    }
+    if (typeof err?.response?.data === "string") {
+      error(err?.response?.data || "Something went wrong. Try again.");
+    } else if (!err?.response?.data) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data === "object") {
+      error(Object.values(err?.response?.data).flat().join("\n"));
+    }
+  }
+};

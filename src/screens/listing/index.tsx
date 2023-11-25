@@ -22,13 +22,41 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useIsFocused } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { getAllListing } from "../../api/category";
+import Toast from "react-native-toast-message";
 
 const Listing = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const dispatch = useDispatch();
+  const focus = useIsFocused();
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const [allListing, setAllListing] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getAllListing(
+        null,
+        (response) => {
+          dispatch(SET_LOADER(false));
+          // console.log("Listing", response.listing);
+          setAllListing(response.listing);
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus]);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -51,7 +79,7 @@ const Listing = ({
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={MAIN_USERS}
+          data={allListing}
           className="px-3"
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
@@ -59,8 +87,11 @@ const Listing = ({
           )}
           renderItem={({ item }) => (
             <UserProfileCard
+              navigation={navigation}
               item={item}
-              onPress={() => navigation.navigate("FreelancerProfile")}
+              onPress={() =>
+                navigation.navigate("FreelancerProfile", { data: item })
+              }
             />
           )}
         />

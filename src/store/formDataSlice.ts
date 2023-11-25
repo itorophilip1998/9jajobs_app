@@ -27,10 +27,10 @@ const initialState: IFormData = {
 
   authData: {
     fullName: "",
-    email: "user@gmail.com",
+    email: "",
     phoneNumber: "",
     referralCode: "",
-    password: "password123",
+    password: "",
     confirmPassword: "",
   },
 };
@@ -62,10 +62,10 @@ export const formDataSlice = createSlice({
       state.authData.phoneNumber = action.payload;
     },
     SET_REFERRAL_CODE: (state, action: PayloadAction<string>) => {
-      state.authData.phoneNumber = action.payload;
+      state.authData.referralCode = action.payload;
     },
     SET_FULL_NAME: (state, action: PayloadAction<string>) => {
-      state.authData.fullName= action.payload;
+      state.authData.fullName = action.payload;
     },
     SET_EMAIL: (state, action: PayloadAction<string>) => {
       state.authData.email = action.payload;

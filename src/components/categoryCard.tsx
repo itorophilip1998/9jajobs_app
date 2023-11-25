@@ -1,8 +1,4 @@
-import {
-  Image,
-  TouchableOpacity,
-  GestureResponderEvent,
-} from "react-native";
+import { Image, TouchableOpacity, GestureResponderEvent } from "react-native";
 import React from "react";
 import SmallText from "./smallText";
 import { shadowBox } from "../style/Typography";
@@ -14,11 +10,11 @@ const CategoryCard = ({
   onPress,
   color,
 }: {
-  item: { title: string; image: string; id: number };
-  color: string
+  item: any;
+  color: string;
   onPress: (event: GestureResponderEvent) => void;
 }) => {
-  const {darkMode} = useSelector((state: RootState) => state.auth)
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -29,16 +25,17 @@ const CategoryCard = ({
       }}
     >
       <Image
-        source={{ uri: item.image }}
+        source={{ uri: item?.listing_category_photo }}
         alt=""
         className="w-full h-[70px] rounded-md mb-2"
         resizeMode="cover"
       />
       <SmallText
+      numberOfLine={1}
         style={{ color: darkMode ? "white" : "#0F0F0F" }}
         className="text-white p-0 text-[13px] font-RedHatDisplayMedium"
       >
-        {item.title}
+        {item?.listing_category_name}
       </SmallText>
     </TouchableOpacity>
   );

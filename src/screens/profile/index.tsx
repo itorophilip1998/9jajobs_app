@@ -33,6 +33,7 @@ import ProfileMenuCard from "../../components/profileMenuCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
+import userImg from "../../../assets/images/user.jpg";
 
 const routes = [
   { path: "MyWallet", name: "My Wallet", icon: WalletIcon },
@@ -43,7 +44,11 @@ const routes = [
   { path: "Verification", name: "Verification", icon: VerifyIcon },
   { path: "MyListing", name: "My Listing", icon: ListingIcon },
   { path: "BoostPost", name: "Boost Post", icon: BoostIcon },
-  { path: "https://9jajob.com/privacy-policy", name: "Privacy Policy", icon: PrivacyIcon },
+  {
+    path: "https://9jajob.com/privacy-policy",
+    name: "Privacy Policy",
+    icon: PrivacyIcon,
+  },
   { path: "https://9jajob.com/contact", name: "Feedback", icon: FeedBackIcon },
   { path: "https://9jajob.com/faq", name: "FAQ", icon: FaqIcon },
   { path: "https://9jajob.com/about", name: "About", icon: AboutIcon },
@@ -54,7 +59,7 @@ const Profile = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   //   const sortRef = React.useState<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
@@ -81,21 +86,32 @@ const Profile = ({
           </GradientText>
         )}
         <Image
-          source={{
-            uri: "https://i.ibb.co/rbCFc33/Rectangle-53.png",
-          }}
+          source={
+            profile?.photo
+              ? {
+                  uri: profile?.photo,
+                }
+              : userImg
+          }
           alt=""
           className=" w-[70%] mx-auto h-[170px] my-3 rounded-lg"
+          resizeMode="cover"
         />
         <View className="flex-row item-center justify-center pl-4">
           <View>
             {darkMode ? (
-              <SmallText className="text-center p-0 font-RedHatDisplayBold text-[#D4E1D2] text-[22px]">
-                Victor Daniel
+              <SmallText
+                numberOfLine={1}
+                className="text-center p-0 font-RedHatDisplayBold text-[#D4E1D2] text-[22px]"
+              >
+                {profile?.name}
               </SmallText>
             ) : (
-              <GradientText className="text-center p-0 font-RedHatDisplayBold text-[#D4E1D2] text-[22px]">
-                Victor Daniel
+              <GradientText
+                numberOfLines={1}
+                className="text-center p-0 font-RedHatDisplayBold text-[#D4E1D2] text-[22px]"
+              >
+                {profile?.name}
               </GradientText>
             )}
 
@@ -103,13 +119,14 @@ const Profile = ({
               style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
               className="text-center p-0 text-[#696969] text-[18px] pb-2"
             >
-              Victordaniel@gmail.com
+              {profile?.email}
             </SmallText>
           </View>
           <AntDesign
             name="setting"
             size={30}
             color={COLORS.primary}
+            // className="ml-2"
             onPress={() => navigation.navigate("EditProfile")}
           />
         </View>

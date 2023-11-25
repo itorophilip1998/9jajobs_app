@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "576653944433",
+    "project_id": "jajob-5e1e7",
+    "storage_bucket": "jajob-5e1e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576653944433:android:02b0856daa8c6aae6b5dd0",
+        "android_client_info": {
+          "package_name": "com.job.ng"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmFKr9vWNnn33c3Dh1YSejHz_i_2r1fq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

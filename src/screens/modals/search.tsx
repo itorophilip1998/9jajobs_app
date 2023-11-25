@@ -5,6 +5,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  FlatList,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,27 +15,67 @@ import { COLORS } from "../../utility/colors";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import {
+  widthPercentageToDP as W,
+  heightPercentageToDP as H,
+} from "react-native-responsive-screen";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { RootState } from "../../store";
 import { SET_LOCATION, SET_SEARCH } from "../../store/searchSlice";
 import { width, height } from "../../utility/constant";
 import { FONTS } from "../../utility/fonts";
-import { BottomSheet, SmallText } from "../../components";
+import { BottomSheet, SmallText, Spacer } from "../../components";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { getAllListing } from "../../api/category";
+import Toast from "react-native-toast-message";
+import { useIsFocused } from "@react-navigation/native";
+import UserProfileCard from "../../components/userProfileCard";
+import { DelayFor } from "../../utility/helpers";
 
 const Search = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const focus = useIsFocused();
   const { darkMode } = useSelector((state: RootState) => state.auth);
-  const { location, search, type } = useSelector(
-    (state: RootState) => state.search
-  );
+  const { location, search } = useSelector((state: RootState) => state.search);
+  const [longtitude, setLongtitude] = React.useState<string | null>(null);
+  const [latitude, setLatitude] = React.useState<string | null>(null);
   const dispatch = useDispatch();
   const ref = React.useRef<RBSheet | null>(null);
 
-  const [searchResults, setSearchResults] = React.useState([]);
+  const [searchResults, setSearchResults] = React.useState<any[]>([]);
+
+  const handleSearch = () => {
+    dispatch(SET_LOADER(true));
+    getAllListing(
+      {
+        listing_name: search,
+        // address_latitude: latitude,
+        // address_longitude: longtitude,
+        city: location,
+      },
+      (response) => {
+        dispatch(SET_LOADER(false));
+        setSearchResults(response.listing);
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    if (focus) {
+      handleSearch();
+    }
+  }, [focus]);
 
   return (
     <KeyboardAvoidingView
@@ -43,16 +84,16 @@ const Search = ({
       style={{
         width: width,
         height: height,
-        backgroundColor: darkMode ? "black" : "white",
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
       }}
     >
       <SafeAreaView
-        style={{ backgroundColor: darkMode ? "black" : "white" }}
+        style={{ backgroundColor: darkMode ? "black" : "#D4E1D2" }}
         className="flex-1 bg-black px-3 py-4"
       >
         <View className="w-full flex-row items-center justify-between">
           <Pressable
-            style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
+            style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
             className="w-[60%] px-3 py-2 border bg-[#1b1b1b] border-primary rounded-full flex-row justify-between items-center"
           >
             <AntDesign
@@ -61,25 +102,23 @@ const Search = ({
               color={darkMode ? "#D4E1D2" : "#696969"}
             />
             <TextInput
-              keyboardType={"web-search"}
+              keyboardType={"default"}
               className={`h-full w-[80%] text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
               onChangeText={(value) => dispatch(SET_SEARCH(value))}
               value={search}
               // onFocus={() => {
               //   onFocus && onFocus();
               // }}
-              // onBlur={() => {
-              //   onBlur && onBlur();
-              // }}
+              onBlur={handleSearch}
               placeholderTextColor={"#626262"}
-              placeholder={"Search for Category"}
+              placeholder={"Search here..."}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               autoCapitalize={"none"}
             />
           </Pressable>
           <Pressable
             style={{
-              backgroundColor: darkMode ? "#1b1b1b" : "transparent",
+              backgroundColor: darkMode ? "#1b1b1b" : "white",
               borderWidth: darkMode ? 0 : 1,
               borderColor: COLORS.primary,
             }}
@@ -87,11 +126,11 @@ const Search = ({
             className="w-[30%] px-3 py-2 bg-[#1b1b1b] rounded-full flex-row items-center justify-between"
           >
             <SmallText
+              numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#696969" }}
-              className="text-[#D4E1D2] text-left p-0 pr-2"
+              className="text-[#D4E1D2] text-left p-0 pr-2 w-[90%]"
             >
-              {/* {location === "" ? "Location" : location} */}
-              Location
+              {location === "" ? "Location" : location}
             </SmallText>
             <AntDesign name="downcircleo" size={13} color={COLORS.primary} />
           </Pressable>
@@ -100,9 +139,34 @@ const Search = ({
             name="closecircleo"
             size={20}
             color={darkMode ? "#D4E1D2" : "#696969"}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              dispatch(SET_SEARCH(""));
+              dispatch(SET_LOCATION(""));
+              setLongtitude(null);
+              setLatitude(null);
+              navigation.goBack();
+            }}
           />
         </View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={searchResults}
+          // className="px-2"
+          ListHeaderComponent={() => <Spacer value={H("2%")} axis="vertical" />}
+          keyExtractor={(item) => item.id.toString()}
+          ItemSeparatorComponent={() => (
+            <Spacer value={H("1%")} axis="vertical" />
+          )}
+          renderItem={({ item }) => (
+            <UserProfileCard
+              navigation={navigation}
+              item={item}
+              onPress={() =>
+                navigation.navigate("FreelancerProfile", { data: item })
+              }
+            />
+          )}
+        />
       </SafeAreaView>
       <BottomSheet ref={ref} duration={0}>
         <View
@@ -113,9 +177,27 @@ const Search = ({
             placeholder="Search City"
             enableHighAccuracyLocation
             debounce={400}
-            onPress={(data, details = null) => {}}
+            onPress={(data, details = null) => {
+              const city = details?.address_components.find(
+                (item) => item.types[0] === "locality"
+              );
+              const country = details?.address_components.find(
+                (item) => item.types[0] === "country"
+              );
+              dispatch(
+                SET_LOCATION(`${city?.long_name}, ${country?.long_name}`)
+              );
+              setLatitude(
+                details ? details.geometry.location.lat.toString() : null
+              );
+              setLongtitude(
+                details ? details.geometry.location.lng.toString() : null
+              );
+              ref.current?.close();
+              DelayFor(200, () => handleSearch());
+            }}
             query={{
-              key: "AIzaSyDrzxYICs65yHUDjc4mPMU7T_m_PqQzSLI",
+              key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
               types: "(cities)",
             }}
@@ -133,7 +215,7 @@ const Search = ({
                 <Text
                   style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#D4E1D2",
+                    color: "#c6c6c6",
                   }}
                 >
                   {rowData.description}
@@ -144,11 +226,11 @@ const Search = ({
               textInput: {
                 fontFamily: FONTS.RedHatDisplayRegular,
                 backgroundColor: "transparent",
-                color: darkMode ? "#D4E1D2" : "#0f0f0f",
+                color: darkMode ? "#c6c6c6" : "#0f0f0f",
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,
-                height: "50px",
+                height: 40,
               },
             }}
           />

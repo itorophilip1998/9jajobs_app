@@ -27,15 +27,36 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
 import NearUserCard from "../../components/nearUserCard";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { getCategories, getCategoryListing } from "../../api/category";
+import Toast from "react-native-toast-message";
 
 const Dashboard = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [category, setCategory] = React.useState<any[]>([]);
   const { location, search } = useSelector((state: RootState) => state.search);
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(SET_LOADER(true));
+    getCategoryListing(
+      (response) => {
+        setCategory(response);
+        dispatch(SET_LOADER(false));
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  }, []);
   return (
     <View
       className="flex-1 bg-black"
@@ -68,8 +89,7 @@ const Dashboard = ({
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-[#D4E1D2] text-left p-0 pl-3"
               >
-                {/* {search === "" ? "Search here" : search} */}
-                Search here
+                {search === "" ? "Search here" : search}
               </SmallText>
             </Pressable>
             <Pressable
@@ -85,11 +105,11 @@ const Dashboard = ({
               className="w-[30%] px-3 py-3 bg-[#1b1b1b] rounded-full flex-row items-center justify-between"
             >
               <SmallText
+              numberOfLine={1}
                 style={{ color: darkMode ? "#D4E1D2" : "#696969" }}
-                className="text-[#D4E1D2] text-left p-0 pr-2"
+                className="text-[#D4E1D2] text-left p-0 pr-2 w-[90%]"
               >
-                {/* {location === "" ? "Location" : location} */}
-                Location
+                {location === "" ? "Location" : location}
               </SmallText>
               <AntDesign name="downcircleo" size={13} color={COLORS.primary} />
             </Pressable>
@@ -110,7 +130,7 @@ const Dashboard = ({
           <View>
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={CATEGORIES.filter((_item, idx) => idx < 6)}
+              data={category.filter((_item, idx) => idx < 6)}
               keyExtractor={(item) => item.id.toString()}
               scrollEnabled={false}
               // columnWrapperStyle={{ justifyContent: "space-between" }}
@@ -120,26 +140,17 @@ const Dashboard = ({
               )}
               renderItem={({ item }) => (
                 <CategoryCard
-                  onPress={() => navigation.navigate("Freelancers")}
-                  key={item.id.toString()}
+                  onPress={() =>
+                    navigation.navigate("Freelancers", { data: item })
+                  }
                   item={item}
                   color={darkMode ? "#0F0F0F" : "#D4E1D2"}
                 />
               )}
             />
           </View>
-          {/* <View className="flex-row flex-wrap w-full">
-            {CATEGORIES.filter((_item, idx) => idx !== 6).map((item) => (
-              <CategoryCard
-                onPress={() => navigation.navigate("Freelancers")}
-                key={item.id.toString()}
-                item={item}
-                color={darkMode ? "#0F0F0F" : "#D4E1D2"}
-              />
-            ))}
-          </View> */}
           <TouchableOpacity
-            onPress={() => navigation.navigate("Category")}
+            onPress={() => navigation.navigate("Category", { data: category })}
             className="flex-row items-center mx-auto"
           >
             <Entypo
@@ -147,13 +158,12 @@ const Dashboard = ({
               size={24}
               color={darkMode ? "#D4E1D2" : "#0F0F0F"}
             />
-            <PrimaryText
-              onPress={() => navigation.navigate("Category")}
-              className="text-center"
+            <SmallText
+              className="text-center text-primary p-0"
               style={!darkMode && { color: !darkMode && "#0F0F0F" }}
             >
               See More
-            </PrimaryText>
+            </SmallText>
           </TouchableOpacity>
           <Spacer axis="vertical" value={H(3)} />
           <View className="w-full flex-row justify-between items-center">

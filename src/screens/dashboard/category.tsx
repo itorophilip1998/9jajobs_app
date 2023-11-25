@@ -20,11 +20,14 @@ import {
 import { Spacer } from "../../components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { RouteProp } from "@react-navigation/native";
 
 const Category = ({
   navigation,
+  route,
 }: {
   navigation: NativeStackNavigationProp<any>;
+  route: RouteProp<any>;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
@@ -41,7 +44,7 @@ const Category = ({
         <TitleWithButton title="Categories" fire={() => navigation.goBack()} />
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={CATEGORIES}
+          data={route.params?.data}
           keyExtractor={(item) => item.id.toString()}
           // columnWrapperStyle={{ justifyContent: "space-between" }}
           numColumns={3}
@@ -50,7 +53,7 @@ const Category = ({
           )}
           renderItem={({ item }) => (
             <CategoryCard
-              onPress={() => navigation.navigate("Freelancers")}
+              onPress={() => navigation.navigate("Freelancers", { data: item })}
               key={item.id.toString()}
               item={item}
               color={darkMode ? "#0F0F0F" : "white"}

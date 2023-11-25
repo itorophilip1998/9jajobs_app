@@ -47,13 +47,25 @@ import Instagram from "../../../assets/icons/instagram.svg";
 import Whatsapp from "../../../assets/icons/whatsapp.svg";
 import Linkedin from "../../../assets/icons/linkedin.svg";
 import Twitter from "../../../assets/icons/twitter.svg";
+import { RouteProp } from "@react-navigation/native";
+import userImg from "../../../assets/images/user.jpg";
+import { useDispatch } from "react-redux";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { getRating } from "../../api/rating";
+import Toast from "react-native-toast-message";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
 const FreelancerProfile = ({
   navigation,
+  route,
 }: {
+  route: RouteProp<any>;
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  const { darkMode, loggedIn, access_token } = useSelector(
+    (state: RootState) => state.auth
+  );
   const [homeDelivery, setHomeDelivery] = React.useState<boolean>(false);
   const [nationWideDelivery, setNationWideDelivery] =
     React.useState<boolean>(false);
@@ -91,9 +103,14 @@ const FreelancerProfile = ({
             className="w-[270px] h-[270px] rounded-full mx-auto bg-[#0f0f0f]"
           >
             <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
+              source={
+                route.params?.data?.listing_featured_photo &&
+                route.params?.data?.listing_featured_photo.length > 0
+                  ? {
+                      uri: route.params?.data?.listing_featured_photo,
+                    }
+                  : userImg
+              }
               alt=""
               className="w-full h-full rounded-full"
             />
@@ -101,36 +118,60 @@ const FreelancerProfile = ({
           <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center justify-between mt-2 w-full">
             <View className="w-[50%]">
-              <View className="flex-row items-center mb-1 w-full">
+              <View className="flex-row items-center mb-1 w-full pr-3">
                 {darkMode ? (
-                  <SmallText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold">
-                    {FirstLetterUppercase("Sammy UI")}
+                  <SmallText
+                    numberOfLine={1}
+                    className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold"
+                  >
+                    {FirstLetterUppercase(
+                      route.params?.data?.listing_name || ""
+                    )}
                   </SmallText>
                 ) : (
-                  <GradientText className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold">
-                    {FirstLetterUppercase("Sammuel UI")}
+                  <GradientText
+                    numberOfLines={1}
+                    className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold"
+                  >
+                    {FirstLetterUppercase(
+                      route.params?.data?.listing_name || ""
+                    )}
                   </GradientText>
                 )}
-                <MaterialIcons
-                  name="verified"
-                  size={18}
-                  color={COLORS.primary}
-                />
+                {route.params?.data.is_featured === "Yes" && (
+                  <MaterialIcons
+                    name="verified"
+                    size={18}
+                    color={COLORS.primary}
+                  />
+                )}
               </View>
               <Spacer value={H("0.5%")} axis="vertical" />
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[15px]"
-              >
-                {FirstLetterUppercase("Real Estate")}
-              </SmallText>
-              <Spacer value={H("1%")} axis="vertical" />
+              <View className="flex-row justify-between items-center mb-1 w-full">
+                <SmallText
+                  numberOfLine={1}
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#D4E1D2] text-left p-0 text-[15px] w-[75%]"
+                >
+                  {FirstLetterUppercase(
+                    route.params?.data?.r_listing_category
+                      ?.listing_category_name || ""
+                  )}
+                </SmallText>
+                <View className="flex-row items-center">
+                  <AntDesign name="star" size={15} color={COLORS.primary} />
+                  <SmallText className="text-primary p-0 text-[15px] pl-1">
+                    {route.params?.data.rate_star}
+                  </SmallText>
+                </View>
+              </View>
+              {/* <Spacer value={H("1%")} axis="vertical" />
               <View className="flex-row justify-between items-center mb-1 w-full">
                 <SmallText
                   style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
                   className="text-[#696969] text-left p-0 text-[15px]"
                 >
-                  {FirstLetterUppercase("1.2 Km Away")}
+             {FirstLetterUppercase("1.2 Km Away")} 
                 </SmallText>
 
                 <View className="flex-row items-center">
@@ -139,10 +180,15 @@ const FreelancerProfile = ({
                     4.2
                   </SmallText>
                 </View>
-              </View>
+              </View> */}
             </View>
             <View className="flex-row items-center justify-between w-[45%]">
-              <TouchableOpacity className="items-center">
+              <TouchableOpacity
+                className="items-center"
+                onPress={() =>
+                  navigation.navigate("Chat", { data: route.params?.data })
+                }
+              >
                 <View
                   style={
                     !darkMode
@@ -161,7 +207,14 @@ const FreelancerProfile = ({
                   Chat
                 </SmallText>
               </TouchableOpacity>
-              <TouchableOpacity className="items-center">
+              <TouchableOpacity
+                onPress={() =>
+                  Linking.openURL(
+                    `tel:${route.params?.data?.listing_phone || ""}`
+                  )
+                }
+                className="items-center"
+              >
                 <View
                   style={
                     !darkMode
@@ -213,11 +266,10 @@ const FreelancerProfile = ({
             style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
             className="text-[#D4E1D2] text-left p-0 text-[15px] font-RedHatDisplayRegular"
           >
-            Lorem ipsum dolor sit amet consectetur. Dis nullam enim pharetra
-            bibendum purus. Blandit faucibus facilisis blandit mauris
-            consectetur ultrices in mattis. Aliquet orci morbi sapien elementum.
-            Adipiscing proin venenatis morbi nascetur erat praesent fermentum
-            fames. Adipiscing etiam netus velit magna magnis ac placerat orci.
+            {route.params?.data?.listing_description?.replaceAll(
+              /<\/?[^>]+(>|$)/gi,
+              ""
+            )}
           </SmallText>
           <Spacer value={H("3%")} axis="vertical" />
           <SmallText
@@ -290,7 +342,11 @@ const FreelancerProfile = ({
                 Amenities
               </SmallText>
             </View>
-            <PrimaryText onPress={() => navigation.navigate("Reviews")}>
+            <PrimaryText
+              onPress={() =>
+                navigation.navigate("Reviews", { data: route.params?.data })
+              }
+            >
               See Reviews
             </PrimaryText>
           </View>
@@ -352,7 +408,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-left p-0 text-[15px]"
             >
-              07041528380
+              {route.params?.data?.listing_phone || "N/A"}
             </SmallText>
           </View>
           <View
@@ -369,7 +425,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-left p-0 text-[15px]"
             >
-              vincentovie39@gmail.com
+              {route.params?.data.listing_email || "N/A"}
             </SmallText>
           </View>
           <View
@@ -386,10 +442,11 @@ const FreelancerProfile = ({
               Location
             </SmallText>
             <SmallText
+              // numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              Abuja, Nigeria
+              {route.params?.data?.listing_address || "N/A"}
             </SmallText>
           </View>
           <View
@@ -412,7 +469,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-left p-0 text-[15px]"
             >
-              https://vincentcollins.netlify.app/
+              {route.params?.data?.listing_website || "N/A"}
             </SmallText>
           </View>
           <View
@@ -448,17 +505,45 @@ const FreelancerProfile = ({
           </View>
 
           <Spacer value={H("3%")} axis="vertical" />
-          <Pressable
+          <MapView
             onPress={() =>
-              navigation.navigate("MapScreen", { name: "Collins Vincent" })
+              navigation.navigate("MapScreen", { data: route.params?.data })
             }
+            className="flex-1 w-full h-[200px]"
+            provider={PROVIDER_GOOGLE}
+            initialRegion={{
+              latitude: Number(route.params?.data?.address_latitude),
+              longitude: Number(route.params?.data?.address_longitude),
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
           >
-            <Image source={map} className="w-full h-[150px] object-cover" />
-          </Pressable>
+            <Marker
+              coordinate={{
+                latitude: Number(route.params?.data?.address_latitude),
+                longitude: Number(route.params?.data?.address_longitude),
+              }}
+              title={route.params?.data?.listing_name}
+              description={route.params?.data?.listing_description?.replaceAll(
+                /<\/?[^>]+(>|$)/gi,
+                ""
+              )}
+            />
+          </MapView>
           <Spacer value={H("3%")} axis="vertical" />
           <Button
             text="Book Now"
-            onPress={() => bookRef.current?.open()}
+            onPress={() =>
+              Boolean(loggedIn && access_token)
+                ? bookRef.current?.open()
+                : (() => {
+                    Toast.show({
+                      type: "error",
+                      text1: "Login to book this user.",
+                    });
+                    navigation.navigate("Signin");
+                  })()
+            }
             buttonStyle={{ width: "100%" }}
           />
           <Spacer value={H("1%")} axis="vertical" />

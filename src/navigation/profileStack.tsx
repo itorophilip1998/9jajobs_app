@@ -1,6 +1,9 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from "@react-navigation/native-stack";
 import Profile from "../screens/profile";
 import EditProfile from "../screens/profile/editProfile";
 import MyWallet from "../screens/profile/myWallet";
@@ -13,10 +16,30 @@ import Verification from "../screens/profile/verification";
 import BoostPost from "../screens/profile/boostPost";
 import MyListing from "../screens/profile/myListing";
 import EditListing from "../screens/profile/editListing";
+import { useIsFocused } from "@react-navigation/native";
+import { useAuthorize } from "../hooks/useAuthorized";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const Stack = createNativeStackNavigator();
 
-const ProfileStack = () => {
+const ProfileStack = ({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<any>;
+}) => {
+  const { loggedIn, access_token } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const focused = useIsFocused();
+
+  React.useEffect(() => {
+    if (focused) {
+      if (!Boolean(loggedIn && access_token)) {
+        navigation.navigate("Signin");
+      }
+    }
+  }, [focused, loggedIn, access_token]);
   return (
     <Stack.Navigator
       screenOptions={() => ({

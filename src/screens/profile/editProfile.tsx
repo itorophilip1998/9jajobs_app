@@ -20,28 +20,34 @@ import { BottomSheet, Button, InputField, SmallText } from "../../components";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
-import { SET_DARK_MODE } from "../../store/authSlice";
+import { LOGIN, SET_DARK_MODE, SET_TOKEN } from "../../store/authSlice";
 import { COLORS } from "../../utility/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { FONTS } from "../../utility/fonts";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { logout } from "../../api/auth";
+import Toast from "react-native-toast-message";
+import userImg from "../../../assets/images/user.jpg";
 
 const EditProfile = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const locationRef = React.useRef<RBSheet | null>(null);
 
-  const [name, setName] = React.useState<string>("John Doe");
-  const [email, setEmail] = React.useState<string>("user@gmail.com");
-  const [phone, setPhone] = React.useState<string>("07041528380");
-  const [location, setLocation] = React.useState<string>("Abuja, Nigeria");
-  const [password, setPassword] = React.useState<string>("12345678");
+  const [name, setName] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+  const [phone, setPhone] = React.useState<string>("");
+  const [location, setLocation] = React.useState<string>("");
+  // const [longtitude, setLongtitude] = React.useState<string>("");
+  // const [latitude, setLatitude] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
   const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
-  const [visible, setVisible] = React.useState<boolean>(false)
+  const [visible, setVisible] = React.useState<boolean>(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -55,6 +61,14 @@ const EditProfile = ({
       setSelectedImage(result.assets[0].uri);
     }
   };
+
+  React.useEffect(() => {
+    setName(profile?.name || "");
+    setEmail(profile?.email || "");
+    setPhone(profile?.phone || "");
+    setLocation(profile?.address || "");
+    setSelectedImage(profile?.photo);
+  }, [profile]);
 
   return (
     <KeyboardAvoidingView
@@ -70,11 +84,13 @@ const EditProfile = ({
         <ScrollView className="flex-1">
           <View className="w-full h-[170px] items-center mb-[40px]">
             <Image
-              source={{
-                uri:
-                  selectedImage ||
-                  "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
+              source={
+                selectedImage
+                  ? {
+                      uri: selectedImage,
+                    }
+                  : userImg
+              }
               alt=""
               className=" w-[100%] mx-auto h-[180px] rounded-b-3xl"
             />
@@ -148,6 +164,28 @@ const EditProfile = ({
               text="Logout"
               buttonStyle={{ width: W(23), height: H(5) }}
               textStyleClassName="text-[14px]"
+              onPress={() => {
+                dispatch(SET_LOADER(true));
+                logout(
+                  (response) => {
+                    Toast.show({
+                      type: "error",
+                      text1: response.message,
+                    });
+                    dispatch(LOGIN(false));
+                    dispatch(SET_TOKEN(null));
+                    dispatch(SET_LOADER(false));
+                    navigation.navigate("HomeStack");
+                  },
+                  (error) => {
+                    dispatch(SET_LOADER(false));
+                    Toast.show({
+                      type: "error",
+                      text1: error,
+                    });
+                  }
+                );
+              }}
             />
           </View>
           <SmallText
@@ -247,7 +285,7 @@ const EditProfile = ({
             debounce={400}
             onPress={(data, details = null) => {}}
             query={{
-              key: "AIzaSyDrzxYICs65yHUDjc4mPMU7T_m_PqQzSLI",
+              key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
             }}
             fetchDetails={true}
@@ -264,7 +302,7 @@ const EditProfile = ({
                 <Text
                   style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#D4E1D2",
+                    color: "#c6c6c6",
                   }}
                 >
                   {rowData.description}
@@ -275,11 +313,11 @@ const EditProfile = ({
               textInput: {
                 fontFamily: FONTS.RedHatDisplayRegular,
                 backgroundColor: "transparent",
-                color: darkMode ? "#D4E1D2" : "#0f0f0f",
+                color: darkMode ? "#c6c6c6" : "#0f0f0f",
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,
-                height: "50px",
+                height: 50,
               },
             }}
           />

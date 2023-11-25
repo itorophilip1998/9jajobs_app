@@ -31,7 +31,9 @@ import { RootState } from "../../store";
 import {
   SET_CONFIRM_PASSWORD,
   SET_EMAIL,
+  SET_ERROR,
   SET_FULL_NAME,
+  SET_LOADER,
   SET_PASSWORD,
   SET_PHONE_NUMBER,
   SET_REFERRAL_CODE,
@@ -45,6 +47,8 @@ import {
 import Toast from "react-native-toast-message";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
+import { signIn, signUp } from "../../api/auth";
+import { LOGIN, SET_TOKEN } from "../../store/authSlice";
 
 const Signin = ({
   navigation,
@@ -81,11 +85,28 @@ const Signin = ({
         text1: "Password must not be less than 8 characters.",
       });
     } else {
-      Toast.show({
-        type: "success",
-        text1: "Login successfully.",
-      });
-      navigation.navigate("TabNavigation");
+      dispatch(SET_LOADER(true));
+      signIn(
+        { email, password },
+        (response) => {
+          dispatch(SET_TOKEN(response.access_token));
+          dispatch(LOGIN(true));
+          console.log(response);
+          Toast.show({
+            type: "success",
+            text1: response.message,
+          });
+          navigation.goBack();
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+          dispatch(SET_LOADER(false));
+        }
+      );
     }
   };
 
@@ -112,11 +133,34 @@ const Signin = ({
           text1: "Passwords do not match.",
         });
       } else {
-        Toast.show({
-          type: "success",
-          text1: "Signup successfully.",
-        });
-        navigation.navigate("TabNavigation");
+        dispatch(SET_LOADER(true));
+        signUp(
+          {
+            name: fullName,
+            email,
+            password,
+            phone: phoneNumber,
+            referral_code: referralCode.length > 0 && referralCode,
+            re_password: confirmPassword,
+          },
+          (response) => {
+            dispatch(SET_TOKEN(response.access_token));
+            dispatch(LOGIN(true));
+            Toast.show({
+              type: "success",
+              text1: response.message,
+            });
+            navigation.goBack();
+            dispatch(SET_LOADER(false));
+          },
+          (error) => {
+            Toast.show({
+              type: "error",
+              text1: error,
+            });
+            dispatch(SET_LOADER(false));
+          }
+        );
       }
     });
   };
@@ -272,7 +316,6 @@ const Signin = ({
               onTextChange={(value) => dispatch(SET_EMAIL(value))}
               defaultValue={email}
               placeholder="Email Address"
-              placeholderTextColor={darkMode ? "white" : "black"}
               type={"email-address"}
               autoCapitalize={"none"}
               className="border-[#626262] border-b rounded-none p-0"
