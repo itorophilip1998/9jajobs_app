@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Linking,
+  BackHandler,
 } from "react-native";
 
 import React from "react";
@@ -49,11 +50,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
 import { signIn, signUp } from "../../api/auth";
 import { LOGIN, SET_TOKEN } from "../../store/authSlice";
+import { RouteProp } from "@react-navigation/native";
 
 const Signin = ({
   navigation,
+  route,
 }: {
   navigation: NativeStackNavigationProp<any>;
+  route: RouteProp<any>;
 }) => {
   // AUTH STATE AND PASSWORD VISIBILITY
   const [authState, setAuthState] = React.useState<"login" | "register">(
@@ -164,6 +168,19 @@ const Signin = ({
       }
     });
   };
+  // SEND USERS BACK TWO STEPS BACK
+  const handleBackPress = (e: any) => {
+    if (route.params?.two_step) {
+      e.preventDefault();
+      navigation.navigate("HomeStack");
+    }
+    return true;
+  };
+
+ 
+  React.useEffect(() => {
+    navigation.addListener("beforeRemove", handleBackPress);
+  }, []);
 
   return (
     <KeyboardAvoidingView

@@ -51,7 +51,7 @@ const Post = ({
   React.useEffect(() => {
     if (focused) {
       if (!Boolean(loggedIn && access_token)) {
-        navigation.navigate("Signin");
+        navigation.navigate("Signin", { two_step: true });
       }
     }
   }, [focused, loggedIn, access_token]);

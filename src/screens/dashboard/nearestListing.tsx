@@ -22,10 +22,13 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { RouteProp } from "@react-navigation/native";
 
 const NearestListing = ({
   navigation,
+  route,
 }: {
+  route: RouteProp<any>;
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
@@ -51,7 +54,7 @@ const NearestListing = ({
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={MAIN_USERS}
+          data={route.params?.data}
           className="px-3"
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
@@ -59,8 +62,11 @@ const NearestListing = ({
           )}
           renderItem={({ item }) => (
             <UserProfileCard
+              navigation={navigation}
               item={item}
-              onPress={() => navigation.navigate("FreelancerProfile")}
+              onPress={() =>
+                navigation.navigate("FreelancerProfile", { data: item })
+              }
             />
           )}
         />

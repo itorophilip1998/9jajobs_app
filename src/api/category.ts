@@ -56,7 +56,9 @@ export const getAllListing = async (
     address_latitude?: string | null;
     listing_category_id?: number;
     listing_name?: string;
-    city?: string;
+    listing_city?: string;
+    is_trending?: boolean;
+    is_nearest?: boolean;
   } | null,
   execute: (e: any) => void,
   error: (e: string) => void
@@ -67,7 +69,11 @@ export const getAllListing = async (
       data?.address_longitude || ""
     }&address_latitude=${data?.address_latitude || ""}&listing_category_id=${
       data?.listing_category_id || ""
-    }&listing_name=${data?.listing_name || ""}&city=${data?.city || ""}`,
+    }&listing_name=${data?.listing_name || ""}&listing_city=${
+      data?.listing_city || ""
+    }&is_trending=${data?.is_trending || ""}&is_nearest=${
+      data?.is_nearest || ""
+    }`,
   };
 
   try {

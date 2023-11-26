@@ -22,11 +22,14 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { RouteProp } from "@react-navigation/native";
 
 const TrendingListing = ({
   navigation,
+  route,
 }: {
   navigation: NativeStackNavigationProp<any>;
+  route: RouteProp<any>;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
@@ -44,14 +47,11 @@ const TrendingListing = ({
           style={{ backgroundColor: darkMode ? "#0f0f0f" : "#FFFFFF" }}
           className="relative flex flex-row items-center w-full justify-between px-3 mb-5 bg-[#0f0f0f]"
         >
-          <TitleWithButton
-            title="Trending"
-            fire={() => navigation.goBack()}
-          />
+          <TitleWithButton title="Trending" fire={() => navigation.goBack()} />
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={MAIN_USERS}
+          data={route.params?.data}
           className="px-3"
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
@@ -59,8 +59,11 @@ const TrendingListing = ({
           )}
           renderItem={({ item }) => (
             <UserProfileCard
+              navigation={navigation}
               item={item}
-              onPress={() => navigation.navigate("FreelancerProfile")}
+              onPress={() =>
+                navigation.navigate("FreelancerProfile", { data: item })
+              }
             />
           )}
         />

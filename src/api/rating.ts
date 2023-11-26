@@ -4,13 +4,13 @@ import { store } from "../store";
 import { LOGIN, SET_PROFILE, SET_TOKEN } from "../store/authSlice";
 
 export const getRating = async (
-  user_id: number,
+  listing_id: number,
   execute: (e: any) => void,
   error: (e: string) => void
 ) => {
   var config = {
     method: "get",
-    url: `${BASE_URL}/ratings/${user_id}`,
+    url: `${BASE_URL}/reviews/${listing_id}`,
     headers: {
       Authorization: `Bearer ${store.getState().auth.access_token}`,
     },
@@ -38,24 +38,24 @@ export const getRating = async (
 
 export const postRate = async (
   data: {
-    user_id: string;
-    description: string;
-    rate: string;
+    listing_id: string;
+    review: string;
+    rating: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void
 ) => {
-    const formData = new FormData()
-    formData.append("user_id", data.user_id)
-    formData.append("description", data.description)
-    formData.append("rate", data.rate)
+  const formData = new FormData();
+  formData.append("listing_id", data.listing_id);
+  formData.append("review", data.review);
+  formData.append("rating", data.rating);
   var config = {
     method: "post",
-    url: `${BASE_URL}/ratings`,
+    url: `${BASE_URL}/reviews`,
     headers: {
       Authorization: `Bearer ${store.getState().auth.access_token}`,
     },
-    data: formData
+    data: formData,
   };
 
   try {

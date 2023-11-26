@@ -59,9 +59,9 @@ const AddReview = ({
     dispatch(SET_LOADER(true));
     postRate(
       {
-        user_id: route.params?.data.user.id,
-        description: review,
-        rate: String(rating),
+        listing_id: route.params?.data.id,
+        review: review,
+        rating: String(rating),
       },
       (response) => {
         dispatch(SET_LOADER(false));

@@ -65,6 +65,7 @@ const UserProfileCard = ({
           )}
         </View>
         <SmallText
+          numberOfLine={1}
           style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
           className="text-[#D4E1D2] text-left p-0 text-[15px] w-full"
         >
@@ -119,7 +120,7 @@ const UserProfileCard = ({
             </LinearGradient>
           )}
           <TouchableOpacity
-            onPress={() => navigation.navigate("Chat", { data: item })}
+            onPress={() => navigation.navigate("Chat", { data: item.user })}
             style={[
               shadowBox,
               { backgroundColor: darkMode ? "black" : "#D4E1D2" },

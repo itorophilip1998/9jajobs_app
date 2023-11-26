@@ -40,7 +40,7 @@ const routes = [
   { path: "Bookings", name: "Bookings", icon: BookingIcon },
   { path: "Referrals", name: "Referrals", icon: ReferralIcon },
   { path: "Packages", name: "Packages", icon: PackageIcon },
-  { path: "MyReviews", name: "My Reviews", icon: ReviewIcon },
+  // { path: "MyReviews", name: "My Reviews", icon: ReviewIcon },
   { path: "Verification", name: "Verification", icon: VerifyIcon },
   { path: "MyListing", name: "My Listing", icon: ListingIcon },
   { path: "BoostPost", name: "Boost Post", icon: BoostIcon },

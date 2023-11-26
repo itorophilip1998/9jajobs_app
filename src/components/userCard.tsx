@@ -12,21 +12,9 @@ import { COLORS } from "../utility/colors";
 import { shadowBox } from "../style/Typography";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import userImg from "../../assets/images/user.jpg";
 
-const UserCard = ({
-  item,
-}: {
-  item: {
-    id: number;
-    image: string;
-    verified: boolean;
-    rating: number;
-    location: string;
-    name: string;
-    career: string;
-    sponsored: boolean;
-  };
-}) => {
+const UserCard = ({ item }: { item: any }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View
@@ -39,12 +27,19 @@ const UserCard = ({
           style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
           className="text-left text-[#696969] text-[13px] p-0"
         >
-          {item.sponsored && "sponsored"}
+          {item.is_featured === "Yes" && "sponsored"}
         </SmallText>
         <Spacer axis="vertical" value={H(0.5)} />
       </>
       <Image
-        source={{ uri: item.image }}
+        source={
+          item?.listing_featured_photo &&
+          item?.listing_featured_photo.length > 0
+            ? {
+                uri: item?.listing_featured_photo,
+              }
+            : userImg
+        }
         alt=""
         className="w-full h-[130px] rounded-md mb-2 object-cover"
         resizeMode="cover"
@@ -55,31 +50,35 @@ const UserCard = ({
           style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
           className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 max-w-[90%]"
         >
-          {FirstLetterUppercase(item.name || "")}
+          {FirstLetterUppercase(item.listing_name || "")}
         </SmallText>
-        {item.verified && (
+        {item.is_featured === "Yes" && (
           <MaterialIcons name="verified" size={18} color={COLORS.primary} />
         )}
       </View>
       <Spacer axis="vertical" value={H(0.5)} />
       <View className="w-full flex-row justify-between items-center">
         <SmallText
+          numberOfLine={1}
           style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
           className="text-[#D4E1D2] text-left p-0 text-[13px] w-[40%]"
         >
-          {FirstLetterUppercase(item.location || "")}
+          {FirstLetterUppercase(item.listing_address || "")}
         </SmallText>
         <View className="flex-row items-center">
           <AntDesign name="star" size={15} color={COLORS.primary} />
           <SmallText className="text-primary p-0 text-[13px] pl-1">
-            {item.rating}
+            {item.rate_star}
           </SmallText>
         </View>
         <SmallText
+          numberOfLine={1}
           style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
           className="text-[#D4E1D2] text-right p-0 text-[13px] w-[40%]"
         >
-          {FirstLetterUppercase(item.career || "")}
+          {FirstLetterUppercase(
+            item?.r_listing_category?.listing_category_name || "" || ""
+          )}
         </SmallText>
       </View>
       <Spacer axis="vertical" value={H(2)} />

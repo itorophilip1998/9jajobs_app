@@ -36,7 +36,7 @@ const ReviewCard = ({ item }: { item: any }) => {
             <View className="flex-row items-center">
               <AntDesign name="star" size={15} color={COLORS.primary} />
               <SmallText className="text-primary p-0 text-[13px] pl-1">
-                {item.rate}
+                {item?.rating}
               </SmallText>
             </View>
           </View>
@@ -46,12 +46,12 @@ const ReviewCard = ({ item }: { item: any }) => {
         </SmallText>
         {/* <Feather name="more-vertical" size={24} color={COLORS.primary} /> */}
       </View>
-      {item?.description && (
+      {item?.review && (
         <SmallText
           style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
           className="text-[#696969] text-left p-0 text-[16px] pt-2 font-RedHatDisplayRegular"
         >
-          {item?.description?.replaceAll(/<\/?[^>]+(>|$)/gi, "")}
+          {item?.review?.replaceAll(/<\/?[^>]+(>|$)/gi, "")}
         </SmallText>
       )}
     </View>

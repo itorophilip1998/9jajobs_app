@@ -28,7 +28,11 @@ import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
 import NearUserCard from "../../components/nearUserCard";
 import { SET_LOADER } from "../../store/formDataSlice";
-import { getCategories, getCategoryListing } from "../../api/category";
+import {
+  getAllListing,
+  getCategories,
+  getCategoryListing,
+} from "../../api/category";
 import Toast from "react-native-toast-message";
 
 const Dashboard = ({
@@ -37,8 +41,10 @@ const Dashboard = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [category, setCategory] = React.useState<any[]>([]);
+  const [nearest, setNearest] = React.useState<any[]>([]);
+  const [trending, setTrending] = React.useState<any[]>([]);
   const { location, search } = useSelector((state: RootState) => state.search);
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -46,6 +52,46 @@ const Dashboard = ({
     getCategoryListing(
       (response) => {
         setCategory(response);
+        dispatch(SET_LOADER(false));
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  }, []);
+
+  React.useEffect(() => {
+    dispatch(SET_LOADER(true));
+    getAllListing(
+      {
+        is_trending: true,
+      },
+      (response) => {
+        setTrending(response.listing);
+        dispatch(SET_LOADER(false));
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  }, []);
+
+  React.useEffect(() => {
+    dispatch(SET_LOADER(true));
+    getAllListing(
+      {
+        listing_city: profile?.city || "",
+      },
+      (response) => {
+        setNearest(response.listing);
         dispatch(SET_LOADER(false));
       },
       (error) => {
@@ -105,7 +151,7 @@ const Dashboard = ({
               className="w-[30%] px-3 py-3 bg-[#1b1b1b] rounded-full flex-row items-center justify-between"
             >
               <SmallText
-              numberOfLine={1}
+                numberOfLine={1}
                 style={{ color: darkMode ? "#D4E1D2" : "#696969" }}
                 className="text-[#D4E1D2] text-left p-0 pr-2 w-[90%]"
               >
@@ -133,7 +179,6 @@ const Dashboard = ({
               data={category.filter((_item, idx) => idx < 6)}
               keyExtractor={(item) => item.id.toString()}
               scrollEnabled={false}
-              // columnWrapperStyle={{ justifyContent: "space-between" }}
               numColumns={3}
               ItemSeparatorComponent={() => (
                 <Spacer value={H("1%")} axis="vertical" />
@@ -176,7 +221,11 @@ const Dashboard = ({
                 Trending
               </GradientText>
             )}
-            <Pressable onPress={() => navigation.navigate("TrendingListing")}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("TrendingListing", { data: trending })
+              }
+            >
               <GradientText className="!text-[#626262] text-[15px] font-RedHatDisplayMedium mt-3">
                 View All
               </GradientText>
@@ -185,7 +234,7 @@ const Dashboard = ({
           <Spacer axis="vertical" value={H(3)} />
           <FlatList
             showsHorizontalScrollIndicator={false}
-            data={SPONSORED_MAIN_USERS}
+            data={trending.filter((_item, idx) => idx < 10)}
             horizontal
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
@@ -194,7 +243,9 @@ const Dashboard = ({
             renderItem={({ item }) => (
               <Pressable
                 className="w-[220px] py-1 px-1"
-                onPress={() => navigation.navigate("FreelancerProfile")}
+                onPress={() =>
+                  navigation.navigate("FreelancerProfile", { data: item })
+                }
               >
                 <UserCard item={item} />
               </Pressable>
@@ -211,7 +262,11 @@ const Dashboard = ({
                 Nearest Listing
               </GradientText>
             )}
-            <Pressable onPress={() => navigation.navigate("NearestListing")}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("NearestListing", { data: nearest })
+              }
+            >
               <GradientText className="!text-[#626262] text-[15px] font-RedHatDisplayMedium">
                 View All
               </GradientText>
@@ -221,7 +276,7 @@ const Dashboard = ({
           <Spacer axis="vertical" value={H(3)} />
           <FlatList
             showsHorizontalScrollIndicator={false}
-            data={MAIN_USERS}
+            data={nearest.filter((_item, idx) => idx < 10)}
             horizontal
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
@@ -230,7 +285,9 @@ const Dashboard = ({
             renderItem={({ item }) => (
               <Pressable
                 className="w-[260px] py-1 px-1"
-                onPress={() => navigation.navigate("FreelancerProfile")}
+                onPress={() =>
+                  navigation.navigate("FreelancerProfile", { data: item })
+                }
               >
                 <NearUserCard item={item} />
               </Pressable>

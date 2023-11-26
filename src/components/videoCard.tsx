@@ -4,7 +4,7 @@ import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { COLORS } from "../utility/colors";
 
-const VideoCard = () => {
+const VideoCard = ({item}: {item: any}) => {
   const video = React.useRef<Video | null>(null);
   const [status, setStatus] = React.useState<AVPlaybackStatus | null>(null);
 
@@ -14,7 +14,7 @@ const VideoCard = () => {
         ref={video}
         style={{ width: "100%", height: "100%" }}
         source={{
-          uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+          uri: item.video_url || "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
         }}
         useNativeControls={false}
         resizeMode={ResizeMode.CONTAIN}

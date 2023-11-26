@@ -42,15 +42,13 @@ const Reviews = ({
     (state: RootState) => state.auth
   );
   const [rating, setRating] = React.useState<any[]>([]);
-  console.log(route.params?.data?.user?.id);
 
   React.useEffect(() => {
     if (focus) {
       dispatch(SET_LOADER(true));
       getRating(
-        route.params?.data.user.id,
+        route.params?.data.id,
         (response) => {
-          console.log(response);
           setRating(response);
           dispatch(SET_LOADER(false));
         },
@@ -103,11 +101,13 @@ const Reviews = ({
                 >
                   {FirstLetterUppercase(route.params?.data?.listing_name || "")}
                 </SmallText>
-                <MaterialIcons
-                  name="verified"
-                  size={18}
-                  color={COLORS.primary}
-                />
+                {route.params?.data?.is_featured === "Yes" && (
+                  <MaterialIcons
+                    name="verified"
+                    size={18}
+                    color={COLORS.primary}
+                  />
+                )}
               </View>
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}

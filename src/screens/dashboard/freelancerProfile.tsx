@@ -33,7 +33,11 @@ import {
   Octicons,
 } from "@expo/vector-icons";
 import { COLORS } from "../../utility/colors";
-import { FirstLetterUppercase } from "../../utility/helpers";
+import {
+  DelayFor,
+  FirstLetterUppercase,
+  isValidDate,
+} from "../../utility/helpers";
 import Checkbox from "expo-checkbox";
 import VideoCard from "../../components/videoCard";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -54,6 +58,7 @@ import { SET_LOADER } from "../../store/formDataSlice";
 import { getRating } from "../../api/rating";
 import Toast from "react-native-toast-message";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import { bookListing } from "../../api/booking";
 
 const FreelancerProfile = ({
   navigation,
@@ -66,9 +71,7 @@ const FreelancerProfile = ({
   const { darkMode, loggedIn, access_token } = useSelector(
     (state: RootState) => state.auth
   );
-  const [homeDelivery, setHomeDelivery] = React.useState<boolean>(false);
-  const [nationWideDelivery, setNationWideDelivery] =
-    React.useState<boolean>(false);
+  const [amenities, setAmenities] = React.useState<any[]>([]);
 
   const bookRef = React.useRef<RBSheet | null>(null);
   const [day, setDay] = React.useState<string>("");
@@ -272,66 +275,57 @@ const FreelancerProfile = ({
             )}
           </SmallText>
           <Spacer value={H("3%")} axis="vertical" />
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
-          >
-            Photos
-          </SmallText>
-          <Spacer value={H("3%")} axis="vertical" />
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
-              alt=""
-              className="w-[150px] h-[100px] rounded-lg"
-            />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
-              alt=""
-              className="w-[150px] h-[100px] rounded-lg"
-            />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
-              alt=""
-              className="w-[150px] h-[100px] rounded-lg"
-            />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-              }}
-              alt=""
-              className="w-[150px] h-[100px] rounded-lg"
-            />
-          </ScrollView>
-          <Spacer value={H("3%")} axis="vertical" />
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-            className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
-          >
-            Videos
-          </SmallText>
-          <Spacer value={H("3%")} axis="vertical" />
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <VideoCard />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <VideoCard />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <VideoCard />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <VideoCard />
-            <Spacer value={W("5%")} axis="horizontal" />
-            <VideoCard />
-          </ScrollView>
-          <Spacer value={H("3%")} axis="vertical" />
+          {route.params?.data?.listings_photos.length > 0 && (
+            <>
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+              >
+                Photos
+              </SmallText>
+              <Spacer value={H("3%")} axis="vertical" />
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {route.params?.data?.listings_photos.map(
+                  (item: any, idx: number) => (
+                    <>
+                      <Image
+                        key={idx}
+                        source={{
+                          uri: item.photo,
+                        }}
+                        alt=""
+                        className="w-[150px] h-[100px] rounded-lg"
+                      />
+                      <Spacer value={W("5%")} axis="horizontal" key={idx + 1} />
+                    </>
+                  )
+                )}
+              </ScrollView>
+              <Spacer value={H("3%")} axis="vertical" />
+            </>
+          )}
+          {route.params?.data?.listings_videos.length > 0 && (
+            <>
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+              >
+                Videos
+              </SmallText>
+              <Spacer value={H("3%")} axis="vertical" />
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {route.params?.data?.listings_photos.map(
+                  (item: any, idx: number) => (
+                    <>
+                      <VideoCard item={item} />
+                      <Spacer value={W("5%")} axis="horizontal" key={idx + 1} />
+                    </>
+                  )
+                )}
+              </ScrollView>
+              <Spacer value={H("3%")} axis="vertical" />
+            </>
+          )}
           <View className="w-full flex-row justify-between items-center">
             <View className="flex-row items-center">
               <Octicons name="megaphone" size={28} color={COLORS.primary} />
@@ -350,36 +344,50 @@ const FreelancerProfile = ({
               See Reviews
             </PrimaryText>
           </View>
-          <Spacer value={H("3%")} axis="vertical" />
-          <View className=" flex-row items-center">
-            <Checkbox
-              color={"#1A911B"}
-              value={homeDelivery}
-              onValueChange={setHomeDelivery}
-            />
-            <SmallText
-              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
-              onPress={() => setHomeDelivery(!homeDelivery)}
-              className="text-[15px] !text-[#696969] text-left !pl-3"
-            >
-              Home Delivery
-            </SmallText>
-          </View>
-          <Spacer value={H("2%")} axis="vertical" />
-          <View className=" flex-row items-center">
-            <Checkbox
-              color={"#1A911B"}
-              value={nationWideDelivery}
-              onValueChange={setNationWideDelivery}
-            />
-            <SmallText
-              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
-              className="text-[15px] !text-[#696969] text-left !pl-3"
-              onPress={() => setNationWideDelivery(!nationWideDelivery)}
-            >
-              Nationwide Delivery
-            </SmallText>
-          </View>
+          <Spacer value={H("1%")} axis="vertical" />
+          {route.params?.data?.amenities.map((item: any, idx: number) => (
+            <>
+              <Spacer value={H("2%")} axis="vertical" />
+              <View className=" flex-row items-center">
+                <Checkbox
+                  color={"#1A911B"}
+                  value={amenities.some((data: any) => data.id === item.id)}
+                  onValueChange={() => {
+                    const isItemInArray = amenities.some(
+                      (obj) => obj.id === item.id
+                    );
+
+                    if (isItemInArray) {
+                      setAmenities((prev: any) =>
+                        prev.filter((obj: any) => item.id !== obj.id)
+                      );
+                    } else {
+                      setAmenities((prev: any) => [...prev, item]);
+                    }
+                  }}
+                />
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+                  onPress={() => {
+                    const isItemInArray = amenities.some(
+                      (obj) => obj.id === item.id
+                    );
+
+                    if (isItemInArray) {
+                      setAmenities((prev: any) =>
+                        prev.filter((obj: any) => item.id !== obj.id)
+                      );
+                    } else {
+                      setAmenities((prev: any) => [...prev, item]);
+                    }
+                  }}
+                  className="text-[15px] !text-[#696969] text-left !pl-3"
+                >
+                  {item.amenity_name}
+                </SmallText>
+              </View>
+            </>
+          ))}
           <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center">
             <AntDesign name="idcard" size={30} color={COLORS.primary} />
@@ -454,7 +462,7 @@ const FreelancerProfile = ({
               borderTopColor: darkMode ? "#0F0F0F" : "#69696926",
               borderBottomColor: darkMode ? "#0F0F0F" : "#69696926",
             }}
-            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+            className="py-3 flex-row justify-between items-center border-y border-y-[#0F0F0F]"
           >
             <SmallText
               style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
@@ -472,37 +480,44 @@ const FreelancerProfile = ({
               {route.params?.data?.listing_website || "N/A"}
             </SmallText>
           </View>
-          <View
-            style={{
-              borderTopColor: darkMode ? "#0F0F0F" : "#69696926",
-              borderBottomColor: darkMode ? "#0F0F0F" : "#69696926",
-            }}
-            className="py-2 flex-row justify-between items-center border-y border-y-[#0F0F0F]"
-          >
-            <SmallText
-              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
-              className="text-[#696969] text-left p-0 text-[15px]"
+          {route.params?.data?.listing_social_item.length > 0 && (
+            <View
+              style={{
+                borderTopColor: darkMode ? "#0F0F0F" : "#69696926",
+                borderBottomColor: darkMode ? "#0F0F0F" : "#69696926",
+              }}
+              className="py-2 flex-row justify-between items-center border-b border-b-[#0F0F0F]"
             >
-              Social Media
-            </SmallText>
-            <View className="flex-row items-center">
-              <Pressable className="ml-1">
-                <Facebook height={30} width={30} />
-              </Pressable>
-              <Pressable className="ml-1">
-                <Instagram height={30} width={30} />
-              </Pressable>
-              <Pressable className="ml-1">
-                <Whatsapp height={30} width={30} />
-              </Pressable>
-              <Pressable className="ml-1">
-                <Twitter height={30} width={30} />
-              </Pressable>
-              <Pressable className="ml-1">
-                <Linkedin height={30} width={30} />
-              </Pressable>
+              <SmallText
+                style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+                className="text-[#696969] text-left p-0 text-[15px]"
+              >
+                Social Media
+              </SmallText>
+              <View className="flex-row items-center">
+                {route.params?.data?.listing_social_item.map(
+                  (item: any, idx: number) => (
+                    <Pressable
+                      onPress={() => Linking.openURL(item.social_url)}
+                      className="ml-1"
+                    >
+                      {item.social_icon.toLowerCase() === "facebook" ? (
+                        <Facebook height={30} width={30} />
+                      ) : item.social_icon.toLowerCase() === "instagram" ? (
+                        <Instagram height={30} width={30} />
+                      ) : item.social_icon.toLowerCase() === "whatsapp" ? (
+                        <Whatsapp height={30} width={30} />
+                      ) : item.social_icon.toLowerCase() === "twitter" ? (
+                        <Twitter height={30} width={30} />
+                      ) : item.social_icon.toLowerCase() === "linkedin" ? (
+                        <Linkedin height={30} width={30} />
+                      ) : null}
+                    </Pressable>
+                  )
+                )}
+              </View>
             </View>
-          </View>
+          )}
 
           <Spacer value={H("3%")} axis="vertical" />
           <MapView
@@ -539,7 +554,7 @@ const FreelancerProfile = ({
                 : (() => {
                     Toast.show({
                       type: "error",
-                      text1: "Login to book this user.",
+                      text1: "Login to book this listing.",
                     });
                     navigation.navigate("Signin");
                   })()
@@ -667,25 +682,52 @@ const FreelancerProfile = ({
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
-          {/* <View className="w-full">
-            <SmallText style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }} className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular">
-              Location
-            </SmallText>
-            <InputField
-            style={{ backgroundColor: darkMode ? "black" : "white" }}
-              onTextChange={function (value: string): void {
-                setLocation(value);
-              }}
-              placeholder="input your address"
-              defaultValue={location}
-              className="border border-[#696969] bg-[#000000]"
-              containerStyle={{ width: "100%" }}
-              type={"numeric"}
-              autoCapitalize={"none"}
-            />
-          </View>
-          <Spacer value={H("3%")} axis="vertical" /> */}
-          <Button text="Book Date" />
+          <Button
+            text="Book Date"
+            onPress={() => {
+              if (!isValidDate(Number(day), Number(month), Number(year))) {
+                Toast.show({
+                  type: "error",
+                  text1: "Date is invalid",
+                });
+              } else if (
+                !/^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?$/.test(
+                  `${hour}:${minutes}`
+                )
+              ) {
+                Toast.show({
+                  type: "error",
+                  text1: "Time is invalid",
+                });
+              } else {
+                bookRef.current?.close();
+                DelayFor(200, () => {
+                  dispatch(SET_LOADER(true));
+                  bookListing(
+                    {
+                      listing_id: route.params?.data.id,
+                      date: `${year}-${month}-${day}`,
+                      time: `${hour}:${minutes}`,
+                    },
+                    (response) => {
+                      dispatch(SET_LOADER(false));
+                      Toast.show({
+                        type: "success",
+                        text1: response.message,
+                      });
+                    },
+                    (error) => {
+                      dispatch(SET_LOADER(false));
+                      Toast.show({
+                        type: "error",
+                        text1: error,
+                      });
+                    }
+                  );
+                });
+              }
+            }}
+          />
           <Spacer value={H("6%")} axis="vertical" />
         </ScrollView>
       </BottomSheet>
