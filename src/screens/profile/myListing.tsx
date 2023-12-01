@@ -26,15 +26,48 @@ import { COLORS } from "../../utility/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { shadowBoxDark } from "../../style/Typography";
+import { useDispatch } from "react-redux";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { getUserListing } from "../../api/category";
+import Toast from "react-native-toast-message";
+import { useIsFocused } from "@react-navigation/native";
+import userImg from "../../../assets/images/user.jpg";
 
 const MyListing = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const focus = useIsFocused();
+  const dispatch = useDispatch();
   const { darkMode } = useSelector((state: RootState) => state.auth);
-  const [id, setID] = React.useState<string>("");
+  const [listings, setListings] = React.useState<any[]>([]);
+  const [details, setDetails] = React.useState<any>(null);
   const [search, setSearch] = React.useState<string>("");
+
+  const handleSearch = () => {
+    dispatch(SET_LOADER(true));
+    getUserListing(
+      {
+        listing_name: search,
+      },
+      (response) => {
+        dispatch(SET_LOADER(false));
+        setListings(response);
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    if (focus) handleSearch();
+  }, [focus]);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -50,7 +83,7 @@ const MyListing = ({
           style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
           className="relative flex flex-row items-center w-full bg-[#0f0f0f] justify-between px-3 py-4"
         >
-          <View className="flex-row items-center w-[65%]">
+          <View className="flex-row items-center w-[95%]">
             <Pressable onPress={() => navigation.goBack()} className="mr-3">
               <Feather name="arrow-left-circle" size={30} color={"#696969"} />
             </Pressable>
@@ -65,7 +98,7 @@ const MyListing = ({
               />
               <TextInput
                 keyboardType={"web-search"}
-                className={`h-full w-[87%] text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
+                className={`h-full flex-1 px-2 text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
                 onChangeText={(value) => setSearch(value)}
                 value={search}
                 // onFocus={() => {
@@ -81,7 +114,7 @@ const MyListing = ({
               />
             </Pressable>
           </View>
-          {darkMode ? (
+          {/* {darkMode ? (
             <TouchableOpacity className="bg-black py-2 px-4 w-auto justify-center items-center rounded-full">
               <SmallText className="text-white p-0 text-[15px] pl-1">
                 Sort by
@@ -89,7 +122,7 @@ const MyListing = ({
             </TouchableOpacity>
           ) : (
             <Button text="Sort by" buttonStyle={{ width: 80, height: 40 }} />
-          )}
+          )} */}
         </View>
 
         <FlatList
@@ -115,7 +148,7 @@ const MyListing = ({
           }
           className=" flex-1"
           showsVerticalScrollIndicator={false}
-          data={MAIN_USERS}
+          data={listings}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
             <View
@@ -125,20 +158,26 @@ const MyListing = ({
           )}
           renderItem={({ item }) => (
             <Pressable
-              onPress={() => setID(item.id.toString())}
+              onPress={() => setDetails(item)}
               style={{
                 backgroundColor:
-                  item.id.toString() === id ? "#023215" : "transparent",
+                  item.id.toString() === details?.id.toString()
+                    ? "#023215"
+                    : "transparent",
               }}
               className="flex-row px-3 justify-between items-center w-full py-2"
             >
               <SmallText
                 style={{
-                  color: item.id.toString() === id ? "#D4E1D2" : "#696969",
+                  color:
+                    item.id.toString() === details?.id.toString()
+                      ? "#D4E1D2"
+                      : "#696969",
                 }}
+                numberOfLine={1}
                 className="text-[#D4E1D2] text-[19px] w-[45%] text-left p-0"
               >
-                {item.name}
+                {item.listing_name}
               </SmallText>
               <View className="w-[47%] flex-row justify-between items-center">
                 <TouchableOpacity
@@ -174,51 +213,58 @@ const MyListing = ({
             </Pressable>
           )}
           ListFooterComponent={
-            <View className="px-3">
-              <Spacer value={H("6%")} axis="vertical" />
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
-                className="text-[#D4E1D2] text-[20px] text-left p-0"
-              >
-                Details
-              </SmallText>
-              <Spacer value={H("4%")} axis="vertical" />
-              <View className="flex-row justify-between items-center mb-3">
-                <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
-                  Category
+            details && (
+              <View className="px-3">
+                <Spacer value={H("6%")} axis="vertical" />
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                  className="text-[#D4E1D2] text-[20px] text-left p-0"
+                >
+                  Details
                 </SmallText>
-                <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
-                  Fashion
+                <Spacer value={H("4%")} axis="vertical" />
+                <View className="flex-row justify-between items-center mb-3">
+                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
+                    Category
+                  </SmallText>
+                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
+                    {details?.r_listing_category?.listing_category_name}
+                  </SmallText>
+                </View>
+                <View className="flex-row justify-between items-center mb-3">
+                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
+                    Location
+                  </SmallText>
+                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
+                    {details?.listing_address}
+                  </SmallText>
+                </View>
+                <View className="flex-row justify-between items-center mb-3">
+                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
+                    Status
+                  </SmallText>
+                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
+                    {details?.listing_status}
+                  </SmallText>
+                </View>
+                <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[100%] mb-3">
+                  Brand Logo
                 </SmallText>
+                <Image
+                  source={
+                    details?.listing_featured_photo &&
+                    details?.listing_featured_photo.length > 0
+                      ? {
+                          uri: details?.listing_featured_photo,
+                        }
+                      : userImg
+                  }
+                  alt="logo"
+                  className="w-[150px] h-[130px] rounded-xl "
+                />
+                <Spacer value={H("4%")} axis="vertical" />
               </View>
-              <View className="flex-row justify-between items-center mb-3">
-                <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
-                  Location
-                </SmallText>
-                <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
-                  14 Rumuokoro, PH, Nigeria
-                </SmallText>
-              </View>
-              <View className="flex-row justify-between items-center mb-3">
-                <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
-                  Status
-                </SmallText>
-                <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
-                  Active
-                </SmallText>
-              </View>
-              <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[100%] mb-3">
-                Brand Logo
-              </SmallText>
-              <Image
-                source={{
-                  uri: "https://images.unsplash.com/photo-1581578017306-7334b15283df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhcmRlbmluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-                }}
-                alt="logo"
-                className="w-[150px] h-[130px] rounded-xl "
-              />
-              <Spacer value={H("4%")} axis="vertical" />
-            </View>
+            )
           }
         />
       </SafeAreaView>

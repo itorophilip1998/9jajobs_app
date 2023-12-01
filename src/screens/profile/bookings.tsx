@@ -19,8 +19,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { bookListing, getAllBookings } from "../../api/booking";
+import Toast from "react-native-toast-message";
+import moment from "moment";
 
-const Booked = () => {
+const Booked = ({ booked }: { booked?: any[] }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View className="w-full">
@@ -38,86 +44,52 @@ const Booked = () => {
           Date booked
         </SmallText>
       </View>
-      <View className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]">
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          Daniel Oluwakemi
-        </SmallText>
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          12/10/2023
-        </SmallText>
-      </View>
-      <View className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]">
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          Vera Nkechi
-        </SmallText>
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          12/10/2023
-        </SmallText>
-      </View>
-      <View className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]">
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          Stephen Donald
-        </SmallText>
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          12/10/2023
-        </SmallText>
-      </View>
-      <View className="w-full flex-row justify-between  items-center py-3 border-y border-y-[#473F474D]">
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          Christian Okoro
-        </SmallText>
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          12/10/2023
-        </SmallText>
-      </View>
+
+      {booked?.map((item, idx) => (
+        <View key={idx} className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]">
+          <SmallText className="text-[#6A6A6A] text-left p-0">
+           {item.listings.listing_name} ({item.status})
+          </SmallText>
+          <SmallText className="text-[#6A6A6A] text-left p-0">
+            {moment(item.date).format("DD/MM/YYYY")}
+          </SmallText>
+        </View>
+      ))}
     </View>
   );
 };
 
-const Booking = () => {
+const Booking = ({ booking }: { booking?: any[] }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View className="w-full">
       <View className="w-full flex-row justify-between  items-center pb-3">
-        <SmallText style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }} className="text-[#D4E1D2] text-left p-0">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
           Client Name
         </SmallText>
-        <SmallText style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }} className="text-[#D4E1D2] text-left p-0">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
           Date booked
         </SmallText>
       </View>
-      <View className="w-full flex-row justify-between  items-center py-3 border-y border-y-[#473F474D]">
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          Daniel Oluwakemi
-        </SmallText>
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          12/10/2023
-        </SmallText>
-      </View>
-      <View className="w-full flex-row justify-between  items-center py-3 border-y border-y-[#473F474D]">
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          Vera Nkechi
-        </SmallText>
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          12/10/2023
-        </SmallText>
-      </View>
-      <View className="w-full flex-row justify-between  items-center py-3 border-y border-y-[#473F474D]">
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          Stephen Donald
-        </SmallText>
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          12/10/2023
-        </SmallText>
-      </View>
-      <View className="w-full flex-row justify-between  items-center py-3 border-y border-y-[#473F474D]">
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          Christian Okoro
-        </SmallText>
-        <SmallText className="text-[#6A6A6A] text-left p-0">
-          12/10/2023
-        </SmallText>
-      </View>
+      {booking?.map((item, idx) => (
+        <View
+          key={idx}
+          className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
+        >
+          <SmallText className="text-[#6A6A6A] text-left p-0">
+            {item.listings.listing_name} ({item.status})
+          </SmallText>
+          <SmallText className="text-[#6A6A6A] text-left p-0">
+            {moment(item.date).format("DD/MM/YYYY")}
+          </SmallText>
+        </View>
+      ))}
     </View>
   );
 };
@@ -127,8 +99,34 @@ const Bookings = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const dispatch = useDispatch();
+  const focus = useIsFocused();
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const [type, setType] = React.useState<"booked" | "booking">("booked");
+  const [bookedlisting, setBookListing] = React.useState<{
+    bookings: any[];
+    booked: any[];
+  } | null>(null);
+
+  React.useEffect(() => {
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getAllBookings(
+        (response) => {
+          dispatch(SET_LOADER(false));
+          setBookListing(response);
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus]);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -248,8 +246,8 @@ const Bookings = ({
         </View>
         <Spacer value={H("3%")} axis="vertical" />
         <ScrollView className="px-3 flex-1">
-          {type === "booked" && <Booked />}
-          {type === "booking" && <Booking />}
+          {type === "booked" && <Booked booked={bookedlisting?.booked} />}
+          {type === "booking" && <Booking booking={bookedlisting?.bookings} />}
         </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>

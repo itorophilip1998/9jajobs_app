@@ -55,7 +55,7 @@ const Search = ({
         listing_name: search,
         // address_latitude: latitude,
         // address_longitude: longtitude,
-        city: location,
+        listing_city: location,
       },
       (response) => {
         dispatch(SET_LOADER(false));

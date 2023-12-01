@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   Pressable,
+  FlatList,
 } from "react-native";
 
 import React from "react";
@@ -35,22 +36,29 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { FONTS } from "../../utility/fonts";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useIsFocused } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { getUserListing } from "../../api/category";
+import Toast from "react-native-toast-message";
+import UserProfileCard from "../../components/userProfileCard";
 
 const Verification = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const [name, setName] = React.useState<string>("");
-  const [email, setEmail] = React.useState<string>("");
+  const focus = useIsFocused();
+  const dispatch = useDispatch();
+  const [listing, setListing] = React.useState<any[]>([]);
+
+  const [id, setId] = React.useState<number>();
   const [regNo, setRegNo] = React.useState<string>("");
   const [idFront, setIdFront] = React.useState<string | null>(null);
   const [skill, setSkill] = React.useState<string | null>(null);
   const [idBack, setIdBack] = React.useState<string | null>(null);
   const [cac, setCac] = React.useState<string | null>(null);
   const [services, setServices] = React.useState<string[]>([]);
-  const [location, setLocation] = React.useState<string>("");
-  const [homeAddress, setHomeAddress] = React.useState<string>("");
   const [isChecked, setChecked] = React.useState<boolean>(false);
   const { darkMode } = useSelector((state: RootState) => state.auth);
 
@@ -87,8 +95,27 @@ const Verification = ({
     }
   };
 
-  const locationRef = React.useRef<RBSheet | null>(null);
-  const homeAddressRef = React.useRef<RBSheet | null>(null);
+  const businessRef = React.useRef<RBSheet | null>(null);
+
+  React.useEffect(() => {
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getUserListing(
+        null,
+        (response) => {
+          dispatch(SET_LOADER(false));
+          setListing(response);
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus]);
 
   return (
     <KeyboardAvoidingView
@@ -113,20 +140,20 @@ const Verification = ({
         <Spacer value={H("3%")} axis="vertical" />
         <ScrollView className="px-3 flex-1">
           <InputField
-            onTextChange={(value) => setName(value)}
-            defaultValue={name}
-            placeholder="Company/Business Name"
+            onTextChange={(value) => {}}
+            defaultValue={
+              listing.find((item) => item.id === id)?.listing_name || ""
+            }
+            placeholder="Select Business"
             type={"default"}
-            autoCapitalize={"words"}
+            containerStyle={{ width: "100%" }}
+            autoCapitalize={"none"}
             className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
-          />
-          <InputField
-            onTextChange={(value) => setEmail(value)}
-            defaultValue={email}
-            placeholder="Email Address"
-            type={"email-address"}
-            autoCapitalize={"words"}
-            className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+            editable={false}
+            suffixIcon={
+              <Feather name="chevron-down" size={24} color="#626262" />
+            }
+            onSuffixTap={() => businessRef.current?.open()}
           />
           <InputField
             onTextChange={(value) => setRegNo(value)}
@@ -372,35 +399,7 @@ const Verification = ({
               </SmallText>
             </View>
           </View>
-          <Spacer value={H("2%")} axis="vertical" />
-          <InputField
-            onTextChange={(value) => setLocation(value)}
-            defaultValue={location}
-            placeholder="Location"
-            type={"default"}
-            containerStyle={{ width: "100%" }}
-            autoCapitalize={"none"}
-            className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
-            editable={false}
-            suffixIcon={
-              <Feather name="chevron-down" size={24} color="#626262" />
-            }
-            onSuffixTap={() => locationRef.current?.open()}
-          />
-          <InputField
-            onTextChange={(value) => setHomeAddress(value)}
-            defaultValue={homeAddress}
-            placeholder="Home Address"
-            type={"default"}
-            containerStyle={{ width: "100%" }}
-            autoCapitalize={"none"}
-            className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
-            editable={false}
-            suffixIcon={
-              <Feather name="chevron-down" size={24} color="#626262" />
-            }
-            onSuffixTap={() => homeAddressRef.current?.open()}
-          />
+
           <Spacer value={H("2%")} axis="vertical" />
           <View className="px-3 flex-row items-center">
             <Checkbox
@@ -433,106 +432,28 @@ const Verification = ({
           <Spacer value={H("3%")} axis="vertical" />
         </ScrollView>
       </SafeAreaView>
-      {/* POPUP FOR GOOGLE PLACES LOCATION FOR LOCATION */}
-      <BottomSheet ref={locationRef} duration={0}>
-        <View
-          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
-          className="flex-1 bg-[#1b1b1b] py-3 px-3"
-        >
-          <GooglePlacesAutocomplete
-            placeholder="Enter your Business Location"
-            enableHighAccuracyLocation
-            debounce={400}
-            onPress={(data, details = null) => {}}
-            query={{
-              key: "AIzaSyDrzxYICs65yHUDjc4mPMU7T_m_PqQzSLI",
-              language: "en",
-            }}
-            fetchDetails={true}
-            enablePoweredByContainer={true}
-            minLength={2}
-            renderRow={(rowData) => (
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Ionicons
-                  name="ios-location-sharp"
-                  size={24}
-                  color={COLORS.primary}
-                  style={{ marginRight: 10 }}
-                />
-                <Text
-                  style={{
-                    fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#D4E1D2",
-                  }}
-                >
-                  {rowData.description}
-                </Text>
-              </View>
-            )}
-            styles={{
-              textInput: {
-                fontFamily: FONTS.RedHatDisplayRegular,
-                backgroundColor: "transparent",
-                color: darkMode ? "#D4E1D2" : "#0f0f0f",
-                fontSize: 15,
-                borderWidth: 1,
-                borderColor: COLORS.primary,
-                height: "50px",
-              },
-            }}
-          />
-        </View>
-      </BottomSheet>
 
       {/* POPUP FOR GOOGLE PLACES LOCATION FOR HOME ADDRESS */}
-      <BottomSheet ref={homeAddressRef} duration={0}>
-        <View
+      <BottomSheet ref={businessRef} duration={0}>
+        {/* <View className="flex-1 bg-[#1b1b1b] py-3 px-3"></View> */}
+        <FlatList
+          showsVerticalScrollIndicator={false}
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
-          className="flex-1 bg-[#1b1b1b] py-3 px-3"
-        >
-          <GooglePlacesAutocomplete
-            placeholder="Enter your Home Address"
-            enableHighAccuracyLocation
-            debounce={400}
-            onPress={(data, details = null) => {}}
-            query={{
-              key: "AIzaSyDrzxYICs65yHUDjc4mPMU7T_m_PqQzSLI",
-              language: "en",
-            }}
-            fetchDetails={true}
-            enablePoweredByContainer={true}
-            minLength={2}
-            renderRow={(rowData) => (
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Ionicons
-                  name="ios-location-sharp"
-                  size={24}
-                  color={COLORS.primary}
-                  style={{ marginRight: 10 }}
-                />
-                <Text
-                  style={{
-                    fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#D4E1D2",
-                  }}
-                >
-                  {rowData.description}
-                </Text>
-              </View>
-            )}
-            styles={{
-              textInput: {
-                fontFamily: FONTS.RedHatDisplayRegular,
-                backgroundColor: "transparent",
-                color: darkMode ? "#D4E1D2" : "#0f0f0f",
-                fontSize: 15,
-                borderWidth: 1,
-                borderColor: COLORS.primary,
-                height: "50px",
-              },
-            }}
-          />
-        </View>
+          data={listing}
+          className="px-3 flex-1 py-3 bg-[#1b1b1b]"
+          keyExtractor={(item) => item.id.toString()}
+          ItemSeparatorComponent={() => (
+            <Spacer value={H("1%")} axis="vertical" />
+          )}
+          renderItem={({ item }) => (
+            <UserProfileCard
+              navigation={navigation}
+              item={item}
+              hide={true}
+              onPress={() => setId(item.id)}
+            />
+          )}
+        />
       </BottomSheet>
     </KeyboardAvoidingView>
   );

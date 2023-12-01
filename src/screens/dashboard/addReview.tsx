@@ -122,8 +122,8 @@ const AddReview = ({
               onTextChange={(value) => setReview(value)}
               type={"default"}
               autoCapitalize={"sentences"}
-              className="border border-[#696969]"
-              containerStyle={{ width: "100%" }}
+              className="border border-[#696969] h-100"
+              containerStyle={{ width: "100%", height: 100 }}
               multiline={true}
               numberOfLines={7}
               placeholder="Enter your review"

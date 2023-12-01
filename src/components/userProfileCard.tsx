@@ -21,12 +21,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const UserProfileCard = ({
   navigation,
+  hide = false,
   item,
   onPress,
 }: {
   navigation: NativeStackNavigationProp<any>;
   onPress: (event: GestureResponderEvent) => void;
   item: any;
+  hide?: boolean;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
@@ -82,62 +84,64 @@ const UserProfileCard = ({
             {FirstLetterUppercase(item?.listing_address || "")}
           </SmallText>
         </View>
-        <View className="flex-row items-center justify-between mt-2 w-full">
-          {darkMode ? (
-            <TouchableOpacity
-              style={[
-                darkMode && shadowBox,
-                {
-                  backgroundColor: "black",
-                },
-              ]}
-              className="bg-black w-[47%] py-2 px-4 justify-center items-center rounded-full"
-              onPress={() =>
-                Linking.openURL(`tel:${item?.listing_phone || ""}`)
-              }
-            >
-              <SmallText className="text-white p-0 text-[15px] pl-1">
-                Call
-              </SmallText>
-            </TouchableOpacity>
-          ) : (
-            <LinearGradient
-              colors={["#023215", "#1A911B"]}
-              start={{ x: 0.0, y: 1.0 }}
-              end={{ x: 1.0, y: 1.0 }}
-              className="bg-black w-[47%] px-[1px] py-[1px] justify-center items-center rounded-full"
-            >
+        {!hide && (
+          <View className="flex-row items-center justify-between mt-2 w-full">
+            {darkMode ? (
               <TouchableOpacity
+                style={[
+                  darkMode && shadowBox,
+                  {
+                    backgroundColor: "black",
+                  },
+                ]}
+                className="bg-black w-[47%] py-2 px-4 justify-center items-center rounded-full"
                 onPress={() =>
                   Linking.openURL(`tel:${item?.listing_phone || ""}`)
                 }
-                className="bg-white py-2 px-4 w-[100%] justify-center items-center rounded-full"
               >
-                <GradientText className="text-white p-0 text-[15px] pl-1">
+                <SmallText className="text-white p-0 text-[15px] pl-1">
                   Call
-                </GradientText>
+                </SmallText>
               </TouchableOpacity>
-            </LinearGradient>
-          )}
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Chat", { data: item.user })}
-            style={[
-              shadowBox,
-              { backgroundColor: darkMode ? "black" : "#D4E1D2" },
-            ]}
-            className="bg-black py-2 px-4 w-[47%] justify-center items-center rounded-full"
-          >
-            {darkMode ? (
-              <SmallText className="text-white p-0 text-[15px] pl-1">
-                Chat
-              </SmallText>
             ) : (
-              <GradientText className="text-white p-0 text-[15px] pl-1">
-                Chat
-              </GradientText>
+              <LinearGradient
+                colors={["#023215", "#1A911B"]}
+                start={{ x: 0.0, y: 1.0 }}
+                end={{ x: 1.0, y: 1.0 }}
+                className="bg-black w-[47%] px-[1px] py-[1px] justify-center items-center rounded-full"
+              >
+                <TouchableOpacity
+                  onPress={() =>
+                    Linking.openURL(`tel:${item?.listing_phone || ""}`)
+                  }
+                  className="bg-white py-2 px-4 w-[100%] justify-center items-center rounded-full"
+                >
+                  <GradientText className="text-white p-0 text-[15px] pl-1">
+                    Call
+                  </GradientText>
+                </TouchableOpacity>
+              </LinearGradient>
             )}
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Chat", { data: item.user })}
+              style={[
+                shadowBox,
+                { backgroundColor: darkMode ? "black" : "#D4E1D2" },
+              ]}
+              className="bg-black py-2 px-4 w-[47%] justify-center items-center rounded-full"
+            >
+              {darkMode ? (
+                <SmallText className="text-white p-0 text-[15px] pl-1">
+                  Chat
+                </SmallText>
+              ) : (
+                <GradientText className="text-white p-0 text-[15px] pl-1">
+                  Chat
+                </GradientText>
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );

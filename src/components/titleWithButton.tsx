@@ -33,19 +33,21 @@ const TitleWithButton: React.FC<IProps> = ({
   return (
     <View className="relative flex flex-row items-center w-full justify-center py-4">
       {left && (
-        <Pressable onPress={() => fire && fire()} className="absolute left-0">
+        <Pressable onPress={() => fire && fire()} className="absolute left-0 z-10">
           <Feather name="arrow-left-circle" size={30} color={color} />
         </Pressable>
       )}
       {darkMode ? (
         <Text
-          className={`text-[#D4E1D2] text-[22px] font-RedHatDisplaySemiBold ${style}`}
+          numberOfLines={1}
+          className={`text-[#D4E1D2] text-[22px] font-RedHatDisplaySemiBold  ${style}`}
         >
           {title}
         </Text>
       ) : (
         <GradientText
-          className={`text-[#D4E1D2] text-[22px] font-RedHatDisplaySemiBold ${style}`}
+          numberOfLines={1}
+          className={`text-[#D4E1D2] text-[22px] font-RedHatDisplaySemiBold px-10 ${style}`}
         >
           {title}
         </GradientText>
@@ -54,7 +56,7 @@ const TitleWithButton: React.FC<IProps> = ({
       {right && (
         <Pressable
           onPress={() => rightFire && rightFire()}
-          className="absolute right-2"
+          className="absolute right-2 z-10"
         >
           {rightIcon ? rightIcon : <SliderIcon onPress={() => {}} />}
         </Pressable>
