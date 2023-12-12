@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -19,15 +20,44 @@ import { width, height } from "../../utility/constant";
 import { COLORS } from "../../utility/colors";
 import { Entypo } from "@expo/vector-icons";
 import { shadowBox, shadowBoxDark } from "../../style/Typography";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useIsFocused } from "@react-navigation/native";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { getPackages, subscribePackage } from "../../api/packages";
+import Toast from "react-native-toast-message";
+import { getUser } from "../../api/user";
+import { SET_PROFILE } from "../../store/authSlice";
 
 const Packages = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const dispatch = useDispatch();
+  const focus = useIsFocused();
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const [packages, setPackages] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getPackages(
+        (response) => {
+          setPackages(response?.package);
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus]);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -46,10 +76,16 @@ const Packages = ({
           <TitleWithButton title="Packages" fire={() => navigation.goBack()} />
         </View>
         <Spacer value={H("3%")} axis="vertical" />
-        <ScrollView className="px-3">
-          {["", "", ""].map((item, idx) => (
+        <FlatList
+          className="px-3"
+          showsVerticalScrollIndicator={false}
+          data={packages}
+          keyExtractor={(item) => item.id.toString()}
+          ItemSeparatorComponent={() => (
+            <Spacer value={H("2%")} axis="vertical" />
+          )}
+          renderItem={({ item }) => (
             <View
-              key={idx}
               style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}
               className="w-full bg-[#0F0F0F] px-3 py-3 rounded-xl mb-5"
             >
@@ -58,10 +94,10 @@ const Packages = ({
                   style={{ color: darkMode ? "white" : "#0f0f0f" }}
                   className="text-white text-left text-[20px] p-0 w-[48%]"
                 >
-                  Online Services only
+                  {item?.package_name}
                 </SmallText>
                 <SmallText className="text-primary text-left font-RedHatDisplayBold text-[20px] p-0 w-[48%]">
-                  $0/365 days
+                  ₦{item?.package_price}/{item?.valid_days} days
                 </SmallText>
               </View>
               <Spacer value={H("3%")} axis="vertical" />
@@ -72,7 +108,7 @@ const Packages = ({
                     style={{ color: darkMode ? "white" : "#0f0f0f" }}
                     className="text-white text-left text-[16px] p-0 w-[85%]"
                   >
-                    2 listing allowed
+                    {item?.total_listings} listing allowed
                   </SmallText>
                 </View>
                 <View className="flex-row items-start w-[48%]">
@@ -81,7 +117,7 @@ const Packages = ({
                     style={{ color: darkMode ? "white" : "#0f0f0f" }}
                     className="text-white text-left text-[16px] p-0 w-[85%]"
                   >
-                    2 amenities per listing
+                    {item?.total_amenities} amenities per listing
                   </SmallText>
                 </View>
               </View>
@@ -93,7 +129,7 @@ const Packages = ({
                     style={{ color: darkMode ? "white" : "#0f0f0f" }}
                     className="text-white text-left text-[16px] p-0 w-[85%]"
                   >
-                    10 photos per listing
+                    {item?.total_photos} photos per listing
                   </SmallText>
                 </View>
                 <View className="flex-row items-start w-[48%]">
@@ -102,7 +138,7 @@ const Packages = ({
                     style={{ color: darkMode ? "white" : "#0f0f0f" }}
                     className="text-white text-left text-[16px] p-0 w-[85%]"
                   >
-                    5 videos per listing
+                    {item?.total_videos} videos per listing
                   </SmallText>
                 </View>
               </View>
@@ -114,7 +150,7 @@ const Packages = ({
                     style={{ color: darkMode ? "white" : "#0f0f0f" }}
                     className="text-white text-left text-[16px] p-0 w-[85%]"
                   >
-                    5 social itesm per listing
+                    {item?.total_social_items} social items per listing
                   </SmallText>
                 </View>
                 <View className="flex-row items-start w-[48%]">
@@ -123,31 +159,68 @@ const Packages = ({
                     style={{ color: darkMode ? "white" : "#0f0f0f" }}
                     className="text-white text-left text-[16px] p-0 w-[85%]"
                   >
-                    2 additional features per listing
+                    {item?.total_additional_features} additional features per
+                    listing
                   </SmallText>
                 </View>
               </View>
-              <Spacer value={H("3%")} axis="vertical" />
-              <View className="flex-row items-start justify-between w-full">
-                <View className="flex-row items-start w-[48%]">
-                  <Entypo name="check" size={24} color={COLORS.primary} />
-                  <SmallText
-                    style={{ color: darkMode ? "white" : "#0f0f0f" }}
-                    className="text-white text-left text-[16px] p-0 w-[85%]"
-                  >
-                    featured listing allowed
-                  </SmallText>
-                </View>
-              </View>
+              {item?.allow_featured === "Yes" && (
+                <>
+                  <Spacer value={H("3%")} axis="vertical" />
+                  <View className="flex-row items-start justify-between w-full">
+                    <View className="flex-row items-start w-[48%]">
+                      <Entypo name="check" size={24} color={COLORS.primary} />
+                      <SmallText
+                        style={{ color: darkMode ? "white" : "#0f0f0f" }}
+                        className="text-white text-left text-[16px] p-0 w-[85%]"
+                      >
+                        featured listing allowed
+                      </SmallText>
+                    </View>
+                  </View>
+                </>
+              )}
               <Spacer value={H("3%")} axis="vertical" />
               <Button
                 text="Enroll Now"
                 buttonStyleClassName="rounded-lg"
                 buttonStyle={{ width: "100%" }}
+                onPress={() => {
+                  dispatch(SET_LOADER(true));
+                  subscribePackage(
+                    { package_id: item?.id, duration: item?.valid_days },
+                    (response1) => {
+                      getUser(
+                        (response) => {
+                          dispatch(SET_PROFILE(response));
+                          Toast.show({
+                            type: "success",
+                            text1: response1.message,
+                          });
+                          dispatch(SET_LOADER(false));
+                        },
+                        (error) => {
+                          dispatch(SET_LOADER(false));
+                          Toast.show({
+                            type: "error",
+                            text1: error,
+                          });
+                        }
+                      );
+                    },
+                    (error) => {
+                      dispatch(SET_LOADER(false));
+                      Toast.show({
+                        type: "error",
+                        text1: error,
+                      });
+                    }
+                  );
+                }}
               />
             </View>
-          ))}
-        </ScrollView>
+          )}
+        />
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

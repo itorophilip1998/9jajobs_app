@@ -57,6 +57,7 @@ const MyWallet = ({
 }) => {
   const dispatch = useDispatch();
   const focus = useIsFocused();
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [details, setDetails] = React.useState<any>(null);
   const [acctNo, setAcctNo] = React.useState<string>("");
   const [bank, setBank] = React.useState<any>(null);
@@ -84,18 +85,18 @@ const MyWallet = ({
 
   React.useEffect(() => {
     if (acctNo.length === 10 && bank) {
-      dispatch(SET_LOADER(true));
+      setLoading(true);
       getAccountName(
         {
           acct_no: Number(acctNo),
           bank_code: bank?.code,
         },
         (response) => {
-          dispatch(SET_LOADER(false));
+          setLoading(false);
           setAcctName(response.data.account_name);
         },
         (error) => {
-          dispatch(SET_LOADER(false));
+          setLoading(false);
           Toast.show({
             type: "error",
             text1: error,
@@ -162,7 +163,12 @@ const MyWallet = ({
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           <View className="w-full flex-row justify-evenly items-center">
-            <TouchableOpacity onPress={() => fundRef.current?.open()}>
+            <TouchableOpacity
+              onPress={() => {
+                setAmount("");
+                fundRef.current?.open();
+              }}
+            >
               <FundIcon />
               <SmallText
                 style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
@@ -180,7 +186,15 @@ const MyWallet = ({
                 Payment
               </SmallText>
             </TouchableOpacity> */}
-            <TouchableOpacity onPress={() => withdrawRef.current?.open()}>
+            <TouchableOpacity
+              onPress={() => {
+                setAmount("");
+                setBank(null);
+                setAcctName("");
+                setAcctNo("");
+                withdrawRef.current?.open();
+              }}
+            >
               <WithdrawIcon />
               <SmallText
                 style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
@@ -300,9 +314,9 @@ const MyWallet = ({
             <SelectDropdown
               data={banks}
               onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
+                setBank(selectedItem);
               }}
-              // defaultValue={bank?.name || ""}
+              defaultValue={bank?.name || ""}
               buttonStyle={{
                 width: "100%",
                 backgroundColor: darkMode ? "black" : "white",
@@ -312,7 +326,6 @@ const MyWallet = ({
               }}
               buttonTextStyle={{ textAlign: "left", fontSize: 16 }}
               buttonTextAfterSelection={(selectedItem, index) => {
-                setBank(selectedItem);
                 return selectedItem.name;
               }}
               rowTextForSelection={(item, index) => {
@@ -322,80 +335,89 @@ const MyWallet = ({
             <Spacer value={H("2%")} axis="vertical" />
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+              className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
             >
-              Account Name
+              {loading ? "Loading..." : acctName}
             </SmallText>
-            <InputField
-              style={{ backgroundColor: darkMode ? "black" : "white" }}
-              onTextChange={function (value: string): void {
-                setAcctName(value);
-              }}
-              placeholder="input your account name"
-              defaultValue={acctName}
-              className="border border-[#696969] bg-[#000000]"
-              containerStyle={{ width: "100%" }}
-              type={"default"}
-              editable={false}
-              autoCapitalize={"none"}
-            />
-            <Spacer value={H("2%")} axis="vertical" />
           </View>
-          <Spacer value={H("3%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <Button
             text="Withdraw"
             buttonStyle={{ width: "100%" }}
             onPress={() => {
-              withdrawRef.current?.close();
-              dispatch(SET_LOADER(true));
-              transfer(
-                {
-                  type: bank?.type,
-                  account_number: acctNo,
-                  name: acctName,
-                  bank_code: bank?.code,
-                  amount: Number(amount + "00"),
-                  currency: "NGN",
-                },
-                (response) => {
-                  console.log(response);
-                  initiateWalletTransaction(
-                    // search by name and phone_number - create LGA, search user, create service
-                    // filter debit, credit, lga, area-unit, clear filter
-                    // landing page to nasarrawa and logos edit logo
-                    {
-                      amount: Number(amount) || 0,
-                      purpose: "withdrawal",
-                      status: "success",
-                      type: "debit",
-                      description: "Wallet withdrawal.",
-                      ref_number: response.data.reference,
-                      trans_id: response.data.transfer_code,
-                    },
-                    (response) => {
-                      dispatch(SET_LOADER(false));
-                      Toast.show({
-                        type: "success",
-                        text1: response?.message,
-                      });
-                    },
-                    (error) => {
-                      dispatch(SET_LOADER(false));
-                      Toast.show({
-                        type: "error",
-                        text1: error,
-                      });
-                    }
-                  );
-                },
-                (error) => {
-                  dispatch(SET_LOADER(false));
-                  Toast.show({
-                    type: "error",
-                    text1: "Network is currently down. Please try again later.",
-                  });
-                }
-              );
+              if (Number(amount) > details?.balance || Number(amount) === 0) {
+                Toast.show({
+                  type: "error",
+                  text1: "Amount cannot be more than balance or less than 0.",
+                });
+              } else if (acctNo.length !== 10) {
+                Toast.show({
+                  type: "error",
+                  text1: "Invalid account number.",
+                });
+              } else if (bank === null) {
+                Toast.show({
+                  type: "error",
+                  text1: "Select a bank.",
+                });
+              } else if (acctName.length <= 0) {
+                Toast.show({
+                  type: "error",
+                  text1: "No account name has been found.",
+                });
+              } else {
+                withdrawRef.current?.close();
+                dispatch(SET_LOADER(true));
+                transfer(
+                  {
+                    type: bank?.type,
+                    account_number: acctNo,
+                    name: acctName,
+                    bank_code: bank?.code,
+                    amount: Number(amount + "00"),
+                    currency: "NGN",
+                  },
+                  (response) => {
+                    initiateWalletTransaction(
+                      {
+                        amount: Number(amount) || 0,
+                        purpose: "withdrawal",
+                        status: "success",
+                        type: "debit",
+                        description: "Wallet withdrawal.",
+                        ref_number: response.data.reference,
+                        trans_id: response.data.transfer_code,
+                      },
+                      (response) => {
+                        dispatch(SET_LOADER(false));
+                        Toast.show({
+                          type: "success",
+                          text1: response?.message,
+                        });
+                        setDetails({
+                          ...details,
+                          balance: details?.balance - Number(amount),
+                        });
+                      },
+                      (error) => {
+                        dispatch(SET_LOADER(false));
+                        Toast.show({
+                          type: "error",
+                          text1: error,
+                        });
+                      }
+                    );
+                  },
+                  (error) => {
+                    dispatch(SET_LOADER(false));
+                    Toast.show({
+                      type: "error",
+                      text1:
+                        "Network is currently down. Please try again later.",
+                    });
+                  }
+                );
+              }
             }}
           />
           <Spacer value={H("6%")} axis="vertical" />
@@ -434,8 +456,15 @@ const MyWallet = ({
             text="Fund Now"
             buttonStyle={{ width: "100%" }}
             onPress={() => {
-              fundRef.current?.close();
-              navigation.navigate("Paystack", { amount });
+              if (Number(amount) <= 0) {
+                Toast.show({
+                  type: "error",
+                  text1: "Amount cannot be 0 or less",
+                });
+              } else {
+                fundRef.current?.close();
+                navigation.navigate("Paystack", { amount });
+              }
             }}
           />
           <Spacer value={H("6%")} axis="vertical" />

@@ -19,14 +19,23 @@ import { Button, InputField, SmallText, Spacer } from "../../components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { LinearGradient } from "expo-linear-gradient";
+import Toast from "react-native-toast-message";
+import { useDispatch } from "react-redux";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { postReport } from "../../api/rating";
+import { RouteProp } from "@react-navigation/native";
 
 const Report = ({
   navigation,
+  route,
 }: {
   navigation: NativeStackNavigationProp<any>;
+  route: RouteProp<any>;
 }) => {
   const [report, setReport] = React.useState<string>("");
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  // console.log(route.params?.data);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -59,8 +68,8 @@ const Report = ({
               onTextChange={(value) => setReport(value)}
               type={"default"}
               autoCapitalize={"sentences"}
-              className="border border-[#696969]"
-              containerStyle={{ width: "100%" }}
+              className="border border-[#696969] h-[150px] w-full"
+              containerStyle={{ width: "100%", height: 150, borderRadius: 8 }}
               multiline={true}
               numberOfLines={7}
               placeholder="Enter your report"
@@ -79,17 +88,50 @@ const Report = ({
                 autoCapitalize={"sentences"}
                 containerStyle={{
                   width: "100%",
+                  height: 150,
                   backgroundColor: "white",
                   borderRadius: 8,
                 }}
                 multiline={true}
                 numberOfLines={7}
+                className="h-[150px] w-full"
                 placeholder="Enter your review"
               />
             </LinearGradient>
           )}
           <Spacer axis="vertical" value={H("3%")} />
-          <Button text="Submit Report" buttonStyle={{ width: "100%" }} />
+          <Button
+            text="Submit Report"
+            buttonStyle={{ width: "100%" }}
+            onPress={() => {
+              if (report === "") {
+                Toast.show({
+                  type: "error",
+                  text1: "Please enter your report",
+                });
+              } else {
+                dispatch(SET_LOADER(true));
+                postReport(
+                  { listing_id: route.params?.data?.id, report },
+                  (response) => {
+                    dispatch(SET_LOADER(false));
+                    setReport("");
+                    Toast.show({
+                      type: "success",
+                      text1: response.message,
+                    });
+                  },
+                  (error) => {
+                    dispatch(SET_LOADER(false));
+                    Toast.show({
+                      type: "error",
+                      text1: error,
+                    });
+                  }
+                );
+              }
+            }}
+          />
           <Spacer axis="vertical" value={H("3%")} />
         </ScrollView>
       </SafeAreaView>

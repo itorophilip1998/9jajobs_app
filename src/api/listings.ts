@@ -3,22 +3,27 @@ import { store } from "../store";
 import { LOGIN, SET_TOKEN, SET_PROFILE } from "../store/authSlice";
 import { BASE_URL } from "./config";
 
-export const bookListing = async (
+export const addListing = async (
   data: {
-    listing_id: string;
-    date: string;
-    time: string;
+    listing_name: string;
+    listing_description: string;
+    listing_phone: string;
+    listing_address: string;
+    listing_category_id: string;
+    photo_list: File[];
+    video_list: File[];
+    amenity: string[];
+    listing_featured_photo: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void
 ) => {
   const formData = new FormData();
-  formData.append("listing_id", data.listing_id);
-  formData.append("date", data.date);
-  formData.append("time", data.time);
+  formData.append("listing_name", data.listing_name);
+  formData.append("is_featured", "true");
   var config = {
     method: "post",
-    url: `${BASE_URL}/bookings`,
+    url: `${BASE_URL}/add-listings`,
     headers: {
       Authorization: `Bearer ${store.getState().auth.access_token}`,
       "Content-Type": "multipart/form-data",
@@ -30,7 +35,7 @@ export const bookListing = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    console.log("Book-Listing", err?.response?.data);
+    console.log("report-listing", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
@@ -46,14 +51,16 @@ export const bookListing = async (
   }
 };
 
-
-export const getAllBookings = async (
+export const deleteListing = async (
+  data: {
+    id: number;
+  },
   execute: (e: any) => void,
   error: (e: string) => void
 ) => {
   var config = {
-    method: "get",
-    url: `${BASE_URL}/bookings`,
+    method: "delete",
+    url: `${BASE_URL}/delete-listings/${data.id}`,
     headers: {
       Authorization: `Bearer ${store.getState().auth.access_token}`,
     },
@@ -63,7 +70,7 @@ export const getAllBookings = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    console.log("all-booking", err?.response?.data);
+    console.log("delete-listing", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));

@@ -4,14 +4,20 @@ import { store } from "../store";
 import { LOGIN, SET_PROFILE, SET_TOKEN } from "../store/authSlice";
 
 export const refreshToken = async (
+  data: {
+    expo_token?: string | null;
+  },
   execute: (arg: any) => void,
   error: (arg: string) => void
 ) => {
+  const formData = new FormData();
+  data.expo_token && formData.append("expo_token", data.expo_token);
   var config = {
     method: "post",
     url: `${BASE_URL}/auth/refresh`,
     headers: {
       Authorization: `Bearer ${store.getState().auth.access_token}`,
+      "Content-Type": "multipart/form-data",
     },
   };
 
@@ -38,7 +44,7 @@ export const signUp = async (
     name: string;
     email: string;
     phone: string;
-    referral_code: string | false;
+    ref_code: string;
     password: string;
     re_password: string;
   },
@@ -49,7 +55,7 @@ export const signUp = async (
   formData.append("name", data.name);
   formData.append("email", data.email);
   formData.append("phone_number", data.phone);
-  data.referral_code && formData.append("referral_code", data.referral_code);
+  formData.append("ref_code", data.ref_code);
   formData.append("password", data.password);
   formData.append("re_password", data.re_password);
   var config = {
@@ -101,6 +107,78 @@ export const signIn = async (
     execute(response.data);
   } catch (err: any) {
     console.log("login", err?.response?.data);
+    if (typeof err?.response?.data?.error === "string") {
+      error(err?.response?.data?.error);
+    } else if (!err?.response?.data?.error) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data?.error === "object") {
+      error(Object.values(err?.response?.data?.error).flat().join("\n"));
+    }
+  }
+};
+
+export const forgot = async (
+  data: {
+    email: string;
+  },
+  execute: (e: any) => void,
+  error: (e: string) => void
+) => {
+  const formData = new FormData();
+  formData.append("email", data.email);
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/auth/forgot-password`,
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    console.log("forgot-password", err?.response?.data);
+    if (typeof err?.response?.data?.error === "string") {
+      error(err?.response?.data?.error);
+    } else if (!err?.response?.data?.error) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data?.error === "object") {
+      error(Object.values(err?.response?.data?.error).flat().join("\n"));
+    }
+  }
+};
+
+export const verifyAndReset = async (
+  data: {
+    email: string;
+    otp: string;
+    password: string;
+    re_password: string;
+  },
+  execute: (e: any) => void,
+  error: (e: string) => void
+) => {
+  const formData = new FormData();
+  formData.append("email", data.email);
+  formData.append("otp", data.otp);
+  formData.append("password", data.password);
+  formData.append("re_password", data.re_password);
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/auth/reset-password`,
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    console.log("verify-reset-error", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error);
     } else if (!err?.response?.data?.error) {

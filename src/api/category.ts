@@ -3,6 +3,30 @@ import { BASE_URL } from "./config";
 import { store } from "../store";
 import { LOGIN, SET_TOKEN, SET_PROFILE } from "../store/authSlice";
 
+export const getAmenities = async (
+  execute: (e: any) => void,
+  error: (e: string) => void
+) => {
+  var config = {
+    method: "get",
+    url: `${BASE_URL}/amenities`,
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    console.log("categories", err?.response?.data);
+    if (typeof err?.response?.data === "string") {
+      error(err?.response?.data);
+    } else if (!err?.response?.data) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data === "object") {
+      error(Object.values(err?.response?.data).flat().join("\n"));
+    }
+  }
+};
+
 export const getCategories = async (
   execute: (e: any) => void,
   error: (e: string) => void

@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { COLORS } from "../utility/colors";
-import { FirstLetterUppercase } from "../utility/helpers";
+import { FirstLetterUppercase, validatePhone } from "../utility/helpers";
 import SmallText from "./smallText";
 import { shadowBox, shadowBoxDark } from "../style/Typography";
 import { useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { GradientText } from "./gradientText";
 import userImg from "../../assets/images/user.jpg";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Toast from "react-native-toast-message";
 
 const UserProfileCard = ({
   navigation,
@@ -31,6 +32,7 @@ const UserProfileCard = ({
   hide?: boolean;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  // console.log(item.user);
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -62,7 +64,7 @@ const UserProfileCard = ({
           >
             {FirstLetterUppercase(item?.listing_name || "")}
           </SmallText>
-          {item.is_featured === "Yes" && (
+          {item?.verified && item?.verified?.status === "completed" && (
             <MaterialIcons name="verified" size={18} color={COLORS.primary} />
           )}
         </View>
@@ -96,7 +98,20 @@ const UserProfileCard = ({
                 ]}
                 className="bg-black w-[47%] py-2 px-4 justify-center items-center rounded-full"
                 onPress={() =>
-                  Linking.openURL(`tel:${item?.listing_phone || ""}`)
+                  !item?.listing_phone && !item?.user?.phone
+                    ? Toast.show({
+                        type: "error",
+                        text1: "This listing does not have a phone number.",
+                      })
+                    : !validatePhone(item?.listing_phone, 11) ||
+                      !validatePhone(item?.user?.phone, 11)
+                    ? Toast.show({
+                        type: "error",
+                        text1: "Invalid phone number.",
+                      })
+                    : Linking.openURL(
+                        `tel:${item?.listing_phone || item?.user?.phone || ""}`
+                      )
                 }
               >
                 <SmallText className="text-white p-0 text-[15px] pl-1">
@@ -112,7 +127,22 @@ const UserProfileCard = ({
               >
                 <TouchableOpacity
                   onPress={() =>
-                    Linking.openURL(`tel:${item?.listing_phone || ""}`)
+                    !item?.listing_phone && !item?.user?.phone
+                      ? Toast.show({
+                          type: "error",
+                          text1: "This listing does not have a phone number.",
+                        })
+                      : !validatePhone(item?.listing_phone, 11) ||
+                        !validatePhone(item?.user?.phone, 11)
+                      ? Toast.show({
+                          type: "error",
+                          text1: "Invalid phone number.",
+                        })
+                      : Linking.openURL(
+                          `tel:${
+                            item?.listing_phone || item?.user?.phone || ""
+                          }`
+                        )
                   }
                   className="bg-white py-2 px-4 w-[100%] justify-center items-center rounded-full"
                 >
@@ -123,7 +153,14 @@ const UserProfileCard = ({
               </LinearGradient>
             )}
             <TouchableOpacity
-              onPress={() => navigation.navigate("Chat", { data: item.user })}
+              onPress={() =>
+                item.user !== null
+                  ? navigation.navigate("Chat", { data: item.user })
+                  : Toast.show({
+                      type: "error",
+                      text1: "This listing does not have a user.",
+                    })
+              }
               style={[
                 shadowBox,
                 { backgroundColor: darkMode ? "black" : "#D4E1D2" },

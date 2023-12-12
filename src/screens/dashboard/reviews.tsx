@@ -101,13 +101,14 @@ const Reviews = ({
                 >
                   {FirstLetterUppercase(route.params?.data?.listing_name || "")}
                 </SmallText>
-                {route.params?.data?.is_featured === "Yes" && (
-                  <MaterialIcons
-                    name="verified"
-                    size={18}
-                    color={COLORS.primary}
-                  />
-                )}
+                {route.params?.data?.verified &&
+                  route.params?.data?.verified?.status === "completed" && (
+                    <MaterialIcons
+                      name="verified"
+                      size={18}
+                      color={COLORS.primary}
+                    />
+                  )}
               </View>
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}

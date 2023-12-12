@@ -25,7 +25,7 @@ import { RootState } from "../../store";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { SET_LOADER } from "../../store/formDataSlice";
-import { getAllListing } from "../../api/category";
+import { getAllListing, getAmenities } from "../../api/category";
 import Toast from "react-native-toast-message";
 
 const Listing = ({
@@ -35,8 +35,9 @@ const Listing = ({
 }) => {
   const dispatch = useDispatch();
   const focus = useIsFocused();
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [allListing, setAllListing] = React.useState<any[]>([]);
+
   React.useEffect(() => {
     if (focus) {
       dispatch(SET_LOADER(true));
@@ -44,7 +45,6 @@ const Listing = ({
         null,
         (response) => {
           dispatch(SET_LOADER(false));
-          // console.log("Listing", response.listing);
           setAllListing(response.listing);
         },
         (error) => {

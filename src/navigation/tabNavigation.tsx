@@ -22,6 +22,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
   const { authenticate } = useAuthorize();
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { notification } = useSelector((state: RootState) => state.formData);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -85,7 +86,10 @@ const TabNavigation = () => {
         name="Message"
         options={{
           tabBarLabel: "Messages",
-          tabBarBadge: 4,
+          tabBarBadge:
+            notification.notifications + notification.messages === 0
+              ? undefined
+              : notification.notifications + notification.messages,
           tabBarBadgeStyle: {
             top: -5,
           },

@@ -8,7 +8,12 @@ import {
   Modal,
   SuccessModalContent,
 } from "../components";
-import { SET_LOADER, UNSET_ERROR, UNSET_SUCCESS } from "../store/formDataSlice";
+import {
+  SET_LOADER,
+  SET_NOTIFICATION,
+  UNSET_ERROR,
+  UNSET_SUCCESS,
+} from "../store/formDataSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -36,6 +41,9 @@ import PaystackScreen from "../screens/profile/paystack";
 import { refreshToken } from "../api/auth";
 import { getUser } from "../api/user";
 import { SET_PROFILE, SET_TOKEN } from "../store/authSlice";
+import Forgot from "../screens/auth/forgot";
+import BoostDetail from "../screens/profile/boostDetail";
+import { getNotificationCount } from "../api/notification";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -94,7 +102,7 @@ const NavigationSetup = () => {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
+    // console.log(token);
 
     return token;
   }
@@ -126,9 +134,30 @@ const NavigationSetup = () => {
 
   React.useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
-    if (LoggedIn === true) {
+    if (Boolean(LoggedIn === true && authToken !== null)) {
+      timer = setInterval(() => {
+        getNotificationCount(
+          (response) => {
+            // console.log(response);
+            dispatch(SET_NOTIFICATION(response));
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }, 5000);
+    } else {
+      clearInterval(timer);
+    }
+    return () => clearInterval(timer);
+  }, [LoggedIn, authToken]);
+
+  React.useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+    if (Boolean(LoggedIn === true && authToken !== null)) {
       timer = setTimeout(() => {
         refreshToken(
+          { expo_token: expoPushToken.length > 0 ? expoPushToken : null },
           (response) => {
             dispatch(SET_TOKEN(response.access_token));
           },
@@ -141,22 +170,7 @@ const NavigationSetup = () => {
       clearTimeout(timer);
     }
     return () => clearTimeout(timer);
-  }, [LoggedIn, authToken]);
-
-  // React.useEffect(() => {
-  //   if (LoggedIn && authToken && expoPushToken.length > 0) {
-  //     sendExpoToken(
-  //       authToken,
-  //       expoPushToken,
-  //       (response) => {
-  //         console.log(response);
-  //       },
-  //       (error) => {
-  //         dispatch(SET_ERROR(error));
-  //       }
-  //     );
-  //   }
-  // }, [LoggedIn, authToken, expoPushToken]);
+  }, [LoggedIn, authToken, expoPushToken]);
 
   return (
     <NavigationContainer>
@@ -176,17 +190,11 @@ const NavigationSetup = () => {
         <Stack.Group>
           <Stack.Screen name="TabNavigation" component={TabNavigation} />
           <Stack.Screen name="Signin" component={Signin} />
+          <Stack.Screen name="Forgot" component={Forgot} />
           <Stack.Screen name="Chat" component={Chat} />
+          <Stack.Screen name="BoostDetail" component={BoostDetail} />
           <Stack.Screen name="Paystack" component={PaystackScreen} />
         </Stack.Group>
-        {/* {!LoggedIn ? (
-        ) : (
-          <Stack.Group>
-            <Stack.Screen name="Welcome" component={Welcome} />
-            <Stack.Screen name="Body" component={Body} />
-            <Stack.Screen name="Finish" component={Finish} />
-          </Stack.Group>
-        )} */}
         <Stack.Group
           screenOptions={{
             animation: "slide_from_bottom",
@@ -216,16 +224,12 @@ const AppNavigator = () => {
   );
 
   React.useEffect(() => {
-    if (Boolean(loggedIn && access_token)) {
-      dispatch(SET_LOADER(true));
+    if (loggedIn) {
       getUser(
         (response) => {
-          dispatch(SET_LOADER(false));
           dispatch(SET_PROFILE(response));
-          console.log(response);
         },
         (error) => {
-          dispatch(SET_LOADER(false));
           Toast.show({
             type: "error",
             text1: error,
@@ -234,7 +238,6 @@ const AppNavigator = () => {
       );
     }
   }, [loggedIn]);
-  // console.log();
 
   const toastConfig: ToastConfig = {
     success: (props) => (

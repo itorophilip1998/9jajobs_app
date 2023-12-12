@@ -27,7 +27,7 @@ const UserCard = ({ item }: { item: any }) => {
           style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
           className="text-left text-[#696969] text-[13px] p-0"
         >
-          {item.is_featured === "Yes" && "sponsored"}
+          {item?.boosting && item?.boosting?.status === "active" && "sponsored"}
         </SmallText>
         <Spacer axis="vertical" value={H(0.5)} />
       </>
@@ -52,7 +52,7 @@ const UserCard = ({ item }: { item: any }) => {
         >
           {FirstLetterUppercase(item.listing_name || "")}
         </SmallText>
-        {item.is_featured === "Yes" && (
+        {item?.verified && item?.verified?.status === "completed" && (
           <MaterialIcons name="verified" size={18} color={COLORS.primary} />
         )}
       </View>

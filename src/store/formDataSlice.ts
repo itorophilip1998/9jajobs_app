@@ -7,6 +7,10 @@ export interface IFormData {
   loader: boolean;
   successModal: boolean;
   successMessage: string;
+  notification: {
+    messages: number;
+    notifications: number;
+  };
 
   authData: {
     fullName: string;
@@ -24,7 +28,10 @@ const initialState: IFormData = {
   loader: false,
   successModal: false,
   successMessage: "",
-
+  notification: {
+    messages: 0,
+    notifications: 0,
+  },
   authData: {
     fullName: "",
     email: "",
@@ -76,6 +83,13 @@ export const formDataSlice = createSlice({
     SET_CONFIRM_PASSWORD: (state, action: PayloadAction<string>) => {
       state.authData.confirmPassword = action.payload;
     },
+    SET_NOTIFICATION: (
+      state,
+      action: PayloadAction<Partial<{ messages: number; notifications: number }>>
+    ) => {
+      
+      state.notification = { ...state.notification, ...action.payload };
+    },
   },
 });
 
@@ -90,6 +104,7 @@ export const {
   SET_REFERRAL_CODE,
   SET_SUCCESS,
   UNSET_ERROR,
+  SET_NOTIFICATION,
   UNSET_SUCCESS,
 } = formDataSlice.actions;
 

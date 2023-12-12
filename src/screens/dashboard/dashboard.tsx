@@ -34,12 +34,14 @@ import {
   getCategoryListing,
 } from "../../api/category";
 import Toast from "react-native-toast-message";
+import { useIsFocused } from "@react-navigation/native";
 
 const Dashboard = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const focus = useIsFocused();
   const [category, setCategory] = React.useState<any[]>([]);
   const [nearest, setNearest] = React.useState<any[]>([]);
   const [trending, setTrending] = React.useState<any[]>([]);
@@ -48,61 +50,67 @@ const Dashboard = ({
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(SET_LOADER(true));
-    getCategoryListing(
-      (response) => {
-        setCategory(response);
-        dispatch(SET_LOADER(false));
-      },
-      (error) => {
-        dispatch(SET_LOADER(false));
-        Toast.show({
-          type: "error",
-          text1: error,
-        });
-      }
-    );
-  }, []);
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getCategoryListing(
+        (response) => {
+          setCategory(response);
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus]);
 
   React.useEffect(() => {
-    dispatch(SET_LOADER(true));
-    getAllListing(
-      {
-        is_trending: true,
-      },
-      (response) => {
-        setTrending(response.listing);
-        dispatch(SET_LOADER(false));
-      },
-      (error) => {
-        dispatch(SET_LOADER(false));
-        Toast.show({
-          type: "error",
-          text1: error,
-        });
-      }
-    );
-  }, []);
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getAllListing(
+        {
+          is_trending: true,
+        },
+        (response) => {
+          setTrending(response.listing);
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus]);
 
   React.useEffect(() => {
-    dispatch(SET_LOADER(true));
-    getAllListing(
-      {
-        listing_city: profile?.city || "",
-      },
-      (response) => {
-        setNearest(response.listing);
-        dispatch(SET_LOADER(false));
-      },
-      (error) => {
-        dispatch(SET_LOADER(false));
-        Toast.show({
-          type: "error",
-          text1: error,
-        });
-      }
-    );
-  }, []);
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getAllListing(
+        {
+          listing_city: profile?.city || "",
+        },
+        (response) => {
+          setNearest(response.listing);
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus]);
   return (
     <View
       className="flex-1 bg-black"
