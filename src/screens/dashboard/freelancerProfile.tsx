@@ -664,6 +664,7 @@ const FreelancerProfile = ({
                 {route.params?.data?.listing_social_item.map(
                   (item: any, idx: number) => (
                     <Pressable
+                      key={idx}
                       onPress={() => Linking.openURL(item.social_url)}
                       className="ml-1"
                     >

@@ -45,6 +45,12 @@ import {
   getUserListing,
 } from "../../api/category";
 import { SET_LOADER } from "../../store/formDataSlice";
+import {
+  validateEmail,
+  validatePhone,
+  validateUrl,
+} from "../../utility/helpers";
+import { addListing } from "../../api/listings";
 
 const Post = ({
   navigation,
@@ -75,7 +81,7 @@ const Post = ({
                 navigation.navigate("Packages");
                 Toast.show({
                   type: "error",
-                  text1: "Maximum limit reached for package. Upgrade Package.",
+                  text1: `Maximum limit of ${profile?.package?.purchase_details?.total_listings} listings reached for package. Upgrade Package.`,
                 });
               }
             },
@@ -153,7 +159,6 @@ const Post = ({
         (response) => {
           dispatch(SET_LOADER(false));
           setAllAmenities(response);
-          console.log(response);
         },
         (error) => {
           dispatch(SET_LOADER(false));
@@ -210,6 +215,192 @@ const Post = ({
   const categoryRef = React.useRef<RBSheet | null>(null);
   const locationRef = React.useRef<RBSheet | null>(null);
   const amenitiesRef = React.useRef<RBSheet | null>(null);
+
+  React.useEffect(() => {
+    // console.log(profile);
+    if (profile) {
+      setEmail(profile?.email || "");
+      setPhone(profile?.phone || "");
+      setWebsite(profile?.website || "");
+    }
+  }, [profile]);
+
+  const validate = () => {
+    if (!category) {
+      Toast.show({
+        type: "error",
+        text1: "Select a Business Category.",
+      });
+    } else if (business.trim() === "") {
+      Toast.show({
+        type: "error",
+        text1: "Business Name is required.",
+      });
+    } else if (description.trim() === "") {
+      Toast.show({
+        type: "error",
+        text1: "Business Description is required.",
+      });
+    } else if (
+      location.trim() === "" ||
+      !longitude ||
+      !latitude ||
+      longitude?.trim() === "" ||
+      latitude.trim() === ""
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Business Location is required.",
+      });
+    } else if (!validateEmail(email)) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Business Email.",
+      });
+    } else if (!validatePhone(phone, 11)) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Business phone number.",
+      });
+    } else if (website.trim().length > 0 && !validateUrl(website.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Business Website.",
+      });
+    } else if (
+      amenities.length > profile?.package?.purchase_details?.total_amenities
+    ) {
+      Toast.show({
+        type: "error",
+        text1: `Amenities cannot be more than your package limit of ${profile?.package?.purchase_details?.total_amenities}.`,
+      });
+    } else if (
+      monday.trim() === "" ||
+      tuesday.trim() === "" ||
+      wednesday.trim() === "" ||
+      thursday.trim() === "" ||
+      friday.trim() === "" ||
+      saturday.trim() === "" ||
+      sunday.trim() === ""
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Enter time of booking from monday to sunday.",
+      });
+    } else if (whatsapp.trim().length > 0 && !validatePhone(whatsapp, 11)) {
+      Toast.show({
+        type: "error",
+        text1: "Whatsapp number must be 11 digits.",
+      });
+    } else if (facebook.trim().length > 0 && !validateUrl(facebook.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid facebook Link.",
+      });
+    } else if (instagram.trim().length > 0 && !validateUrl(instagram.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid instagram Link.",
+      });
+    } else if (twitter.trim().length > 0 && !validateUrl(twitter.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid twitter Link.",
+      });
+    } else if (linkedIn.trim().length > 0 && !validateUrl(linkedIn.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid linkedin Link.",
+      });
+    } else if (!logo) {
+      Toast.show({
+        type: "error",
+        text1: "Upload Business Logo.",
+      });
+    } else if (
+      selectedImages.length < 2 &&
+      selectedImages.length > profile?.package?.purchase_details?.total_photos
+    ) {
+      Toast.show({
+        type: "error",
+        text1: `Upload at least 2 photo but not more than your package limit of ${profile?.package?.purchase_details?.total_photos}.`,
+      });
+    } else if (
+      selectedVideos.length > profile?.package?.purchase_details?.total_videos
+    ) {
+      Toast.show({
+        type: "error",
+        text1: `Videos cannot be more that your package limit of ${profile?.package?.purchase_details?.total_videos}.`,
+      });
+    } else {
+      dispatch(SET_LOADER(true));
+      addListing(
+        {
+          listing_name: business,
+          listing_address: location,
+          listing_category_id: category?.id,
+          amenity: amenities.map((item) => item.id.toString()),
+          listing_description: description,
+          listing_phone: phone,
+          photo_list: selectedImages.map((item) => ({
+            name: item?.fileName,
+            uri: item?.uri,
+            type: "image/png",
+          })),
+          video: selectedVideos.map((item) => ({
+            name: item?.fileName,
+            uri: item?.uri,
+            type: "video/mp4",
+          })),
+          listing_featured_photo: {
+            name: logo?.fileName,
+            uri: logo?.uri,
+            type: "image/png",
+          },
+          address_latitude: latitude,
+          address_longitude: longitude,
+          is_featured: true,
+          listing_email: email,
+          listing_oh_friday: friday.trim(),
+          listing_oh_monday: monday.trim(),
+          listing_oh_saturday: saturday.trim(),
+          listing_oh_sunday: sunday.trim(),
+          listing_oh_thursday: thursday.trim(),
+          listing_oh_tuesday: tuesday.trim(),
+          listing_oh_wednesday: wednesday.trim(),
+          listing_status: "Active",
+          listing_website: website.trim(),
+          social_media: [
+            facebook.trim().length > 0 && { icon: "Facebook", url: facebook },
+            instagram.trim().length > 0 && {
+              icon: "Instagram",
+              url: instagram,
+            },
+            twitter.trim().length > 0 && { icon: "Twitter", url: twitter },
+            linkedIn.trim().length > 0 && { icon: "LinkedIn", url: linkedIn },
+            whatsapp.trim().length > 0 && {
+              icon: "Whatsapp",
+              url: `https://wa.me/${whatsapp.trim()}`,
+            },
+          ],
+        },
+        (response) => {
+          Toast.show({
+            type: "success",
+            text1: response?.message,
+          });
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+          dispatch(SET_LOADER(false));
+        }
+      );
+    }
+  };
   return (
     <>
       <KeyboardAvoidingView
@@ -693,7 +884,7 @@ const Post = ({
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
                 >
-                  Add Video (Optional)
+                  Add at least 1 video
                 </SmallText>
                 {selectedVideos.map((item, idx) => (
                   <View
@@ -745,7 +936,11 @@ const Post = ({
               </View>
             </View>
             <Spacer axis="vertical" value={H(3)} />
-            <Button text="Post Ad" buttonStyle={{ width: "100%" }} />
+            <Button
+              text="Post Ad"
+              buttonStyle={{ width: "100%" }}
+              onPress={validate}
+            />
             <Spacer axis="vertical" value={H(5)} />
           </ScrollView>
         </SafeAreaView>
@@ -817,6 +1012,16 @@ const Post = ({
                   }
                 }}
               >
+                {amenities.some(
+                  (data) => data?.amenity_name === item?.amenity_name
+                ) && (
+                  <Entypo
+                    name="check"
+                    size={19}
+                    color={COLORS.primary}
+                    className="mr-2"
+                  />
+                )}
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="text-left text-[#D4E1D2] p-0 font-ManropeSemiBold text-[15px]"

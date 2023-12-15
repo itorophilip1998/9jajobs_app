@@ -9,18 +9,53 @@ export const addListing = async (
     listing_description: string;
     listing_phone: string;
     listing_address: string;
+    address_longitude: string;
+    address_latitude: string;
+    listing_email: string;
+    listing_website: string;
+    listing_oh_monday: string;
+    listing_oh_tuesday: string;
+    listing_oh_wednesday: string;
+    listing_oh_thursday: string;
+    listing_oh_friday: string;
+    listing_oh_saturday: string;
+    listing_oh_sunday: string;
+    listing_featured_photo: any;
     listing_category_id: string;
-    photo_list: File[];
-    video_list: File[];
+    listing_status: string;
+    is_featured: boolean;
+    photo_list: any[];
+    social_media: any[];
+    video: any[];
     amenity: string[];
-    listing_featured_photo: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void
 ) => {
   const formData = new FormData();
   formData.append("listing_name", data.listing_name);
-  formData.append("is_featured", "true");
+  formData.append("listing_description", data.listing_description);
+  formData.append("listing_phone", data.listing_phone);
+  formData.append("listing_address", data.listing_address);
+  formData.append("address_longitude", data.address_longitude);
+  formData.append("address_latitude", data.address_latitude);
+  formData.append("listing_email", data.listing_email);
+  formData.append("listing_website", data.listing_website);
+  formData.append("listing_oh_monday", data.listing_oh_monday);
+  formData.append("listing_oh_tuesday", data.listing_oh_tuesday);
+  formData.append("listing_oh_wednesday", data.listing_oh_wednesday);
+  formData.append("listing_oh_thursday", data.listing_oh_thursday);
+  formData.append("listing_oh_friday", data.listing_oh_friday);
+  formData.append("listing_oh_saturday", data.listing_oh_saturday);
+  formData.append("listing_oh_sunday", data.listing_oh_sunday);
+  formData.append("listing_featured_photo", data.listing_featured_photo);
+  formData.append("listing_category_id", data.listing_category_id);
+  formData.append("listing_status", data.listing_status);
+  formData.append("is_featured", data.is_featured.toString());
+  data.photo_list.map((item) => formData.append("photo_list[]", item));
+  data.video.map((item) => formData.append("video[]", item));
+  data.amenity.map((item) => formData.append("amenity[]", item));
+
   var config = {
     method: "post",
     url: `${BASE_URL}/add-listings`,
