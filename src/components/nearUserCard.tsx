@@ -14,11 +14,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import userImg from "../../assets/images/user.jpg";
 
-const NearUserCard = ({
-  item,
-}: {
-  item: any;
-}) => {
+const NearUserCard = ({ item }: { item: any }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View
@@ -56,7 +52,7 @@ const NearUserCard = ({
           >
             {FirstLetterUppercase(item.listing_name || "")}
           </SmallText>
-          {item.is_featured === "Yes" && (
+          {item?.verified && item?.verified?.status === "completed" && (
             <MaterialIcons name="verified" size={18} color={COLORS.primary} />
           )}
         </View>
@@ -70,7 +66,7 @@ const NearUserCard = ({
       <Spacer axis="vertical" value={H(0.5)} />
       <View className="w-full flex-row justify-between items-center">
         <SmallText
-        numberOfLine={1}
+          numberOfLine={1}
           style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
           className="text-[#D4E1D2] text-left p-0 text-[13px] w-[45%]"
         >
@@ -79,7 +75,7 @@ const NearUserCard = ({
           )}
         </SmallText>
         <SmallText
-        numberOfLine={1}
+          numberOfLine={1}
           style={{ color: darkMode ? "#A099A8" : "#0F0F0F" }}
           className="text-[#A099A8] text-right p-0 text-[13px] w-[50%]"
         >

@@ -20,18 +20,49 @@ import {
 import { Button, SmallText, Spacer } from "../../components";
 import UserProfileCard from "../../components/userProfileCard";
 import { MAIN_USERS } from "../../data/listing";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
+import { useIsFocused } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
+import { getUserListing } from "../../api/category";
+import { SET_LOADER } from "../../store/formDataSlice";
 
 const BoostPost = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const focus = useIsFocused();
+  const dispatch = useDispatch();
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const [listings, setListings] = React.useState<any[]>([]);
   const [search, setSearch] = React.useState<string>("");
   //   const sortRef = React.useState<RBSheet | null>(null);
+
+  const handleSearch = () => {
+    dispatch(SET_LOADER(true));
+    getUserListing(
+      {
+        listing_name: search,
+      },
+      (response) => {
+        dispatch(SET_LOADER(false));
+        setListings(response);
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    if (focus) handleSearch();
+  }, [focus]);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -47,7 +78,7 @@ const BoostPost = ({
           style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
           className="relative flex flex-row items-center w-full bg-[#0f0f0f] justify-between px-3 py-4"
         >
-          <View className="flex-row items-center w-[65%]">
+          <View className="flex-row items-center w-[88%]">
             <Pressable onPress={() => navigation.goBack()} className="mr-3">
               <Feather name="arrow-left-circle" size={30} color={"#696969"} />
             </Pressable>
@@ -79,7 +110,7 @@ const BoostPost = ({
               />
             </Pressable>
           </View>
-          <TouchableOpacity className="bg-transparent py-2 px-4 w-auto justify-center items-center rounded-full">
+          {/* <TouchableOpacity className="bg-transparent py-2 px-4 w-auto justify-center items-center rounded-full">
             {darkMode ? (
               <SmallText className="text-white p-0 text-[15px] pl-1">
                 Sort by
@@ -89,20 +120,32 @@ const BoostPost = ({
                 Sort by
               </GradientText>
             )}
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <Spacer value={H("3%")} axis="vertical" />
-        <SmallText
-          style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
-          className="text-[#696969] text-[20px] text-left p-0 px-3"
-        >
-          Listed posts
-        </SmallText>
+        <View className="px-3 flex-row justify-between items-center">
+          <SmallText
+            style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+            className="text-[#696969] text-[20px] text-left p-0"
+          >
+            Listed posts
+          </SmallText>
+          {/* <SmallText
+            style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+            className="text-[#696969] text-[20px] text-left p-0"
+          >
+            ₦2,000/Year
+          </SmallText> */}
+        </View>
         <Spacer value={H("3%")} axis="vertical" />
         <FlatList
           className="px-3 flex-1"
           showsVerticalScrollIndicator={false}
-          data={MAIN_USERS}
+          data={listings
+            .filter((item) => item?.boosting?.status !== "active")
+            .filter((item) =>
+              item.listing_name.toLowerCase().includes(search.toLowerCase())
+            )}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
             <View
@@ -116,10 +159,12 @@ const BoostPost = ({
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="text-[#D4E1D2] text-[19px] text-left p-0"
               >
-                {item.name}
+                {item.listing_name}
               </SmallText>
               <Button
-                onPress={() => navigation.navigate("Packages")}
+                onPress={() =>
+                  navigation.navigate("BoostDetail", { data: item })
+                }
                 text="Boost Post"
                 buttonStyle={{ width: 100 }}
                 buttonStyleClassName="h-[40px]"

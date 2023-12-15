@@ -20,7 +20,12 @@ import { BottomSheet, Button, InputField, SmallText } from "../../components";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
-import { LOGIN, SET_DARK_MODE, SET_TOKEN } from "../../store/authSlice";
+import {
+  LOGIN,
+  SET_DARK_MODE,
+  SET_PROFILE,
+  SET_TOKEN,
+} from "../../store/authSlice";
 import { COLORS } from "../../utility/colors";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { FONTS } from "../../utility/fonts";
@@ -29,12 +34,16 @@ import { SET_LOADER } from "../../store/formDataSlice";
 import { logout } from "../../api/auth";
 import Toast from "react-native-toast-message";
 import userImg from "../../../assets/images/user.jpg";
+import { VALIDATE_USER_DATA, validatePhone } from "../../utility/helpers";
+import { editUser, getUser } from "../../api/user";
+import { useIsFocused } from "@react-navigation/native";
 
 const EditProfile = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const focus = useIsFocused();
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const locationRef = React.useRef<RBSheet | null>(null);
@@ -43,11 +52,14 @@ const EditProfile = ({
   const [email, setEmail] = React.useState<string>("");
   const [phone, setPhone] = React.useState<string>("");
   const [location, setLocation] = React.useState<string>("");
-  // const [longtitude, setLongtitude] = React.useState<string>("");
-  // const [latitude, setLatitude] = React.useState<string>("");
+  const [city, setCity] = React.useState<string>("");
+  const [state, setState] = React.useState<string>("");
+  const [country, setCountry] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
-  const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
+  const [confirm_password, setConfirmPassword] = React.useState<string>("");
+  const [selectedImage, setSelectedImage] = React.useState<any>(null);
   const [visible, setVisible] = React.useState<boolean>(false);
+  const [visible1, setVisible1] = React.useState<boolean>(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -58,6 +70,42 @@ const EditProfile = ({
     });
 
     if (!result.canceled) {
+      dispatch(SET_LOADER(true));
+      editUser(
+        {
+          photo: {
+            name: result.assets[0].fileName,
+            uri: result.assets[0].uri,
+            type: "image/png",
+          },
+        },
+        (response) => {
+          getUser(
+            (response1) => {
+              Toast.show({
+                type: "success",
+                text1: response?.message,
+              });
+              dispatch(SET_LOADER(false));
+              dispatch(SET_PROFILE(response1));
+            },
+            (error) => {
+              Toast.show({
+                type: "error",
+                text1: error,
+              });
+              dispatch(SET_LOADER(false));
+            }
+          );
+        },
+        (error) => {
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+          dispatch(SET_LOADER(false));
+        }
+      );
       setSelectedImage(result.assets[0].uri);
     }
   };
@@ -67,8 +115,117 @@ const EditProfile = ({
     setEmail(profile?.email || "");
     setPhone(profile?.phone || "");
     setLocation(profile?.address || "");
+    setCity(profile?.city || "");
+    setState(profile?.state || "");
+    setCountry(profile?.country || "");
     setSelectedImage(profile?.photo);
   }, [profile]);
+
+  const validateProfile = () => {
+    VALIDATE_USER_DATA({ name, phone }, (e) => {
+      if (location === "" || country === "" || state === "" || city === "") {
+        Toast.show({
+          type: "error",
+          text1: "Please select a location.",
+        });
+        return;
+      }
+      if (!validatePhone(phone)) {
+        Toast.show({
+          type: "error",
+          text1: "Phone number must be up to 11 characters.",
+        });
+        return;
+      }
+
+      dispatch(SET_LOADER(true));
+      editUser(
+        {
+          name,
+          phone,
+          address: location,
+          city,
+          country,
+          state,
+        },
+        (response) => {
+          getUser(
+            (response1) => {
+              Toast.show({
+                type: "success",
+                text1: response?.message,
+              });
+              dispatch(SET_LOADER(false));
+              dispatch(SET_PROFILE(response1));
+            },
+            (error) => {
+              Toast.show({
+                type: "error",
+                text1: error,
+              });
+              dispatch(SET_LOADER(false));
+            }
+          );
+        },
+        (error) => {
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+          dispatch(SET_LOADER(false));
+        }
+      );
+    });
+  };
+
+  const validatePassword = () => {
+    if (password.length < 8) {
+      Toast.show({
+        type: "error",
+        text1: "Password must not be less than 8 characters.",
+      });
+    } else if (password !== confirm_password) {
+      Toast.show({
+        type: "error",
+        text1: "Passwords do not match.",
+      });
+    } else {
+      dispatch(SET_LOADER(true));
+      editUser(
+        {
+          name: name === "" ? profile?.name : name,
+          password: password,
+          re_password: confirm_password,
+        },
+        (response) => {
+          getUser(
+            (response1) => {
+              Toast.show({
+                type: "success",
+                text1: response?.message,
+              });
+              dispatch(SET_LOADER(false));
+              dispatch(SET_PROFILE(response1));
+            },
+            (error) => {
+              Toast.show({
+                type: "error",
+                text1: error,
+              });
+              dispatch(SET_LOADER(false));
+            }
+          );
+        },
+        (error) => {
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+          dispatch(SET_LOADER(false));
+        }
+      );
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -122,7 +279,7 @@ const EditProfile = ({
               value={darkMode}
             />
           </View>
-          <View
+          {/* <View
             style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
             className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]"
           >
@@ -141,7 +298,7 @@ const EditProfile = ({
               }}
               value={darkMode}
             />
-          </View>
+          </View> */}
           {/* <View
             style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
             className="w-full flex-row justify-between items-center px-3 py-2 border-b-2 border-b-[#0F0F0F]"
@@ -169,7 +326,7 @@ const EditProfile = ({
                 logout(
                   (response) => {
                     Toast.show({
-                      type: "error",
+                      type: "success",
                       text1: response.message,
                     });
                     dispatch(LOGIN(false));
@@ -215,6 +372,7 @@ const EditProfile = ({
               defaultValue={email}
               containerStyle={{ width: "100%" }}
               placeholder="abc@gmail.com"
+              editable={false}
               type={"email-address"}
               autoCapitalize={"none"}
               className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
@@ -237,7 +395,7 @@ const EditProfile = ({
             <InputField
               onTextChange={(value) => setLocation(value)}
               defaultValue={location}
-              placeholder="Select your business location"
+              placeholder="Enter your location"
               type={"default"}
               containerStyle={{ width: "100%" }}
               autoCapitalize={"none"}
@@ -248,7 +406,16 @@ const EditProfile = ({
               }
               onSuffixTap={() => locationRef.current?.open()}
             />
-            <SmallText className="text-left p-0 text-[#696969] text-[15px]">
+            <Button
+              text="Save Changes"
+              buttonStyle={{ width: "100%" }}
+              buttonStyleClassName="mb-5 mt-3"
+              onPress={validateProfile}
+            />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-left p-0 text-[#D4E1D2] text-[20px] py-3"
+            >
               Reset Password
             </SmallText>
             <InputField
@@ -269,7 +436,29 @@ const EditProfile = ({
               }
               onSuffixTap={() => setVisible(!visible)}
             />
-            <Button text="Save Changes" buttonStyle={{ width: "100%" }} />
+            <InputField
+              onTextChange={(value) => setConfirmPassword(value)}
+              defaultValue={confirm_password}
+              placeholder="Re-Type password"
+              type={"default"}
+              containerStyle={{ width: "100%" }}
+              autoCapitalize={"none"}
+              className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+              secure={!visible1}
+              suffixIcon={
+                <Feather
+                  name={visible1 ? "eye-off" : "eye"}
+                  size={20}
+                  color="#626262"
+                />
+              }
+              onSuffixTap={() => setVisible1(!visible1)}
+            />
+            <Button
+              text="Save Changes"
+              buttonStyle={{ width: "100%" }}
+              onPress={validatePassword}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -280,16 +469,31 @@ const EditProfile = ({
           className="flex-1 bg-[#1b1b1b] py-3 px-3"
         >
           <GooglePlacesAutocomplete
-            placeholder="Search City"
+            placeholder="Search Location"
             enableHighAccuracyLocation
             debounce={400}
-            onPress={(data, details = null) => {}}
+            onPress={(data, details = null) => {
+              const city = details?.address_components.find(
+                (item) => item.types[0] === "locality"
+              );
+              const country_state = details?.address_components.find(
+                (item) => item.types[0] === "administrative_area_level_1"
+              );
+              const country = details?.address_components.find(
+                (item) => item.types[0] === "country"
+              );
+              setLocation(details?.formatted_address || "");
+              setCity(city?.long_name || "");
+              setState(country_state?.long_name || "");
+              setCountry(country?.long_name || "");
+              locationRef.current?.close();
+            }}
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
             }}
             fetchDetails={true}
-            enablePoweredByContainer={true}
+            enablePoweredByContainer={false}
             minLength={2}
             renderRow={(rowData) => (
               <View style={{ flexDirection: "row", alignItems: "center" }}>

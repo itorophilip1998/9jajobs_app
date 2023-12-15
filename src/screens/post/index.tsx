@@ -37,28 +37,86 @@ import { RootState } from "../../store";
 import { shadowBoxDark } from "../../style/Typography";
 import { useAuthorize } from "../../hooks/useAuthorized";
 import { useIsFocused } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import Toast from "react-native-toast-message";
+import {
+  getAmenities,
+  getCategoryListing,
+  getUserListing,
+} from "../../api/category";
+import { SET_LOADER } from "../../store/formDataSlice";
+import {
+  validateEmail,
+  validatePhone,
+  validateUrl,
+} from "../../utility/helpers";
+import { addListing } from "../../api/listings";
 
 const Post = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const { loggedIn, access_token } = useSelector(
+  const focused = useIsFocused();
+  const dispatch = useDispatch();
+  const { loggedIn, access_token, darkMode, profile } = useSelector(
     (state: RootState) => state.auth
   );
-  const focused = useIsFocused();
 
   React.useEffect(() => {
     if (focused) {
       if (!Boolean(loggedIn && access_token)) {
         navigation.navigate("Signin", { two_step: true });
+      } else {
+        if (profile?.package) {
+          dispatch(SET_LOADER(true));
+          getUserListing(
+            null,
+            (response) => {
+              dispatch(SET_LOADER(false));
+              if (
+                response?.length >=
+                profile?.package?.purchase_details?.total_listings
+              ) {
+                navigation.navigate("Packages");
+                Toast.show({
+                  type: "error",
+                  text1: `Maximum limit of ${profile?.package?.purchase_details?.total_listings} listings reached for package. Upgrade Package.`,
+                });
+              }
+            },
+            (error) => {
+              dispatch(SET_LOADER(false));
+              Toast.show({
+                type: "error",
+                text1: error,
+              });
+            }
+          );
+        } else {
+          navigation.navigate("Packages");
+          Toast.show({
+            type: "error",
+            text1: "Purchase a package to create listing",
+          });
+        }
       }
     }
   }, [focused, loggedIn, access_token]);
+
   const [business, setBusiness] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
-  const [category, setCategory] = React.useState<string>("");
+  const [category, setCategory] = React.useState<any>(null);
   const [location, setLocation] = React.useState<string>("");
+  const [monday, setMonday] = React.useState<string>("");
+  const [tuesday, setTuesday] = React.useState<string>("");
+  const [wednesday, setWednesday] = React.useState<string>("");
+  const [thursday, setThursday] = React.useState<string>("");
+  const [friday, setFriday] = React.useState<string>("");
+  const [saturday, setSaturday] = React.useState<string>("");
+  const [sunday, setSunday] = React.useState<string>("");
+  const [longitude, setLongitude] = React.useState<string | null>(null);
+  const [latitude, setLatitude] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<string>("");
   const [phone, setPhone] = React.useState<string>("");
   const [website, setWebsite] = React.useState<string>("");
@@ -67,11 +125,51 @@ const Post = ({
   const [instagram, setInstagram] = React.useState<string>("");
   const [twitter, setTwitter] = React.useState<string>("");
   const [linkedIn, setLinkedIn] = React.useState<string>("");
-  const [amenities, setAmenities] = React.useState<string>("");
-  const [selectedVideos, setSelectedVideos] = React.useState<string[]>([]);
-  const { darkMode } = useSelector((state: RootState) => state.auth);
-  const [selectedImages, setSelectedImages] = React.useState<string[]>([]);
-  const [logo, setLogo] = React.useState<string | null>(null);
+  const [amenities, setAmenities] = React.useState<any[]>([]);
+  const [selectedVideos, setSelectedVideos] = React.useState<any[]>([]);
+  const [selectedImages, setSelectedImages] = React.useState<any[]>([]);
+  const [logo, setLogo] = React.useState<any>(null);
+
+  const [allCategory, setAllCategory] = React.useState<any[]>([]);
+  const [allAmenities, setAllAmenities] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    if (focused) {
+      dispatch(SET_LOADER(true));
+      getCategoryListing(
+        (response) => {
+          setAllCategory(response);
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focused]);
+
+  React.useEffect(() => {
+    if (focused) {
+      dispatch(SET_LOADER(true));
+      getAmenities(
+        (response) => {
+          dispatch(SET_LOADER(false));
+          setAllAmenities(response);
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focused]);
 
   const pickImages = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -83,7 +181,7 @@ const Post = ({
 
     if (!result.canceled) {
       for (let i = 0; i < result.assets.length; i++) {
-        setSelectedImages((prev) => [...prev, result.assets[i].uri || ""]);
+        setSelectedImages((prev) => [...prev, result.assets[i]]);
       }
     }
   };
@@ -97,7 +195,7 @@ const Post = ({
     });
 
     if (!result.canceled) {
-      setLogo(result.assets[0].uri);
+      setLogo(result.assets[0]);
     }
   };
 
@@ -109,7 +207,7 @@ const Post = ({
 
     if (!result.canceled) {
       for (let i = 0; i < result.assets.length; i++) {
-        setSelectedVideos((prev) => [...prev, result.assets[i].uri || ""]);
+        setSelectedVideos((prev) => [...prev, result.assets[i]]);
       }
     }
   };
@@ -117,6 +215,192 @@ const Post = ({
   const categoryRef = React.useRef<RBSheet | null>(null);
   const locationRef = React.useRef<RBSheet | null>(null);
   const amenitiesRef = React.useRef<RBSheet | null>(null);
+
+  React.useEffect(() => {
+    // console.log(profile);
+    if (profile) {
+      setEmail(profile?.email || "");
+      setPhone(profile?.phone || "");
+      setWebsite(profile?.website || "");
+    }
+  }, [profile]);
+
+  const validate = () => {
+    if (!category) {
+      Toast.show({
+        type: "error",
+        text1: "Select a Business Category.",
+      });
+    } else if (business.trim() === "") {
+      Toast.show({
+        type: "error",
+        text1: "Business Name is required.",
+      });
+    } else if (description.trim() === "") {
+      Toast.show({
+        type: "error",
+        text1: "Business Description is required.",
+      });
+    } else if (
+      location.trim() === "" ||
+      !longitude ||
+      !latitude ||
+      longitude?.trim() === "" ||
+      latitude.trim() === ""
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Business Location is required.",
+      });
+    } else if (!validateEmail(email)) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Business Email.",
+      });
+    } else if (!validatePhone(phone, 11)) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Business phone number.",
+      });
+    } else if (website.trim().length > 0 && !validateUrl(website.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Business Website.",
+      });
+    } else if (
+      amenities.length > profile?.package?.purchase_details?.total_amenities
+    ) {
+      Toast.show({
+        type: "error",
+        text1: `Amenities cannot be more than your package limit of ${profile?.package?.purchase_details?.total_amenities}.`,
+      });
+    } else if (
+      monday.trim() === "" ||
+      tuesday.trim() === "" ||
+      wednesday.trim() === "" ||
+      thursday.trim() === "" ||
+      friday.trim() === "" ||
+      saturday.trim() === "" ||
+      sunday.trim() === ""
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Enter time of booking from monday to sunday.",
+      });
+    } else if (whatsapp.trim().length > 0 && !validatePhone(whatsapp, 11)) {
+      Toast.show({
+        type: "error",
+        text1: "Whatsapp number must be 11 digits.",
+      });
+    } else if (facebook.trim().length > 0 && !validateUrl(facebook.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid facebook Link.",
+      });
+    } else if (instagram.trim().length > 0 && !validateUrl(instagram.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid instagram Link.",
+      });
+    } else if (twitter.trim().length > 0 && !validateUrl(twitter.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid twitter Link.",
+      });
+    } else if (linkedIn.trim().length > 0 && !validateUrl(linkedIn.trim())) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid linkedin Link.",
+      });
+    } else if (!logo) {
+      Toast.show({
+        type: "error",
+        text1: "Upload Business Logo.",
+      });
+    } else if (
+      selectedImages.length < 2 &&
+      selectedImages.length > profile?.package?.purchase_details?.total_photos
+    ) {
+      Toast.show({
+        type: "error",
+        text1: `Upload at least 2 photo but not more than your package limit of ${profile?.package?.purchase_details?.total_photos}.`,
+      });
+    } else if (
+      selectedVideos.length > profile?.package?.purchase_details?.total_videos
+    ) {
+      Toast.show({
+        type: "error",
+        text1: `Videos cannot be more that your package limit of ${profile?.package?.purchase_details?.total_videos}.`,
+      });
+    } else {
+      dispatch(SET_LOADER(true));
+      addListing(
+        {
+          listing_name: business,
+          listing_address: location,
+          listing_category_id: category?.id,
+          amenity: amenities.map((item) => item.id.toString()),
+          listing_description: description,
+          listing_phone: phone,
+          photo_list: selectedImages.map((item) => ({
+            name: item?.fileName,
+            uri: item?.uri,
+            type: "image/png",
+          })),
+          video: selectedVideos.map((item) => ({
+            name: item?.fileName,
+            uri: item?.uri,
+            type: "video/mp4",
+          })),
+          listing_featured_photo: {
+            name: logo?.fileName,
+            uri: logo?.uri,
+            type: "image/png",
+          },
+          address_latitude: latitude,
+          address_longitude: longitude,
+          is_featured: true,
+          listing_email: email,
+          listing_oh_friday: friday.trim(),
+          listing_oh_monday: monday.trim(),
+          listing_oh_saturday: saturday.trim(),
+          listing_oh_sunday: sunday.trim(),
+          listing_oh_thursday: thursday.trim(),
+          listing_oh_tuesday: tuesday.trim(),
+          listing_oh_wednesday: wednesday.trim(),
+          listing_status: "Active",
+          listing_website: website.trim(),
+          social_media: [
+            facebook.trim().length > 0 && { icon: "Facebook", url: facebook },
+            instagram.trim().length > 0 && {
+              icon: "Instagram",
+              url: instagram,
+            },
+            twitter.trim().length > 0 && { icon: "Twitter", url: twitter },
+            linkedIn.trim().length > 0 && { icon: "LinkedIn", url: linkedIn },
+            whatsapp.trim().length > 0 && {
+              icon: "Whatsapp",
+              url: `https://wa.me/${whatsapp.trim()}`,
+            },
+          ],
+        },
+        (response) => {
+          Toast.show({
+            type: "success",
+            text1: response?.message,
+          });
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+          dispatch(SET_LOADER(false));
+        }
+      );
+    }
+  };
   return (
     <>
       <KeyboardAvoidingView
@@ -152,9 +436,9 @@ const Post = ({
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField
-              onTextChange={(value) => setCategory(value)}
+              onTextChange={(value) => {}}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
-              defaultValue={category}
+              defaultValue={category?.listing_category_name || ""}
               placeholder="Select your business category"
               type={"default"}
               autoCapitalize={"none"}
@@ -293,8 +577,10 @@ const Post = ({
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField
-              onTextChange={(value) => setAmenities(value)}
-              defaultValue={amenities}
+              onTextChange={(value) => {}}
+              defaultValue={amenities
+                .map((item) => item.amenity_name)
+                .join(", ")}
               placeholder="Select amenities for your business"
               type={"default"}
               containerStyle={{ width: "100%" }}
@@ -308,6 +594,131 @@ const Post = ({
               onSuffixTap={() => amenitiesRef.current?.open()}
             />
             <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
+              Monday
+            </SmallText>
+            <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setMonday(value)}
+              defaultValue={monday}
+              placeholder="6AM - 8PM"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
+              Tuesday
+            </SmallText>
+            <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setTuesday(value)}
+              defaultValue={tuesday}
+              placeholder="6AM - 8PM"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
+              Wednesday
+            </SmallText>
+            <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setWednesday(value)}
+              defaultValue={wednesday}
+              placeholder="6AM - 8PM"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
+              Thursday
+            </SmallText>
+            <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setThursday(value)}
+              defaultValue={thursday}
+              placeholder="6AM - 8PM"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
+              Friday
+            </SmallText>
+            <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setFriday(value)}
+              defaultValue={friday}
+              placeholder="6AM - 8PM"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
+              Saturday
+            </SmallText>
+            <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setSaturday(value)}
+              defaultValue={saturday}
+              placeholder="6AM - 8PM"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
+            <Spacer axis="vertical" value={H(2)} />
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+              className="text-[#D4E1D2] text-left p-0"
+            >
+              Sunday
+            </SmallText>
+            <Spacer axis="vertical" value={H(1)} />
+            <InputField
+              onTextChange={(value) => setSunday(value)}
+              defaultValue={sunday}
+              placeholder="6AM - 8PM"
+              type={"default"}
+              style={{ backgroundColor: darkMode ? "transparent" : "white" }}
+              autoCapitalize={"none"}
+              containerStyle={{ width: "100%" }}
+              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            />
             <Spacer axis="vertical" value={H(2)} />
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
@@ -330,7 +741,7 @@ const Post = ({
             <InputField
               onTextChange={(value) => setFacebook(value)}
               defaultValue={facebook}
-              placeholder="Facebook Handle"
+              placeholder="Facebook Link"
               type={"default"}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
@@ -341,7 +752,7 @@ const Post = ({
             <InputField
               onTextChange={(value) => setInstagram(value)}
               defaultValue={instagram}
-              placeholder="Instagram Handle"
+              placeholder="Instagram Link"
               type={"default"}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
@@ -352,7 +763,7 @@ const Post = ({
             <InputField
               onTextChange={(value) => setTwitter(value)}
               defaultValue={twitter}
-              placeholder="Twitter Handle"
+              placeholder="Twitter Link"
               type={"default"}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
@@ -363,7 +774,7 @@ const Post = ({
             <InputField
               onTextChange={(value) => setLinkedIn(value)}
               defaultValue={linkedIn}
-              placeholder="LinkedIn Handle"
+              placeholder="LinkedIn Link"
               type={"default"}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
@@ -382,7 +793,7 @@ const Post = ({
                 {logo ? (
                   <View className="w-[45%] h-[60px] mb-3 relative">
                     <Image
-                      source={{ uri: logo }}
+                      source={{ uri: logo.uri }}
                       className="w-full h-full object-cover"
                     />
                     <Ionicons
@@ -430,7 +841,7 @@ const Post = ({
                     className="w-[45%] h-[60px] mb-3 relative"
                   >
                     <Image
-                      source={{ uri: item }}
+                      source={{ uri: item.uri }}
                       className="w-full h-full object-cover"
                     />
                     <Ionicons
@@ -473,7 +884,7 @@ const Post = ({
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
                 >
-                  Add Video (Optional)
+                  Add at least 1 video
                 </SmallText>
                 {selectedVideos.map((item, idx) => (
                   <View
@@ -481,7 +892,7 @@ const Post = ({
                     className="w-[45%] h-[60px] mb-3 relative"
                   >
                     <Video
-                      source={{ uri: item }}
+                      source={{ uri: item.uri }}
                       isMuted={true}
                       resizeMode={ResizeMode.COVER}
                       shouldPlay={true}
@@ -525,7 +936,11 @@ const Post = ({
               </View>
             </View>
             <Spacer axis="vertical" value={H(3)} />
-            <Button text="Post Ad" buttonStyle={{ width: "100%" }} />
+            <Button
+              text="Post Ad"
+              buttonStyle={{ width: "100%" }}
+              onPress={validate}
+            />
             <Spacer axis="vertical" value={H(5)} />
           </ScrollView>
         </SafeAreaView>
@@ -540,7 +955,7 @@ const Post = ({
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
-            data={CATEGORIES}
+            data={allCategory}
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
@@ -549,7 +964,7 @@ const Post = ({
               <Pressable
                 className="w-[100%] h-auto flex-row items-center"
                 onPress={() => {
-                  setCategory(item.title);
+                  setCategory(item);
                   categoryRef.current?.close();
                 }}
               >
@@ -557,7 +972,7 @@ const Post = ({
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="text-left text-[#D4E1D2] p-0 font-ManropeSemiBold text-[15px]"
                 >
-                  {item.title}
+                  {item.listing_category_name}
                 </SmallText>
               </Pressable>
             )}
@@ -575,8 +990,8 @@ const Post = ({
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
-            data={["Home Delivery", "Nationwide Delivery"]}
-            keyExtractor={(item) => item}
+            data={allAmenities}
+            keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
             )}
@@ -584,15 +999,34 @@ const Post = ({
               <Pressable
                 className="w-[100%] h-auto flex-row items-center"
                 onPress={() => {
-                  setAmenities(item);
-                  amenitiesRef.current?.close();
+                  const isItemInArray = amenities.some(
+                    (obj) => obj.id === item.id
+                  );
+
+                  if (isItemInArray) {
+                    setAmenities((prev: any) =>
+                      prev.filter((obj: any) => item.id !== obj.id)
+                    );
+                  } else {
+                    setAmenities((prev: any) => [...prev, item]);
+                  }
                 }}
               >
+                {amenities.some(
+                  (data) => data?.amenity_name === item?.amenity_name
+                ) && (
+                  <Entypo
+                    name="check"
+                    size={19}
+                    color={COLORS.primary}
+                    className="mr-2"
+                  />
+                )}
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="text-left text-[#D4E1D2] p-0 font-ManropeSemiBold text-[15px]"
                 >
-                  {item}
+                  {item?.amenity_name}
                 </SmallText>
               </Pressable>
             )}
@@ -608,10 +1042,19 @@ const Post = ({
           className="flex-1 bg-[#1b1b1b] py-3 px-3"
         >
           <GooglePlacesAutocomplete
-            placeholder="Search City"
+            placeholder="Search location"
             enableHighAccuracyLocation
             debounce={400}
-            onPress={(data, details = null) => {}}
+            onPress={(data, details = null) => {
+              setLocation(details?.formatted_address || "");
+              setLatitude(
+                details ? details.geometry.location.lat.toString() : null
+              );
+              setLongitude(
+                details ? details.geometry.location.lng.toString() : null
+              );
+              locationRef.current?.close();
+            }}
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
@@ -620,7 +1063,13 @@ const Post = ({
             enablePoweredByContainer={true}
             minLength={2}
             renderRow={(rowData) => (
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  backgroundColor: "transparent",
+                }}
+              >
                 <Ionicons
                   name="ios-location-sharp"
                   size={24}
@@ -645,7 +1094,7 @@ const Post = ({
                 fontSize: 15,
                 borderWidth: 1,
                 borderColor: COLORS.primary,
-                height: "50px",
+                height: 50,
               },
             }}
           />

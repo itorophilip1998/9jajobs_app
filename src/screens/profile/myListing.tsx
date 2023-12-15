@@ -20,8 +20,6 @@ import {
 } from "react-native-responsive-screen";
 import { width, height } from "../../utility/constant";
 import { Feather, AntDesign } from "@expo/vector-icons";
-import search from "../modals/search";
-import { MAIN_USERS } from "../../data/listing";
 import { COLORS } from "../../utility/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -32,6 +30,9 @@ import { getUserListing } from "../../api/category";
 import Toast from "react-native-toast-message";
 import { useIsFocused } from "@react-navigation/native";
 import userImg from "../../../assets/images/user.jpg";
+import { getRating } from "../../api/rating";
+import ReviewCard from "../../components/reviewCard";
+import { deleteListing } from "../../api/listings";
 
 const MyListing = ({
   navigation,
@@ -44,6 +45,25 @@ const MyListing = ({
   const [listings, setListings] = React.useState<any[]>([]);
   const [details, setDetails] = React.useState<any>(null);
   const [search, setSearch] = React.useState<string>("");
+
+  const [rating, setRating] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    if (focus && details?.id) {
+      dispatch(SET_LOADER(true));
+      getRating(
+        details?.id,
+        (response) => {
+          setRating(response);
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({ type: "error", text1: error });
+        }
+      );
+    }
+  }, [details?.id, focus]);
 
   const handleSearch = () => {
     dispatch(SET_LOADER(true));
@@ -68,6 +88,7 @@ const MyListing = ({
   React.useEffect(() => {
     if (focus) handleSearch();
   }, [focus]);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -105,7 +126,7 @@ const MyListing = ({
                 //   onFocus && onFocus();
                 // }}
                 // onBlur={() => {
-                //   onBlur && onBlur();
+                //   handleSearch();
                 // }}
                 placeholderTextColor={"#626262"}
                 placeholder={"Search here"}
@@ -114,15 +135,6 @@ const MyListing = ({
               />
             </Pressable>
           </View>
-          {/* {darkMode ? (
-            <TouchableOpacity className="bg-black py-2 px-4 w-auto justify-center items-center rounded-full">
-              <SmallText className="text-white p-0 text-[15px] pl-1">
-                Sort by
-              </SmallText>
-            </TouchableOpacity>
-          ) : (
-            <Button text="Sort by" buttonStyle={{ width: 80, height: 40 }} />
-          )} */}
         </View>
 
         <FlatList
@@ -148,7 +160,9 @@ const MyListing = ({
           }
           className=" flex-1"
           showsVerticalScrollIndicator={false}
-          data={listings}
+          data={listings.filter((item) =>
+            item.listing_name.toLowerCase().includes(search.toLowerCase())
+          )}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
             <View
@@ -203,6 +217,29 @@ const MyListing = ({
                     },
                   ]}
                   className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
+                  onPress={() => {
+                    dispatch(SET_LOADER(true));
+                    deleteListing(
+                      { id: item.id },
+                      (response) => {
+                        setListings(
+                          listings.filter((data) => data.id !== item.id)
+                        );
+                        dispatch(SET_LOADER(false));
+                        Toast.show({
+                          type: "success",
+                          text1: response.message,
+                        });
+                      },
+                      (error) => {
+                        Toast.show({
+                          type: "error",
+                          text1: error,
+                        });
+                        dispatch(SET_LOADER(false));
+                      }
+                    );
+                  }}
                 >
                   <AntDesign name="delete" size={15} color={COLORS.primary} />
                   <SmallText className="text-primary p-0 text-[13px] pl-1">
@@ -213,58 +250,68 @@ const MyListing = ({
             </Pressable>
           )}
           ListFooterComponent={
-            details && (
+            <>
+              {details && (
+                <View className="px-3">
+                  <Spacer value={H("6%")} axis="vertical" />
+                  <SmallText
+                    style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                    className="text-[#D4E1D2] text-[20px] text-left p-0"
+                  >
+                    Details
+                  </SmallText>
+                  <Spacer value={H("4%")} axis="vertical" />
+                  <View className="flex-row justify-between items-center mb-3">
+                    <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
+                      Category
+                    </SmallText>
+                    <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
+                      {details?.r_listing_category?.listing_category_name}
+                    </SmallText>
+                  </View>
+                  <View className="flex-row justify-between items-center mb-3">
+                    <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
+                      Location
+                    </SmallText>
+                    <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
+                      {details?.listing_address}
+                    </SmallText>
+                  </View>
+                  <View className="flex-row justify-between items-center mb-3">
+                    <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
+                      Status
+                    </SmallText>
+                    <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
+                      {details?.listing_status}
+                    </SmallText>
+                  </View>
+                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[100%] mb-3">
+                    Brand Logo
+                  </SmallText>
+                  <Image
+                    source={
+                      details?.listing_featured_photo &&
+                      details?.listing_featured_photo.length > 0
+                        ? {
+                            uri: details?.listing_featured_photo,
+                          }
+                        : userImg
+                    }
+                    alt="logo"
+                    className="w-[150px] h-[130px] rounded-xl "
+                  />
+                  <Spacer value={H("3%")} axis="vertical" />
+                </View>
+              )}
               <View className="px-3">
-                <Spacer value={H("6%")} axis="vertical" />
-                <SmallText
-                  style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
-                  className="text-[#D4E1D2] text-[20px] text-left p-0"
-                >
-                  Details
-                </SmallText>
-                <Spacer value={H("4%")} axis="vertical" />
-                <View className="flex-row justify-between items-center mb-3">
-                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
-                    Category
-                  </SmallText>
-                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
-                    {details?.r_listing_category?.listing_category_name}
-                  </SmallText>
-                </View>
-                <View className="flex-row justify-between items-center mb-3">
-                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
-                    Location
-                  </SmallText>
-                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
-                    {details?.listing_address}
-                  </SmallText>
-                </View>
-                <View className="flex-row justify-between items-center mb-3">
-                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[30%]">
-                    Status
-                  </SmallText>
-                  <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[60%]">
-                    {details?.listing_status}
-                  </SmallText>
-                </View>
-                <SmallText className="text-[#696969] text-[16px] text-left p-0 w-[100%] mb-3">
-                  Brand Logo
-                </SmallText>
-                <Image
-                  source={
-                    details?.listing_featured_photo &&
-                    details?.listing_featured_photo.length > 0
-                      ? {
-                          uri: details?.listing_featured_photo,
-                        }
-                      : userImg
-                  }
-                  alt="logo"
-                  className="w-[150px] h-[130px] rounded-xl "
-                />
-                <Spacer value={H("4%")} axis="vertical" />
+                {rating.map((item: any, idx: number) => (
+                  <>
+                    <ReviewCard item={item} key={idx} />
+                    <Spacer key={idx + 1} value={H("3%")} axis="vertical" />
+                  </>
+                ))}
               </View>
-            )
+            </>
           }
         />
       </SafeAreaView>

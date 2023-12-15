@@ -40,16 +40,15 @@ const routes = [
   { path: "Bookings", name: "Bookings", icon: BookingIcon },
   { path: "Referrals", name: "Referrals", icon: ReferralIcon },
   { path: "Packages", name: "Packages", icon: PackageIcon },
-  // { path: "MyReviews", name: "My Reviews", icon: ReviewIcon },
   { path: "Verification", name: "Verification", icon: VerifyIcon },
   { path: "MyListing", name: "My Listing", icon: ListingIcon },
   { path: "BoostPost", name: "Boost Post", icon: BoostIcon },
   {
-    path: "https://9jajob.com/privacy-policy",
+    path: "Privacy",
     name: "Privacy Policy",
     icon: PrivacyIcon,
   },
-  { path: "https://9jajob.com/contact", name: "Feedback", icon: FeedBackIcon },
+  { path: "https://9jajob.com/contact", name: "Contact Us", icon: FeedBackIcon },
   { path: "https://9jajob.com/faq", name: "FAQ", icon: FaqIcon },
   { path: "https://9jajob.com/about", name: "About", icon: AboutIcon },
 ];

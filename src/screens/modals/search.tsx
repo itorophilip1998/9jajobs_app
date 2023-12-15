@@ -53,8 +53,6 @@ const Search = ({
     getAllListing(
       {
         listing_name: search,
-        // address_latitude: latitude,
-        // address_longitude: longtitude,
         listing_city: location,
       },
       (response) => {
@@ -75,7 +73,7 @@ const Search = ({
     if (focus) {
       handleSearch();
     }
-  }, [focus]);
+  }, [focus, location]);
 
   return (
     <KeyboardAvoidingView
@@ -132,7 +130,12 @@ const Search = ({
             >
               {location === "" ? "Location" : location}
             </SmallText>
-            <AntDesign name="downcircleo" size={13} color={COLORS.primary} />
+            <AntDesign
+              name={location === "" ? "downcircleo" : "closecircleo"}
+              size={13}
+              color={COLORS.primary}
+              onPress={() => location !== "" && dispatch(SET_LOCATION(""))}
+            />
           </Pressable>
           {/* <SliderIcon onPress={() => navigation.navigate("Filter")} /> */}
           <AntDesign
@@ -184,9 +187,7 @@ const Search = ({
               const country = details?.address_components.find(
                 (item) => item.types[0] === "country"
               );
-              dispatch(
-                SET_LOCATION(`${city?.long_name}, ${country?.long_name}`)
-              );
+              dispatch(SET_LOCATION(`${city?.long_name}`));
               setLatitude(
                 details ? details.geometry.location.lat.toString() : null
               );
@@ -194,7 +195,26 @@ const Search = ({
                 details ? details.geometry.location.lng.toString() : null
               );
               ref.current?.close();
-              DelayFor(200, () => handleSearch());
+              DelayFor(200, () => {
+                dispatch(SET_LOADER(true));
+                getAllListing(
+                  {
+                    listing_name: search,
+                    listing_city: `${city?.long_name}`,
+                  },
+                  (response) => {
+                    dispatch(SET_LOADER(false));
+                    setSearchResults(response.listing);
+                  },
+                  (error) => {
+                    dispatch(SET_LOADER(false));
+                    Toast.show({
+                      type: "error",
+                      text1: error,
+                    });
+                  }
+                );
+              });
             }}
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",

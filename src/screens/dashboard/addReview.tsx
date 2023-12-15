@@ -122,10 +122,10 @@ const AddReview = ({
               onTextChange={(value) => setReview(value)}
               type={"default"}
               autoCapitalize={"sentences"}
-              className="border border-[#696969] h-100"
-              containerStyle={{ width: "100%", height: 100 }}
               multiline={true}
               numberOfLines={7}
+              className="border border-[#696969] h-[150px] w-full"
+              containerStyle={{ width: "100%", height: 150, borderRadius: 8 }}
               placeholder="Enter your review"
             />
           ) : (
@@ -142,9 +142,11 @@ const AddReview = ({
                 autoCapitalize={"sentences"}
                 containerStyle={{
                   width: "100%",
+                  height: 150,
                   backgroundColor: "white",
                   borderRadius: 8,
                 }}
+                className="h-[150px] w-full"
                 multiline={true}
                 numberOfLines={7}
                 placeholder="Enter your review"

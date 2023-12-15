@@ -81,6 +81,7 @@ export const initiateWalletTransaction = async (
     url: `${BASE_URL}/transaction/initiate`,
     headers: {
       Authorization: `Bearer ${store.getState().auth.access_token}`,
+      "Content-Type": "multipart/form-data",
     },
     data,
   };
@@ -157,12 +158,12 @@ export const getAccountName = async (
     execute(response.data);
   } catch (err: any) {
     console.log("verify-account", err?.response?.data?.message);
-    if (typeof err?.response?.data.message === "string") {
-      error(err?.response?.data);
-    } else if (!err?.response?.data.message) {
+    if (typeof err?.response?.data?.message === "string") {
+      error(err?.response?.data?.message);
+    } else if (!err?.response?.data?.message) {
       error("Something went wrong. Try again.");
-    } else if (typeof err?.response?.data.message === "object") {
-      error(Object.values(err?.response?.data.message).flat().join("\n"));
+    } else if (typeof err?.response?.data?.message === "object") {
+      error(Object.values(err?.response?.data?.message).flat().join("\n"));
     }
   }
 };

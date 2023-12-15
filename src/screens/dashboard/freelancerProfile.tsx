@@ -29,6 +29,7 @@ import {
 import {
   AntDesign,
   Ionicons,
+  MaterialCommunityIcons,
   MaterialIcons,
   Octicons,
 } from "@expo/vector-icons";
@@ -37,6 +38,7 @@ import {
   DelayFor,
   FirstLetterUppercase,
   isValidDate,
+  validatePhone,
 } from "../../utility/helpers";
 import Checkbox from "expo-checkbox";
 import VideoCard from "../../components/videoCard";
@@ -141,13 +143,14 @@ const FreelancerProfile = ({
                     )}
                   </GradientText>
                 )}
-                {route.params?.data.is_featured === "Yes" && (
-                  <MaterialIcons
-                    name="verified"
-                    size={18}
-                    color={COLORS.primary}
-                  />
-                )}
+                {route.params?.data.verified &&
+                  route.params?.data.verified?.status === "completed" && (
+                    <MaterialIcons
+                      name="verified"
+                      size={18}
+                      color={COLORS.primary}
+                    />
+                  )}
               </View>
               <Spacer value={H("0.5%")} axis="vertical" />
               <View className="flex-row justify-between items-center mb-1 w-full">
@@ -185,11 +188,18 @@ const FreelancerProfile = ({
                 </View>
               </View> */}
             </View>
-            <View className="flex-row items-center justify-between w-[45%]">
+            <View className="flex-row items-center justify-end w-[45%]">
               <TouchableOpacity
                 className="items-center"
                 onPress={() =>
-                  navigation.navigate("Chat", { data: route.params?.data })
+                  route.params?.data?.user
+                    ? navigation.navigate("Chat", {
+                        data: route.params?.data?.user,
+                      })
+                    : Toast.show({
+                        type: "error",
+                        text1: "This listing does not have a user.",
+                      })
                 }
               >
                 <View
@@ -210,13 +220,30 @@ const FreelancerProfile = ({
                   Chat
                 </SmallText>
               </TouchableOpacity>
+
               <TouchableOpacity
                 onPress={() =>
-                  Linking.openURL(
-                    `tel:${route.params?.data?.listing_phone || ""}`
-                  )
+                  !route.params?.data?.listing_phone &&
+                  !route.params?.data?.user?.phone
+                    ? Toast.show({
+                        type: "error",
+                        text1: "This listing does not have a phone number.",
+                      })
+                    : !validatePhone(route.params?.data?.listing_phone, 11) ||
+                      !validatePhone(route.params?.data?.user?.phone, 11)
+                    ? Toast.show({
+                        type: "error",
+                        text1: "Invalid phone number.",
+                      })
+                    : Linking.openURL(
+                        `tel:${
+                          route.params?.data?.listing_phone ||
+                          route.params?.data?.user?.phone ||
+                          ""
+                        }`
+                      )
                 }
-                className="items-center"
+                className="items-center mx-4"
               >
                 <View
                   style={
@@ -235,7 +262,9 @@ const FreelancerProfile = ({
 
               <TouchableOpacity
                 className="items-center"
-                onPress={() => navigation.navigate("Report")}
+                onPress={() =>
+                  navigation.navigate("Report", { data: route.params?.data })
+                }
               >
                 <View
                   style={
@@ -390,6 +419,143 @@ const FreelancerProfile = ({
           ))}
           <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center">
+            <MaterialCommunityIcons
+              name="calendar-today"
+              size={30}
+              color={COLORS.primary}
+            />
+            {darkMode ? (
+              <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
+                Opening Days
+              </SmallText>
+            ) : (
+              <GradientText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
+                Opening Hours
+              </GradientText>
+            )}
+          </View>
+          <Spacer value={H("2%")} axis="vertical" />
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Monday
+            </SmallText>
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
+              {route.params?.data?.listing_oh_monday || "N/A"}
+            </SmallText>
+          </View>
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Tuesday
+            </SmallText>
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
+              {route.params?.data.listing_oh_tuesday || "N/A"}
+            </SmallText>
+          </View>
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Wednesday
+            </SmallText>
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
+              {route.params?.data.listing_oh_wednesday || "N/A"}
+            </SmallText>
+          </View>
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Thursday
+            </SmallText>
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
+              {route.params?.data.listing_oh_thursday || "N/A"}
+            </SmallText>
+          </View>
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Friday
+            </SmallText>
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
+              {route.params?.data.listing_oh_friday || "N/A"}
+            </SmallText>
+          </View>
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Saturday
+            </SmallText>
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
+              {route.params?.data.listing_oh_saturday || "N/A"}
+            </SmallText>
+          </View>
+          <View
+            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+            className="py-3 flex-row justify-between items-center border-t border-t-[#0F0F0F]"
+          >
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-[#696969] text-left p-0 text-[15px]"
+            >
+              Sunday
+            </SmallText>
+            <SmallText
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+            >
+              {route.params?.data.listing_oh_sunday || "N/A"}
+            </SmallText>
+          </View>
+          <Spacer value={H("3%")} axis="vertical" />
+          <View className="flex-row items-center">
             <AntDesign name="idcard" size={30} color={COLORS.primary} />
             {darkMode ? (
               <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
@@ -498,6 +664,7 @@ const FreelancerProfile = ({
                 {route.params?.data?.listing_social_item.map(
                   (item: any, idx: number) => (
                     <Pressable
+                      key={idx}
                       onPress={() => Linking.openURL(item.social_url)}
                       className="ml-1"
                     >

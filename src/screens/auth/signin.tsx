@@ -144,7 +144,7 @@ const Signin = ({
             email,
             password,
             phone: phoneNumber,
-            referral_code: referralCode.length > 0 && referralCode,
+            ref_code: referralCode,
             re_password: confirmPassword,
           },
           (response) => {
@@ -360,9 +360,7 @@ const Signin = ({
               <PrimaryText
                 className="!text-[#626262]"
                 onPress={function (): void {
-                  Linking.openURL(
-                    "https://9jajob.com/customer/forget-password"
-                  );
+                  navigation.navigate("Forgot")
                 }}
               >
                 Forgot Password?

@@ -26,6 +26,7 @@ const Message = ({
 }) => {
   const [type, setType] = React.useState<"message" | "notification">("message");
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { notification } = useSelector((state: RootState) => state.formData);
   //   const sortRef = React.useState<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
@@ -63,12 +64,14 @@ const Message = ({
                 }}
                 onPress={() => setType("message")}
               >
-                <View className="relative">
-                  <View className="w-[15px] h-[15px] justify-center items-center bg-red-500 rounded-full absolute right-[5%] z-10 bottom-[50%]">
-                    <SmallText className="!text-[12px] p-0 !text-white font-RedHatDisplaySemiBold">
-                      2
-                    </SmallText>
-                  </View>
+                <View className="w-full">
+                  {notification.messages > 0 && (
+                    <View className="w-[15px] h-[15px] justify-center items-center bg-red-500 rounded-full absolute right-[5%] z-10 bottom-[50%]">
+                      <SmallText className="!text-[12px] p-0 !text-white font-RedHatDisplaySemiBold">
+                        {notification.messages}
+                      </SmallText>
+                    </View>
+                  )}
                   {darkMode ? (
                     <SmallText
                       className="!text-[16px] !text-white font-RedHatDisplaySemiBold"
@@ -117,12 +120,14 @@ const Message = ({
                 }}
                 onPress={() => setType("notification")}
               >
-                <View className="relative">
-                  <View className="w-[15px] h-[15px] justify-center items-center bg-red-500 rounded-full absolute right-[5%] z-10 bottom-[50%]">
-                    <SmallText className="!text-[12px] p-0 !text-white font-RedHatDisplaySemiBold">
-                      2
-                    </SmallText>
-                  </View>
+                <View className="w-full">
+                  {notification.notifications > 0 && (
+                    <View className="w-[15px] h-[15px] justify-center items-center bg-red-500 rounded-full absolute right-[5%] z-10 bottom-[50%]">
+                      <SmallText className="!text-[12px] p-0 !text-white font-RedHatDisplaySemiBold">
+                        {notification.notifications}
+                      </SmallText>
+                    </View>
+                  )}
                   {darkMode ? (
                     <SmallText
                       className="!text-[16px] !text-white font-RedHatDisplaySemiBold"

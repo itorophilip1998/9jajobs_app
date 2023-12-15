@@ -22,16 +22,43 @@ import { Ionicons } from "@expo/vector-icons";
 import { REFERRAL_HISTORY } from "../../data/transactions";
 import { FirstLetterUppercase } from "../../utility/helpers";
 import * as Clipboard from "expo-clipboard";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import Toast from "react-native-toast-message";
+import moment from "moment";
+import { useIsFocused } from "@react-navigation/native";
+import { getReferral } from "../../api/referral";
+import { SET_LOADER } from "../../store/formDataSlice";
 
 const Referrals = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const focus = useIsFocused();
+  const dispatch = useDispatch();
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const [referral, setReferral] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    if (focus) {
+      dispatch(SET_LOADER(true));
+      getReferral(
+        (response) => {
+          dispatch(SET_LOADER(false));
+          setReferral(response?.referral);
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+  }, [focus]);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -65,7 +92,7 @@ const Referrals = ({
             <View className="w-auto flex-row justify-between items-center mb-2">
               <View>
                 <SmallText className="text-primary text-center text-[20px] p-0 mb-1">
-                  ₦150
+                  ₦{referral?.total_earn?.toLocaleString()}
                 </SmallText>
                 <SmallText className="text-[#696969] text-center text-[15px] p-0">
                   Total Earned
@@ -73,7 +100,7 @@ const Referrals = ({
               </View>
               <View className="mx-5">
                 <SmallText className="text-primary text-center text-[20px] p-0 mb-1">
-                  5
+                  {referral?.completed?.toLocaleString()}
                 </SmallText>
                 <SmallText className="text-[#696969] text-center text-[15px] p-0">
                   Completed
@@ -81,7 +108,7 @@ const Referrals = ({
               </View>
               <View>
                 <SmallText className="text-primary text-center text-[20px] p-0 mb-1">
-                  12
+                  {referral?.pending?.toLocaleString()}
                 </SmallText>
                 <SmallText className="text-[#696969] text-center text-[15px] p-0">
                   Pending
@@ -95,7 +122,7 @@ const Referrals = ({
                   style={{ color: darkMode ? "#FFFFFF" : COLORS.primary }}
                   className="text-[#FFFFFF] text-center text-[18px] p-0"
                 >
-                  93jskkl43
+                  {referral?.code}
                 </SmallText>
               </SmallText>
               <Ionicons
@@ -103,12 +130,14 @@ const Referrals = ({
                 size={24}
                 color={COLORS.primary}
                 onPress={async () => {
-                  const set = await Clipboard.setStringAsync("93jskkl43");
-                  if (set) {
-                    Toast.show({
-                      type: "success",
-                      text1: "Copied to Clipboard",
-                    });
+                  if (referral?.code) {
+                    const set = await Clipboard.setStringAsync(referral?.code);
+                    if (set) {
+                      Toast.show({
+                        type: "success",
+                        text1: "Copied to Clipboard",
+                      });
+                    }
                   }
                 }}
               />
@@ -133,13 +162,13 @@ const Referrals = ({
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
                   className="text-[#696969] font-RedHatDisplayBold text-left p-0 text-[20px]"
                 >
-                  20
+                  {referral?.referrals_list?.length}
                 </SmallText>
               </View>
             }
             className="px-3 mt-3"
             showsVerticalScrollIndicator={false}
-            data={REFERRAL_HISTORY}
+            data={referral?.referrals_list}
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
@@ -151,21 +180,21 @@ const Referrals = ({
                     style={{ color: darkMode ? "#BDB7C5" : "#0f0f0f" }}
                     className="text-[#BDB7C5] text-left p-0 text-[18px]"
                   >
-                    {item.name}
+                    {item?.user?.name}
                   </SmallText>
                   <SmallText
                     style={{ color: darkMode ? "#BDB7C5" : "#0f0f0f" }}
                     className="text-[#BDB7C5] text-right p-0 text-[18px]"
                   >
-                    ₦{item.amount.toLocaleString()}
+                    ₦{item.amount_earn.toLocaleString()}
                   </SmallText>
                 </View>
                 <View className="flex-row justify-between items-center w-full">
                   <SmallText className="text-primary text-left p-0 text-[15px]">
-                    {item.status}
+                    {item.user.ref_code}
                   </SmallText>
                   <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px]">
-                    {item.date}
+                    {moment(item.created_at).format("DD/MM/YYYY")}
                   </SmallText>
                 </View>
               </Pressable>

@@ -2,9 +2,10 @@
   "expo": {
     "name": "9jajob",
     "slug": "9jajob",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "owner": "9jajob",
+    "privacy": "unlisted",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": [
@@ -20,7 +21,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
-      "buildNumber": "1.0.0",
+      "buildNumber": "0.1.0",
       "usesIcloudStorage": true,
       "config": {
         "googleMapsApiKey": "AIzaSyDADxCsbzRzu3czMCsOURExEQrZSewTaEM"

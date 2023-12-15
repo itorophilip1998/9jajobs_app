@@ -42,6 +42,17 @@ import { SET_LOADER } from "../../store/formDataSlice";
 import { getUserListing } from "../../api/category";
 import Toast from "react-native-toast-message";
 import UserProfileCard from "../../components/userProfileCard";
+import { verifyListing } from "../../api/verification";
+
+const allServices = [
+  "Sole",
+  "Private",
+  "Public",
+  "Limited",
+  "Unlimited",
+  "Guaranteed",
+  "Remote",
+];
 
 const Verification = ({
   navigation,
@@ -52,12 +63,13 @@ const Verification = ({
   const dispatch = useDispatch();
   const [listing, setListing] = React.useState<any[]>([]);
 
-  const [id, setId] = React.useState<number>();
+  const [detail, setDetail] = React.useState<any>(null);
   const [regNo, setRegNo] = React.useState<string>("");
-  const [idFront, setIdFront] = React.useState<string | null>(null);
-  const [skill, setSkill] = React.useState<string | null>(null);
-  const [idBack, setIdBack] = React.useState<string | null>(null);
-  const [cac, setCac] = React.useState<string | null>(null);
+  const [idFront, setIdFront] = React.useState<any>(null);
+  const [skill, setSkill] = React.useState<any>(null);
+  const [idBack, setIdBack] = React.useState<any>(null);
+  const [cac, setCac] = React.useState<any>(null);
+  const [utility, setUtility] = React.useState<any>(null);
   const [services, setServices] = React.useState<string[]>([]);
   const [isChecked, setChecked] = React.useState<boolean>(false);
   const { darkMode } = useSelector((state: RootState) => state.auth);
@@ -70,14 +82,16 @@ const Verification = ({
       });
 
       if (!result.canceled) {
-        setCac(result.assets[0].uri);
+        setCac(result.assets[0]);
       }
     } catch (error) {
       console.error("Error picking file:", error);
     }
   };
 
-  const pickImages = async (type: "idFront" | "idBack" | "skill") => {
+  const pickImages = async (
+    type: "idFront" | "idBack" | "skill" | "utility"
+  ) => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 4],
@@ -86,11 +100,13 @@ const Verification = ({
 
     if (!result.canceled) {
       if (type === "idFront") {
-        setIdFront(result.assets[0].uri);
+        setIdFront(result.assets[0]);
       } else if (type === "idBack") {
-        setIdBack(result.assets[0].uri);
+        setIdBack(result.assets[0]);
       } else if (type === "skill") {
-        setSkill(result.assets[0].uri);
+        setSkill(result.assets[0]);
+      } else if (type === "utility") {
+        setUtility(result.assets[0]);
       }
     }
   };
@@ -117,6 +133,78 @@ const Verification = ({
     }
   }, [focus]);
 
+  const validate = () => {
+    if (!detail) {
+      Toast.show({
+        type: "error",
+        text1: "Select a Business to Verify",
+      });
+    } else if (regNo === "") {
+      Toast.show({
+        type: "error",
+        text1: "Enter Business Registration Number",
+      });
+    } else if (!idFront || !idBack) {
+      Toast.show({
+        type: "error",
+        text1: "Please ensure all documents are uploaded",
+      });
+    } else if (!isChecked) {
+      Toast.show({
+        type: "error",
+        text1: "Please agree to terms and conditions to proceed.",
+      });
+    } else {
+      dispatch(SET_LOADER(true));
+      verifyListing(
+        {
+          cac_document: {
+            name: cac.name,
+            uri: cac.uri,
+            type: cac.mimeType,
+          },
+          id_card_back: {
+            name: idBack.fileName,
+            uri: idBack.uri,
+            type: "image/png",
+          },
+          id_card_front: {
+            name: idFront.fileName,
+            uri: idFront.uri,
+            type: "image/png",
+          },
+          listing_id: detail?.id || "",
+          proof_address: {
+            name: idBack.fileName,
+            uri: utility.uri,
+            type: "image/png",
+          },
+          reg_number: regNo,
+          services,
+          skill_certificate: {
+            name: skill.fileName,
+            uri: skill.uri,
+            type: "image/png",
+          },
+        },
+        (response) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "success",
+            text1: response.message,
+          });
+        },
+        (error) => {
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+          dispatch(SET_LOADER(false));
+        }
+      );
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -142,7 +230,7 @@ const Verification = ({
           <InputField
             onTextChange={(value) => {}}
             defaultValue={
-              listing.find((item) => item.id === id)?.listing_name || ""
+              listing.find((item) => item.id === detail?.id)?.listing_name || ""
             }
             placeholder="Select Business"
             type={"default"}
@@ -161,11 +249,12 @@ const Verification = ({
             placeholder="Registration Number"
             type={"default"}
             autoCapitalize={"words"}
-            className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+            containerStyle={{ width: "100%" }}
+            className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3 w-full"
           />
           <Spacer value={H("2%")} axis="vertical" />
-          <View className="flex-row w-full justify-between items-start">
-            <View className="w-[23%] flex-row flex-wrap justify-between items-center">
+          <View className="flex-row w-full justify-start items-start flex-wrap">
+            <View className="w-[27%] mr-6 mb-3 flex-row flex-wrap justify-between items-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="w-full text-[#D4E1D2] text-left p-0 pb-3"
@@ -175,7 +264,7 @@ const Verification = ({
               {idFront ? (
                 <View className="w-[85%] h-[60px] mb-3 relative">
                   <Image
-                    source={{ uri: idFront }}
+                    source={{ uri: idFront.uri }}
                     className="w-full h-full object-cover"
                   />
                   <Ionicons
@@ -205,7 +294,7 @@ const Verification = ({
                 </Pressable>
               )}
             </View>
-            <View className="w-[23%] flex-row flex-wrap justify-between items-center">
+            <View className="w-[27%] mr-6 mb-3 flex-row flex-wrap justify-between items-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="w-full text-[#D4E1D2] text-left p-0 pb-3"
@@ -215,7 +304,7 @@ const Verification = ({
               {idBack ? (
                 <View className="w-[85%] h-[60px] mb-3 relative">
                   <Image
-                    source={{ uri: idBack }}
+                    source={{ uri: idBack.uri }}
                     className="w-full h-full object-cover"
                   />
                   <Ionicons
@@ -245,17 +334,17 @@ const Verification = ({
                 </Pressable>
               )}
             </View>
-            <View className="w-[23%] flex-row flex-wrap justify-between items-center">
+            <View className="w-[27%] mr-6 mb-3 flex-row flex-wrap justify-between items-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="w-full text-[#D4E1D2] text-left p-0 pb-3"
               >
-                Skill Certificate
+                Upload Skill Certificate
               </SmallText>
               {skill ? (
                 <View className="w-[85%] h-[60px] mb-3 relative">
                   <Image
-                    source={{ uri: skill }}
+                    source={{ uri: skill?.uri }}
                     className="w-full h-full object-cover"
                   />
                   <Ionicons
@@ -285,7 +374,47 @@ const Verification = ({
                 </Pressable>
               )}
             </View>
-            <View className="w-[23%] flex-row flex-wrap justify-between items-center">
+            <View className="w-[27%] mr-6 mb-3 flex-row flex-wrap justify-between items-center">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+                className="w-full text-[#D4E1D2] text-left p-0 pb-3"
+              >
+                Utility Bill
+              </SmallText>
+              {utility ? (
+                <View className="w-[85%] h-[60px] mb-3 relative">
+                  <Image
+                    source={{ uri: utility?.uri }}
+                    className="w-full h-full object-cover"
+                  />
+                  <Ionicons
+                    name="ios-close-circle"
+                    size={24}
+                    color="black"
+                    style={{
+                      position: "absolute",
+                      top: -17,
+                      right: -17,
+                      color: "red",
+                    }}
+                    onPress={() => setUtility(null)}
+                  />
+                </View>
+              ) : (
+                <Pressable
+                  style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
+                  onPress={() => pickImages("utility")}
+                  className="w-[80%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
+                >
+                  <Entypo
+                    name="plus"
+                    size={27}
+                    color={darkMode ? "#D4E1D2" : COLORS.primary}
+                  />
+                </Pressable>
+              )}
+            </View>
+            <View className="w-[27%] mr-6 mb-3 flex-row flex-wrap justify-between items-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="w-full text-[#D4E1D2] text-left p-0 pb-3"
@@ -314,90 +443,22 @@ const Verification = ({
           </View>
           <Spacer value={H("2%")} axis="vertical" />
           <View className="flex-row items-center flex-wrap">
-            <View className="flex-row items-center mb-3 mr-3">
-              <Checkbox
-                color={COLORS.primary}
-                value={services.includes("Sole")}
-                onValueChange={(e) =>
-                  setServices((prevState) =>
-                    toggleStringInArray(prevState, "Sole")
-                  )
-                }
-              />
-              <SmallText className="text-[#696969] text-left p-0 ml-2">
-                Sole
-              </SmallText>
-            </View>
-            <View className="flex-row items-center mb-3 mr-3">
-              <Checkbox
-                color={COLORS.primary}
-                value={services.includes("Private")}
-                onValueChange={(e) =>
-                  setServices((prevState) =>
-                    toggleStringInArray(prevState, "Private")
-                  )
-                }
-              />
-              <SmallText className="text-[#696969] text-left p-0 ml-2">
-                Private
-              </SmallText>
-            </View>
-            <View className="flex-row items-center mb-3 mr-3">
-              <Checkbox
-                color={COLORS.primary}
-                value={services.includes("Public")}
-                onValueChange={(e) =>
-                  setServices((prevState) =>
-                    toggleStringInArray(prevState, "Public")
-                  )
-                }
-              />
-              <SmallText className="text-[#696969] text-left p-0 ml-2">
-                Public
-              </SmallText>
-            </View>
-            <View className="flex-row items-center mb-3 mr-3">
-              <Checkbox
-                color={COLORS.primary}
-                value={services.includes("Limited")}
-                onValueChange={(e) =>
-                  setServices((prevState) =>
-                    toggleStringInArray(prevState, "Limited")
-                  )
-                }
-              />
-              <SmallText className="text-[#696969] text-left p-0 ml-2">
-                Limited
-              </SmallText>
-            </View>
-            <View className="flex-row items-center mb-3 mr-3">
-              <Checkbox
-                color={COLORS.primary}
-                value={services.includes("Unlimited")}
-                onValueChange={(e) =>
-                  setServices((prevState) =>
-                    toggleStringInArray(prevState, "Unlimited")
-                  )
-                }
-              />
-              <SmallText className="text-[#696969] text-left p-0 ml-2">
-                Unlimited
-              </SmallText>
-            </View>
-            <View className="flex-row items-center mb-3 mr-3">
-              <Checkbox
-                color={COLORS.primary}
-                value={services.includes("Guaranteed")}
-                onValueChange={(e) =>
-                  setServices((prevState) =>
-                    toggleStringInArray(prevState, "Guaranteed")
-                  )
-                }
-              />
-              <SmallText className="text-[#696969] text-left p-0 ml-2">
-                Guaranteed
-              </SmallText>
-            </View>
+            {allServices.map((item, idx) => (
+              <View key={idx} className="flex-row items-center mb-3 mr-3">
+                <Checkbox
+                  color={COLORS.primary}
+                  value={services.includes(item)}
+                  onValueChange={(e) =>
+                    setServices((prevState) =>
+                      toggleStringInArray(prevState, item)
+                    )
+                  }
+                />
+                <SmallText className="text-[#696969] text-left p-0 ml-2">
+                  {item}
+                </SmallText>
+              </View>
+            ))}
           </View>
 
           <Spacer value={H("2%")} axis="vertical" />
@@ -428,7 +489,20 @@ const Verification = ({
             </SmallText>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
-          <Button text="Apply" buttonStyle={{ width: "100%" }} />
+          <Button
+            text="Apply"
+            buttonStyle={{ width: "100%" }}
+            onPress={validate}
+          />
+          <Spacer value={H("1%")} axis="vertical" />
+          <SmallText className="text-[15px] !text-[#696969] text-left !pl-3">
+            <Text className="font-RedHatDisplayBold">NOTE:</Text> A Thousand
+            naira{" "}
+            <Text className="font-RedHatDisplaySemiBold text-primary">
+              (₦1,000)
+            </Text>{" "}
+            amount will be deducted from your wallet for verification.
+          </SmallText>
           <Spacer value={H("3%")} axis="vertical" />
         </ScrollView>
       </SafeAreaView>
@@ -438,8 +512,10 @@ const Verification = ({
         {/* <View className="flex-1 bg-[#1b1b1b] py-3 px-3"></View> */}
         <FlatList
           showsVerticalScrollIndicator={false}
-          style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
-          data={listing}
+          style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
+          data={listing.filter(
+            (item) => item?.verified?.status !== "completed"
+          )}
           className="px-3 flex-1 py-3 bg-[#1b1b1b]"
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
@@ -450,7 +526,10 @@ const Verification = ({
               navigation={navigation}
               item={item}
               hide={true}
-              onPress={() => setId(item.id)}
+              onPress={() => {
+                businessRef.current?.close();
+                setDetail(item);
+              }}
             />
           )}
         />

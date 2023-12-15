@@ -19,8 +19,7 @@ const ProfileMenuCard = ({
     <TouchableOpacity
       onPress={() => {
         if (
-          item.name === "Privacy Policy" ||
-          item.name === "Feedback" ||
+          item.name === "Contact Us" ||
           item.name === "FAQ" ||
           item.name === "About"
         ) {
