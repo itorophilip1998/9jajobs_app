@@ -18,7 +18,7 @@ export const MAIN_USERS = [
     name: "Business B",
     career: "Backend developer",
     sponsored: false,
-  },
+  }, 
   {
     id: 3,
     image: "https://i.ibb.co/rbCFc33/Rectangle-53.png",
