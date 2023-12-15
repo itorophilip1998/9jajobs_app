@@ -223,7 +223,7 @@ const MyListing = ({
                       { id: item.id },
                       (response) => {
                         setListings(
-                          listings.filter((data) => data.id === item.id)
+                          listings.filter((data) => data.id !== item.id)
                         );
                         dispatch(SET_LOADER(false));
                         Toast.show({
