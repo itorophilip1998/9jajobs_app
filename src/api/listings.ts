@@ -76,12 +76,12 @@ export const addListing = async (
       store.dispatch(SET_TOKEN(null));
       store.dispatch(SET_PROFILE(null));
     }
-    if (typeof err?.response?.data === "string") {
-      error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    if (typeof err?.response?.data?.error === "string") {
+      error(err?.response?.data?.error);
+    } else if (!err?.response?.data?.error) {
       error("Something went wrong. Try again.");
-    } else if (typeof err?.response?.data === "object") {
-      error(Object.values(err?.response?.data).flat().join("\n"));
+    } else if (typeof err?.response?.data?.error === "object") {
+      error(Object.values(err?.response?.data?.error).flat().join("\n"));
     }
   }
 };
