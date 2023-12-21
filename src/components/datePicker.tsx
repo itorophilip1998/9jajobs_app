@@ -5,6 +5,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import InputField from "./inputField";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { AntDesign, Feather } from "@expo/vector-icons";
+import moment from "moment";
 
 export const DatePicker = ({
   isDate,
@@ -34,7 +36,7 @@ export const DatePicker = ({
         autoCapitalize={"none"}
         dropdown
         onSuffixTap={() => setDateActive(true)}
-        suffixIcon={<></>}
+        suffixIcon={<Feather name="calendar" size={20} color="#696969" />}
       />
       <DateTimePickerModal
         is24Hour={false}
@@ -42,8 +44,8 @@ export const DatePicker = ({
         mode="date"
         display={Platform.OS === "ios" ? "spinner" : "default"}
         onConfirm={(date) => {
-          const dateString: string = date?.toISOString().split("T")[0];
-          setDate(dateString);
+          // console.log();
+          setDate(moment(date).format("DD-MM-YYYY"));
           setDateActive(false);
         }}
         onCancel={() => setDateActive(false)}
@@ -80,7 +82,7 @@ export const TimePicker = ({
         autoCapitalize={"none"}
         dropdown
         onSuffixTap={() => setTimeActive(true)}
-        suffixIcon={<></>}
+        suffixIcon={<AntDesign name="clockcircleo" size={20} color="#696969" />}
       />
 
       <DateTimePickerModal
@@ -88,9 +90,8 @@ export const TimePicker = ({
         isVisible={isTime}
         mode="time"
         display={Platform.OS === "ios" ? "spinner" : "default"}
-        onConfirm={(date) => {
-          const dateString: string = date?.toISOString().split("T")[0];
-          setTime(dateString);
+        onConfirm={(time) => {
+          setTime(moment(time).format("HH:mm"));
           setTimeActive(false);
         }}
         onCancel={() => setTimeActive(false)}

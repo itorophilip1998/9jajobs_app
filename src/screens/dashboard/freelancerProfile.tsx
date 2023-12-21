@@ -62,6 +62,7 @@ import { getRating } from "../../api/rating";
 import Toast from "react-native-toast-message";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { bookListing } from "../../api/booking";
+import { DatePicker, TimePicker } from "../../components/datePicker";
 
 const FreelancerProfile = ({
   navigation,
@@ -77,13 +78,11 @@ const FreelancerProfile = ({
   const [amenities, setAmenities] = React.useState<any[]>([]);
 
   const bookRef = React.useRef<RBSheet | null>(null);
-  const [day, setDay] = React.useState<string>("");
-  const [month, setMonth] = React.useState<string>("");
-  const [year, setYear] = React.useState<string>("");
+  const [date, setDate] = React.useState<string>("");
+  const [isDate, setDateActive] = React.useState<boolean>(false);
 
-  const [hour, setHour] = React.useState<string>("");
-  const [minutes, setMinutes] = React.useState<string>("");
-  const [location, setLocation] = React.useState<string>("");
+  const [time, setTime] = React.useState<string>("");
+  const [isTime, setTimeActive] = React.useState<boolean>(false);
 
   return (
     <KeyboardAvoidingView
@@ -747,49 +746,52 @@ const FreelancerProfile = ({
           )}
 
           <Spacer value={H("3%")} axis="vertical" />
-          {Boolean(route.params?.data?.address_latitude && 
-          route.params?.data?.address_longitude) &&(
+          {Boolean(
+            route.params?.data?.address_latitude &&
+              route.params?.data?.address_longitude
+          ) && (
             <>
-            <MapView
-            onPress={() =>
-              navigation.navigate("MapScreen", { data: route.params?.data })
-            }
-            className="flex-1 w-full h-[200px]"
-            provider={PROVIDER_GOOGLE}
-            initialRegion={{
-              latitude: Number(route.params?.data?.address_latitude),
-              longitude: Number(route.params?.data?.address_longitude),
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          >
-            <Marker
-              coordinate={{
-                latitude: Number(route.params?.data?.address_latitude),
-                longitude: Number(route.params?.data?.address_longitude),
-              }}
-              title={route.params?.data?.listing_name}
-              description={route.params?.data?.listing_description?.replaceAll(
-                /<\/?[^>]+(>|$)/gi,
-                ""
-              )}
-            />
-          </MapView>
-          <Spacer value={H("3%")} axis="vertical" />
-          </>
-)}
+              <MapView
+                onPress={() =>
+                  navigation.navigate("MapScreen", { data: route.params?.data })
+                }
+                className="flex-1 w-full h-[200px]"
+                provider={PROVIDER_GOOGLE}
+                initialRegion={{
+                  latitude: Number(route.params?.data?.address_latitude),
+                  longitude: Number(route.params?.data?.address_longitude),
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+              >
+                <Marker
+                  coordinate={{
+                    latitude: Number(route.params?.data?.address_latitude),
+                    longitude: Number(route.params?.data?.address_longitude),
+                  }}
+                  title={route.params?.data?.listing_name}
+                  description={route.params?.data?.listing_description?.replaceAll(
+                    /<\/?[^>]+(>|$)/gi,
+                    ""
+                  )}
+                />
+              </MapView>
+              <Spacer value={H("3%")} axis="vertical" />
+            </>
+          )}
           <Button
             text="Book Now"
-            onPress={() =>
-              Boolean(loggedIn && access_token)
-                ? bookRef.current?.open()
-                : (() => {
-                    Toast.show({
-                      type: "error",
-                      text1: "Login to book this listing.",
-                    });
-                    navigation.navigate("Signin");
-                  })()
+            onPress={
+              () => bookRef.current?.open()
+              // Boolean(loggedIn && access_token)
+              //   ? bookRef.current?.open()
+              //   : (() => {
+              //       Toast.show({
+              //         type: "error",
+              //         text1: "Login to book this listing.",
+              //       });
+              //       navigation.navigate("Signin");
+              //     })()
             }
             buttonStyle={{ width: "100%" }}
           />
@@ -803,161 +805,68 @@ const FreelancerProfile = ({
           className="flex-1 bg-[#1b1b1b] py-5 px-3"
         >
           <View className="w-full flex-row justify-between items-center">
-            <View className="w-[23%]">
+            <View className="w-full">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
               >
-                Day
+                Date
               </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setDay(value);
-                }}
-                defaultValue={day}
-                placeholder="02"
-                className="border border-[#696969] bg-[#000000]"
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
-              />
-            </View>
-            <View className="w-[30%]">
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
-              >
-                Month
-              </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setMonth(value);
-                }}
-                defaultValue={month}
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                placeholder="05"
-                className="border border-[#696969] bg-[#000000]"
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
-              />
-            </View>
-            <View className="w-[30%]">
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
-              >
-                Year
-              </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setYear(value);
-                }}
-                placeholder="2022"
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                defaultValue={year}
-                className="border border-[#696969] bg-[#000000]"
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
+              <DatePicker
+                date={date}
+                isDate={isDate}
+                setDate={setDate}
+                setDateActive={setDateActive}
               />
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
-          <View className="w-[60%] flex-row justify-between items-center">
-            <View className="w-[40%]">
+          <View className="w-full flex-row justify-between items-center">
+            <View className="w-[100%]">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
               >
                 Time
               </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setHour(value);
-                }}
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                defaultValue={hour}
-                placeholder="14"
-                className="border border-[#696969] bg-[#000000]"
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
-              />
-            </View>
-            <SmallText
-              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[40px] mt-5 font-RedHatDisplayRegular"
-            >
-              :
-            </SmallText>
-            <View className="w-[40%]">
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
-              >
-                {" "}
-              </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setMinutes(value);
-                }}
-                defaultValue={minutes}
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                placeholder="60"
-                className="border border-[#696969] bg-[#000000]"
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
+              <TimePicker
+                isTime={isTime}
+                setTime={setTime}
+                setTimeActive={setTimeActive}
+                time={time}
               />
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           <Button
             text="Book Date"
+            buttonStyle={{ width: "100%" }}
             onPress={() => {
-              if (!isValidDate(Number(day), Number(month), Number(year))) {
-                Toast.show({
-                  type: "error",
-                  text1: "Date is invalid",
-                });
-              } else if (
-                !/^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?$/.test(
-                  `${hour}:${minutes}`
-                )
-              ) {
-                Toast.show({
-                  type: "error",
-                  text1: "Time is invalid",
-                });
-              } else {
-                bookRef.current?.close();
-                DelayFor(200, () => {
-                  dispatch(SET_LOADER(true));
-                  bookListing(
-                    {
-                      listing_id: route.params?.data.id,
-                      date: `${year}-${month}-${day}`,
-                      time: `${hour}:${minutes}`,
-                    },
-                    (response) => {
-                      dispatch(SET_LOADER(false));
-                      Toast.show({
-                        type: "success",
-                        text1: response.message,
-                      });
-                    },
-                    (error) => {
-                      dispatch(SET_LOADER(false));
-                      Toast.show({
-                        type: "error",
-                        text1: error,
-                      });
-                    }
-                  );
-                });
-              }
+              bookRef.current?.close();
+              DelayFor(200, () => {
+                dispatch(SET_LOADER(true));
+                bookListing(
+                  {
+                    listing_id: route.params?.data.id,
+                    date: date,
+                    time: time,
+                  },
+                  (response) => {
+                    dispatch(SET_LOADER(false));
+                    Toast.show({
+                      type: "success",
+                      text1: response.message,
+                    });
+                  },
+                  (error) => {
+                    dispatch(SET_LOADER(false));
+                    Toast.show({
+                      type: "error",
+                      text1: error,
+                    });
+                  }
+                );
+              });
             }}
           />
           <Spacer value={H("6%")} axis="vertical" />
