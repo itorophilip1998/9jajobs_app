@@ -81,10 +81,19 @@ const UserProfileCard = ({
           <SmallText
             numberOfLine={1}
             style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
-            className="text-[#696969] text-left p-0 text-[13px]"
+            className="text-[#696969] text-left p-0 text-[13px] flex-1"
           >
             {FirstLetterUppercase(item?.listing_address || "")}
           </SmallText>
+          {item?.km && (
+            <SmallText
+              numberOfLine={1}
+              // style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+              className="text-primary text-right p-0 text-[13px] w-[35%] ml-[2%]"
+            >
+              {FirstLetterUppercase(`${item?.km} km` || "")}
+            </SmallText>
+          )}
         </View>
         {!hide && (
           <View className="flex-row items-center justify-between mt-2 w-full">
@@ -103,14 +112,17 @@ const UserProfileCard = ({
                         type: "error",
                         text1: "This listing does not have a phone number.",
                       })
-                    : !validatePhone(item?.listing_phone, 11) ||
-                      !validatePhone(item?.user?.phone, 11)
-                    ? Toast.show({
-                        type: "error",
-                        text1: "Invalid phone number.",
-                      })
                     : Linking.openURL(
-                        `tel:${item?.listing_phone || item?.user?.phone || ""}`
+                        `tel:${
+                          item?.listing_phone.replace(
+                            /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                            ""
+                          ) ||
+                          item?.user?.phone.replace(
+                            /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                            ""
+                          )
+                        }`
                       )
                 }
               >
@@ -132,15 +144,16 @@ const UserProfileCard = ({
                           type: "error",
                           text1: "This listing does not have a phone number.",
                         })
-                      : !validatePhone(item?.listing_phone, 11) ||
-                        !validatePhone(item?.user?.phone, 11)
-                      ? Toast.show({
-                          type: "error",
-                          text1: "Invalid phone number.",
-                        })
                       : Linking.openURL(
                           `tel:${
-                            item?.listing_phone || item?.user?.phone || ""
+                            item?.listing_phone.replace(
+                              /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                              ""
+                            ) ||
+                            item?.user?.phone.replace(
+                              /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                              ""
+                            )
                           }`
                         )
                   }

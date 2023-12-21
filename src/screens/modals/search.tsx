@@ -32,6 +32,8 @@ import Toast from "react-native-toast-message";
 import { useIsFocused } from "@react-navigation/native";
 import UserProfileCard from "../../components/userProfileCard";
 import { DelayFor } from "../../utility/helpers";
+import { GradientText } from "../../components/gradientText";
+import BorderBottom from "../../components/borderBottom";
 
 const Search = ({
   navigation,
@@ -48,19 +50,19 @@ const Search = ({
 
   const [searchResults, setSearchResults] = React.useState<any[]>([]);
 
-  const handleSearch = () => {
-    dispatch(SET_LOADER(true));
+  const handleSearch = (loading: boolean = true) => {
+    loading && dispatch(SET_LOADER(true));
     getAllListing(
       {
-        listing_name: search,
+        // listing_name: search,
         listing_city: location,
       },
       (response) => {
-        dispatch(SET_LOADER(false));
+        loading && dispatch(SET_LOADER(false));
         setSearchResults(response.listing);
       },
       (error) => {
-        dispatch(SET_LOADER(false));
+        loading && dispatch(SET_LOADER(false));
         Toast.show({
           type: "error",
           text1: error,
@@ -102,12 +104,15 @@ const Search = ({
             <TextInput
               keyboardType={"default"}
               className={`h-full w-[80%] text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
-              onChangeText={(value) => dispatch(SET_SEARCH(value))}
+              onChangeText={(value) => {
+                dispatch(SET_SEARCH(value));
+                // handleSearch(false);
+              }}
               value={search}
               // onFocus={() => {
               //   onFocus && onFocus();
               // }}
-              onBlur={handleSearch}
+              // onBlur={handleSearch}
               placeholderTextColor={"#626262"}
               placeholder={"Search here..."}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
@@ -153,21 +158,65 @@ const Search = ({
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={searchResults}
+          data={searchResults.filter(
+            (item) =>
+              item.listing_name
+                .toLowerCase()
+                .trim()
+                .includes(search.trim().toLowerCase()) ||
+              item.r_listing_category?.listing_category_name
+                .toLowerCase().trim()
+                .includes(search.trim().toLowerCase())
+          )}
           // className="px-2"
           ListHeaderComponent={() => <Spacer value={H("2%")} axis="vertical" />}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
-            <Spacer value={H("1%")} axis="vertical" />
+            <>
+              <Spacer value={H("0.5%")} axis="vertical" />
+              <BorderBottom />
+              <Spacer value={H("0.5%")} axis="vertical" />
+            </>
           )}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("71%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           renderItem={({ item }) => (
-            <UserProfileCard
-              navigation={navigation}
-              item={item}
+            // <UserProfileCard
+            //   navigation={navigation}
+            //   item={item}
+            //   onPress={() =>
+            //     navigation.navigate("FreelancerProfile", { data: item })
+            //   }
+            // />
+            <Pressable
+              className="py-2"
               onPress={() =>
-                navigation.navigate("FreelancerProfile", { data: item })
+                navigation.navigate("SearchResult", {
+                  data: {
+                    search,
+                    location,
+                  },
+                })
               }
-            />
+            >
+              <SmallText
+                numberOfLine={1}
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-left text-[16px]"
+              >
+                {item.listing_name} at {item.listing_address}
+              </SmallText>
+            </Pressable>
           )}
         />
       </SafeAreaView>
@@ -199,7 +248,7 @@ const Search = ({
                 dispatch(SET_LOADER(true));
                 getAllListing(
                   {
-                    listing_name: search,
+                    // listing_name: search,
                     listing_city: `${city?.long_name}`,
                   },
                   (response) => {

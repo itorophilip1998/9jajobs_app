@@ -51,10 +51,10 @@ const PaystackScreen = ({
               },
               (response) => {
                 dispatch(SET_LOADER(false));
-                Toast.show({
-                  type: "success",
-                  text1: response?.message,
-                });
+                // Toast.show({
+                //   type: "success",
+                //   text1: response?.message,
+                // });
               },
               (error) => {
                 dispatch(SET_LOADER(false));

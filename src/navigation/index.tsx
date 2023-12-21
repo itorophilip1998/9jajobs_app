@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
 import * as Notifications from "expo-notifications";
-import { Platform, View } from "react-native";
+import { Alert, Platform, View } from "react-native";
 import Welcome from "../screens/onbodyScreen/welcome";
 import Body from "../screens/onbodyScreen/body";
 import Finish from "../screens/onbodyScreen/finish";
@@ -33,6 +33,7 @@ import Toast, {
   ErrorToast,
   ToastConfig,
 } from "react-native-toast-message";
+import * as Location from "expo-location";
 import { width, height } from "../utility/constant";
 import { FONTS } from "../utility/fonts";
 import Terms from "../screens/dashboard/terms";
@@ -40,7 +41,7 @@ import Privacy from "../screens/dashboard/privacy";
 import PaystackScreen from "../screens/profile/paystack";
 import { refreshToken } from "../api/auth";
 import { getUser } from "../api/user";
-import { SET_PROFILE, SET_TOKEN } from "../store/authSlice";
+import { SET_COORDINATE, SET_PROFILE, SET_TOKEN } from "../store/authSlice";
 import Forgot from "../screens/auth/forgot";
 import BoostDetail from "../screens/profile/boostDetail";
 import { getNotificationCount } from "../api/notification";
@@ -133,11 +134,9 @@ const NavigationSetup = () => {
   }, []);
 
   React.useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
     if (Boolean(LoggedIn === true && authToken !== null)) {
       getNotificationCount(
         (response) => {
-          // console.log(response);
           dispatch(SET_NOTIFICATION(response));
         },
         (error) => {
@@ -145,11 +144,10 @@ const NavigationSetup = () => {
         }
       );
     }
-    // return () => clearInterval(timer);
   }, [LoggedIn, authToken]);
 
+  let timer: NodeJS.Timeout | undefined;
   React.useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
     if (Boolean(LoggedIn === true && authToken !== null)) {
       timer = setTimeout(() => {
         refreshToken(
@@ -161,12 +159,32 @@ const NavigationSetup = () => {
             console.log(error);
           }
         );
-      }, 40000);
+      }, 60 * 1000);
     } else {
       clearTimeout(timer);
     }
     // return () => clearTimeout(timer);
   }, [LoggedIn, authToken, expoPushToken]);
+
+  React.useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Error", "Permission to access location was denied", [
+          { text: "Ok" },
+        ]);
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      dispatch(
+        SET_COORDINATE({
+          lat: location.coords.latitude.toString(),
+          lng: location.coords.longitude.toString(),
+        })
+      );
+    })();
+  }, []);
 
   return (
     <NavigationContainer>

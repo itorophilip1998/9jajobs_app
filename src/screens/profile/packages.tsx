@@ -28,6 +28,7 @@ import { getPackages, subscribePackage } from "../../api/packages";
 import Toast from "react-native-toast-message";
 import { getUser } from "../../api/user";
 import { SET_PROFILE } from "../../store/authSlice";
+import { GradientText } from "../../components/gradientText";
 
 const Packages = ({
   navigation,
@@ -36,7 +37,7 @@ const Packages = ({
 }) => {
   const dispatch = useDispatch();
   const focus = useIsFocused();
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [packages, setPackages] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -84,6 +85,18 @@ const Packages = ({
           ItemSeparatorComponent={() => (
             <Spacer value={H("2%")} axis="vertical" />
           )}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("71%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           renderItem={({ item }) => (
             <View
               style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}
@@ -182,41 +195,52 @@ const Packages = ({
               )}
               <Spacer value={H("3%")} axis="vertical" />
               <Button
-                text="Enroll Now"
+                text={
+                  item?.id === profile?.package?.purchase_details?.id
+                    ? "Active Package"
+                    : "Enroll Now"
+                }
                 buttonStyleClassName="rounded-lg"
+                disabled={Boolean(
+                  item?.id === profile?.package?.purchase_details?.id
+                )}
                 buttonStyle={{ width: "100%" }}
-                onPress={() => {
-                  dispatch(SET_LOADER(true));
-                  subscribePackage(
-                    { package_id: item?.id, duration: item?.valid_days },
-                    (response1) => {
-                      getUser(
-                        (response) => {
-                          dispatch(SET_PROFILE(response));
-                          Toast.show({
-                            type: "success",
-                            text1: response1.message,
-                          });
-                          dispatch(SET_LOADER(false));
-                        },
-                        (error) => {
-                          dispatch(SET_LOADER(false));
-                          Toast.show({
-                            type: "error",
-                            text1: error,
-                          });
-                        }
-                      );
-                    },
-                    (error) => {
-                      dispatch(SET_LOADER(false));
-                      Toast.show({
-                        type: "error",
-                        text1: error,
-                      });
-                    }
-                  );
-                }}
+                onPress={
+                  item?.id !== profile?.package?.purchase_details?.id
+                    ? () => {
+                        dispatch(SET_LOADER(true));
+                        subscribePackage(
+                          { package_id: item?.id, duration: item?.valid_days },
+                          (response1) => {
+                            getUser(
+                              (response) => {
+                                dispatch(SET_PROFILE(response));
+                                Toast.show({
+                                  type: "success",
+                                  text1: response1.message,
+                                });
+                                dispatch(SET_LOADER(false));
+                              },
+                              (error) => {
+                                dispatch(SET_LOADER(false));
+                                Toast.show({
+                                  type: "error",
+                                  text1: error,
+                                });
+                              }
+                            );
+                          },
+                          (error) => {
+                            dispatch(SET_LOADER(false));
+                            Toast.show({
+                              type: "error",
+                              text1: error,
+                            });
+                          }
+                        );
+                      }
+                    : undefined
+                }
               />
             </View>
           )}

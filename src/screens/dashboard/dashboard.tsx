@@ -76,6 +76,7 @@ const Dashboard = ({
           is_trending: true,
         },
         (response) => {
+          console.log(response);
           setTrending(response.listing);
           dispatch(SET_LOADER(false));
         },
@@ -96,6 +97,7 @@ const Dashboard = ({
       getAllListing(
         {
           listing_city: profile?.city || "",
+          is_nearest: true,
         },
         (response) => {
           setNearest(response.listing);
@@ -179,7 +181,6 @@ const Dashboard = ({
               Categories
             </GradientText>
           )}
-
           <Spacer axis="vertical" value={H(3)} />
           <View>
             <FlatList

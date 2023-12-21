@@ -130,12 +130,16 @@ const BoostDetail = ({
             placeholder="Select your business category"
             type={"default"}
             autoCapitalize={"none"}
-            containerStyle={{ width: "100%" }}
-            className="border-[#626262] text-[#696969] focus:border-primary border rounded-full p-0 px-3"
+            containerStyle={{
+              width: "100%",
+              backgroundColor: darkMode ? "transparent" : "white",
+            }}
+            className="rounded-full p-0"
+            containerClassName="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
             editable={false}
-            suffixStyle="w-[100px]"
+            suffixStyle="w-[60px]"
             suffixIcon={
-              <View className="flex-row justify-between w-full items-center">
+              <View className="flex-row w-full justify-between items-center">
                 <AntDesign
                   name="pluscircleo"
                   size={24}
@@ -167,10 +171,13 @@ const BoostDetail = ({
             placeholder="Select your business category"
             type={"default"}
             autoCapitalize={"none"}
-            containerStyle={{ width: "100%" }}
-            className="border-[#626262] text-[#696969] focus:border-primary border rounded-full p-0 px-3"
+            containerStyle={{
+              width: "100%",
+              backgroundColor: darkMode ? "transparent" : "white",
+            }}
+            className="rounded-full p-0"
+            containerClassName="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
             editable={false}
-            suffixStyle="min-w-[130px] p-0"
             suffixIcon={
               <SmallText className="p-0 text-[#696969]">
                 People reached

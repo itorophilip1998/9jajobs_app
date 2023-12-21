@@ -1,7 +1,6 @@
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 import { SET_ERROR } from "../store/formDataSlice";
 import moment from "moment";
-import * as FileSystem from "expo-file-system";
 import Toast from "react-native-toast-message";
 
 export const FormatNumber = (number: number) => {

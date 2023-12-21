@@ -91,14 +91,14 @@ export const getAllListing = async (
   var config = {
     method: "get",
     url: `${BASE_URL}/categories/all-listing?address_longitude=${
-      data?.address_longitude || ""
-    }&address_latitude=${data?.address_latitude || ""}&listing_category_id=${
-      data?.listing_category_id || ""
-    }&listing_name=${data?.listing_name || ""}&listing_city=${
-      data?.listing_city || ""
-    }&is_trending=${data?.is_trending || ""}&is_nearest=${
-      data?.is_nearest || ""
-    }`,
+      data?.address_longitude || Number(store.getState().auth.lng)
+    }&address_latitude=${
+      data?.address_latitude || Number(store.getState().auth.lat)
+    }&listing_category_id=${data?.listing_category_id || ""}&listing_name=${
+      data?.listing_name || ""
+    }&listing_city=${data?.listing_city || ""}&is_trending=${
+      data?.is_trending || ""
+    }&is_nearest=${data?.is_nearest || ""}`,
   };
 
   try {

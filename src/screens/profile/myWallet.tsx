@@ -225,6 +225,18 @@ const MyWallet = ({
           ItemSeparatorComponent={() => (
             <Spacer value={H("3%")} axis="vertical" />
           )}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("30%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           ListFooterComponent={<Spacer value={H("3%")} axis="vertical" />}
           renderItem={({ item }) => (
             <Pressable className="w-full">

@@ -147,6 +147,18 @@ const BoostPost = ({
               item.listing_name.toLowerCase().includes(search.toLowerCase())
             )}
           keyExtractor={(item) => item.id.toString()}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("71%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           ItemSeparatorComponent={() => (
             <View
               style={{ borderBottomColor: darkMode ? "#0f0f0f" : "#696969" }}

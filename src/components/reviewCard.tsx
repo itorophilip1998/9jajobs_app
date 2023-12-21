@@ -17,9 +17,9 @@ const ReviewCard = ({ item }: { item: any }) => {
         <View className="flex-row items-center">
           <Image
             source={
-              item.user.photo
+              item?.user?.photo
                 ? {
-                    uri: item.user.photo,
+                    uri: item?.user?.photo,
                   }
                 : userImg
             }
@@ -31,7 +31,7 @@ const ReviewCard = ({ item }: { item: any }) => {
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
             >
-              {FirstLetterUppercase(item.user.name || "")}
+              {FirstLetterUppercase(item?.user?.name || "")}
             </SmallText>
             <View className="flex-row items-center">
               <AntDesign name="star" size={15} color={COLORS.primary} />
@@ -42,7 +42,7 @@ const ReviewCard = ({ item }: { item: any }) => {
           </View>
         </View>
         <SmallText className="text-[#696969] text-left p-0 text-[15px] pr-2 font-RedHatDisplaySemiBold">
-          {moment(item.created_at).format("DD/MM/YYYY")}
+          {moment(item?.created_at).format("DD/MM/YYYY")}
         </SmallText>
         {/* <Feather name="more-vertical" size={24} color={COLORS.primary} /> */}
       </View>

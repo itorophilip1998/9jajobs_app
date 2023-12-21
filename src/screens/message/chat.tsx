@@ -112,6 +112,7 @@ const Chat = ({
         })),
       },
       (response1) => {
+        setMessage("");
         markRead(
           { friend_id: route.params?.data?.id },
           (response2) => {
@@ -121,6 +122,7 @@ const Chat = ({
               (response) => {
                 dispatch(SET_LOADER(false));
                 setChats(response);
+                setMessage("");
               },
               (error) => {
                 Toast.show({
@@ -274,7 +276,6 @@ const Chat = ({
         />
         {(chats?.chats?.length === 0 ||
           chats?.chats?.some((item: any) => {
-            console.log("chat", item);
             return item?.spam === null || item?.spam === "unspam";
           })) && (
           <View

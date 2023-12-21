@@ -7,6 +7,7 @@ import {
   FlatList,
   Pressable,
   Image,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
@@ -51,6 +52,8 @@ import {
   validateUrl,
 } from "../../utility/helpers";
 import { addListing } from "../../api/listings";
+import { GradientText } from "../../components/gradientText";
+import { getFreeDiskStorageAsync } from "expo-file-system";
 
 const Post = ({
   navigation,
@@ -68,38 +71,38 @@ const Post = ({
       if (!Boolean(loggedIn && access_token)) {
         navigation.navigate("Signin", { two_step: true });
       } else {
-        if (profile?.package) {
-          dispatch(SET_LOADER(true));
-          getUserListing(
-            null,
-            (response) => {
-              dispatch(SET_LOADER(false));
-              if (
-                response?.length >=
-                profile?.package?.purchase_details?.total_listings
-              ) {
-                navigation.navigate("Packages");
-                Toast.show({
-                  type: "error",
-                  text1: `Maximum limit of ${profile?.package?.purchase_details?.total_listings} listings reached for package. Upgrade Package.`,
-                });
-              }
-            },
-            (error) => {
-              dispatch(SET_LOADER(false));
-              Toast.show({
-                type: "error",
-                text1: error,
-              });
-            }
-          );
-        } else {
-          navigation.navigate("Packages");
-          Toast.show({
-            type: "error",
-            text1: "Purchase a package to create listing",
-          });
-        }
+        // if (profile?.package) {
+        //   dispatch(SET_LOADER(true));
+        //   getUserListing(
+        //     null,
+        //     (response) => {
+        //       dispatch(SET_LOADER(false));
+        //       if (
+        //         response?.length >=
+        //         profile?.package?.purchase_details?.total_listings
+        //       ) {
+        //         navigation.navigate("Packages");
+        //         Toast.show({
+        //           type: "error",
+        //           text1: `Maximum limit of ${profile?.package?.purchase_details?.total_listings} listings reached for package. Upgrade Package.`,
+        //         });
+        //       }
+        //     },
+        //     (error) => {
+        //       dispatch(SET_LOADER(false));
+        //       Toast.show({
+        //         type: "error",
+        //         text1: error,
+        //       });
+        //     }
+        //   );
+        // } else {
+        //   navigation.navigate("Packages");
+        //   Toast.show({
+        //     type: "error",
+        //     text1: "Purchase a package to create listing",
+        //   });
+        // }
       }
     }
   }, [focused, loggedIn, access_token]);
@@ -172,43 +175,94 @@ const Post = ({
   }, [focused]);
 
   const pickImages = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [4, 3],
-      quality: 1,
-      allowsMultipleSelection: true, // Enable multiple selection
-    });
-
-    if (!result.canceled) {
-      for (let i = 0; i < result.assets.length; i++) {
-        setSelectedImages((prev) => [...prev, result.assets[i]]);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const freeSpace = await getFreeDiskStorageAsync();
+      if (freeSpace < 100) {
+        Toast.show({
+          type: "error",
+          text1: "Please free up space to 100mb",
+        });
+        return;
       }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 3],
+        quality: 1,
+        allowsMultipleSelection: true, // Enable multiple selection
+      });
+
+      if (!result.canceled) {
+        for (let i = 0; i < result.assets.length; i++) {
+          setSelectedImages((prev) => [...prev, result.assets[i]]);
+        }
+      }
+    } else {
+      Alert.alert(
+        "Error",
+        "This application does not have access. Please enable it from your settings.",
+        [{ text: "Ok" }]
+      );
     }
   };
 
   const pickOneImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [4, 4],
-      quality: 1,
-      allowsEditing: true,
-    });
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const freeSpace = await getFreeDiskStorageAsync();
+      if (freeSpace < 100) {
+        Toast.show({
+          type: "error",
+          text1: "Please free up space to 100mb",
+        });
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 4],
+        quality: 1,
+        allowsEditing: true,
+      });
 
-    if (!result.canceled) {
-      setLogo(result.assets[0]);
+      if (!result.canceled) {
+        setLogo(result.assets[0]);
+      }
+    } else {
+      Alert.alert(
+        "Error",
+        "This application does not have access. Please enable it from your settings.",
+        [{ text: "Ok" }]
+      );
     }
   };
 
   const pickVideos = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      allowsMultipleSelection: true, // Enable multiple selection
-    });
-
-    if (!result.canceled) {
-      for (let i = 0; i < result.assets.length; i++) {
-        setSelectedVideos((prev) => [...prev, result.assets[i]]);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const freeSpace = await getFreeDiskStorageAsync();
+      if (freeSpace < 100) {
+        Toast.show({
+          type: "error",
+          text1: "Please free up space to 100mb",
+        });
+        return;
       }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsMultipleSelection: true, // Enable multiple selection
+      });
+
+      if (!result.canceled) {
+        for (let i = 0; i < result.assets.length; i++) {
+          setSelectedVideos((prev) => [...prev, result.assets[i]]);
+        }
+      }
+    } else {
+      Alert.alert(
+        "Error",
+        "This application does not have access. Please enable it from your settings.",
+        [{ text: "Ok" }]
+      );
     }
   };
 
@@ -246,7 +300,7 @@ const Post = ({
       !longitude ||
       !latitude ||
       longitude?.trim() === "" ||
-      latitude.trim() === ""
+      latitude?.trim() === ""
     ) {
       Toast.show({
         type: "error",
@@ -292,22 +346,38 @@ const Post = ({
         type: "error",
         text1: "Whatsapp number must be 11 digits.",
       });
-    } else if (facebook.trim().length > 0 && !validateUrl(facebook.trim())) {
+    } else if (
+      facebook.trim().length > 0 &&
+      !validateUrl(facebook.trim()) &&
+      !facebook.trim().toLowerCase().includes("facebook.com")
+    ) {
       Toast.show({
         type: "error",
         text1: "Invalid facebook Link.",
       });
-    } else if (instagram.trim().length > 0 && !validateUrl(instagram.trim())) {
+    } else if (
+      instagram.trim().length > 0 &&
+      !validateUrl(instagram.trim()) &&
+      !instagram.trim().toLowerCase().includes("instagram.com")
+    ) {
       Toast.show({
         type: "error",
         text1: "Invalid instagram Link.",
       });
-    } else if (twitter.trim().length > 0 && !validateUrl(twitter.trim())) {
+    } else if (
+      twitter.trim().length > 0 &&
+      !validateUrl(twitter.trim()) &&
+      !twitter.trim().toLowerCase().includes("twitter.com")
+    ) {
       Toast.show({
         type: "error",
         text1: "Invalid twitter Link.",
       });
-    } else if (linkedIn.trim().length > 0 && !validateUrl(linkedIn.trim())) {
+    } else if (
+      linkedIn.trim().length > 0 &&
+      !validateUrl(linkedIn.trim()) &&
+      !linkedIn.trim().toLowerCase().includes("linkedin.com")
+    ) {
       Toast.show({
         type: "error",
         text1: "Invalid linkedin Link.",
@@ -317,20 +387,10 @@ const Post = ({
         type: "error",
         text1: "Upload Business Logo.",
       });
-    } else if (
-      selectedImages.length < 2 &&
-      selectedImages.length > profile?.package?.purchase_details?.total_photos
-    ) {
+    } else if (selectedImages.length < 1) {
       Toast.show({
         type: "error",
-        text1: `Upload at least 2 photo but not more than your package limit of ${profile?.package?.purchase_details?.total_photos}.`,
-      });
-    } else if (
-      selectedVideos.length > profile?.package?.purchase_details?.total_videos
-    ) {
-      Toast.show({
-        type: "error",
-        text1: `Videos cannot be more that your package limit of ${profile?.package?.purchase_details?.total_videos}.`,
+        text1: `Upload at least 1 photo.`,
       });
     } else {
       dispatch(SET_LOADER(true));
@@ -380,7 +440,11 @@ const Post = ({
             linkedIn.trim().length > 0 && { icon: "LinkedIn", url: linkedIn },
             whatsapp.trim().length > 0 && {
               icon: "Whatsapp",
-              url: `https://wa.me/${whatsapp.trim()}`,
+              url: `https://wa.me/${
+                whatsapp.trim().charAt(0) === "0"
+                  ? whatsapp.trim().slice(1)
+                  : whatsapp.trim()
+              }`,
             },
           ],
         },
@@ -442,9 +506,14 @@ const Post = ({
               placeholder="Select your business category"
               type={"default"}
               autoCapitalize={"none"}
-              containerStyle={{ width: "100%" }}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
+              containerStyle={{
+                width: "100%",
+                backgroundColor: darkMode ? "transparent" : "white",
+              }}
+              className="rounded-full p-0"
+              containerClassName="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
               editable={false}
+              dropdown
               suffixIcon={
                 <Feather name="chevron-down" size={24} color="#626262" />
               }
@@ -505,10 +574,15 @@ const Post = ({
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               placeholder="Select your business location"
               type={"default"}
-              containerStyle={{ width: "100%" }}
               autoCapitalize={"none"}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
+              containerStyle={{
+                width: "100%",
+                backgroundColor: darkMode ? "transparent" : "white",
+              }}
+              className="rounded-full p-0"
+              containerClassName="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
               editable={false}
+              dropdown
               suffixIcon={
                 <Feather name="chevron-down" size={24} color="#626262" />
               }
@@ -583,11 +657,16 @@ const Post = ({
                 .join(", ")}
               placeholder="Select amenities for your business"
               type={"default"}
-              containerStyle={{ width: "100%" }}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
+              containerStyle={{
+                width: "100%",
+                backgroundColor: darkMode ? "transparent" : "white",
+              }}
+              className="rounded-full p-0"
+              containerClassName="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
               editable={false}
+              dropdown
               suffixIcon={
                 <Feather name="chevron-down" size={24} color="#626262" />
               }
@@ -783,7 +862,7 @@ const Post = ({
             />
             <Spacer axis="vertical" value={H(2)} />
             <View className="flex-row w-full justify-between items-start">
-              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
+              <View className="w-[28%] flex-row flex-wrap justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
@@ -791,7 +870,7 @@ const Post = ({
                   Add Company Logo
                 </SmallText>
                 {logo ? (
-                  <View className="w-[45%] h-[60px] mb-3 relative">
+                  <View className="w-[100%] h-[60px] mb-3 relative">
                     <Image
                       source={{ uri: logo.uri }}
                       className="w-full h-full object-cover"
@@ -818,7 +897,7 @@ const Post = ({
                         backgroundColor: darkMode ? "#0F0F0F" : "#FFFFFF",
                       },
                     ]}
-                    className="w-[45%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
+                    className="w-[100%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
                   >
                     <Entypo
                       name="plus"
@@ -828,12 +907,12 @@ const Post = ({
                   </Pressable>
                 )}
               </View>
-              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
+              <View className="w-[28%] flex-row flex-wrap justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
                 >
-                  Add at least 2 images
+                  Add at least 1 image
                 </SmallText>
                 {selectedImages.map((item, idx) => (
                   <View
@@ -879,12 +958,12 @@ const Post = ({
                   />
                 </Pressable>
               </View>
-              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
+              <View className="w-[28%] flex-row flex-wrap justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
                 >
-                  Add at least 1 video
+                  Add video (Optional)
                 </SmallText>
                 {selectedVideos.map((item, idx) => (
                   <View
@@ -957,6 +1036,18 @@ const Post = ({
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
             data={allCategory}
             keyExtractor={(item) => item.id.toString()}
+            ListEmptyComponent={
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  // style={{ height: H("71%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Nothing Yet
+                  </GradientText>
+                </View>
+              </>
+            }
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
             )}
@@ -995,6 +1086,18 @@ const Post = ({
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
             )}
+            ListEmptyComponent={
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("40%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Nothing Yet
+                  </GradientText>
+                </View>
+              </>
+            }
             renderItem={({ item }) => (
               <Pressable
                 className="w-[100%] h-auto flex-row items-center"

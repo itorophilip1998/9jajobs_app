@@ -8,6 +8,7 @@ import {
   ScrollView,
   Linking,
   Pressable,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
@@ -164,6 +165,22 @@ const FreelancerProfile = ({
                       ?.listing_category_name || ""
                   )}
                 </SmallText>
+                {/* <View className="flex-row items-center">
+                  <AntDesign name="star" size={15} color={COLORS.primary} />
+                  <SmallText className="text-primary p-0 text-[15px] pl-1">
+                    {route.params?.data.rate_star}
+                  </SmallText>
+                </View> */}
+              </View>
+              <Spacer value={H("0.5%")} axis="vertical" />
+              <View className="flex-row justify-between items-center mb-1 w-full">
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
+                  {FirstLetterUppercase(route.params?.data.km + " Km Away")}
+                </SmallText>
+
                 <View className="flex-row items-center">
                   <AntDesign name="star" size={15} color={COLORS.primary} />
                   <SmallText className="text-primary p-0 text-[15px] pl-1">
@@ -171,22 +188,6 @@ const FreelancerProfile = ({
                   </SmallText>
                 </View>
               </View>
-              {/* <Spacer value={H("1%")} axis="vertical" />
-              <View className="flex-row justify-between items-center mb-1 w-full">
-                <SmallText
-                  style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
-                  className="text-[#696969] text-left p-0 text-[15px]"
-                >
-             {FirstLetterUppercase("1.2 Km Away")} 
-                </SmallText>
-
-                <View className="flex-row items-center">
-                  <AntDesign name="star" size={15} color={COLORS.primary} />
-                  <SmallText className="text-primary p-0 text-[15px] pl-1">
-                    4.2
-                  </SmallText>
-                </View>
-              </View> */}
             </View>
             <View className="flex-row items-center justify-end w-[45%]">
               <TouchableOpacity
@@ -229,16 +230,16 @@ const FreelancerProfile = ({
                         type: "error",
                         text1: "This listing does not have a phone number.",
                       })
-                    : !validatePhone(route.params?.data?.listing_phone, 11) ||
-                      !validatePhone(route.params?.data?.user?.phone, 11)
-                    ? Toast.show({
-                        type: "error",
-                        text1: "Invalid phone number.",
-                      })
                     : Linking.openURL(
                         `tel:${
-                          route.params?.data?.listing_phone ||
-                          route.params?.data?.user?.phone ||
+                          route.params?.data?.listing_phone?.replace(
+                            /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                            ""
+                          ) ||
+                          route.params?.data?.user?.phone?.replace(
+                            /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                            ""
+                          ) ||
                           ""
                         }`
                       )
@@ -412,7 +413,7 @@ const FreelancerProfile = ({
                   }}
                   className="text-[15px] !text-[#696969] text-left !pl-3"
                 >
-                  {item.amenity_name}
+                  {item.amenity_name || item?.amenity_details?.amenity_name}
                 </SmallText>
               </View>
             </>
@@ -447,7 +448,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data?.listing_oh_monday || "N/A"}
             </SmallText>
@@ -464,7 +465,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_tuesday || "N/A"}
             </SmallText>
@@ -481,7 +482,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_wednesday || "N/A"}
             </SmallText>
@@ -498,7 +499,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_thursday || "N/A"}
             </SmallText>
@@ -515,7 +516,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_friday || "N/A"}
             </SmallText>
@@ -532,7 +533,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_saturday || "N/A"}
             </SmallText>
@@ -549,7 +550,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_sunday || "N/A"}
             </SmallText>
@@ -579,10 +580,31 @@ const FreelancerProfile = ({
               Phone Number
             </SmallText>
             <SmallText
+              numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
+              onPress={() =>
+                !route.params?.data?.listing_phone &&
+                !route.params?.data?.user?.phone
+                  ? null
+                  : Linking.openURL(
+                      `tel:${
+                        route.params?.data?.listing_phone?.replace(
+                          /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                          ""
+                        ) ||
+                        route.params?.data?.user?.phone?.replace(
+                          /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                          ""
+                        ) ||
+                        ""
+                      }`
+                    )
+              }
             >
-              {route.params?.data?.listing_phone || "N/A"}
+              {route.params?.data?.listing_phone ||
+                route?.params?.data?.user?.phone ||
+                "N/A"}
             </SmallText>
           </View>
           <View
@@ -596,8 +618,13 @@ const FreelancerProfile = ({
               Email Address
             </SmallText>
             <SmallText
+              numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
+              onPress={() =>
+                route.params?.data.listing_email &&
+                Linking.openURL(`mailto:${route.params?.data.listing_email}`)
+              }
             >
               {route.params?.data.listing_email || "N/A"}
             </SmallText>
@@ -637,11 +664,18 @@ const FreelancerProfile = ({
               Website
             </SmallText>
             <SmallText
+              numberOfLine={1}
               onPress={() =>
-                Linking.openURL("https://vincentcollins.netlify.app/")
+                route.params?.data?.listing_website
+                  ? Linking.openURL(
+                      route.params?.data?.listing_website?.includes("://")
+                        ? route.params?.data?.listing_website
+                        : `http://${route.params?.data?.listing_website}`
+                    )
+                  : undefined
               }
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data?.listing_website || "N/A"}
             </SmallText>
@@ -662,32 +696,61 @@ const FreelancerProfile = ({
               </SmallText>
               <View className="flex-row items-center">
                 {route.params?.data?.listing_social_item.map(
-                  (item: any, idx: number) => (
-                    <Pressable
-                      key={idx}
-                      onPress={() => Linking.openURL(item.social_url)}
-                      className="ml-1"
-                    >
-                      {item.social_icon.toLowerCase() === "facebook" ? (
-                        <Facebook height={30} width={30} />
-                      ) : item.social_icon.toLowerCase() === "instagram" ? (
-                        <Instagram height={30} width={30} />
-                      ) : item.social_icon.toLowerCase() === "whatsapp" ? (
-                        <Whatsapp height={30} width={30} />
-                      ) : item.social_icon.toLowerCase() === "twitter" ? (
-                        <Twitter height={30} width={30} />
-                      ) : item.social_icon.toLowerCase() === "linkedin" ? (
-                        <Linkedin height={30} width={30} />
-                      ) : null}
-                    </Pressable>
-                  )
+                  (item: any, idx: number) => {
+                    console.log(item.social_url);
+                    return (
+                      <Pressable
+                        key={idx}
+                        onPress={async () => {
+                          try {
+                            const supported = await Linking.canOpenURL(
+                              item.social_url?.includes("://")
+                                ? item.social_url
+                                : `http://${item.social_url}`
+                            );
+                            if (supported) {
+                              await Linking.openURL(
+                                item.social_url?.includes("://")
+                                  ? item.social_url
+                                  : `http://${item.social_url}`
+                              );
+                            } else {
+                              Toast.show({
+                                type: "error",
+                                text1: `Invalid URL: ${item.social_url}`,
+                              });
+                            }
+                          } catch (err) {
+                            // Alert.alert("Error", err, )
+                            console.log(err);
+                          }
+                        }}
+                        className="ml-1"
+                      >
+                        {item.social_icon.toLowerCase() === "facebook" ? (
+                          <Facebook height={30} width={30} />
+                        ) : item.social_icon.toLowerCase() === "instagram" ? (
+                          <Instagram height={30} width={30} />
+                        ) : item.social_icon.toLowerCase() === "whatsapp" ? (
+                          <Whatsapp height={30} width={30} />
+                        ) : item.social_icon.toLowerCase() === "twitter" ? (
+                          <Twitter height={30} width={30} />
+                        ) : item.social_icon.toLowerCase() === "linkedin" ? (
+                          <Linkedin height={30} width={30} />
+                        ) : null}
+                      </Pressable>
+                    );
+                  }
                 )}
               </View>
             </View>
           )}
 
           <Spacer value={H("3%")} axis="vertical" />
-          <MapView
+          {Boolean(route.params?.data?.address_latitude && 
+          route.params?.data?.address_longitude) &&(
+            <>
+            <MapView
             onPress={() =>
               navigation.navigate("MapScreen", { data: route.params?.data })
             }
@@ -713,6 +776,8 @@ const FreelancerProfile = ({
             />
           </MapView>
           <Spacer value={H("3%")} axis="vertical" />
+          </>
+)}
           <Button
             text="Book Now"
             onPress={() =>

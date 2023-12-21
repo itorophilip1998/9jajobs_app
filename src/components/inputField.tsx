@@ -3,6 +3,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   TextStyle,
+  Pressable,
 } from "react-native";
 import React from "react";
 import {
@@ -32,11 +33,13 @@ interface IProps {
   autoCapitalize: "none" | "sentences" | "words" | "characters";
   style?: TextStyle;
   containerStyle?: TextStyle;
+  containerClassName?: string;
   placeholderTextColor?: string;
   multiline?: boolean;
   numberOfLines?: number;
   onFocus?: () => void;
   onBlur?: () => void;
+  dropdown?: boolean;
 }
 
 const InputField: React.FC<IProps> = ({
@@ -53,21 +56,23 @@ const InputField: React.FC<IProps> = ({
   secure,
   style,
   autoCapitalize,
-  placeholderTextColor = "#626262",
+  placeholderTextColor,
   multiline = false,
   numberOfLines,
   onFocus,
   onBlur,
+  containerClassName,
+  dropdown = false,
 }) => {
   const [textValue, setValue] = React.useState("");
   const [isPlaceHolder, togglePlaceholder] = React.useState(true);
   const InputRef = React.useRef(null);
-  const {darkMode} = useSelector((state: RootState) => state.auth)
+  const { darkMode } = useSelector((state: RootState) => state.auth);
 
   return (
     <>
       <View
-        className="relative w-[100%] flex h-full"
+        className={`relative w-[100%] items-center flex-row h-[50px] bg-transparent rounded-md ${containerClassName}`}
         style={{ width: W("90%"), height: "auto", ...containerStyle }}
       >
         <TextInput
@@ -78,7 +83,7 @@ const InputField: React.FC<IProps> = ({
           placeholderTextColor={placeholderTextColor}
           keyboardType={type || "default"}
           secureTextEntry={secure}
-          className={`min-h-[50px] w-[100%] py-[10px] px-[16px] text-[15px] text-white font-semibold font-RedHatDisplayRegular rounded-[5px] bg-transparent ${className}`}
+          className={`min-h-[50px] text-black flex-1 py-[10px] px-[10px] text-[15px] font-semibold font-RedHatDisplayRegular rounded-[5px] bg-transparent ${className}`}
           onChangeText={(value) => onTextChange(value)}
           value={defaultValue}
           onFocus={() => {
@@ -87,23 +92,27 @@ const InputField: React.FC<IProps> = ({
           onBlur={() => {
             onBlur && onBlur();
           }}
-          style={{color: darkMode ? "white" : "black", ...style}}
+          style={{ color: darkMode ? "white" : "black", ...style }}
           placeholder={placeholder || ""}
           autoCapitalize={autoCapitalize || "none"}
         />
         {editable == false && (
           <View className="absolute w-full h-full top-0 left-0 bg-transparent"></View>
         )}
-        {suffixIcon && (
+        {dropdown == true && (
           <TouchableWithoutFeedback
             onPress={() => onSuffixTap && onSuffixTap()}
           >
-            <View
-              className={`flex justify-center items-center px-[16px] h-full w-[50px] absolute right-0 ${suffixStyle}`}
-            >
-              {suffixIcon}
-            </View>
+            <View className="absolute w-full h-full top-0 left-0 bg-transparent"></View>
           </TouchableWithoutFeedback>
+        )}
+        {suffixIcon && (
+          <Pressable
+            className={`flex justify-center items-center mr-3 ${suffixStyle}`}
+            onPress={() => onSuffixTap && onSuffixTap()}
+          >
+            {suffixIcon}
+          </Pressable>
         )}
       </View>
     </>

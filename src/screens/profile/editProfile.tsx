@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   Platform,
+  Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import React from "react";
@@ -37,6 +38,7 @@ import userImg from "../../../assets/images/user.jpg";
 import { VALIDATE_USER_DATA, validatePhone } from "../../utility/helpers";
 import { editUser, getUser } from "../../api/user";
 import { useIsFocused } from "@react-navigation/native";
+import * as FileSystem from "expo-file-system";
 
 const EditProfile = ({
   navigation,
@@ -62,51 +64,68 @@ const EditProfile = ({
   const [visible1, setVisible1] = React.useState<boolean>(false);
 
   const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const freeSpace = await FileSystem.getFreeDiskStorageAsync();
+      if (freeSpace < 100) {
+        Toast.show({
+          type: "error",
+          text1: "Please free up space to 100mb",
+        });
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+      });
 
-    if (!result.canceled) {
-      dispatch(SET_LOADER(true));
-      editUser(
-        {
-          photo: {
-            name: result.assets[0].fileName,
-            uri: result.assets[0].uri,
-            type: "image/png",
-          },
-        },
-        (response) => {
-          getUser(
-            (response1) => {
-              Toast.show({
-                type: "success",
-                text1: response?.message,
-              });
-              dispatch(SET_LOADER(false));
-              dispatch(SET_PROFILE(response1));
+      if (!result.canceled) {
+        dispatch(SET_LOADER(true));
+        editUser(
+          {
+            photo: {
+              name: result.assets[0].fileName,
+              uri: result.assets[0].uri,
+              type: "image/png",
             },
-            (error) => {
-              Toast.show({
-                type: "error",
-                text1: error,
-              });
-              dispatch(SET_LOADER(false));
-            }
-          );
-        },
-        (error) => {
-          Toast.show({
-            type: "error",
-            text1: error,
-          });
-          dispatch(SET_LOADER(false));
-        }
+          },
+          (response) => {
+            getUser(
+              (response1) => {
+                Toast.show({
+                  type: "success",
+                  text1: response?.message,
+                });
+                dispatch(SET_LOADER(false));
+                dispatch(SET_PROFILE(response1));
+              },
+              (error) => {
+                Toast.show({
+                  type: "error",
+                  text1: error,
+                });
+                dispatch(SET_LOADER(false));
+              }
+            );
+          },
+          (error) => {
+            Toast.show({
+              type: "error",
+              text1: error,
+            });
+            dispatch(SET_LOADER(false));
+          }
+        );
+        setSelectedImage(result.assets[0].uri);
+      }
+    } else {
+      Alert.alert(
+        "Error",
+        "This application does not have access. Please enable it from your settings.",
+        [{ text: "Ok" }]
       );
-      setSelectedImage(result.assets[0].uri);
     }
   };
 
@@ -362,7 +381,7 @@ const EditProfile = ({
               type={"default"}
               containerStyle={{ width: "100%" }}
               autoCapitalize={"words"}
-              className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+              className="border-[#626262] border-b rounded-none p-0 mb-3"
             />
             <SmallText className="text-left p-0 text-[#696969] text-[15px]">
               Email Address
@@ -375,7 +394,7 @@ const EditProfile = ({
               editable={false}
               type={"email-address"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+              className="border-[#626262] border-b rounded-none p-0 mb-3"
             />
             <SmallText className="text-left p-0 text-[#696969] text-[15px]">
               Phone Number
@@ -387,7 +406,7 @@ const EditProfile = ({
               placeholder="Enter phone number"
               type={"numeric"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+              className="border-[#626262] border-b rounded-none p-0 mb-3"
             />
             <SmallText className="text-left p-0 text-[#696969] text-[15px]">
               Location
@@ -399,8 +418,10 @@ const EditProfile = ({
               type={"default"}
               containerStyle={{ width: "100%" }}
               autoCapitalize={"none"}
-              className="focus:border-primary border-[#626262] border-b rounded-none p-0 mb-3"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0 mb-3"
               editable={false}
+              dropdown
               suffixIcon={
                 <Feather name="chevron-down" size={24} color="#626262" />
               }
@@ -425,7 +446,8 @@ const EditProfile = ({
               type={"default"}
               containerStyle={{ width: "100%" }}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0 mb-3"
               secure={!visible}
               suffixIcon={
                 <Feather
@@ -443,7 +465,8 @@ const EditProfile = ({
               type={"default"}
               containerStyle={{ width: "100%" }}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+              className="rounded-none p-0"
+              containerClassName="focus:border-primary border-[#626262] border-b rounded-none p-0 mb-3"
               secure={!visible1}
               suffixIcon={
                 <Feather

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Pressable,
   FlatList,
+  Alert,
 } from "react-native";
 
 import React from "react";
@@ -43,6 +44,8 @@ import { getUserListing } from "../../api/category";
 import Toast from "react-native-toast-message";
 import UserProfileCard from "../../components/userProfileCard";
 import { verifyListing } from "../../api/verification";
+import { GradientText } from "../../components/gradientText";
+import { getFreeDiskStorageAsync } from "expo-file-system";
 
 const allServices = [
   "Sole",
@@ -75,6 +78,14 @@ const Verification = ({
   const { darkMode } = useSelector((state: RootState) => state.auth);
 
   const pickFile = async () => {
+    const freeSpace = await getFreeDiskStorageAsync();
+    if (freeSpace < 100) {
+      Toast.show({
+        type: "error",
+        text1: "Please free up space to 100mb",
+      });
+      return;
+    }
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: "*/*", // Accept any file type
@@ -85,6 +96,11 @@ const Verification = ({
         setCac(result.assets[0]);
       }
     } catch (error) {
+      Alert.alert(
+        "Error",
+        "Something went wrong. Please try again or check setting if permission is enabled.",
+        [{ text: "Ok" }]
+      );
       console.error("Error picking file:", error);
     }
   };
@@ -92,22 +108,39 @@ const Verification = ({
   const pickImages = async (
     type: "idFront" | "idBack" | "skill" | "utility"
   ) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      if (type === "idFront") {
-        setIdFront(result.assets[0]);
-      } else if (type === "idBack") {
-        setIdBack(result.assets[0]);
-      } else if (type === "skill") {
-        setSkill(result.assets[0]);
-      } else if (type === "utility") {
-        setUtility(result.assets[0]);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const freeSpace = await getFreeDiskStorageAsync();
+      if (freeSpace < 100) {
+        Toast.show({
+          type: "error",
+          text1: "Please free up space to 100mb",
+        });
+        return;
       }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 4],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        if (type === "idFront") {
+          setIdFront(result.assets[0]);
+        } else if (type === "idBack") {
+          setIdBack(result.assets[0]);
+        } else if (type === "skill") {
+          setSkill(result.assets[0]);
+        } else if (type === "utility") {
+          setUtility(result.assets[0]);
+        }
+      }
+    } else {
+      Alert.alert(
+        "Error",
+        "This application does not have access. Please enable it from your settings.",
+        [{ text: "Ok" }]
+      );
     }
   };
 
@@ -147,7 +180,7 @@ const Verification = ({
     } else if (!idFront || !idBack) {
       Toast.show({
         type: "error",
-        text1: "Please ensure all documents are uploaded",
+        text1: "Please upload the front and back of your ID card",
       });
     } else if (!isChecked) {
       Toast.show({
@@ -158,34 +191,44 @@ const Verification = ({
       dispatch(SET_LOADER(true));
       verifyListing(
         {
-          cac_document: {
-            name: cac.name,
-            uri: cac.uri,
-            type: cac.mimeType,
-          },
-          id_card_back: {
-            name: idBack.fileName,
-            uri: idBack.uri,
-            type: "image/png",
-          },
-          id_card_front: {
-            name: idFront.fileName,
-            uri: idFront.uri,
-            type: "image/png",
-          },
+          cac_document: cac
+            ? {
+                name: cac?.name,
+                uri: cac?.uri,
+                type: cac?.mimeType,
+              }
+            : null,
+          id_card_back: idBack
+            ? {
+                name: idBack?.fileName,
+                uri: idBack?.uri,
+                type: "image/png",
+              }
+            : null,
+          id_card_front: idFront
+            ? {
+                name: idFront?.fileName,
+                uri: idFront?.uri,
+                type: "image/png",
+              }
+            : null,
           listing_id: detail?.id || "",
-          proof_address: {
-            name: idBack.fileName,
-            uri: utility.uri,
-            type: "image/png",
-          },
+          proof_address: utility
+            ? {
+                name: utility?.fileName,
+                uri: utility?.uri,
+                type: "image/png",
+              }
+            : null,
           reg_number: regNo,
           services,
-          skill_certificate: {
-            name: skill.fileName,
-            uri: skill.uri,
-            type: "image/png",
-          },
+          skill_certificate: skill
+            ? {
+                name: skill?.fileName,
+                uri: skill?.uri,
+                type: "image/png",
+              }
+            : null,
         },
         (response) => {
           dispatch(SET_LOADER(false));
@@ -236,7 +279,9 @@ const Verification = ({
             type={"default"}
             containerStyle={{ width: "100%" }}
             autoCapitalize={"none"}
-            className="border-[#626262] border-b focus:border-primary rounded-none p-0 mb-3"
+            className="rounded-none p-0"
+            containerClassName="border-[#626262] border-b rounded-none p-0"
+            dropdown
             editable={false}
             suffixIcon={
               <Feather name="chevron-down" size={24} color="#626262" />
@@ -521,6 +566,18 @@ const Verification = ({
           ItemSeparatorComponent={() => (
             <Spacer value={H("1%")} axis="vertical" />
           )}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("40%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           renderItem={({ item }) => (
             <UserProfileCard
               navigation={navigation}
