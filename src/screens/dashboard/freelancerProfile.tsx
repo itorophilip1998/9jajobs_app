@@ -129,9 +129,7 @@ const FreelancerProfile = ({
               className="w-full h-full rounded-md"
             />
           </Pressable>
-          <Spacer value={H("1%")} axis="vertical" />
-          <BorderBottom />
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center justify-between mt-2 w-full">
             <View className="w-[50%]">
               <View className="flex-row items-center mb-1 w-full pr-3">
@@ -297,9 +295,9 @@ const FreelancerProfile = ({
               </TouchableOpacity>
             </View>
           </View>
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <BorderBottom />
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <SmallText
             style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
             className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
@@ -316,9 +314,9 @@ const FreelancerProfile = ({
               ""
             )}
           </SmallText>
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <BorderBottom />
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           {route.params?.data?.listings_photos.length > 0 && (
             <>
               <SmallText
@@ -349,9 +347,9 @@ const FreelancerProfile = ({
                   )
                 )}
               </ScrollView>
-              <Spacer value={H("1%")} axis="vertical" />
+              <Spacer value={H("2%")} axis="vertical" />
               <BorderBottom />
-              <Spacer value={H("1%")} axis="vertical" />
+              <Spacer value={H("2%")} axis="vertical" />
             </>
           )}
           {route.params?.data?.listings_videos.length > 0 && (
@@ -376,9 +374,9 @@ const FreelancerProfile = ({
                   )
                 )}
               </ScrollView>
-              <Spacer value={H("1%")} axis="vertical" />
+              <Spacer value={H("2%")} axis="vertical" />
               <BorderBottom />
-              <Spacer value={H("1%")} axis="vertical" />
+              <Spacer value={H("2%")} axis="vertical" />
             </>
           )}
           <View className="w-full flex-row justify-between items-center">
@@ -443,9 +441,9 @@ const FreelancerProfile = ({
               </View>
             </>
           ))}
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <BorderBottom />
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <View className="flex-row items-center">
             <MaterialCommunityIcons
               name="calendar-today"
@@ -582,9 +580,9 @@ const FreelancerProfile = ({
               {route.params?.data.listing_oh_sunday || "N/A"}
             </SmallText>
           </View>
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <BorderBottom />
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <View className="flex-row items-center">
             <AntDesign name="idcard" size={30} color={COLORS.primary} />
             {darkMode ? (
@@ -773,10 +771,7 @@ const FreelancerProfile = ({
               </View>
             </View>
           )}
-
-          <Spacer value={H("1%")} axis="vertical" />
-          <BorderBottom />
-          <Spacer value={H("1%")} axis="vertical" />
+          <Spacer value={H("3%")} axis="vertical" />
           {Boolean(
             route.params?.data?.address_latitude &&
               route.params?.data?.address_longitude

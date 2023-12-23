@@ -82,7 +82,7 @@ const NotificationSection = ({
       ListEmptyComponent={
         <>
           <View
-            className="flex-1 w-full h-full justify-center items-center"
+            className="flex-1 w-full h-full justify-center items-center px-4"
             style={{ height: H("71%") }}
           >
             <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
