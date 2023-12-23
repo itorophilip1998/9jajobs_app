@@ -159,7 +159,7 @@ const NavigationSetup = () => {
             console.log(error);
           }
         );
-      }, 60 * 1000);
+      }, 2 * 60 * 1000);
     } else {
       clearTimeout(timer);
     }

@@ -30,6 +30,7 @@ import PrivacyIcon from "../../../assets/icons/privacy.svg";
 import FeedBackIcon from "../../../assets/icons/feedback.svg";
 import FaqIcon from "../../../assets/icons/faq.svg";
 import AboutIcon from "../../../assets/icons/about.svg";
+import SettingsIcon from "../../../assets/icons/settings.svg";
 import ProfileMenuCard from "../../components/profileMenuCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -45,6 +46,7 @@ const routes = [
   { path: "Verification", name: "Verification", icon: VerifyIcon },
   { path: "MyListing", name: "My Listing", icon: ListingIcon },
   { path: "BoostPost", name: "Boost Post", icon: BoostIcon },
+  { path: "EditProfile", name: "Settings", icon: SettingsIcon },
   {
     path: "Privacy",
     name: "Privacy Policy",
@@ -130,13 +132,13 @@ const Profile = ({
               {profile?.email}
             </SmallText>
           </View>
-          <AntDesign
+          {/* <AntDesign
             name="setting"
             size={30}
             color={COLORS.primary}
             // className="ml-2"
             onPress={() => navigation.navigate("EditProfile")}
-          />
+          /> */}
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}

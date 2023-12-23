@@ -73,7 +73,6 @@ const EditListing = ({
   const { loggedIn, access_token, darkMode, profile } = useSelector(
     (state: RootState) => state.auth
   );
-  console.log(route.params?.data);
 
   const [categorySearch, setCategorySearch] = React.useState<string>("");
   const [amenitySearch, setAmenitySearch] = React.useState<string>("");
@@ -310,7 +309,6 @@ const EditListing = ({
   const amenitiesRef = React.useRef<RBSheet | null>(null);
 
   React.useEffect(() => {
-    // console.log(profile);
     if (profile) {
       setEmail(profile?.email || "");
       setPhone(profile?.phone || "");
@@ -413,28 +411,26 @@ const EditListing = ({
           listing_description: description,
           listing_phone: phone,
           photo_list: selectedImages.map((item) => ({
-            name: item?.fileName,
+            name: item?.fileName ||
+                  "image." + item?.uri?.split(".").pop()?.toLowerCase(),
             uri: item?.uri,
-            type:
-              "image/" +
-              item?.uri?.split(".")[item?.uri?.split(".")?.length - 1],
+            type: "image/" + item?.uri?.split(".").pop()?.toLowerCase(),
           })),
           video: selectedVideos.map((item) => ({
-            name: item?.fileName,
+            name: item?.fileName ||
+                  "video." + item?.uri?.split(".").pop()?.toLowerCase(),
             uri: item?.uri,
-            type:
-              "video/" +
-              item?.uri
-                ?.split(".")
-                [item?.uri?.split(".")?.length - 1]?.toLowerCase(),
+            type: "video/" + item?.uri?.split(".").pop()?.toLowerCase(),
           })),
-          listing_featured_photo: logo ? {
-            name: logo?.fileName,
-            uri: logo?.uri,
-            type:
-              "image/" +
-              logo?.uri?.split(".")[logo?.uri?.split(".")?.length - 1],
-          } : null,
+          listing_featured_photo: logo
+            ? {
+                name:
+                  logo?.fileName ||
+                  "image." + logo?.uri?.split(".").pop()?.toLowerCase(),
+                uri: logo?.uri,
+                type: "image/" + logo?.uri?.split(".").pop()?.toLowerCase(),
+              }
+            : null,
           address_latitude: latitude,
           address_longitude: longitude,
           is_featured: true,
@@ -1150,10 +1146,11 @@ const EditListing = ({
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
-            data={allAmenities.filter((item) =>
-              item?.amenity_name
-                ?.toLowerCase()
-                .includes(amenitySearch.toLowerCase())
+            data={allAmenities.filter(
+              (item) =>
+                item?.amenity_name
+                  ?.toLowerCase()
+                  .includes(amenitySearch.toLowerCase())
             )}
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
@@ -1176,12 +1173,16 @@ const EditListing = ({
                 className="w-[100%] h-auto flex-row items-center"
                 onPress={() => {
                   const isItemInArray = amenities.some(
-                    (obj) => obj.id === item.id
+                    (obj) => obj?.amenity_details ? obj?.amenity_details?.id  === item.id : obj?.id === item.id
                   );
 
                   if (isItemInArray) {
                     setAmenities((prev: any) =>
-                      prev.filter((obj: any) => item.id !== obj.id)
+                      prev.filter((obj: any) =>
+                        obj?.amenity_details
+                          ? obj?.amenity_details?.id !== item.id
+                          : obj?.id !== item.id
+                      )
                     );
                   } else {
                     setAmenities((prev: any) => [...prev, item]);
@@ -1189,7 +1190,9 @@ const EditListing = ({
                 }}
               >
                 {amenities.some(
-                  (data) => data?.amenity_name === item?.amenity_name
+                  (data) =>
+                    data?.amenity_name === item?.amenity_name ||
+                    data?.amenity_details?.amenity_name === item?.amenity_name
                 ) && (
                   <Entypo
                     name="check"

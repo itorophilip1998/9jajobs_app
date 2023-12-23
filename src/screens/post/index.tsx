@@ -84,7 +84,6 @@ const Post = ({
         getWalletDetails(
           null,
           (response) => {
-            // console.log(response);
             setWalletDetails(response);
             // dispatch(SET_LOADER(false));
           },
@@ -108,13 +107,13 @@ const Post = ({
   const [description, setDescription] = React.useState<string>("");
   const [category, setCategory] = React.useState<any>(null);
   const [location, setLocation] = React.useState<string>("");
-  const [monday, setMonday] = React.useState<string>("");
-  const [tuesday, setTuesday] = React.useState<string>("");
-  const [wednesday, setWednesday] = React.useState<string>("");
-  const [thursday, setThursday] = React.useState<string>("");
-  const [friday, setFriday] = React.useState<string>("");
-  const [saturday, setSaturday] = React.useState<string>("");
-  const [sunday, setSunday] = React.useState<string>("");
+  const [monday, setMonday] = React.useState<string>("24HOURS");
+  const [tuesday, setTuesday] = React.useState<string>("24HOURS");
+  const [wednesday, setWednesday] = React.useState<string>("24HOURS");
+  const [thursday, setThursday] = React.useState<string>("24HOURS");
+  const [friday, setFriday] = React.useState<string>("24HOURS");
+  const [saturday, setSaturday] = React.useState<string>("24HOURS");
+  const [sunday, setSunday] = React.useState<string>("24HOURS");
   const [longitude, setLongitude] = React.useState<string | null>(null);
   const [latitude, setLatitude] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<string>("");
@@ -268,7 +267,6 @@ const Post = ({
   const amenitiesRef = React.useRef<RBSheet | null>(null);
 
   React.useEffect(() => {
-    // console.log(profile);
     if (profile) {
       setEmail(profile?.email || "");
       setPhone(profile?.phone || "");
@@ -277,7 +275,10 @@ const Post = ({
   }, [profile]);
 
   const createListing = () => {
-    dispatch(SET_LOADER(true));
+    Toast.show({
+      type: "success",
+      text1: "Listing creation in progress...",
+    });
     addListing(
       {
         listing_creation_amount: profile?.listing_creation_amount?.toString(),
@@ -288,25 +289,25 @@ const Post = ({
         listing_description: description,
         listing_phone: phone,
         photo_list: selectedImages.map((item) => ({
-          name: item?.fileName,
+          name:
+            item?.fileName ||
+            "image." + item?.uri?.split(".").pop()?.toLowerCase(),
           uri: item?.uri,
-          type:
-            "image/" + item?.uri?.split(".")[item?.uri?.split(".")?.length - 1],
+          type: "image/" + logo?.uri?.split(".").pop()?.toLowerCase(),
         })),
         video: selectedVideos.map((item) => ({
-          name: item?.fileName,
+          name:
+            item?.fileName ||
+            "image" + item?.uri?.split(".").pop()?.toLowerCase(),
           uri: item?.uri,
-          type:
-            "video/" +
-            item?.uri
-              ?.split(".")
-              [item?.uri?.split(".")?.length - 1]?.toLowerCase(),
+          type: "video/" + item?.uri?.split(".").pop()?.toLowerCase(),
         })),
         listing_featured_photo: {
-          name: logo?.fileName,
+          name:
+            logo?.fileName ||
+            "image." + logo?.uri?.split(".").pop()?.toLowerCase(),
           uri: logo?.uri,
-          type:
-            "image/" + logo?.uri?.split(".")[logo?.uri?.split(".")?.length - 1],
+          type: "image/" + logo?.uri?.split(".").pop()?.toLowerCase(),
         },
         address_latitude: latitude || "",
         address_longitude: longitude || "",
@@ -344,14 +345,14 @@ const Post = ({
           type: "success",
           text1: response?.message,
         });
-        dispatch(SET_LOADER(false));
+        // dispatch(SET_LOADER(false));
       },
       (error) => {
         Toast.show({
           type: "error",
           text1: error,
         });
-        dispatch(SET_LOADER(false));
+        // dispatch(SET_LOADER(false));
       }
     );
   };
@@ -639,7 +640,7 @@ const Post = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
               className="text-[#D4E1D2] text-left p-0"
             >
-              Website
+              Website (optional)
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField
@@ -657,7 +658,7 @@ const Post = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
               className="text-[#D4E1D2] text-left p-0"
             >
-              Amenities
+              Amenities (optional)
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField
@@ -813,7 +814,7 @@ const Post = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
               className="text-[#D4E1D2] text-left p-0"
             >
-              Social Media
+              Social Media (optional)
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField

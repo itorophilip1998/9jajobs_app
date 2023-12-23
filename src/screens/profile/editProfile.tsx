@@ -86,13 +86,14 @@ const EditProfile = ({
         editUser(
           {
             photo: {
-              name: result.assets[0].fileName,
+              name:
+                result.assets[0].fileName ||
+                "photo." +
+                  result.assets[0].uri?.split(".").pop()?.toLowerCase(),
               uri: result.assets[0].uri,
               type:
                 "image/" +
-                result.assets[0].uri.split(".")[
-                  result.assets[0].uri.split(".").length - 1
-                ],
+                result.assets[0].uri?.split(".").pop()?.toLowerCase(),
             },
           },
           (response) => {

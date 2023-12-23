@@ -69,7 +69,7 @@ export const addListing = async (
       })
     );
 
-  console.log(formData);
+  console.log(data.listing_featured_photo);
 
   var config = {
     method: "post",
