@@ -144,7 +144,7 @@ const Signin = ({
             email,
             password,
             phone: phoneNumber,
-            ref_code: referralCode,
+            referrer_code: referralCode === "" ? null : referralCode,
             re_password: confirmPassword,
           },
           (response) => {

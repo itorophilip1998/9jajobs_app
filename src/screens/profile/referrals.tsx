@@ -48,6 +48,7 @@ const Referrals = ({
         (response) => {
           dispatch(SET_LOADER(false));
           setReferral(response?.referral);
+          console.log(response?.referral);
         },
         (error) => {
           dispatch(SET_LOADER(false));
