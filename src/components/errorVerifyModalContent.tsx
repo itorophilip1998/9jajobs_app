@@ -21,9 +21,10 @@ interface IProps {
   visible: boolean;
   children: JSX.Element;
   icon: JSX.Element;
+  color?: string;
 }
 
-const ErrorVerifyModalContent: React.FC<IProps> = ({ message, visible, icon, children }) => {
+const ErrorVerifyModalContent: React.FC<IProps> = ({ message, visible, icon, children, color }) => {
   const {darkMode} = useSelector((state: RootState) => state.auth)
   return (
     <Modal showModal={visible}>
@@ -38,7 +39,7 @@ const ErrorVerifyModalContent: React.FC<IProps> = ({ message, visible, icon, chi
           {icon}
         </View>
         <Spacer axis="vertical" value={10} />
-        <Title className="text-[#C93636] text-center w-full text-[18px]">{message.title}</Title>
+        <Title style={{color}} className="text-[#C93636] text-center w-full text-[18px]">{message.title}</Title>
         <Spacer axis="vertical" value={10} />
         <SmallText
           className="p-0 text-center w-full text-[14px]"

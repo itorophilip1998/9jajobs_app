@@ -3,7 +3,6 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   FlatList,
   Pressable,
 } from "react-native";
@@ -30,6 +29,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { getReferral } from "../../api/referral";
 import { SET_LOADER } from "../../store/formDataSlice";
 import { GradientText } from "../../components/gradientText";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Referrals = ({
   navigation,

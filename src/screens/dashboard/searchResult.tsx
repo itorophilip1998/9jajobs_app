@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Spacer } from "../../components";
+import { Button, Spacer } from "../../components";
 import CategoryCard from "../../components/categoryCard";
 import TitleWithButton from "../../components/titleWithButton";
 import { CATEGORIES } from "../../data/category";
@@ -102,8 +102,14 @@ const SearchResult = ({
                 style={{ height: H("71%") }}
               >
                 <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Nothing Yet
+                  Oops! No result found
                 </GradientText>
+                <Spacer value={H("2%")} axis="vertical" />
+                <Button
+                  text="Back to Search"
+                  onPress={() => navigation.navigate("Search")}
+                  buttonStyleClassName="rounded-md"
+                />
               </View>
             </>
           }

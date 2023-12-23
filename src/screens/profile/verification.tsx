@@ -4,13 +4,12 @@ import {
   KeyboardAvoidingView,
   Image,
   Platform,
-  SafeAreaView,
   ScrollView,
   Pressable,
   FlatList,
   Alert,
 } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {

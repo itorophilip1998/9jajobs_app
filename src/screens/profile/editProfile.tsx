@@ -59,7 +59,7 @@ const EditProfile = ({
   const [country, setCountry] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [confirm_password, setConfirmPassword] = React.useState<string>("");
-  const [selectedImage, setSelectedImage] = React.useState<any>(null);
+  const [selectedImage, setSelectedImage] = React.useState<string>("");
   const [visible, setVisible] = React.useState<boolean>(false);
   const [visible1, setVisible1] = React.useState<boolean>(false);
 
@@ -88,7 +88,11 @@ const EditProfile = ({
             photo: {
               name: result.assets[0].fileName,
               uri: result.assets[0].uri,
-              type: "image/png",
+              type:
+                "image/" +
+                result.assets[0].uri.split(".")[
+                  result.assets[0].uri.split(".").length - 1
+                ],
             },
           },
           (response) => {
@@ -100,6 +104,7 @@ const EditProfile = ({
                 });
                 dispatch(SET_LOADER(false));
                 dispatch(SET_PROFILE(response1));
+                setSelectedImage(result.assets[0].uri);
               },
               (error) => {
                 Toast.show({
@@ -118,7 +123,6 @@ const EditProfile = ({
             dispatch(SET_LOADER(false));
           }
         );
-        setSelectedImage(result.assets[0].uri);
       }
     } else {
       Alert.alert(

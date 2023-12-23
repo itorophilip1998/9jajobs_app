@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TouchableWithoutFeedback,
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -34,6 +35,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
 import userImg from "../../../assets/images/user.jpg";
+import ShowImage from "../modals/showImage";
 
 const routes = [
   { path: "MyWallet", name: "My Wallet", icon: WalletIcon },
@@ -48,7 +50,11 @@ const routes = [
     name: "Privacy Policy",
     icon: PrivacyIcon,
   },
-  { path: "https://9jajob.com/contact", name: "Contact Us", icon: FeedBackIcon },
+  {
+    path: "https://9jajob.com/contact",
+    name: "Contact Us",
+    icon: FeedBackIcon,
+  },
   { path: "https://9jajob.com/faq", name: "FAQ", icon: FaqIcon },
   { path: "https://9jajob.com/about", name: "About", icon: AboutIcon },
 ];
@@ -59,6 +65,7 @@ const Profile = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
+  const [profileImg, setProfileImg] = React.useState<string>("");
   //   const sortRef = React.useState<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
@@ -84,18 +91,20 @@ const Profile = ({
             My Account
           </GradientText>
         )}
-        <Image
-          source={
-            profile?.photo
-              ? {
-                  uri: profile?.photo,
-                }
-              : userImg
-          }
-          alt=""
-          className=" w-[70%] mx-auto h-[170px] my-3 rounded-lg"
-          resizeMode="cover"
-        />
+        <TouchableWithoutFeedback onPress={() => setProfileImg(profile?.photo)}>
+          <Image
+            source={
+              profile?.photo
+                ? {
+                    uri: profile?.photo,
+                  }
+                : userImg
+            }
+            alt=""
+            className=" w-[70%] mx-auto h-[170px] mb-3 mt-6 rounded-lg"
+            resizeMode="cover"
+          />
+        </TouchableWithoutFeedback>
         <View className="flex-row item-center justify-center pl-4">
           <View>
             {darkMode ? (
@@ -143,6 +152,11 @@ const Profile = ({
             <ProfileMenuCard navigation={navigation} item={item} key={idx} />
           ))}
         </ScrollView>
+        <ShowImage
+          close={() => setProfileImg("")}
+          img={profileImg}
+          visible={!!profileImg}
+        />
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

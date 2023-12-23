@@ -117,6 +117,14 @@ const Search = ({
               placeholder={"Search here..."}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               autoCapitalize={"none"}
+              onSubmitEditing={() =>
+                navigation.navigate("SearchResult", {
+                  data: {
+                    search,
+                    location,
+                  },
+                })
+              }
             />
           </Pressable>
           <Pressable
@@ -165,7 +173,8 @@ const Search = ({
                 .trim()
                 .includes(search.trim().toLowerCase()) ||
               item.r_listing_category?.listing_category_name
-                .toLowerCase().trim()
+                .toLowerCase()
+                .trim()
                 .includes(search.trim().toLowerCase())
           )}
           // className="px-2"

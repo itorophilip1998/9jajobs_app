@@ -241,6 +241,7 @@ const AppNavigator = () => {
     if (loggedIn) {
       getUser(
         (response) => {
+          // console.log(response);
           dispatch(SET_PROFILE(response));
         },
         (error) => {

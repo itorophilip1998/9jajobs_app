@@ -76,7 +76,6 @@ const Dashboard = ({
           is_trending: true,
         },
         (response) => {
-          console.log(response);
           setTrending(response.listing);
           dispatch(SET_LOADER(false));
         },
@@ -214,7 +213,7 @@ const Dashboard = ({
             />
             <SmallText
               className="text-center text-primary p-0"
-              style={!darkMode && { color: !darkMode && "#0F0F0F" }}
+              style={!darkMode && { color: !darkMode ? "#0F0F0F": undefined }}
             >
               See More
             </SmallText>

@@ -4,12 +4,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  SafeAreaView,
   TouchableOpacity,
   TextInput,
   FlatList,
 } from "react-native";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { width, height } from "../../utility/constant";
@@ -73,7 +73,7 @@ const BoostPost = ({
         backgroundColor: darkMode ? "black" : "#D4E1D2",
       }}
     >
-      <SafeAreaView className="flex-1 w-full">
+      <SafeAreaView className="flex-1 w-full h-full">
         <View
           style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
           className="relative flex flex-row items-center w-full bg-[#0f0f0f] justify-between px-3 py-4"

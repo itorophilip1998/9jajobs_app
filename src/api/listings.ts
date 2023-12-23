@@ -19,6 +19,7 @@ export const addListing = async (
     listing_oh_thursday: string;
     listing_oh_friday: string;
     listing_oh_saturday: string;
+    listing_creation_amount: string;
     listing_oh_sunday: string;
     listing_featured_photo: any;
     listing_category_id: string;
@@ -51,8 +52,11 @@ export const addListing = async (
   formData.append("listing_featured_photo", data.listing_featured_photo);
   formData.append("listing_category_id", data.listing_category_id);
   formData.append("listing_status", data.listing_status);
+  formData.append("listing_creation_amount", data.listing_creation_amount);
   formData.append("is_featured", data.is_featured.toString());
-  data.photo_list.map((item, idx) => formData.append("photo_list[" + idx + "]", item));
+  data.photo_list.map((item, idx) =>
+    formData.append("photo_list[" + idx + "]", item)
+  );
   data.video.map((item, idx) => formData.append("video[" + idx + "]", item));
   data.amenity.map((item, idx) =>
     formData.append("amenity[" + idx + "]", item)

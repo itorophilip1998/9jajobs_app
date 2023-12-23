@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  TouchableWithoutFeedback,
   Linking,
   Pressable,
   Alert,
@@ -63,6 +64,8 @@ import Toast from "react-native-toast-message";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { bookListing } from "../../api/booking";
 import { DatePicker, TimePicker } from "../../components/datePicker";
+import ShowImage from "../modals/showImage";
+import YoutubeVideos from "../modals/youtubeVideos";
 
 const FreelancerProfile = ({
   navigation,
@@ -76,8 +79,10 @@ const FreelancerProfile = ({
     (state: RootState) => state.auth
   );
   const [amenities, setAmenities] = React.useState<any[]>([]);
+  const [videoData, setVideoData] = React.useState<any>(null);
 
   const bookRef = React.useRef<RBSheet | null>(null);
+  const [profileImg, setProfileImg] = React.useState<string>("");
   const [date, setDate] = React.useState<string>("");
   const [isDate, setDateActive] = React.useState<boolean>(false);
 
@@ -97,7 +102,7 @@ const FreelancerProfile = ({
       <SafeAreaView className="flex-1 w-full pt-4">
         <ScrollView showsVerticalScrollIndicator={false}>
           <TitleWithButton title="" fire={() => navigation.goBack()} />
-          <View
+          <Pressable
             style={{
               shadowColor: "#969191", // Shadow color
               shadowOffset: { width: 0, height: 3 }, // Shadow offset
@@ -105,6 +110,9 @@ const FreelancerProfile = ({
               shadowRadius: 15, // Shadow radius
               elevation: 5,
             }}
+            onPress={() =>
+              setProfileImg(route.params?.data?.listing_featured_photo || "")
+            }
             className="w-[270px] h-[270px] rounded-full mx-auto bg-[#0f0f0f]"
           >
             <Image
@@ -119,14 +127,14 @@ const FreelancerProfile = ({
               alt=""
               className="w-full h-full rounded-full"
             />
-          </View>
+          </Pressable>
           <Spacer value={H("3%")} axis="vertical" />
           <View className="flex-row items-center justify-between mt-2 w-full">
             <View className="w-[50%]">
               <View className="flex-row items-center mb-1 w-full pr-3">
                 {darkMode ? (
                   <SmallText
-                    numberOfLine={1}
+                    // numberOfLine={1}
                     className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold"
                   >
                     {FirstLetterUppercase(
@@ -135,7 +143,7 @@ const FreelancerProfile = ({
                   </SmallText>
                 ) : (
                   <GradientText
-                    numberOfLines={1}
+                    // numberOfLines={1}
                     className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold"
                   >
                     {FirstLetterUppercase(
@@ -317,14 +325,18 @@ const FreelancerProfile = ({
                 {route.params?.data?.listings_photos.map(
                   (item: any, idx: number) => (
                     <>
-                      <Image
-                        key={idx}
-                        source={{
-                          uri: item.photo,
-                        }}
-                        alt=""
-                        className="w-[150px] h-[100px] rounded-lg"
-                      />
+                      <TouchableWithoutFeedback
+                        onPress={() => setProfileImg(item.photo || "")}
+                      >
+                        <Image
+                          key={idx}
+                          source={{
+                            uri: item.photo,
+                          }}
+                          alt=""
+                          className="w-[150px] h-[100px] rounded-lg"
+                        />
+                      </TouchableWithoutFeedback>
                       <Spacer value={W("5%")} axis="horizontal" key={idx + 1} />
                     </>
                   )
@@ -343,12 +355,15 @@ const FreelancerProfile = ({
               </SmallText>
               <Spacer value={H("3%")} axis="vertical" />
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {route.params?.data?.listings_photos.map(
+                {route.params?.data?.listings_videos.map(
                   (item: any, idx: number) => (
-                    <>
-                      <VideoCard item={item} />
+                    <React.Fragment key={idx}>
+                      <VideoCard
+                        item={item}
+                        openYoutube={(e) => setVideoData(e)}
+                      />
                       <Spacer value={W("5%")} axis="horizontal" key={idx + 1} />
-                    </>
+                    </React.Fragment>
                   )
                 )}
               </ScrollView>
@@ -696,7 +711,6 @@ const FreelancerProfile = ({
               <View className="flex-row items-center">
                 {route.params?.data?.listing_social_item.map(
                   (item: any, idx: number) => {
-                    console.log(item.social_url);
                     return (
                       <Pressable
                         key={idx}
@@ -781,17 +795,16 @@ const FreelancerProfile = ({
           )}
           <Button
             text="Book Now"
-            onPress={
-              () => bookRef.current?.open()
-              // Boolean(loggedIn && access_token)
-              //   ? bookRef.current?.open()
-              //   : (() => {
-              //       Toast.show({
-              //         type: "error",
-              //         text1: "Login to book this listing.",
-              //       });
-              //       navigation.navigate("Signin");
-              //     })()
+            onPress={() =>
+              Boolean(loggedIn && access_token)
+                ? bookRef.current?.open()
+                : (() => {
+                    Toast.show({
+                      type: "error",
+                      text1: "Login to book this listing.",
+                    });
+                    navigation.navigate("Signin");
+                  })()
             }
             buttonStyle={{ width: "100%" }}
           />
@@ -872,6 +885,16 @@ const FreelancerProfile = ({
           <Spacer value={H("6%")} axis="vertical" />
         </ScrollView>
       </BottomSheet>
+      <ShowImage
+        close={() => setProfileImg("")}
+        img={profileImg}
+        visible={!!profileImg}
+      />
+      <YoutubeVideos
+        visible={Boolean(videoData)}
+        close={() => setVideoData(null)}
+        item={videoData}
+      />
     </KeyboardAvoidingView>
   );
 };

@@ -8,6 +8,7 @@ import {
   Pressable,
   Image,
   Alert,
+  TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
@@ -28,7 +29,7 @@ import {
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Feather, Ionicons } from "@expo/vector-icons";
 import { CATEGORIES } from "../../data/category";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { COLORS } from "../../utility/colors";
@@ -48,6 +49,10 @@ import {
 } from "../../api/category";
 import { SET_LOADER } from "../../store/formDataSlice";
 import {
+  isFacebookLink,
+  isInstagramLink,
+  isLinkedInLink,
+  isTwitterLink,
   validateEmail,
   validatePhone,
   validateUrl,
@@ -70,6 +75,8 @@ const EditListing = ({
   );
   console.log(route.params?.data);
 
+  const [categorySearch, setCategorySearch] = React.useState<string>("");
+  const [amenitySearch, setAmenitySearch] = React.useState<string>("");
   const [business, setBusiness] = React.useState<string>(
     route.params?.data.listing_name || ""
   );
@@ -353,14 +360,7 @@ const EditListing = ({
         type: "error",
         text1: "Invalid Business Website.",
       });
-    } else if (
-      amenities.length > profile?.package?.purchase_details?.total_amenities
-    ) {
-      Toast.show({
-        type: "error",
-        text1: `Amenities cannot be more than your package limit of ${profile?.package?.purchase_details?.total_amenities}.`,
-      });
-    } else if (
+    }else if (
       monday.trim() === "" ||
       tuesday.trim() === "" ||
       wednesday.trim() === "" ||
@@ -378,34 +378,25 @@ const EditListing = ({
         type: "error",
         text1: "Whatsapp number must be 11 digits.",
       });
-    } else if (
-      facebook.trim().length > 0 &&
-      !validateUrl(facebook.trim()) &&
-      !facebook.trim().toLowerCase().includes("facebook.com")
-    ) {
+    } else if (facebook.trim().length > 0 && !isFacebookLink(facebook.trim())) {
       Toast.show({
         type: "error",
         text1: "Invalid facebook Link.",
       });
     } else if (
       instagram.trim().length > 0 &&
-      !validateUrl(instagram.trim()) &&
-      !instagram.trim().toLowerCase().includes("instagram.com")
+      !isInstagramLink(instagram.trim())
     ) {
       Toast.show({
         type: "error",
         text1: "Invalid instagram Link.",
       });
-    } else if (
-      twitter.trim().length > 0 &&
-      !validateUrl(twitter.trim()) &&
-      !twitter.trim().toLowerCase().includes("twitter.com")
-    ) {
+    } else if (twitter.trim().length > 0 && !isTwitterLink(twitter.trim())) {
       Toast.show({
         type: "error",
         text1: "Invalid twitter Link.",
       });
-    } else if (linkedIn.trim().length > 0 && !validateUrl(linkedIn.trim())) {
+    } else if (linkedIn.trim().length > 0 && !isLinkedInLink(linkedIn.trim())) {
       Toast.show({
         type: "error",
         text1: "Invalid linkedin Link.",
@@ -424,20 +415,26 @@ const EditListing = ({
           photo_list: selectedImages.map((item) => ({
             name: item?.fileName,
             uri: item?.uri,
-            type: "image/png",
+            type:
+              "image/" +
+              item?.uri?.split(".")[item?.uri?.split(".")?.length - 1],
           })),
           video: selectedVideos.map((item) => ({
             name: item?.fileName,
             uri: item?.uri,
-            type: "video/mp4",
+            type:
+              "video/" +
+              item?.uri
+                ?.split(".")
+                [item?.uri?.split(".")?.length - 1]?.toLowerCase(),
           })),
-          listing_featured_photo: logo
-            ? {
-                name: logo?.fileName,
-                uri: logo?.uri,
-                type: "image/png",
-              }
-            : null,
+          listing_featured_photo: logo ? {
+            name: logo?.fileName,
+            uri: logo?.uri,
+            type:
+              "image/" +
+              logo?.uri?.split(".")[logo?.uri?.split(".")?.length - 1],
+          } : null,
           address_latitude: latitude,
           address_longitude: longitude,
           is_featured: true,
@@ -503,7 +500,7 @@ const EditListing = ({
             className="relative flex flex-row items-center w-full justify-between px-3 mb-3 bg-[#0f0f0f]"
           >
             <TitleWithButton
-              title="Post New Ad"
+              title="Edit Listing"
               fire={() => navigation.goBack()}
               //   right
               //   rightFire={() => {}}
@@ -1040,7 +1037,7 @@ const EditListing = ({
             </View>
             <Spacer axis="vertical" value={H(3)} />
             <Button
-              text="Post Ad"
+              text="Update Listing"
               buttonStyle={{ width: "100%" }}
               onPress={validate}
             />
@@ -1055,10 +1052,36 @@ const EditListing = ({
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
           className="w-full flex-1 px-5 bg-[#0f0f0f]"
         >
+          <View
+            style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+            className="w-[100%] px-3 py-2 border bg-[#1b1b1b] mt-3 border-primary rounded-md flex-row justify-between items-center"
+          >
+            <AntDesign
+              name="search1"
+              size={20}
+              color={darkMode ? "#D4E1D2" : "#696969"}
+            />
+            <TextInput
+              keyboardType={"default"}
+              className={`h-full flex-1 px-2 text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
+              onChangeText={(value) => {
+                setCategorySearch(value);
+              }}
+              value={categorySearch}
+              placeholderTextColor={"#626262"}
+              placeholder={"Search here..."}
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              autoCapitalize={"none"}
+            />
+          </View>
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
-            data={allCategory}
+            data={allCategory.filter((item) =>
+              item?.listing_category_name
+                ?.toLowerCase()
+                .includes(categorySearch.toLowerCase())
+            )}
             keyExtractor={(item) => item.id.toString()}
             ListEmptyComponent={
               <>
@@ -1102,10 +1125,36 @@ const EditListing = ({
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
           className="w-full flex-1 px-5 bg-[#0f0f0f]"
         >
+          <View
+            style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+            className="w-[100%] px-3 py-2 border bg-[#1b1b1b] mt-3 border-primary rounded-md flex-row justify-between items-center"
+          >
+            <AntDesign
+              name="search1"
+              size={20}
+              color={darkMode ? "#D4E1D2" : "#696969"}
+            />
+            <TextInput
+              keyboardType={"default"}
+              className={`h-full flex-1 px-2 text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
+              onChangeText={(value) => {
+                setAmenitySearch(value);
+              }}
+              value={amenitySearch}
+              placeholderTextColor={"#626262"}
+              placeholder={"Search here..."}
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              autoCapitalize={"none"}
+            />
+          </View>
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
-            data={allAmenities}
+            data={allAmenities.filter((item) =>
+              item?.amenity_name
+                ?.toLowerCase()
+                .includes(amenitySearch.toLowerCase())
+            )}
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
