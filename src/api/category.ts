@@ -19,7 +19,7 @@ export const getAmenities = async (
     console.log("categories", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -43,7 +43,7 @@ export const getCategories = async (
     console.log("categories", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -67,7 +67,7 @@ export const getCategoryListing = async (
     console.log("category-listing", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -91,9 +91,9 @@ export const getAllListing = async (
   var config = {
     method: "get",
     url: `${BASE_URL}/categories/all-listing?address_longitude=${
-      data?.address_longitude || Number(store.getState().auth.lng)
+      store.getState().auth.lng !== 0 ? store.getState().auth.lng : ""
     }&address_latitude=${
-      data?.address_latitude || Number(store.getState().auth.lat)
+      store.getState().auth.lat !== 0 ? store.getState().auth.lat : ""
     }&listing_category_id=${data?.listing_category_id || ""}&listing_name=${
       data?.listing_name || ""
     }&listing_city=${data?.listing_city || ""}&is_trending=${
@@ -108,7 +108,7 @@ export const getAllListing = async (
     console.log("all-listing", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -157,7 +157,7 @@ export const getUserListing = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));

@@ -572,7 +572,7 @@ const Verification = ({
                 style={{ height: H("40%") }}
               >
                 <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Nothing Yet
+                  Oops! No Business Found
                 </GradientText>
               </View>
             </>

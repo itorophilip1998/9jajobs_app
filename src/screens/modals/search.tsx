@@ -24,7 +24,7 @@ import { RootState } from "../../store";
 import { SET_LOCATION, SET_SEARCH } from "../../store/searchSlice";
 import { width, height } from "../../utility/constant";
 import { FONTS } from "../../utility/fonts";
-import { BottomSheet, SmallText, Spacer } from "../../components";
+import { BottomSheet, Button, SmallText, Spacer } from "../../components";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { SET_LOADER } from "../../store/formDataSlice";
 import { getAllListing } from "../../api/category";
@@ -194,8 +194,14 @@ const Search = ({
                 style={{ height: H("71%") }}
               >
                 <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Nothing Yet
+                  Oops! No result found
                 </GradientText>
+                <Spacer value={H("2%")} axis="vertical" />
+                <Button
+                  text="Back to Home"
+                  onPress={() => navigation.navigate("Search")}
+                  buttonStyleClassName="rounded-md"
+                />
               </View>
             </>
           }

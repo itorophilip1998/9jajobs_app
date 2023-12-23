@@ -1083,10 +1083,10 @@ const EditListing = ({
               <>
                 <View
                   className="flex-1 w-full h-full justify-center items-center"
-                  // style={{ height: H("71%") }}
+                  style={{ height: H("71%") }}
                 >
                   <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                    Nothing Yet
+                    Oops! No Category Found
                   </GradientText>
                 </View>
               </>
@@ -1146,11 +1146,10 @@ const EditListing = ({
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
-            data={allAmenities.filter(
-              (item) =>
-                item?.amenity_name
-                  ?.toLowerCase()
-                  .includes(amenitySearch.toLowerCase())
+            data={allAmenities.filter((item) =>
+              item?.amenity_name
+                ?.toLowerCase()
+                .includes(amenitySearch.toLowerCase())
             )}
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
@@ -1160,11 +1159,12 @@ const EditListing = ({
               <>
                 <View
                   className="flex-1 w-full h-full justify-center items-center"
-                  style={{ height: H("40%") }}
+                  style={{ height: H("71%") }}
                 >
                   <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                    Nothing Yet
+                    Oops! No Amenity Found
                   </GradientText>
+                  
                 </View>
               </>
             }
@@ -1172,8 +1172,10 @@ const EditListing = ({
               <Pressable
                 className="w-[100%] h-auto flex-row items-center"
                 onPress={() => {
-                  const isItemInArray = amenities.some(
-                    (obj) => obj?.amenity_details ? obj?.amenity_details?.id  === item.id : obj?.id === item.id
+                  const isItemInArray = amenities.some((obj) =>
+                    obj?.amenity_details
+                      ? obj?.amenity_details?.id === item.id
+                      : obj?.id === item.id
                   );
 
                   if (isItemInArray) {

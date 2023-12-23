@@ -179,8 +179,8 @@ const NavigationSetup = () => {
       let location = await Location.getCurrentPositionAsync({});
       dispatch(
         SET_COORDINATE({
-          lat: location.coords.latitude.toString(),
-          lng: location.coords.longitude.toString(),
+          lat: location.coords.latitude,
+          lng: location.coords.longitude,
         })
       );
     })();

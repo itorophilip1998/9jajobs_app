@@ -12,7 +12,7 @@ import {
 } from "react-native-responsive-screen";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SmallText, Spacer } from "../../components";
+import { Button, SmallText, Spacer } from "../../components";
 import TitleWithButton from "../../components/titleWithButton";
 import { width, height } from "../../utility/constant";
 import { shadowBox, shadowBoxDark } from "../../style/Typography";
@@ -178,11 +178,19 @@ const Referrals = ({
               <>
                 <View
                   className="flex-1 w-full h-full justify-center items-center"
-                  style={{ height: H("30%") }}
+                  style={{ height: H("50%") }}
                 >
                   <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                    Nothing Yet
+                    Oops! No Referral Found
                   </GradientText>
+                  <Spacer value={H("2%")} axis="vertical" />
+                  <Button
+                    text="Go to Menu"
+                    onPress={() => {
+                      navigation.navigate("Profile")
+                    }}
+                    buttonStyleClassName="rounded-md"
+                  />
                 </View>
               </>
             }

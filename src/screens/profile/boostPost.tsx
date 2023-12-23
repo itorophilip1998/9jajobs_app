@@ -154,8 +154,14 @@ const BoostPost = ({
                 style={{ height: H("71%") }}
               >
                 <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Nothing Yet
+                  Oops! No Listings Found
                 </GradientText>
+                <Spacer value={H("2%")} axis="vertical" />
+                <Button
+                  text="Back to Menu"
+                  onPress={() => navigation.navigate("Profile")}
+                  buttonStyleClassName="rounded-md"
+                />
               </View>
             </>
           }

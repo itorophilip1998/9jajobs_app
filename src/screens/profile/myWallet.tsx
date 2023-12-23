@@ -229,11 +229,20 @@ const MyWallet = ({
             <>
               <View
                 className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("30%") }}
+                style={{ height: H("50%") }}
               >
                 <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Nothing Yet
+                  Oops! No Transaction Found
                 </GradientText>
+                <Spacer value={H("2%")} axis="vertical" />
+                <Button
+                  text="Fund Wallet"
+                  onPress={() => {
+                    setAmount("");
+                    fundRef.current?.open();
+                  }}
+                  buttonStyleClassName="rounded-md"
+                />
               </View>
             </>
           }

@@ -31,7 +31,7 @@ export const refreshToken = async (
     console.log("refresh", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -74,7 +74,7 @@ export const signUp = async (
     console.log("register", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || "Something went wrong. Try again.");
-    } else if (!err?.response?.data?.error) {
+    } else if (!err?.response?.data?.error || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data?.error === "object") {
       error(Object.values(err?.response?.data?.error).flat().join("\n"));
@@ -108,7 +108,7 @@ export const signIn = async (
   } catch (err: any) {
     console.log("login", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
-      error(err?.response?.data?.error);
+      error(err?.response?.data?.error || err?.response?.status === 500);
     } else if (!err?.response?.data?.error) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data?.error === "object") {
@@ -141,7 +141,7 @@ export const forgot = async (
   } catch (err: any) {
     console.log("forgot-password", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
-      error(err?.response?.data?.error);
+      error(err?.response?.data?.error || err?.response?.status === 500);
     } else if (!err?.response?.data?.error) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data?.error === "object") {
@@ -180,7 +180,7 @@ export const verifyAndReset = async (
   } catch (err: any) {
     console.log("verify-reset-error", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
-      error(err?.response?.data?.error);
+      error(err?.response?.data?.error || err?.response?.status === 500);
     } else if (!err?.response?.data?.error) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data?.error === "object") {
@@ -214,7 +214,7 @@ export const logout = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data || "Something went wrong. Try again.");
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));

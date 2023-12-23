@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Spacer } from "../../components";
+import { Button, Spacer } from "../../components";
 import CategoryCard from "../../components/categoryCard";
 import TitleWithButton from "../../components/titleWithButton";
 import { CATEGORIES } from "../../data/category";
@@ -68,8 +68,15 @@ const NearestListing = ({
                 style={{ height: H("71%") }}
               >
                 <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Nothing Yet
+                  Oops! No Listing Found
                 </GradientText>
+                <Spacer value={H("2%")} axis="vertical" />
+                <Button
+                  text="Back to Home"
+                  onPress={() => navigation.navigate("Home")}
+                  buttonStyleClassName="rounded-md"
+                  buttonStyle={{ width: "100%" }}
+                />
               </View>
             </>
           }
