@@ -1077,10 +1077,10 @@ const Post = ({
               <>
                 <View
                   className="flex-1 w-full h-full justify-center items-center"
-                  // style={{ height: H("71%") }}
+                  style={{ height: H("71%") }}
                 >
                   <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                    Nothing Yet
+                    Oops! No Category Found
                   </GradientText>
                 </View>
               </>
@@ -1153,10 +1153,10 @@ const Post = ({
               <>
                 <View
                   className="flex-1 w-full h-full justify-center items-center"
-                  style={{ height: H("40%") }}
+                  style={{ height: H("71%") }}
                 >
                   <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                    Nothing Yet
+                    Oops! No Amenities Found
                   </GradientText>
                 </View>
               </>

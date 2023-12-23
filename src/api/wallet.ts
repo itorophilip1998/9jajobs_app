@@ -36,7 +36,7 @@ export const getWalletDetails = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -100,7 +100,7 @@ export const initiateWalletTransaction = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -130,7 +130,7 @@ export const getBanks = async (
 
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -161,7 +161,7 @@ export const getAccountName = async (
     console.log("verify-account", err?.response?.data?.message);
     if (typeof err?.response?.data?.message === "string") {
       error(err?.response?.data?.message);
-    } else if (!err?.response?.data?.message) {
+    } else if (!err?.response?.data?.message || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data?.message === "object") {
       error(Object.values(err?.response?.data?.message).flat().join("\n"));
@@ -194,7 +194,6 @@ export const transfer = async (
   try {
     const response = await axios(config);
     const transferRecipientCode = response.data.data.recipient_code;
-    console.log("Transfer-recept", response.data.data);
 
     // Step 2: Initiate Transfer
     const transferData = {
@@ -220,7 +219,7 @@ export const transfer = async (
     console.log("verify-account", err?.response?.data);
     if (typeof err?.response?.data.message === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data.message) {
+    } else if (!err?.response?.data?.message || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data.message === "object") {
       error(Object.values(err?.response?.data.message).flat().join("\n"));

@@ -1,6 +1,6 @@
 import { View, Image, FlatList, TouchableOpacity } from "react-native";
 import React from "react";
-import { Spacer, SmallText } from "../../components";
+import { Spacer, SmallText, Button } from "../../components";
 import { MESSAGES } from "../../data/messages";
 import {
   widthPercentageToDP as W,
@@ -14,8 +14,13 @@ import Toast from "react-native-toast-message";
 import { SET_LOADER, SET_NOTIFICATION } from "../../store/formDataSlice";
 import moment from "moment";
 import { GradientText } from "../../components/gradientText";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-const NotificationSection = () => {
+const NotificationSection = ({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<any>;
+}) => {
   const focus = useIsFocused();
   const dispatch = useDispatch();
   const { darkMode } = useSelector((state: RootState) => state.auth);
@@ -81,8 +86,15 @@ const NotificationSection = () => {
             style={{ height: H("71%") }}
           >
             <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-              Nothing Yet
+              Oops! No Notification Found
             </GradientText>
+            <Spacer value={H("2%")} axis="vertical" />
+            <Button
+              text="Back to Home"
+              onPress={() => navigation.navigate("Home")}
+              buttonStyleClassName="rounded-md"
+              buttonStyle={{ width: "100%" }}
+            />
           </View>
         </>
       }

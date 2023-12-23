@@ -167,7 +167,7 @@ const Message = ({
           </View>
         </View>
         {type === "message" && <MessageSection navigation={navigation} />}
-        {type === "notification" && <NotificationSection />}
+        {type === "notification" && <NotificationSection navigation={navigation} />}
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

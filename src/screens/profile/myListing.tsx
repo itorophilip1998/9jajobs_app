@@ -175,8 +175,14 @@ const MyListing = ({
                 style={{ height: H("71%") }}
               >
                 <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Nothing Yet
+                  Oops! No Listing Found
                 </GradientText>
+                <Spacer value={H("2%")} axis="vertical" />
+                <Button
+                  text="Back to Menu"
+                  onPress={() => navigation.navigate("Profile")}
+                  buttonStyleClassName="rounded-md"
+                />
               </View>
             </>
           }
@@ -217,7 +223,9 @@ const MyListing = ({
                       backgroundColor: darkMode ? "#0f0f0f" : "white",
                     },
                   ]}
-                  onPress={() => navigation.navigate("EditListing", {data: item})}
+                  onPress={() =>
+                    navigation.navigate("EditListing", { data: item })
+                  }
                   className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
                 >
                   <AntDesign name="edit" size={15} color={COLORS.primary} />

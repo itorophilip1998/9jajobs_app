@@ -40,7 +40,7 @@ export const chatUser = async (
     }
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error);
-    } else if (!err?.response?.data?.error) {
+    } else if (!err?.response?.data?.error || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data?.error === "object") {
       error(Object.values(err?.response?.data?.error).flat().join("\n"));
@@ -82,7 +82,7 @@ export const spamUser = async (
     }
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error);
-    } else if (!err?.response?.data?.error) {
+    } else if (!err?.response?.data?.error || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data?.error === "object") {
       error(Object.values(err?.response?.data?.error).flat().join("\n"));
@@ -121,7 +121,7 @@ export const markRead = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -157,7 +157,7 @@ export const getChats = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -190,7 +190,7 @@ export const getFriendList = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));

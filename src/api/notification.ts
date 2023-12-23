@@ -28,7 +28,7 @@ export const getNotification = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -61,7 +61,7 @@ export const getNotificationCount = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
@@ -94,7 +94,7 @@ export const markReadNotification = async (
     }
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
-    } else if (!err?.response?.data) {
+    } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));

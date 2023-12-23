@@ -17,7 +17,7 @@ import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
-import { SmallText, Spacer } from "../../components";
+import { Button, SmallText, Spacer } from "../../components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { RouteProp } from "@react-navigation/native";
@@ -59,8 +59,15 @@ const Category = ({
                 style={{ height: H("71%") }}
               >
                 <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Nothing Yet
+                  Oops! No Category Found
                 </GradientText>
+                <Spacer value={H("2%")} axis="vertical" />
+                <Button
+                  text="Back to Home"
+                  onPress={() => navigation.navigate("Dashboard")}
+                  buttonStyleClassName="rounded-md"
+                  buttonStyle={{ width: "100%" }}
+                />
               </View>
             </>
           }

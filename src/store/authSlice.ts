@@ -7,8 +7,8 @@ export interface IAuth {
   darkMode: boolean;
   access_token: string | null;
   profile: any;
-  lat: string;
-  lng: string;
+  lat: number;
+  lng: number;
 }
 
 const initialState: IAuth = {
@@ -17,8 +17,8 @@ const initialState: IAuth = {
   darkMode: true,
   access_token: null,
   profile: null,
-  lat: "",
-  lng: "",
+  lat: 0,
+  lng: 0,
 };
 
 export const authSlice = createSlice({
@@ -42,10 +42,10 @@ export const authSlice = createSlice({
     },
     SET_COORDINATE: (
       state,
-      action: PayloadAction<Partial<{ lat: string; lng: string }>>
+      action: PayloadAction<Partial<{ lat: number; lng: number }>>
     ) => {
-      state.lat = action.payload?.lat || "";
-      state.lng = action.payload?.lng || "";
+      state.lat = action.payload?.lat || state.lat;
+      state.lng = action.payload?.lng || state.lng;
     },
   },
 });
