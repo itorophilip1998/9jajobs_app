@@ -6,8 +6,10 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  TouchableWithoutFeedback,
   Linking,
   Pressable,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
@@ -61,6 +63,10 @@ import { getRating } from "../../api/rating";
 import Toast from "react-native-toast-message";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { bookListing } from "../../api/booking";
+import { DatePicker, TimePicker } from "../../components/datePicker";
+import ShowImage from "../modals/showImage";
+import YoutubeVideos from "../modals/youtubeVideos";
+import BorderBottom from "../../components/borderBottom";
 
 const FreelancerProfile = ({
   navigation,
@@ -74,15 +80,15 @@ const FreelancerProfile = ({
     (state: RootState) => state.auth
   );
   const [amenities, setAmenities] = React.useState<any[]>([]);
+  const [videoData, setVideoData] = React.useState<any>(null);
 
   const bookRef = React.useRef<RBSheet | null>(null);
-  const [day, setDay] = React.useState<string>("");
-  const [month, setMonth] = React.useState<string>("");
-  const [year, setYear] = React.useState<string>("");
+  const [profileImg, setProfileImg] = React.useState<string>("");
+  const [date, setDate] = React.useState<string>("");
+  const [isDate, setDateActive] = React.useState<boolean>(false);
 
-  const [hour, setHour] = React.useState<string>("");
-  const [minutes, setMinutes] = React.useState<string>("");
-  const [location, setLocation] = React.useState<string>("");
+  const [time, setTime] = React.useState<string>("");
+  const [isTime, setTimeActive] = React.useState<boolean>(false);
 
   return (
     <KeyboardAvoidingView
@@ -97,7 +103,7 @@ const FreelancerProfile = ({
       <SafeAreaView className="flex-1 w-full pt-4">
         <ScrollView showsVerticalScrollIndicator={false}>
           <TitleWithButton title="" fire={() => navigation.goBack()} />
-          <View
+          <Pressable
             style={{
               shadowColor: "#969191", // Shadow color
               shadowOffset: { width: 0, height: 3 }, // Shadow offset
@@ -105,7 +111,10 @@ const FreelancerProfile = ({
               shadowRadius: 15, // Shadow radius
               elevation: 5,
             }}
-            className="w-[270px] h-[270px] rounded-full mx-auto bg-[#0f0f0f]"
+            onPress={() =>
+              setProfileImg(route.params?.data?.listing_featured_photo || "")
+            }
+            className="w-full h-[230px] rounded-full mx-auto bg-[#0f0f0f]"
           >
             <Image
               source={
@@ -117,16 +126,18 @@ const FreelancerProfile = ({
                   : userImg
               }
               alt=""
-              className="w-full h-full rounded-full"
+              className="w-full h-full rounded-md"
             />
-          </View>
-          <Spacer value={H("3%")} axis="vertical" />
+          </Pressable>
+          <Spacer value={H("1%")} axis="vertical" />
+          <BorderBottom />
+          <Spacer value={H("1%")} axis="vertical" />
           <View className="flex-row items-center justify-between mt-2 w-full">
             <View className="w-[50%]">
               <View className="flex-row items-center mb-1 w-full pr-3">
                 {darkMode ? (
                   <SmallText
-                    numberOfLine={1}
+                    // numberOfLine={1}
                     className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold"
                   >
                     {FirstLetterUppercase(
@@ -135,7 +146,7 @@ const FreelancerProfile = ({
                   </SmallText>
                 ) : (
                   <GradientText
-                    numberOfLines={1}
+                    // numberOfLines={1}
                     className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplaySemiBold"
                   >
                     {FirstLetterUppercase(
@@ -164,6 +175,22 @@ const FreelancerProfile = ({
                       ?.listing_category_name || ""
                   )}
                 </SmallText>
+                {/* <View className="flex-row items-center">
+                  <AntDesign name="star" size={15} color={COLORS.primary} />
+                  <SmallText className="text-primary p-0 text-[15px] pl-1">
+                    {route.params?.data.rate_star}
+                  </SmallText>
+                </View> */}
+              </View>
+              <Spacer value={H("0.5%")} axis="vertical" />
+              <View className="flex-row justify-between items-center mb-1 w-full">
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
+                  {FirstLetterUppercase(route.params?.data.km + " Km Away")}
+                </SmallText>
+
                 <View className="flex-row items-center">
                   <AntDesign name="star" size={15} color={COLORS.primary} />
                   <SmallText className="text-primary p-0 text-[15px] pl-1">
@@ -171,22 +198,6 @@ const FreelancerProfile = ({
                   </SmallText>
                 </View>
               </View>
-              {/* <Spacer value={H("1%")} axis="vertical" />
-              <View className="flex-row justify-between items-center mb-1 w-full">
-                <SmallText
-                  style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
-                  className="text-[#696969] text-left p-0 text-[15px]"
-                >
-             {FirstLetterUppercase("1.2 Km Away")} 
-                </SmallText>
-
-                <View className="flex-row items-center">
-                  <AntDesign name="star" size={15} color={COLORS.primary} />
-                  <SmallText className="text-primary p-0 text-[15px] pl-1">
-                    4.2
-                  </SmallText>
-                </View>
-              </View> */}
             </View>
             <View className="flex-row items-center justify-end w-[45%]">
               <TouchableOpacity
@@ -229,16 +240,16 @@ const FreelancerProfile = ({
                         type: "error",
                         text1: "This listing does not have a phone number.",
                       })
-                    : !validatePhone(route.params?.data?.listing_phone, 11) ||
-                      !validatePhone(route.params?.data?.user?.phone, 11)
-                    ? Toast.show({
-                        type: "error",
-                        text1: "Invalid phone number.",
-                      })
                     : Linking.openURL(
                         `tel:${
-                          route.params?.data?.listing_phone ||
-                          route.params?.data?.user?.phone ||
+                          route.params?.data?.listing_phone?.replace(
+                            /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                            ""
+                          ) ||
+                          route.params?.data?.user?.phone?.replace(
+                            /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                            ""
+                          ) ||
                           ""
                         }`
                       )
@@ -286,7 +297,9 @@ const FreelancerProfile = ({
               </TouchableOpacity>
             </View>
           </View>
-          <Spacer value={H("3%")} axis="vertical" />
+          <Spacer value={H("1%")} axis="vertical" />
+          <BorderBottom />
+          <Spacer value={H("1%")} axis="vertical" />
           <SmallText
             style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
             className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
@@ -303,7 +316,9 @@ const FreelancerProfile = ({
               ""
             )}
           </SmallText>
-          <Spacer value={H("3%")} axis="vertical" />
+          <Spacer value={H("1%")} axis="vertical" />
+          <BorderBottom />
+          <Spacer value={H("1%")} axis="vertical" />
           {route.params?.data?.listings_photos.length > 0 && (
             <>
               <SmallText
@@ -317,20 +332,26 @@ const FreelancerProfile = ({
                 {route.params?.data?.listings_photos.map(
                   (item: any, idx: number) => (
                     <>
-                      <Image
-                        key={idx}
-                        source={{
-                          uri: item.photo,
-                        }}
-                        alt=""
-                        className="w-[150px] h-[100px] rounded-lg"
-                      />
+                      <TouchableWithoutFeedback
+                        onPress={() => setProfileImg(item.photo || "")}
+                      >
+                        <Image
+                          key={idx}
+                          source={{
+                            uri: item.photo,
+                          }}
+                          alt=""
+                          className="w-[150px] h-[100px] rounded-lg"
+                        />
+                      </TouchableWithoutFeedback>
                       <Spacer value={W("5%")} axis="horizontal" key={idx + 1} />
                     </>
                   )
                 )}
               </ScrollView>
-              <Spacer value={H("3%")} axis="vertical" />
+              <Spacer value={H("1%")} axis="vertical" />
+              <BorderBottom />
+              <Spacer value={H("1%")} axis="vertical" />
             </>
           )}
           {route.params?.data?.listings_videos.length > 0 && (
@@ -343,16 +364,21 @@ const FreelancerProfile = ({
               </SmallText>
               <Spacer value={H("3%")} axis="vertical" />
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {route.params?.data?.listings_photos.map(
+                {route.params?.data?.listings_videos.map(
                   (item: any, idx: number) => (
-                    <>
-                      <VideoCard item={item} />
+                    <React.Fragment key={idx}>
+                      <VideoCard
+                        item={item}
+                        openYoutube={(e) => setVideoData(e)}
+                      />
                       <Spacer value={W("5%")} axis="horizontal" key={idx + 1} />
-                    </>
+                    </React.Fragment>
                   )
                 )}
               </ScrollView>
-              <Spacer value={H("3%")} axis="vertical" />
+              <Spacer value={H("1%")} axis="vertical" />
+              <BorderBottom />
+              <Spacer value={H("1%")} axis="vertical" />
             </>
           )}
           <View className="w-full flex-row justify-between items-center">
@@ -412,12 +438,14 @@ const FreelancerProfile = ({
                   }}
                   className="text-[15px] !text-[#696969] text-left !pl-3"
                 >
-                  {item.amenity_name}
+                  {item.amenity_name || item?.amenity_details?.amenity_name}
                 </SmallText>
               </View>
             </>
           ))}
-          <Spacer value={H("3%")} axis="vertical" />
+          <Spacer value={H("1%")} axis="vertical" />
+          <BorderBottom />
+          <Spacer value={H("1%")} axis="vertical" />
           <View className="flex-row items-center">
             <MaterialCommunityIcons
               name="calendar-today"
@@ -447,7 +475,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data?.listing_oh_monday || "N/A"}
             </SmallText>
@@ -464,7 +492,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_tuesday || "N/A"}
             </SmallText>
@@ -481,7 +509,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_wednesday || "N/A"}
             </SmallText>
@@ -498,7 +526,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_thursday || "N/A"}
             </SmallText>
@@ -515,7 +543,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_friday || "N/A"}
             </SmallText>
@@ -532,7 +560,7 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_saturday || "N/A"}
             </SmallText>
@@ -549,12 +577,14 @@ const FreelancerProfile = ({
             </SmallText>
             <SmallText
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data.listing_oh_sunday || "N/A"}
             </SmallText>
           </View>
-          <Spacer value={H("3%")} axis="vertical" />
+          <Spacer value={H("1%")} axis="vertical" />
+          <BorderBottom />
+          <Spacer value={H("1%")} axis="vertical" />
           <View className="flex-row items-center">
             <AntDesign name="idcard" size={30} color={COLORS.primary} />
             {darkMode ? (
@@ -579,10 +609,31 @@ const FreelancerProfile = ({
               Phone Number
             </SmallText>
             <SmallText
+              numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
+              onPress={() =>
+                !route.params?.data?.listing_phone &&
+                !route.params?.data?.user?.phone
+                  ? null
+                  : Linking.openURL(
+                      `tel:${
+                        route.params?.data?.listing_phone?.replace(
+                          /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                          ""
+                        ) ||
+                        route.params?.data?.user?.phone?.replace(
+                          /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                          ""
+                        ) ||
+                        ""
+                      }`
+                    )
+              }
             >
-              {route.params?.data?.listing_phone || "N/A"}
+              {route.params?.data?.listing_phone ||
+                route?.params?.data?.user?.phone ||
+                "N/A"}
             </SmallText>
           </View>
           <View
@@ -596,8 +647,13 @@ const FreelancerProfile = ({
               Email Address
             </SmallText>
             <SmallText
+              numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
+              onPress={() =>
+                route.params?.data.listing_email &&
+                Linking.openURL(`mailto:${route.params?.data.listing_email}`)
+              }
             >
               {route.params?.data.listing_email || "N/A"}
             </SmallText>
@@ -637,11 +693,18 @@ const FreelancerProfile = ({
               Website
             </SmallText>
             <SmallText
+              numberOfLine={1}
               onPress={() =>
-                Linking.openURL("https://vincentcollins.netlify.app/")
+                route.params?.data?.listing_website
+                  ? Linking.openURL(
+                      route.params?.data?.listing_website?.includes("://")
+                        ? route.params?.data?.listing_website
+                        : `http://${route.params?.data?.listing_website}`
+                    )
+                  : undefined
               }
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[15px]"
+              className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
               {route.params?.data?.listing_website || "N/A"}
             </SmallText>
@@ -662,57 +725,91 @@ const FreelancerProfile = ({
               </SmallText>
               <View className="flex-row items-center">
                 {route.params?.data?.listing_social_item.map(
-                  (item: any, idx: number) => (
-                    <Pressable
-                      key={idx}
-                      onPress={() => Linking.openURL(item.social_url)}
-                      className="ml-1"
-                    >
-                      {item.social_icon.toLowerCase() === "facebook" ? (
-                        <Facebook height={30} width={30} />
-                      ) : item.social_icon.toLowerCase() === "instagram" ? (
-                        <Instagram height={30} width={30} />
-                      ) : item.social_icon.toLowerCase() === "whatsapp" ? (
-                        <Whatsapp height={30} width={30} />
-                      ) : item.social_icon.toLowerCase() === "twitter" ? (
-                        <Twitter height={30} width={30} />
-                      ) : item.social_icon.toLowerCase() === "linkedin" ? (
-                        <Linkedin height={30} width={30} />
-                      ) : null}
-                    </Pressable>
-                  )
+                  (item: any, idx: number) => {
+                    return (
+                      <Pressable
+                        key={idx}
+                        onPress={async () => {
+                          try {
+                            const supported = await Linking.canOpenURL(
+                              item.social_url?.includes("://")
+                                ? item.social_url
+                                : `http://${item.social_url}`
+                            );
+                            if (supported) {
+                              await Linking.openURL(
+                                item.social_url?.includes("://")
+                                  ? item.social_url
+                                  : `http://${item.social_url}`
+                              );
+                            } else {
+                              Toast.show({
+                                type: "error",
+                                text1: `Invalid URL: ${item.social_url}`,
+                              });
+                            }
+                          } catch (err) {
+                            // Alert.alert("Error", err, )
+                            console.log(err);
+                          }
+                        }}
+                        className="ml-1"
+                      >
+                        {item.social_icon.toLowerCase() === "facebook" ? (
+                          <Facebook height={30} width={30} />
+                        ) : item.social_icon.toLowerCase() === "instagram" ? (
+                          <Instagram height={30} width={30} />
+                        ) : item.social_icon.toLowerCase() === "whatsapp" ? (
+                          <Whatsapp height={30} width={30} />
+                        ) : item.social_icon.toLowerCase() === "twitter" ? (
+                          <Twitter height={30} width={30} />
+                        ) : item.social_icon.toLowerCase() === "linkedin" ? (
+                          <Linkedin height={30} width={30} />
+                        ) : null}
+                      </Pressable>
+                    );
+                  }
                 )}
               </View>
             </View>
           )}
 
-          <Spacer value={H("3%")} axis="vertical" />
-          <MapView
-            onPress={() =>
-              navigation.navigate("MapScreen", { data: route.params?.data })
-            }
-            className="flex-1 w-full h-[200px]"
-            provider={PROVIDER_GOOGLE}
-            initialRegion={{
-              latitude: Number(route.params?.data?.address_latitude),
-              longitude: Number(route.params?.data?.address_longitude),
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          >
-            <Marker
-              coordinate={{
-                latitude: Number(route.params?.data?.address_latitude),
-                longitude: Number(route.params?.data?.address_longitude),
-              }}
-              title={route.params?.data?.listing_name}
-              description={route.params?.data?.listing_description?.replaceAll(
-                /<\/?[^>]+(>|$)/gi,
-                ""
-              )}
-            />
-          </MapView>
-          <Spacer value={H("3%")} axis="vertical" />
+          <Spacer value={H("1%")} axis="vertical" />
+          <BorderBottom />
+          <Spacer value={H("1%")} axis="vertical" />
+          {Boolean(
+            route.params?.data?.address_latitude &&
+              route.params?.data?.address_longitude
+          ) && (
+            <>
+              <MapView
+                onPress={() =>
+                  navigation.navigate("MapScreen", { data: route.params?.data })
+                }
+                className="flex-1 w-full h-[200px]"
+                provider={PROVIDER_GOOGLE}
+                initialRegion={{
+                  latitude: Number(route.params?.data?.address_latitude),
+                  longitude: Number(route.params?.data?.address_longitude),
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+              >
+                <Marker
+                  coordinate={{
+                    latitude: Number(route.params?.data?.address_latitude),
+                    longitude: Number(route.params?.data?.address_longitude),
+                  }}
+                  title={route.params?.data?.listing_name}
+                  description={route.params?.data?.listing_description?.replaceAll(
+                    /<\/?[^>]+(>|$)/gi,
+                    ""
+                  )}
+                />
+              </MapView>
+              <Spacer value={H("3%")} axis="vertical" />
+            </>
+          )}
           <Button
             text="Book Now"
             onPress={() =>
@@ -738,166 +835,83 @@ const FreelancerProfile = ({
           className="flex-1 bg-[#1b1b1b] py-5 px-3"
         >
           <View className="w-full flex-row justify-between items-center">
-            <View className="w-[23%]">
+            <View className="w-full">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
               >
-                Day
+                Date
               </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setDay(value);
-                }}
-                defaultValue={day}
-                placeholder="02"
-                className="border border-[#696969] bg-[#000000]"
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
-              />
-            </View>
-            <View className="w-[30%]">
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
-              >
-                Month
-              </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setMonth(value);
-                }}
-                defaultValue={month}
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                placeholder="05"
-                className="border border-[#696969] bg-[#000000]"
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
-              />
-            </View>
-            <View className="w-[30%]">
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
-              >
-                Year
-              </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setYear(value);
-                }}
-                placeholder="2022"
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                defaultValue={year}
-                className="border border-[#696969] bg-[#000000]"
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
+              <DatePicker
+                date={date}
+                isDate={isDate}
+                setDate={setDate}
+                setDateActive={setDateActive}
               />
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
-          <View className="w-[60%] flex-row justify-between items-center">
-            <View className="w-[40%]">
+          <View className="w-full flex-row justify-between items-center">
+            <View className="w-[100%]">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
               >
                 Time
               </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setHour(value);
-                }}
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                defaultValue={hour}
-                placeholder="14"
-                className="border border-[#696969] bg-[#000000]"
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
-              />
-            </View>
-            <SmallText
-              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[40px] mt-5 font-RedHatDisplayRegular"
-            >
-              :
-            </SmallText>
-            <View className="w-[40%]">
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
-              >
-                {" "}
-              </SmallText>
-              <InputField
-                onTextChange={function (value: string): void {
-                  setMinutes(value);
-                }}
-                defaultValue={minutes}
-                style={{ backgroundColor: darkMode ? "black" : "white" }}
-                placeholder="60"
-                className="border border-[#696969] bg-[#000000]"
-                containerStyle={{ width: "100%" }}
-                type={"numeric"}
-                autoCapitalize={"none"}
+              <TimePicker
+                isTime={isTime}
+                setTime={setTime}
+                setTimeActive={setTimeActive}
+                time={time}
               />
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           <Button
             text="Book Date"
+            buttonStyle={{ width: "100%" }}
             onPress={() => {
-              if (!isValidDate(Number(day), Number(month), Number(year))) {
-                Toast.show({
-                  type: "error",
-                  text1: "Date is invalid",
-                });
-              } else if (
-                !/^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?$/.test(
-                  `${hour}:${minutes}`
-                )
-              ) {
-                Toast.show({
-                  type: "error",
-                  text1: "Time is invalid",
-                });
-              } else {
-                bookRef.current?.close();
-                DelayFor(200, () => {
-                  dispatch(SET_LOADER(true));
-                  bookListing(
-                    {
-                      listing_id: route.params?.data.id,
-                      date: `${year}-${month}-${day}`,
-                      time: `${hour}:${minutes}`,
-                    },
-                    (response) => {
-                      dispatch(SET_LOADER(false));
-                      Toast.show({
-                        type: "success",
-                        text1: response.message,
-                      });
-                    },
-                    (error) => {
-                      dispatch(SET_LOADER(false));
-                      Toast.show({
-                        type: "error",
-                        text1: error,
-                      });
-                    }
-                  );
-                });
-              }
+              bookRef.current?.close();
+              DelayFor(200, () => {
+                dispatch(SET_LOADER(true));
+                bookListing(
+                  {
+                    listing_id: route.params?.data.id,
+                    date: date,
+                    time: time,
+                  },
+                  (response) => {
+                    dispatch(SET_LOADER(false));
+                    Toast.show({
+                      type: "success",
+                      text1: response.message,
+                    });
+                  },
+                  (error) => {
+                    dispatch(SET_LOADER(false));
+                    Toast.show({
+                      type: "error",
+                      text1: error,
+                    });
+                  }
+                );
+              });
             }}
           />
           <Spacer value={H("6%")} axis="vertical" />
         </ScrollView>
       </BottomSheet>
+      <ShowImage
+        close={() => setProfileImg("")}
+        img={profileImg}
+        visible={!!profileImg}
+      />
+      <YoutubeVideos
+        visible={Boolean(videoData)}
+        close={() => setVideoData(null)}
+        item={videoData}
+      />
     </KeyboardAvoidingView>
   );
 };

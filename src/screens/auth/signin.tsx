@@ -335,7 +335,8 @@ const Signin = ({
               placeholder="Email Address"
               type={"email-address"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b rounded-none p-0"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
@@ -344,7 +345,8 @@ const Signin = ({
               placeholder="Enter Password"
               type={"default"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b rounded-none p-0"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0"
               secure={!visible}
               suffixIcon={
                 <Feather
@@ -360,7 +362,7 @@ const Signin = ({
               <PrimaryText
                 className="!text-[#626262]"
                 onPress={function (): void {
-                  navigation.navigate("Forgot")
+                  navigation.navigate("Forgot");
                 }}
               >
                 Forgot Password?
@@ -381,7 +383,8 @@ const Signin = ({
               placeholder="Full Name"
               type={"default"}
               autoCapitalize={"words"}
-              className="border-[#626262] border-b rounded-none p-0"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
@@ -390,7 +393,8 @@ const Signin = ({
               placeholder="Email Address"
               type={"email-address"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b rounded-none p-0"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
@@ -399,7 +403,8 @@ const Signin = ({
               placeholder="Phone Number"
               type={"numeric"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b rounded-none p-0"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
@@ -408,7 +413,8 @@ const Signin = ({
               placeholder="Referral Code"
               type={"default"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b rounded-none p-0"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0"
             />
             <Spacer axis="vertical" value={H(3)} />
             <InputField
@@ -417,7 +423,8 @@ const Signin = ({
               placeholder="Password"
               type={"default"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b rounded-none p-0"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0"
               secure={!visible1}
               suffixIcon={
                 <Feather
@@ -435,7 +442,8 @@ const Signin = ({
               placeholder="Confirm Password"
               type={"default"}
               autoCapitalize={"none"}
-              className="border-[#626262] border-b rounded-none p-0"
+              className="rounded-none p-0"
+              containerClassName="border-[#626262] border-b rounded-none p-0"
               secure={!visible2}
               suffixIcon={
                 <Feather
@@ -454,8 +462,8 @@ const Signin = ({
             />
           </>
         )}
-        <Spacer axis="vertical" value={H(7)} />
-        <GoogleLineSeperator />
+        {/* <Spacer axis="vertical" value={H(7)} /> */}
+        {/* <GoogleLineSeperator />
         <Spacer axis="vertical" value={H(7)} />
         <View className="items-center flex-row justify-center">
           <Ionicons
@@ -476,7 +484,7 @@ const Signin = ({
             color={COLORS.primary}
             style={{ marginHorizontal: 10 }}
           />
-        </View>
+        </View> */}
         <Spacer axis="vertical" value={H(4)} />
       </ScrollView>
     </KeyboardAvoidingView>

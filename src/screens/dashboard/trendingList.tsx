@@ -23,6 +23,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { RouteProp } from "@react-navigation/native";
+import { GradientText } from "../../components/gradientText";
 
 const TrendingListing = ({
   navigation,
@@ -57,6 +58,18 @@ const TrendingListing = ({
           ItemSeparatorComponent={() => (
             <Spacer value={H("1%")} axis="vertical" />
           )}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("71%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           renderItem={({ item }) => (
             <UserProfileCard
               navigation={navigation}

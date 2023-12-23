@@ -7,6 +7,8 @@ import {
   FlatList,
   Pressable,
   Image,
+  TextInput,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
@@ -26,7 +28,7 @@ import {
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Feather, Ionicons } from "@expo/vector-icons";
 import { CATEGORIES } from "../../data/category";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { COLORS } from "../../utility/colors";
@@ -46,11 +48,20 @@ import {
 } from "../../api/category";
 import { SET_LOADER } from "../../store/formDataSlice";
 import {
+  DelayFor,
+  isFacebookLink,
+  isInstagramLink,
+  isLinkedInLink,
+  isTwitterLink,
   validateEmail,
   validatePhone,
   validateUrl,
 } from "../../utility/helpers";
 import { addListing } from "../../api/listings";
+import { GradientText } from "../../components/gradientText";
+import { getFreeDiskStorageAsync } from "expo-file-system";
+import { getWalletDetails } from "../../api/wallet";
+import ErrorVerifyModalContent from "../../components/errorVerifyModalContent";
 
 const Post = ({
   navigation,
@@ -62,59 +73,47 @@ const Post = ({
   const { loggedIn, access_token, darkMode, profile } = useSelector(
     (state: RootState) => state.auth
   );
+  const [walletDetails, setWalletDetails] = React.useState<any>(null);
 
   React.useEffect(() => {
     if (focused) {
       if (!Boolean(loggedIn && access_token)) {
         navigation.navigate("Signin", { two_step: true });
       } else {
-        if (profile?.package) {
-          dispatch(SET_LOADER(true));
-          getUserListing(
-            null,
-            (response) => {
-              dispatch(SET_LOADER(false));
-              if (
-                response?.length >=
-                profile?.package?.purchase_details?.total_listings
-              ) {
-                navigation.navigate("Packages");
-                Toast.show({
-                  type: "error",
-                  text1: `Maximum limit of ${profile?.package?.purchase_details?.total_listings} listings reached for package. Upgrade Package.`,
-                });
-              }
-            },
-            (error) => {
-              dispatch(SET_LOADER(false));
-              Toast.show({
-                type: "error",
-                text1: error,
-              });
-            }
-          );
-        } else {
-          navigation.navigate("Packages");
-          Toast.show({
-            type: "error",
-            text1: "Purchase a package to create listing",
-          });
-        }
+        // dispatch(SET_LOADER(true));
+        getWalletDetails(
+          null,
+          (response) => {
+            setWalletDetails(response);
+            // dispatch(SET_LOADER(false));
+          },
+          (error) => {
+            Toast.show({
+              type: "error",
+              text1: error,
+            });
+            // dispatch(SET_LOADER(false));
+          }
+        );
       }
     }
   }, [focused, loggedIn, access_token]);
+
+  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+  const [categorySearch, setCategorySearch] = React.useState<string>("");
+  const [amenitySearch, setAmenitySearch] = React.useState<string>("");
 
   const [business, setBusiness] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
   const [category, setCategory] = React.useState<any>(null);
   const [location, setLocation] = React.useState<string>("");
-  const [monday, setMonday] = React.useState<string>("");
-  const [tuesday, setTuesday] = React.useState<string>("");
-  const [wednesday, setWednesday] = React.useState<string>("");
-  const [thursday, setThursday] = React.useState<string>("");
-  const [friday, setFriday] = React.useState<string>("");
-  const [saturday, setSaturday] = React.useState<string>("");
-  const [sunday, setSunday] = React.useState<string>("");
+  const [monday, setMonday] = React.useState<string>("24HOURS");
+  const [tuesday, setTuesday] = React.useState<string>("24HOURS");
+  const [wednesday, setWednesday] = React.useState<string>("24HOURS");
+  const [thursday, setThursday] = React.useState<string>("24HOURS");
+  const [friday, setFriday] = React.useState<string>("24HOURS");
+  const [saturday, setSaturday] = React.useState<string>("24HOURS");
+  const [sunday, setSunday] = React.useState<string>("24HOURS");
   const [longitude, setLongitude] = React.useState<string | null>(null);
   const [latitude, setLatitude] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState<string>("");
@@ -172,43 +171,94 @@ const Post = ({
   }, [focused]);
 
   const pickImages = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [4, 3],
-      quality: 1,
-      allowsMultipleSelection: true, // Enable multiple selection
-    });
-
-    if (!result.canceled) {
-      for (let i = 0; i < result.assets.length; i++) {
-        setSelectedImages((prev) => [...prev, result.assets[i]]);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const freeSpace = await getFreeDiskStorageAsync();
+      if (freeSpace < 100) {
+        Toast.show({
+          type: "error",
+          text1: "Please free up space to 100mb",
+        });
+        return;
       }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 3],
+        quality: 1,
+        allowsMultipleSelection: true, // Enable multiple selection
+      });
+
+      if (!result.canceled) {
+        for (let i = 0; i < result.assets.length; i++) {
+          setSelectedImages((prev) => [...prev, result.assets[i]]);
+        }
+      }
+    } else {
+      Alert.alert(
+        "Error",
+        "This application does not have access. Please enable it from your settings.",
+        [{ text: "Ok" }]
+      );
     }
   };
 
   const pickOneImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      aspect: [4, 4],
-      quality: 1,
-      allowsEditing: true,
-    });
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const freeSpace = await getFreeDiskStorageAsync();
+      if (freeSpace < 100) {
+        Toast.show({
+          type: "error",
+          text1: "Please free up space to 100mb",
+        });
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 4],
+        quality: 1,
+        allowsEditing: true,
+      });
 
-    if (!result.canceled) {
-      setLogo(result.assets[0]);
+      if (!result.canceled) {
+        setLogo(result.assets[0]);
+      }
+    } else {
+      Alert.alert(
+        "Error",
+        "This application does not have access. Please enable it from your settings.",
+        [{ text: "Ok" }]
+      );
     }
   };
 
   const pickVideos = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      allowsMultipleSelection: true, // Enable multiple selection
-    });
-
-    if (!result.canceled) {
-      for (let i = 0; i < result.assets.length; i++) {
-        setSelectedVideos((prev) => [...prev, result.assets[i]]);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const freeSpace = await getFreeDiskStorageAsync();
+      if (freeSpace < 100) {
+        Toast.show({
+          type: "error",
+          text1: "Please free up space to 100mb",
+        });
+        return;
       }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsMultipleSelection: true, // Enable multiple selection
+      });
+
+      if (!result.canceled) {
+        for (let i = 0; i < result.assets.length; i++) {
+          setSelectedVideos((prev) => [...prev, result.assets[i]]);
+        }
+      }
+    } else {
+      Alert.alert(
+        "Error",
+        "This application does not have access. Please enable it from your settings.",
+        [{ text: "Ok" }]
+      );
     }
   };
 
@@ -217,13 +267,106 @@ const Post = ({
   const amenitiesRef = React.useRef<RBSheet | null>(null);
 
   React.useEffect(() => {
-    // console.log(profile);
     if (profile) {
       setEmail(profile?.email || "");
       setPhone(profile?.phone || "");
       setWebsite(profile?.website || "");
     }
   }, [profile]);
+
+  const createListing = () => {
+    Toast.show({
+      type: "success",
+      text1: "Listing creation in progress...",
+    });
+    addListing(
+      {
+        listing_creation_amount: profile?.listing_creation_amount?.toString(),
+        listing_name: business,
+        listing_address: location,
+        listing_category_id: category?.id,
+        amenity: amenities.map((item) => item.id.toString()),
+        listing_description: description,
+        listing_phone: phone,
+        photo_list: selectedImages.map((item) => ({
+          name:
+            item?.fileName ||
+            "image." + item?.uri?.split(".").pop()?.toLowerCase(),
+          uri: item?.uri,
+          type: "image/" + logo?.uri?.split(".").pop()?.toLowerCase(),
+        })),
+        video: selectedVideos.map((item) => ({
+          name:
+            item?.fileName ||
+            "image" + item?.uri?.split(".").pop()?.toLowerCase(),
+          uri: item?.uri,
+          type: "video/" + item?.uri?.split(".").pop()?.toLowerCase(),
+        })),
+        listing_featured_photo: {
+          name:
+            logo?.fileName ||
+            "image." + logo?.uri?.split(".").pop()?.toLowerCase(),
+          uri: logo?.uri,
+          type: "image/" + logo?.uri?.split(".").pop()?.toLowerCase(),
+        },
+        address_latitude: latitude || "",
+        address_longitude: longitude || "",
+        is_featured: true,
+        listing_email: email,
+        listing_oh_friday: friday.trim(),
+        listing_oh_monday: monday.trim(),
+        listing_oh_saturday: saturday.trim(),
+        listing_oh_sunday: sunday.trim(),
+        listing_oh_thursday: thursday.trim(),
+        listing_oh_tuesday: tuesday.trim(),
+        listing_oh_wednesday: wednesday.trim(),
+        listing_status: "Active",
+        listing_website: website.trim(),
+        social_media: [
+          facebook.trim().length > 0 && { icon: "Facebook", url: facebook },
+          instagram.trim().length > 0 && {
+            icon: "Instagram",
+            url: instagram,
+          },
+          twitter.trim().length > 0 && { icon: "Twitter", url: twitter },
+          linkedIn.trim().length > 0 && { icon: "LinkedIn", url: linkedIn },
+          whatsapp.trim().length > 0 && {
+            icon: "Whatsapp",
+            url: `https://wa.me/${
+              whatsapp.trim().charAt(0) === "0"
+                ? whatsapp.trim().slice(1)
+                : whatsapp.trim()
+            }`,
+          },
+        ],
+      },
+      (response) => {
+        Toast.show({
+          type: "success",
+          text1: response?.message,
+        });
+        // dispatch(SET_LOADER(false));
+      },
+      (error) => {
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+        // dispatch(SET_LOADER(false));
+      }
+    );
+  };
+
+  const submit = () => {
+    if (walletDetails?.balance > profile?.listing_creation_amount) {
+      createListing();
+    } else {
+      navigation.navigate("Paystack", {
+        amount: profile?.listing_creation_amount || 0,
+        callback: createListing,
+      });
+    }
+  };
 
   const validate = () => {
     if (!category) {
@@ -246,7 +389,7 @@ const Post = ({
       !longitude ||
       !latitude ||
       longitude?.trim() === "" ||
-      latitude.trim() === ""
+      latitude?.trim() === ""
     ) {
       Toast.show({
         type: "error",
@@ -268,13 +411,6 @@ const Post = ({
         text1: "Invalid Business Website.",
       });
     } else if (
-      amenities.length > profile?.package?.purchase_details?.total_amenities
-    ) {
-      Toast.show({
-        type: "error",
-        text1: `Amenities cannot be more than your package limit of ${profile?.package?.purchase_details?.total_amenities}.`,
-      });
-    } else if (
       monday.trim() === "" ||
       tuesday.trim() === "" ||
       wednesday.trim() === "" ||
@@ -292,22 +428,25 @@ const Post = ({
         type: "error",
         text1: "Whatsapp number must be 11 digits.",
       });
-    } else if (facebook.trim().length > 0 && !validateUrl(facebook.trim())) {
+    } else if (facebook.trim().length > 0 && !isFacebookLink(facebook.trim())) {
       Toast.show({
         type: "error",
         text1: "Invalid facebook Link.",
       });
-    } else if (instagram.trim().length > 0 && !validateUrl(instagram.trim())) {
+    } else if (
+      instagram.trim().length > 0 &&
+      !isInstagramLink(instagram.trim())
+    ) {
       Toast.show({
         type: "error",
         text1: "Invalid instagram Link.",
       });
-    } else if (twitter.trim().length > 0 && !validateUrl(twitter.trim())) {
+    } else if (twitter.trim().length > 0 && !isTwitterLink(twitter.trim())) {
       Toast.show({
         type: "error",
         text1: "Invalid twitter Link.",
       });
-    } else if (linkedIn.trim().length > 0 && !validateUrl(linkedIn.trim())) {
+    } else if (linkedIn.trim().length > 0 && !isLinkedInLink(linkedIn.trim())) {
       Toast.show({
         type: "error",
         text1: "Invalid linkedin Link.",
@@ -317,88 +456,8 @@ const Post = ({
         type: "error",
         text1: "Upload Business Logo.",
       });
-    } else if (
-      selectedImages.length < 2 &&
-      selectedImages.length > profile?.package?.purchase_details?.total_photos
-    ) {
-      Toast.show({
-        type: "error",
-        text1: `Upload at least 2 photo but not more than your package limit of ${profile?.package?.purchase_details?.total_photos}.`,
-      });
-    } else if (
-      selectedVideos.length > profile?.package?.purchase_details?.total_videos
-    ) {
-      Toast.show({
-        type: "error",
-        text1: `Videos cannot be more that your package limit of ${profile?.package?.purchase_details?.total_videos}.`,
-      });
     } else {
-      dispatch(SET_LOADER(true));
-      addListing(
-        {
-          listing_name: business,
-          listing_address: location,
-          listing_category_id: category?.id,
-          amenity: amenities.map((item) => item.id.toString()),
-          listing_description: description,
-          listing_phone: phone,
-          photo_list: selectedImages.map((item) => ({
-            name: item?.fileName,
-            uri: item?.uri,
-            type: "image/png",
-          })),
-          video: selectedVideos.map((item) => ({
-            name: item?.fileName,
-            uri: item?.uri,
-            type: "video/mp4",
-          })),
-          listing_featured_photo: {
-            name: logo?.fileName,
-            uri: logo?.uri,
-            type: "image/png",
-          },
-          address_latitude: latitude,
-          address_longitude: longitude,
-          is_featured: true,
-          listing_email: email,
-          listing_oh_friday: friday.trim(),
-          listing_oh_monday: monday.trim(),
-          listing_oh_saturday: saturday.trim(),
-          listing_oh_sunday: sunday.trim(),
-          listing_oh_thursday: thursday.trim(),
-          listing_oh_tuesday: tuesday.trim(),
-          listing_oh_wednesday: wednesday.trim(),
-          listing_status: "Active",
-          listing_website: website.trim(),
-          social_media: [
-            facebook.trim().length > 0 && { icon: "Facebook", url: facebook },
-            instagram.trim().length > 0 && {
-              icon: "Instagram",
-              url: instagram,
-            },
-            twitter.trim().length > 0 && { icon: "Twitter", url: twitter },
-            linkedIn.trim().length > 0 && { icon: "LinkedIn", url: linkedIn },
-            whatsapp.trim().length > 0 && {
-              icon: "Whatsapp",
-              url: `https://wa.me/${whatsapp.trim()}`,
-            },
-          ],
-        },
-        (response) => {
-          Toast.show({
-            type: "success",
-            text1: response?.message,
-          });
-          dispatch(SET_LOADER(false));
-        },
-        (error) => {
-          Toast.show({
-            type: "error",
-            text1: error,
-          });
-          dispatch(SET_LOADER(false));
-        }
-      );
+      setModalVisible(true);
     }
   };
   return (
@@ -442,9 +501,14 @@ const Post = ({
               placeholder="Select your business category"
               type={"default"}
               autoCapitalize={"none"}
-              containerStyle={{ width: "100%" }}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
+              containerStyle={{
+                width: "100%",
+                backgroundColor: darkMode ? "transparent" : "white",
+              }}
+              className="rounded-full p-0"
+              containerClassName="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
               editable={false}
+              dropdown
               suffixIcon={
                 <Feather name="chevron-down" size={24} color="#626262" />
               }
@@ -477,7 +541,13 @@ const Post = ({
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField
-              onTextChange={(value) => setDescription(value)}
+              onTextChange={(value) =>
+                value
+                  .trim()
+                  .split(" ")
+                  .filter((item) => typeof item === "string").length <= 60 &&
+                setDescription(value)
+              }
               defaultValue={description}
               placeholder="Describe your business here"
               containerStyle={{ width: "100%" }}
@@ -490,6 +560,16 @@ const Post = ({
               autoCapitalize={"none"}
               className="border-[#626262] focus:border-primary border rounded-lg  px-3"
             />
+            <Spacer axis="vertical" value={H(1)} />
+            <SmallText className="text-[#626262] text-right p-0">
+              {
+                description
+                  .trim()
+                  .split(" ")
+                  .filter((item) => typeof item === "string").length
+              }
+              /60 Words
+            </SmallText>
             <Spacer axis="vertical" value={H(2)} />
 
             <SmallText
@@ -505,10 +585,15 @@ const Post = ({
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               placeholder="Select your business location"
               type={"default"}
-              containerStyle={{ width: "100%" }}
               autoCapitalize={"none"}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
+              containerStyle={{
+                width: "100%",
+                backgroundColor: darkMode ? "transparent" : "white",
+              }}
+              className="rounded-full p-0"
+              containerClassName="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
               editable={false}
+              dropdown
               suffixIcon={
                 <Feather name="chevron-down" size={24} color="#626262" />
               }
@@ -555,7 +640,7 @@ const Post = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
               className="text-[#D4E1D2] text-left p-0"
             >
-              Website
+              Website (optional)
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField
@@ -573,7 +658,7 @@ const Post = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
               className="text-[#D4E1D2] text-left p-0"
             >
-              Amenities
+              Amenities (optional)
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField
@@ -583,11 +668,16 @@ const Post = ({
                 .join(", ")}
               placeholder="Select amenities for your business"
               type={"default"}
-              containerStyle={{ width: "100%" }}
               style={{ backgroundColor: darkMode ? "transparent" : "white" }}
               autoCapitalize={"none"}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
+              containerStyle={{
+                width: "100%",
+                backgroundColor: darkMode ? "transparent" : "white",
+              }}
+              className="rounded-full p-0"
+              containerClassName="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
               editable={false}
+              dropdown
               suffixIcon={
                 <Feather name="chevron-down" size={24} color="#626262" />
               }
@@ -724,7 +814,7 @@ const Post = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
               className="text-[#D4E1D2] text-left p-0"
             >
-              Social Media
+              Social Media (optional)
             </SmallText>
             <Spacer axis="vertical" value={H(1)} />
             <InputField
@@ -783,7 +873,7 @@ const Post = ({
             />
             <Spacer axis="vertical" value={H(2)} />
             <View className="flex-row w-full justify-between items-start">
-              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
+              <View className="w-[28%] flex-row flex-wrap justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
@@ -791,7 +881,7 @@ const Post = ({
                   Add Company Logo
                 </SmallText>
                 {logo ? (
-                  <View className="w-[45%] h-[60px] mb-3 relative">
+                  <View className="w-[100%] h-[60px] mb-3 relative">
                     <Image
                       source={{ uri: logo.uri }}
                       className="w-full h-full object-cover"
@@ -818,7 +908,7 @@ const Post = ({
                         backgroundColor: darkMode ? "#0F0F0F" : "#FFFFFF",
                       },
                     ]}
-                    className="w-[45%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
+                    className="w-[100%] h-[55px] bg-[#0F0F0F] justify-center items-center rounded-lg"
                   >
                     <Entypo
                       name="plus"
@@ -828,12 +918,12 @@ const Post = ({
                   </Pressable>
                 )}
               </View>
-              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
+              <View className="w-[28%] flex-row flex-wrap justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
                 >
-                  Add at least 2 images
+                  Add images (optional)
                 </SmallText>
                 {selectedImages.map((item, idx) => (
                   <View
@@ -879,12 +969,12 @@ const Post = ({
                   />
                 </Pressable>
               </View>
-              <View className="w-[33%] flex-row flex-wrap justify-between items-center">
+              <View className="w-[28%] flex-row flex-wrap justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="w-full text-[#D4E1D2] text-left p-0 pb-3"
                 >
-                  Add at least 1 video
+                  Add video (Optional)
                 </SmallText>
                 {selectedVideos.map((item, idx) => (
                   <View
@@ -952,11 +1042,49 @@ const Post = ({
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
           className="w-full flex-1 px-5 bg-[#0f0f0f]"
         >
+          <View
+            style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+            className="w-[100%] px-3 py-2 border bg-[#1b1b1b] mt-3 border-primary rounded-md flex-row justify-between items-center"
+          >
+            <AntDesign
+              name="search1"
+              size={20}
+              color={darkMode ? "#D4E1D2" : "#696969"}
+            />
+            <TextInput
+              keyboardType={"default"}
+              className={`h-full flex-1 px-2 text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
+              onChangeText={(value) => {
+                setCategorySearch(value);
+              }}
+              value={categorySearch}
+              placeholderTextColor={"#626262"}
+              placeholder={"Search here..."}
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              autoCapitalize={"none"}
+            />
+          </View>
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
-            data={allCategory}
+            data={allCategory.filter((item) =>
+              item?.listing_category_name
+                ?.toLowerCase()
+                .includes(categorySearch.toLowerCase())
+            )}
             keyExtractor={(item) => item.id.toString()}
+            ListEmptyComponent={
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  // style={{ height: H("71%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Nothing Yet
+                  </GradientText>
+                </View>
+              </>
+            }
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
             )}
@@ -987,14 +1115,52 @@ const Post = ({
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
           className="w-full flex-1 px-5 bg-[#0f0f0f]"
         >
+          <View
+            style={{ backgroundColor: darkMode ? "#1b1b1b" : "white" }}
+            className="w-[100%] px-3 py-2 border bg-[#1b1b1b] mt-3 border-primary rounded-md flex-row justify-between items-center"
+          >
+            <AntDesign
+              name="search1"
+              size={20}
+              color={darkMode ? "#D4E1D2" : "#696969"}
+            />
+            <TextInput
+              keyboardType={"default"}
+              className={`h-full flex-1 px-2 text-[15px] text-[#D4E1D2] font-semibold font-RedHatDisplayRegular bg-transparent`}
+              onChangeText={(value) => {
+                setAmenitySearch(value);
+              }}
+              value={amenitySearch}
+              placeholderTextColor={"#626262"}
+              placeholder={"Search here..."}
+              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+              autoCapitalize={"none"}
+            />
+          </View>
           <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<Spacer value={H("3%")} axis="vertical" />}
-            data={allAmenities}
+            data={allAmenities.filter((item) =>
+              item?.amenity_name
+                ?.toLowerCase()
+                .includes(amenitySearch.toLowerCase())
+            )}
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
             )}
+            ListEmptyComponent={
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("40%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Nothing Yet
+                  </GradientText>
+                </View>
+              </>
+            }
             renderItem={({ item }) => (
               <Pressable
                 className="w-[100%] h-auto flex-row items-center"
@@ -1100,6 +1266,34 @@ const Post = ({
           />
         </View>
       </BottomSheet>
+      <ErrorVerifyModalContent
+        message={{
+          title: "Confirm",
+          message: `You will be charged the sum of ₦${profile?.listing_creation_amount?.toLocaleString()} to create this listing. Do you want to proceed?`,
+        }}
+        color={COLORS.primary}
+        visible={modalVisible}
+        icon={<AntDesign name="warning" size={24} color={COLORS.primary} />}
+      >
+        <View className="flex-row justify-between items-center">
+          <Button
+            text="Yes"
+            buttonStyle={{ width: W("36%"), marginRight: W("3%") }}
+            // buttonStyleClassName="bg-[#C93636]"
+            onPress={() => {
+              setModalVisible(false);
+              DelayFor(500, submit);
+            }}
+          />
+          <Button
+            text="No"
+            buttonStyle={{ width: W("36%") }}
+            // buttonStyleClassName="bg-transparent border border-[#C3B9B9]"
+            // textStyleClassName="text-[#212121]"
+            onPress={() => setModalVisible(false)}
+          />
+        </View>
+      </ErrorVerifyModalContent>
     </>
   );
 };

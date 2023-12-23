@@ -3,7 +3,6 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   FlatList,
   Pressable,
 } from "react-native";
@@ -29,6 +28,8 @@ import moment from "moment";
 import { useIsFocused } from "@react-navigation/native";
 import { getReferral } from "../../api/referral";
 import { SET_LOADER } from "../../store/formDataSlice";
+import { GradientText } from "../../components/gradientText";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Referrals = ({
   navigation,
@@ -173,6 +174,18 @@ const Referrals = ({
             ItemSeparatorComponent={() => (
               <Spacer value={H("3%")} axis="vertical" />
             )}
+            ListEmptyComponent={
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("30%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Nothing Yet
+                  </GradientText>
+                </View>
+              </>
+            }
             renderItem={({ item }) => (
               <Pressable className="w-full">
                 <View className="flex-row justify-between items-center w-full mb-1">

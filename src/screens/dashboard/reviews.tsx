@@ -122,7 +122,7 @@ const Reviews = ({
               <View className="flex-row items-center  mt-2 w-full">
                 <SmallText className="text-[#696969] text-left p-0 text-[13px] max-w-[70%]">
                   {FirstLetterUppercase(
-                    route.params?.data?.listing_address || ""
+                    `${route.params?.data?.km} km away` || ""
                   )}
                 </SmallText>
                 <View className="flex-row items-center ml-4">

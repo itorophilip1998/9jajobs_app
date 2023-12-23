@@ -38,7 +38,7 @@ const AddReview = ({
   const dispatch = useDispatch();
   const [review, setReview] = React.useState<string>("");
   const [rating, setRating] = React.useState<number>(0);
-  const { darkMode, loggedIn, access_token } = useSelector(
+  const { darkMode, loggedIn, access_token, profile } = useSelector(
     (state: RootState) => state.auth
   );
   const focused = useIsFocused();
@@ -161,6 +161,11 @@ const AddReview = ({
                 ? Toast.show({
                     type: "error",
                     text1: "Please select rating.",
+                  })
+                : route.params?.data.user?.id === profile?.id
+                ? Toast.show({
+                    type: "error",
+                    text1: "You cannot rate your listing.",
                   })
                 : addReview()
             }

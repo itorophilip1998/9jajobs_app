@@ -3,13 +3,13 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   Pressable,
   Image,
   TextInput,
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SmallText, Spacer, Button } from "../../components";
@@ -33,6 +33,9 @@ import userImg from "../../../assets/images/user.jpg";
 import { getRating } from "../../api/rating";
 import ReviewCard from "../../components/reviewCard";
 import { deleteListing } from "../../api/listings";
+import { GradientText } from "../../components/gradientText";
+import ErrorVerifyModalContent from "../../components/errorVerifyModalContent";
+import { DelayFor } from "../../utility/helpers";
 
 const MyListing = ({
   navigation,
@@ -45,6 +48,7 @@ const MyListing = ({
   const [listings, setListings] = React.useState<any[]>([]);
   const [details, setDetails] = React.useState<any>(null);
   const [search, setSearch] = React.useState<string>("");
+  const [listing_id, setListingId] = React.useState<any>(null);
 
   const [rating, setRating] = React.useState<any[]>([]);
 
@@ -164,6 +168,18 @@ const MyListing = ({
             item.listing_name.toLowerCase().includes(search.toLowerCase())
           )}
           keyExtractor={(item) => item.id.toString()}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("71%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           ItemSeparatorComponent={() => (
             <View
               style={{ borderBottomColor: darkMode ? "#0f0f0f" : "#696969" }}
@@ -201,7 +217,7 @@ const MyListing = ({
                       backgroundColor: darkMode ? "#0f0f0f" : "white",
                     },
                   ]}
-                  onPress={() => navigation.navigate("EditListing")}
+                  onPress={() => navigation.navigate("EditListing", {data: item})}
                   className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
                 >
                   <AntDesign name="edit" size={15} color={COLORS.primary} />
@@ -218,27 +234,7 @@ const MyListing = ({
                   ]}
                   className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
                   onPress={() => {
-                    dispatch(SET_LOADER(true));
-                    deleteListing(
-                      { id: item.id },
-                      (response) => {
-                        setListings(
-                          listings.filter((data) => data.id !== item.id)
-                        );
-                        dispatch(SET_LOADER(false));
-                        Toast.show({
-                          type: "success",
-                          text1: response.message,
-                        });
-                      },
-                      (error) => {
-                        Toast.show({
-                          type: "error",
-                          text1: error,
-                        });
-                        dispatch(SET_LOADER(false));
-                      }
-                    );
+                    setListingId(item);
                   }}
                 >
                   <AntDesign name="delete" size={15} color={COLORS.primary} />
@@ -315,6 +311,51 @@ const MyListing = ({
           }
         />
       </SafeAreaView>
+      <ErrorVerifyModalContent
+        message={{
+          title: "Confirm",
+          message: "Are you sure you want to delete this listing?",
+        }}
+        visible={Boolean(listing_id)}
+        icon={<AntDesign name="warning" size={24} color={COLORS.danger} />}
+      >
+        <View className="flex-row justify-between items-center">
+          <Button
+            text="Yes"
+            buttonStyle={{ width: W("36%"), marginRight: W("3%") }}
+            // buttonStyleClassName="bg-[#C93636]"
+            onPress={() => {
+              setListingId(null);
+              DelayFor(500, () => {
+                dispatch(SET_LOADER(true));
+                deleteListing(
+                  { id: listing_id.id },
+                  (response) => {
+                    setListings(
+                      listings.filter((data) => data.id !== listing_id.id)
+                    );
+                    dispatch(SET_LOADER(false));
+                  },
+                  (error) => {
+                    Toast.show({
+                      type: "error",
+                      text1: error,
+                    });
+                    dispatch(SET_LOADER(false));
+                  }
+                );
+              });
+            }}
+          />
+          <Button
+            text="No"
+            buttonStyle={{ width: W("36%") }}
+            // buttonStyleClassName="bg-transparent border border-[#C3B9B9]"
+            // textStyleClassName="text-[#212121]"
+            onPress={() => setListingId(null)}
+          />
+        </View>
+      </ErrorVerifyModalContent>
     </KeyboardAvoidingView>
   );
 };

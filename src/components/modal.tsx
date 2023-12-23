@@ -1,5 +1,8 @@
 import { View, Text, Modal as NativeModal } from "react-native";
 import { width } from "../utility/constant";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { shadowBox } from "../style/Typography";
 
 interface IProps {
   showModal?: boolean;
@@ -12,6 +15,7 @@ const Modal: React.FC<IProps> = ({
   children,
   full = false,
 }) => {
+  const { darkMode } = useSelector((state: RootState) => state.auth);
   if (showModal) {
     return (
       <NativeModal transparent={true} visible={true}>
@@ -25,6 +29,8 @@ const Modal: React.FC<IProps> = ({
               width: full ? width : width - 50,
               zIndex: 9999999,
               borderRadius: full ? 0 : 15,
+              backgroundColor: darkMode ? "#0F0F0F" : "white",
+              ...shadowBox,
             }}
           >
             {children}

@@ -13,6 +13,7 @@ import { getNotification, getNotificationCount, markReadNotification } from "../
 import Toast from "react-native-toast-message";
 import { SET_LOADER, SET_NOTIFICATION } from "../../store/formDataSlice";
 import moment from "moment";
+import { GradientText } from "../../components/gradientText";
 
 const NotificationSection = () => {
   const focus = useIsFocused();
@@ -73,6 +74,18 @@ const NotificationSection = () => {
       data={notificationList}
       keyExtractor={(item) => item.id.toString()}
       ItemSeparatorComponent={() => <Spacer value={H("1%")} axis="vertical" />}
+      ListEmptyComponent={
+        <>
+          <View
+            className="flex-1 w-full h-full justify-center items-center"
+            style={{ height: H("71%") }}
+          >
+            <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+              Nothing Yet
+            </GradientText>
+          </View>
+        </>
+      }
       renderItem={({ item }) => (
         <View
           style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}

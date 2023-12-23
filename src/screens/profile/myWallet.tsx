@@ -64,7 +64,7 @@ const MyWallet = ({
   const [banks, setBanks] = React.useState<any[]>([]);
   const [acctName, setAcctName] = React.useState<string>("");
   const [amount, setAmount] = React.useState<string>("");
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const withdrawRef = React.useRef<RBSheet | null>(null);
   const fundRef = React.useRef<RBSheet | null>(null);
 
@@ -157,9 +157,9 @@ const MyWallet = ({
               Available Balance
             </SmallText>
             <Spacer value={H("1%")} axis="vertical" />
-            <GradientText className="text-primary font-RedHatDisplaySemiBold text-center p-0 text-[20px]">
+            <SmallText className="text-primary font-RedHatDisplaySemiBold text-center p-0 text-[20px]">
               ₦ {details?.balance?.toLocaleString() || 0}
-            </GradientText>
+            </SmallText>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           <View className="w-full flex-row justify-evenly items-center">
@@ -225,6 +225,18 @@ const MyWallet = ({
           ItemSeparatorComponent={() => (
             <Spacer value={H("3%")} axis="vertical" />
           )}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("30%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           ListFooterComponent={<Spacer value={H("3%")} axis="vertical" />}
           renderItem={({ item }) => (
             <Pressable className="w-full">
@@ -364,6 +376,14 @@ const MyWallet = ({
                 Toast.show({
                   type: "error",
                   text1: "No account name has been found.",
+                });
+              } else if (
+                acctName.toLowerCase() !== profile?.name.toLowerCase()
+              ) {
+                Toast.show({
+                  type: "error",
+                  text1: "Profile name does not match account name.",
+                  text2: "Edit name in settings.",
                 });
               } else {
                 withdrawRef.current?.close();

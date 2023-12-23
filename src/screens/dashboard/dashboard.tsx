@@ -96,6 +96,7 @@ const Dashboard = ({
       getAllListing(
         {
           listing_city: profile?.city || "",
+          is_nearest: true,
         },
         (response) => {
           setNearest(response.listing);
@@ -179,7 +180,6 @@ const Dashboard = ({
               Categories
             </GradientText>
           )}
-
           <Spacer axis="vertical" value={H(3)} />
           <View>
             <FlatList
@@ -213,7 +213,7 @@ const Dashboard = ({
             />
             <SmallText
               className="text-center text-primary p-0"
-              style={!darkMode && { color: !darkMode && "#0F0F0F" }}
+              style={!darkMode && { color: !darkMode ? "#0F0F0F": undefined }}
             >
               See More
             </SmallText>

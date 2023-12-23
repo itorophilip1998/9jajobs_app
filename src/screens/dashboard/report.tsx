@@ -33,7 +33,7 @@ const Report = ({
   route: RouteProp<any>;
 }) => {
   const [report, setReport] = React.useState<string>("");
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   // console.log(route.params?.data);
   return (
@@ -108,6 +108,11 @@ const Report = ({
                 Toast.show({
                   type: "error",
                   text1: "Please enter your report",
+                });
+              } else if (route.params?.data?.user?.id === profile?.id) {
+                Toast.show({
+                  type: "error",
+                  text1: "You cannot report your listing.",
                 });
               } else {
                 dispatch(SET_LOADER(true));

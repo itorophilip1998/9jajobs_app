@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TouchableWithoutFeedback,
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -29,26 +30,33 @@ import PrivacyIcon from "../../../assets/icons/privacy.svg";
 import FeedBackIcon from "../../../assets/icons/feedback.svg";
 import FaqIcon from "../../../assets/icons/faq.svg";
 import AboutIcon from "../../../assets/icons/about.svg";
+import SettingsIcon from "../../../assets/icons/settings.svg";
 import ProfileMenuCard from "../../components/profileMenuCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
 import userImg from "../../../assets/images/user.jpg";
+import ShowImage from "../modals/showImage";
 
 const routes = [
   { path: "MyWallet", name: "My Wallet", icon: WalletIcon },
   { path: "Bookings", name: "Bookings", icon: BookingIcon },
   { path: "Referrals", name: "Referrals", icon: ReferralIcon },
-  { path: "Packages", name: "Packages", icon: PackageIcon },
+  // { path: "Packages", name: "Packages", icon: PackageIcon },
   { path: "Verification", name: "Verification", icon: VerifyIcon },
   { path: "MyListing", name: "My Listing", icon: ListingIcon },
   { path: "BoostPost", name: "Boost Post", icon: BoostIcon },
+  { path: "EditProfile", name: "Settings", icon: SettingsIcon },
   {
     path: "Privacy",
     name: "Privacy Policy",
     icon: PrivacyIcon,
   },
-  { path: "https://9jajob.com/contact", name: "Contact Us", icon: FeedBackIcon },
+  {
+    path: "https://9jajob.com/contact",
+    name: "Contact Us",
+    icon: FeedBackIcon,
+  },
   { path: "https://9jajob.com/faq", name: "FAQ", icon: FaqIcon },
   { path: "https://9jajob.com/about", name: "About", icon: AboutIcon },
 ];
@@ -59,6 +67,7 @@ const Profile = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
+  const [profileImg, setProfileImg] = React.useState<string>("");
   //   const sortRef = React.useState<RBSheet | null>(null);
   return (
     <KeyboardAvoidingView
@@ -84,18 +93,20 @@ const Profile = ({
             My Account
           </GradientText>
         )}
-        <Image
-          source={
-            profile?.photo
-              ? {
-                  uri: profile?.photo,
-                }
-              : userImg
-          }
-          alt=""
-          className=" w-[70%] mx-auto h-[170px] my-3 rounded-lg"
-          resizeMode="cover"
-        />
+        <TouchableWithoutFeedback onPress={() => setProfileImg(profile?.photo)}>
+          <Image
+            source={
+              profile?.photo
+                ? {
+                    uri: profile?.photo,
+                  }
+                : userImg
+            }
+            alt=""
+            className=" w-[70%] mx-auto h-[170px] mb-3 mt-6 rounded-lg"
+            resizeMode="cover"
+          />
+        </TouchableWithoutFeedback>
         <View className="flex-row item-center justify-center pl-4">
           <View>
             {darkMode ? (
@@ -121,13 +132,13 @@ const Profile = ({
               {profile?.email}
             </SmallText>
           </View>
-          <AntDesign
+          {/* <AntDesign
             name="setting"
             size={30}
             color={COLORS.primary}
             // className="ml-2"
             onPress={() => navigation.navigate("EditProfile")}
-          />
+          /> */}
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -143,6 +154,11 @@ const Profile = ({
             <ProfileMenuCard navigation={navigation} item={item} key={idx} />
           ))}
         </ScrollView>
+        <ShowImage
+          close={() => setProfileImg("")}
+          img={profileImg}
+          visible={!!profileImg}
+        />
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

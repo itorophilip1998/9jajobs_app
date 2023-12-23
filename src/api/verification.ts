@@ -26,7 +26,7 @@ export const verifyListing = async (
   data.skill_certificate &&
     formData.append("skill_certificate", data.skill_certificate);
   data.proof_address && formData.append("proof_address", data.proof_address);
-  data.services.map((item: string) => formData.append("services", item));
+  data.services.map((item: string) => formData.append("services[]", item));
   var config = {
     method: "post",
     url: `${BASE_URL}/verification`,

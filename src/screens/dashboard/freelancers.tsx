@@ -25,6 +25,7 @@ import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { SET_LOADER } from "../../store/formDataSlice";
 import { getAllListing } from "../../api/category";
 import Toast from "react-native-toast-message";
+import { GradientText } from "../../components/gradientText";
 
 const Freelancers = ({
   navigation,
@@ -80,6 +81,18 @@ const Freelancers = ({
           ItemSeparatorComponent={() => (
             <Spacer value={H("1%")} axis="vertical" />
           )}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("71%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           renderItem={({ item }) => (
             <UserProfileCard
               navigation={navigation}

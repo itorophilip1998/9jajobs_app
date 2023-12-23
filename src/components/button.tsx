@@ -15,6 +15,7 @@ import {
 import { gradientButton } from "../style/buttons";
 interface IProps {
   text: string;
+  disabled?: boolean;
   icon?: JSX.Element;
   textStyle?: TextStyle;
   buttonStyle?: ViewStyle;
@@ -31,6 +32,7 @@ const Button: React.FC<IProps> = ({
   buttonStyle,
   buttonStyleClassName,
   textStyleClassName,
+  disabled = false,
 }) => {
   return (
     <TouchableOpacity
@@ -40,6 +42,7 @@ const Button: React.FC<IProps> = ({
         Keyboard.dismiss();
         onPress && onPress();
       }}
+      disabled={disabled}
     >
       <LinearGradient
         colors={["#023215", "#1A911B"]}

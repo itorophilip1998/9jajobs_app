@@ -1,7 +1,6 @@
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 import { SET_ERROR } from "../store/formDataSlice";
 import moment from "moment";
-import * as FileSystem from "expo-file-system";
 import Toast from "react-native-toast-message";
 
 export const FormatNumber = (number: number) => {
@@ -216,3 +215,23 @@ export const validateUrl = (str: string) => {
   ); // fragment locator
   return pattern.test(str);
 };
+
+export function isFacebookLink(url: string) {
+  const facebookPattern = /^(https?:\/\/)?(www\.)?facebook\.com\/.*/;
+  return facebookPattern.test(url);
+}
+
+export function isLinkedInLink(url: string) {
+  const linkedinPattern = /^(https?:\/\/)?(www\.)?linkedin\.com\/.*/;
+  return linkedinPattern.test(url);
+}
+
+export function isTwitterLink(url: string) {
+  const twitterPattern = /^(https?:\/\/)?(www\.)?twitter\.com\/.*/;
+  return twitterPattern.test(url);
+}
+
+export function isInstagramLink(url: string) {
+  const instagramPattern = /^(https?:\/\/)?(www\.)?instagram\.com\/.*/;
+  return instagramPattern.test(url);
+}

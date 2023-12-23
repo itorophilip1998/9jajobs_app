@@ -17,10 +17,11 @@ import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
-import { Spacer } from "../../components";
+import { SmallText, Spacer } from "../../components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { RouteProp } from "@react-navigation/native";
+import { GradientText } from "../../components/gradientText";
 
 const Category = ({
   navigation,
@@ -45,12 +46,24 @@ const Category = ({
         <FlatList
           showsVerticalScrollIndicator={false}
           data={route.params?.data}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item?.id?.toString()}
           // columnWrapperStyle={{ justifyContent: "space-between" }}
           numColumns={3}
           ItemSeparatorComponent={() => (
             <Spacer value={H("1%")} axis="vertical" />
           )}
+          ListEmptyComponent={
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center"
+                style={{ height: H("71%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Nothing Yet
+                </GradientText>
+              </View>
+            </>
+          }
           renderItem={({ item }) => (
             <CategoryCard
               onPress={() => navigation.navigate("Freelancers", { data: item })}

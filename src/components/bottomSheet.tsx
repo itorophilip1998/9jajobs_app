@@ -63,6 +63,7 @@ const BottomSheet = React.forwardRef(
         ref={ref}
         height={props.height || 700}
         openDuration={3000}
+        animationType="slide"
         customStyles={{
           container: {
             flex: 1,

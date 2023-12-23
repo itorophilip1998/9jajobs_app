@@ -186,15 +186,11 @@ const Forgot = ({
           placeholder="Email Address"
           type={"email-address"}
           autoCapitalize={"none"}
-          className="border-[#626262] border rounded-full"
+          containerClassName="border-[#626262] border rounded-full"
           suffixIcon={
-            <FontAwesome
-              name="send"
-              size={19}
-              color={COLORS.primary}
-              onPress={validateForgotEmail}
-            />
+            <FontAwesome name="send" size={19} color={COLORS.primary} />
           }
+          onSuffixTap={validateForgotEmail}
         />
         <Spacer axis="vertical" value={H(2)} />
         {passedEmail && (

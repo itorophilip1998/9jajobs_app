@@ -11,7 +11,8 @@ export const getWalletDetails = async (
     | "top-up"
     | "withdrawal"
     | "referrals"
-    | "boost",
+    | "boost"
+    | "listing",
   execute: (e: any) => void,
   error: (e: string) => void
 ) => {

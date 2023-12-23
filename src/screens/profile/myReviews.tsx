@@ -84,11 +84,11 @@ const MyReviews = ({
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" /> */}
-          <ReviewCard />
+          <ReviewCard item={undefined} />
           <Spacer value={H("3%")} axis="vertical" />
-          <ReviewCard />
+          <ReviewCard item={undefined} />
           <Spacer value={H("3%")} axis="vertical" />
-          <ReviewCard />
+          <ReviewCard item={undefined} />
           <Spacer value={H("3%")} axis="vertical" />
         </ScrollView>
       </SafeAreaView>
