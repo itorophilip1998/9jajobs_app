@@ -44,7 +44,7 @@ export const signUp = async (
     name: string;
     email: string;
     phone: string;
-    ref_code: string;
+    referrer_code: any;
     password: string;
     re_password: string;
   },
@@ -55,7 +55,7 @@ export const signUp = async (
   formData.append("name", data.name);
   formData.append("email", data.email);
   formData.append("phone_number", data.phone);
-  formData.append("ref_code", data.ref_code);
+  formData.append("referrer_code", data.referrer_code);
   formData.append("password", data.password);
   formData.append("re_password", data.re_password);
   var config = {
