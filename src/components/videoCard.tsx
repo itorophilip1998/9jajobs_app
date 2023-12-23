@@ -5,6 +5,9 @@ import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import userImg from "../../assets/images/user.jpg";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import { COLORS } from "../utility/colors";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { shadowBox, shadowBoxDark } from "../style/Typography";
 
 const VideoCard = ({
   item,
@@ -16,11 +19,15 @@ const VideoCard = ({
   console.log(item);
   const video = React.useRef<Video | null>(null);
   const [status, setStatus] = React.useState<AVPlaybackStatus | null>(null);
+  const { darkMode } = useSelector((state: RootState) => state.auth);
 
   return (
-    <View className="w-[150px] h-[100px]">
+    <View
+      style={shadowBox}
+      className="w-[150px] h-[100px] my-2 bg-white rounded-md"
+    >
       {item.video_url.includes("youtube.com") ? (
-        <View className="w-full h-full bg-white border-red-500" />
+        <View className="w-full h-full bg-white rounded-md" />
       ) : (
         <Video
           ref={video}
