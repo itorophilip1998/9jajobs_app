@@ -70,7 +70,7 @@ const TrendingListing = ({
                 <Spacer value={H("2%")} axis="vertical" />
                 <Button
                   text="Back to Home"
-                  onPress={() => navigation.navigate("Home")}
+                  onPress={() => navigation.navigate("Dashboard")}
                   buttonStyleClassName="rounded-md"
                   buttonStyle={{ width: "100%" }}
                 />

@@ -192,40 +192,51 @@ const Verification = ({
         {
           cac_document: cac
             ? {
-                name: cac?.name,
+                name:
+                  cac?.name ||
+                  "document." + cac?.uri?.split(".").pop()?.toLowerCase(),
                 uri: cac?.uri,
-                type: cac?.mimeType,
+                type:
+                  "application/" + cac?.uri?.split(".").pop()?.toLowerCase(),
               }
             : null,
           id_card_back: idBack
             ? {
-                name: idBack?.fileName,
+                name:
+                  idBack?.fileName ||
+                  "image." + idBack?.uri?.split(".").pop()?.toLowerCase(),
                 uri: idBack?.uri,
-                type: "image/png",
+                type: "image/" + idBack?.uri?.split(".").pop()?.toLowerCase(),
               }
             : null,
           id_card_front: idFront
             ? {
-                name: idFront?.fileName,
+                name:
+                  idFront?.fileName ||
+                  "image." + idFront?.uri?.split(".").pop()?.toLowerCase(),
                 uri: idFront?.uri,
-                type: "image/png",
+                type: "image/" + idFront?.uri?.split(".").pop()?.toLowerCase(),
               }
             : null,
           listing_id: detail?.id || "",
           proof_address: utility
             ? {
-                name: utility?.fileName,
+                name:
+                  utility?.fileName ||
+                  "image." + utility?.uri?.split(".").pop()?.toLowerCase(),
                 uri: utility?.uri,
-                type: "image/png",
+                type: "image/" + utility?.uri?.split(".").pop()?.toLowerCase(),
               }
             : null,
           reg_number: regNo,
           services,
           skill_certificate: skill
             ? {
-                name: skill?.fileName,
+                name:
+                  skill?.fileName ||
+                  "image." + skill?.uri?.split(".").pop()?.toLowerCase(),
                 uri: skill?.uri,
-                type: "image/png",
+                type: "image/" + skill?.uri?.split(".").pop()?.toLowerCase(),
               }
             : null,
         },

@@ -199,7 +199,7 @@ const Search = ({
                 <Spacer value={H("2%")} axis="vertical" />
                 <Button
                   text="Back to Home"
-                  onPress={() => navigation.navigate("Search")}
+                  onPress={() => navigation.navigate("Dashboard")}
                   buttonStyleClassName="rounded-md"
                 />
               </View>

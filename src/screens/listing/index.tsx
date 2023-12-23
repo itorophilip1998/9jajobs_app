@@ -95,7 +95,7 @@ const Listing = ({
                 <Spacer value={H("2%")} axis="vertical" />
                 <Button
                   text="Go to Home"
-                  onPress={() => navigation.navigate("Home")}
+                  onPress={() => navigation.navigate("Dashboard")}
                   buttonStyleClassName="rounded-md"
                   buttonStyle={{ width: "100%" }}
                 />

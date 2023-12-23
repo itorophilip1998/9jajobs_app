@@ -279,6 +279,7 @@ const Post = ({
       type: "success",
       text1: "Listing creation in progress...",
     });
+    navigation.navigate("Dashboard")
     addListing(
       {
         listing_creation_amount: profile?.listing_creation_amount?.toString(),
@@ -345,6 +346,31 @@ const Post = ({
           type: "success",
           text1: response?.message,
         });
+        setBusiness("");
+        setDescription("");
+        setCategory(null);
+        setLocation("");
+        setMonday("24/7");
+        setTuesday("24/7");
+        setWednesday("24/7");
+        setThursday("24/7");
+        setFriday("24/7");
+        setSaturday("24/7");
+        setSunday("24/7");
+        setLongitude(null);
+        setLatitude(null);
+        setEmail("");
+        setPhone("");
+        setWebsite("");
+        setWhatsapp("");
+        setFacebook("");
+        setInstagram("");
+        setTwitter("");
+        setLinkedIn("");
+        setAmenities([]);
+        setSelectedVideos([]);
+        setSelectedImages([]);
+        setLogo(null);
         // dispatch(SET_LOADER(false));
       },
       (error) => {

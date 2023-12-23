@@ -5,16 +5,29 @@ import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import userImg from "../../assets/images/user.jpg";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import { COLORS } from "../utility/colors";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { shadowBox, shadowBoxDark } from "../style/Typography";
 
-const VideoCard = ({ item, openYoutube}: { item: any, openYoutube: (e: any) => void }) => {
-  console.log(item)
+const VideoCard = ({
+  item,
+  openYoutube,
+}: {
+  item: any;
+  openYoutube: (e: any) => void;
+}) => {
+  console.log(item);
   const video = React.useRef<Video | null>(null);
   const [status, setStatus] = React.useState<AVPlaybackStatus | null>(null);
+  const { darkMode } = useSelector((state: RootState) => state.auth);
 
   return (
-    <View className="w-[150px] h-[100px]">
+    <View
+      style={shadowBox}
+      className="w-[150px] h-[100px] my-2 bg-white rounded-md"
+    >
       {item.video_url.includes("youtube.com") ? (
-        <View className="w-full h-full bg-white" />
+        <View className="w-full h-full bg-white rounded-md" />
       ) : (
         <Video
           ref={video}
@@ -40,7 +53,12 @@ const VideoCard = ({ item, openYoutube}: { item: any, openYoutube: (e: any) => v
       )}
       {item.video_url.includes("youtube.com") ? (
         <View className="absolute w-full h-full top-0 left-0 justify-center items-center">
-          <AntDesign name="youtube" size={60} color={COLORS.danger} onPress={() => openYoutube(item)}/>
+          <AntDesign
+            name="youtube"
+            size={60}
+            color={COLORS.danger}
+            onPress={() => openYoutube(item)}
+          />
         </View>
       ) : (
         <View className="absolute w-full h-full top-0 left-0 justify-center items-center bg-[#00000081]">
