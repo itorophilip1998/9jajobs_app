@@ -38,15 +38,18 @@ const Listing = ({
   const focus = useIsFocused();
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [allListing, setAllListing] = React.useState<any[]>([]);
-
+  const [page, setPage] = React.useState<number>(1);
+  const ref = React.useRef<boolean>(false);
   React.useEffect(() => {
-    if (focus) {
+    if (focus && !ref.current) {
       dispatch(SET_LOADER(true));
       getAllListing(
-        null,
+        { page },
         (response) => {
           dispatch(SET_LOADER(false));
-          setAllListing(response.listing);
+          setAllListing([...allListing, ...response.listing.data]);
+          ref.current = true;
+          setPage(response.listing.current_page + 1)
         },
         (error) => {
           dispatch(SET_LOADER(false));
@@ -57,6 +60,7 @@ const Listing = ({
         }
       );
     }
+    return () => setPage(1);
   }, [focus]);
   return (
     <KeyboardAvoidingView
@@ -114,6 +118,26 @@ const Listing = ({
               }
             />
           )}
+          onEndReached={() => {
+            dispatch(SET_LOADER(true));
+            getAllListing(
+              { page },
+              (response) => {
+                dispatch(SET_LOADER(false));
+                setAllListing([...allListing, ...response.listing.data]);
+                // ref.current = true;
+                setPage(response.listing.current_page + 1);
+              },
+              (error) => {
+                dispatch(SET_LOADER(false));
+                Toast.show({
+                  type: "error",
+                  text1: error,
+                });
+              }
+            );
+          }} // Load more data when the user reaches the end
+          onEndReachedThreshold={0.1}
         />
       </SafeAreaView>
     </KeyboardAvoidingView>

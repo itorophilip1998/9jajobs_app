@@ -38,16 +38,19 @@ const Freelancers = ({
   const focus = useIsFocused();
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const [listings, setListing] = React.useState<any[]>([]);
-  // console.log(route.params?.data);
+  const [page, setPage] = React.useState<number>(1);
+  const ref = React.useRef<boolean>(false);
 
   React.useEffect(() => {
-    if (focus) {
+    if (focus && !ref.current) {
       dispatch(SET_LOADER(true));
       getAllListing(
-        { listing_category_id: route.params?.data.id },
+        { listing_category_id: route.params?.data.id, page },
         (response) => {
           dispatch(SET_LOADER(false));
-          setListing(response.listing);
+          setListing([...listings, ...response?.listing?.data]);
+          ref.current = true;
+          setPage(response.listing.current_page + 1)
         },
         (error) => {
           dispatch(SET_LOADER(false));
@@ -58,6 +61,9 @@ const Freelancers = ({
         }
       );
     }
+    return () => {
+      setPage(1);
+    };
   }, [focus, route.params?.data]);
   return (
     <KeyboardAvoidingView
@@ -100,6 +106,25 @@ const Freelancers = ({
               </View>
             </>
           }
+          onEndReached={() => {
+            dispatch(SET_LOADER(true));
+            getAllListing(
+              { listing_category_id: route.params?.data.id, page },
+              (response) => {
+                dispatch(SET_LOADER(false));
+                setListing([...listings, ...response?.listing?.data]);
+                setPage(response.listing.current_page + 1);
+              },
+              (error) => {
+                dispatch(SET_LOADER(false));
+                Toast.show({
+                  type: "error",
+                  text1: error,
+                });
+              }
+            );
+          }} // Load more data when the user reaches the end
+          onEndReachedThreshold={0.1}
           renderItem={({ item }) => (
             <UserProfileCard
               navigation={navigation}

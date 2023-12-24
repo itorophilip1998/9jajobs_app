@@ -56,10 +56,11 @@ const Search = ({
       {
         // listing_name: search,
         listing_city: location,
+        autocomplete: true,
       },
       (response) => {
         loading && dispatch(SET_LOADER(false));
-        setSearchResults(response.listing);
+        setSearchResults(response.auto_complete);
       },
       (error) => {
         loading && dispatch(SET_LOADER(false));
@@ -166,20 +167,12 @@ const Search = ({
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={searchResults.filter(
-            (item) =>
-              item.listing_name
-                .toLowerCase()
-                .trim()
-                .includes(search.trim().toLowerCase()) ||
-              item.r_listing_category?.listing_category_name
-                .toLowerCase()
-                .trim()
-                .includes(search.trim().toLowerCase())
+          data={searchResults.filter((item) =>
+            item.toLowerCase().trim().includes(search.trim().toLowerCase())
           )}
           // className="px-2"
           ListHeaderComponent={() => <Spacer value={H("2%")} axis="vertical" />}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, idx) => idx.toString()}
           ItemSeparatorComponent={() => (
             <>
               <Spacer value={H("0.5%")} axis="vertical" />
@@ -229,7 +222,7 @@ const Search = ({
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-left text-[16px]"
               >
-                {item.listing_name} at {item.listing_address}
+                {item}
               </SmallText>
             </Pressable>
           )}
@@ -264,6 +257,7 @@ const Search = ({
                 getAllListing(
                   {
                     // listing_name: search,
+                    autocomplete: true,
                     listing_city: `${city?.long_name}`,
                   },
                   (response) => {

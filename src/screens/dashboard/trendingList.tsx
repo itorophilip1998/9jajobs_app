@@ -22,8 +22,12 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { GradientText } from "../../components/gradientText";
+import { useDispatch } from "react-redux";
+import Toast from "react-native-toast-message";
+import { getAllListing } from "../../api/category";
+import { SET_LOADER } from "../../store/formDataSlice";
 
 const TrendingListing = ({
   navigation,
@@ -32,7 +36,40 @@ const TrendingListing = ({
   navigation: NativeStackNavigationProp<any>;
   route: RouteProp<any>;
 }) => {
+  const focus = useIsFocused();
+  const dispatch = useDispatch();
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const [trending, setTrending] = React.useState<any[]>([]);
+  const [page, setPage] = React.useState<number>(1);
+  const ref = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    if (focus && !ref.current) {
+      dispatch(SET_LOADER(true));
+      getAllListing(
+        {
+          page,
+          is_trending: true,
+        },
+        (response) => {
+          setTrending([...trending, ...response.listing.data]);
+          ref.current = true;
+          dispatch(SET_LOADER(false));
+          setPage(response?.listing?.current_page + 1)
+        },
+        (error) => {
+          dispatch(SET_LOADER(false));
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+        }
+      );
+    }
+    return () => {
+      setPage(1);
+    };
+  }, [focus]);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -52,7 +89,7 @@ const TrendingListing = ({
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={route.params?.data}
+          data={trending}
           className="px-3"
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
@@ -86,6 +123,28 @@ const TrendingListing = ({
               }
             />
           )}
+          onEndReached={() => {
+            dispatch(SET_LOADER(true));
+            getAllListing(
+              {
+                page,
+                is_trending: true,
+              },
+              (response) => {
+                setTrending([...trending, ...response.listing.data]);
+                dispatch(SET_LOADER(false));
+                setPage(response?.listing?.current_page + 1);
+              },
+              (error) => {
+                dispatch(SET_LOADER(false));
+                Toast.show({
+                  type: "error",
+                  text1: error,
+                });
+              }
+            );
+          }} // Load more data when the user reaches the end
+          onEndReachedThreshold={0.1}
         />
       </SafeAreaView>
     </KeyboardAvoidingView>
