@@ -7,7 +7,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { Button, InputField, PrimaryText, SmallText, Spacer } from "../../components";
+import {
+  Button,
+  InputField,
+  PrimaryText,
+  SmallText,
+  Spacer,
+} from "../../components";
 import { AntDesign } from "@expo/vector-icons";
 import { SET_SEARCH } from "../../store/searchSlice";
 import {
@@ -39,20 +45,22 @@ const MessageSection = ({
   const dispatch = useDispatch();
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const [messagesList, setMessagesList] = React.useState<any[]>([]);
+  const [loaded, setLoaded] = React.useState<boolean>(false);
 
   const getMessages = () => {
     dispatch(SET_LOADER(true));
     getFriendList(
       (response) => {
-        console.log(response.chatted_users);
         dispatch(SET_LOADER(false));
         setMessagesList(response.chatted_users);
+        setLoaded(true);
       },
       (error) => {
         Toast.show({
           type: "error",
           text1: error,
         });
+        setLoaded(true);
         dispatch(SET_LOADER(false));
       }
     );
@@ -122,23 +130,25 @@ const MessageSection = ({
         refreshing={false}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <>
-            <View
-              className="flex-1 w-full h-full justify-center items-center px-4"
-              style={{ height: H("71%") }}
-            >
-              <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                Oops! No Messages Found
-              </GradientText>
-              <Spacer value={H("2%")} axis="vertical" />
-              <Button
-                text="Back to Home"
-                onPress={() => navigation.navigate("Dashboard")}
-                buttonStyleClassName="rounded-md"
-                buttonStyle={{ width: "100%" }}
-              />
-            </View>
-          </>
+          loaded ? (
+            <>
+              <View
+                className="flex-1 w-full h-full justify-center items-center px-4"
+                style={{ height: H("71%") }}
+              >
+                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                  Oops! No Messages Found
+                </GradientText>
+                <Spacer value={H("2%")} axis="vertical" />
+                <Button
+                  text="Back to Home"
+                  onPress={() => navigation.navigate("Dashboard")}
+                  buttonStyleClassName="rounded-md"
+                  buttonStyle={{ width: "100%" }}
+                />
+              </View>
+            </>
+          ) : null
         }
         data={messagesList
           .filter((obj) => {

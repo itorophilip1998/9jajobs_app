@@ -40,7 +40,7 @@ const TrendingListing = ({
   const dispatch = useDispatch();
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const [trending, setTrending] = React.useState<any[]>([]);
-  const [page, setPage] = React.useState<number>(1);
+  const [page, setPage] = React.useState<number | undefined>();
   const ref = React.useRef<boolean>(false);
 
   React.useEffect(() => {
@@ -55,7 +55,7 @@ const TrendingListing = ({
           setTrending([...trending, ...response.listing.data]);
           ref.current = true;
           dispatch(SET_LOADER(false));
-          setPage(response?.listing?.current_page + 1)
+          setPage(response?.listing?.current_page + 1);
         },
         (error) => {
           dispatch(SET_LOADER(false));
@@ -96,23 +96,25 @@ const TrendingListing = ({
             <Spacer value={H("1%")} axis="vertical" />
           )}
           ListEmptyComponent={
-            <>
-              <View
-                className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("71%") }}
-              >
-                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Oops! No Listing Found
-                </GradientText>
-                <Spacer value={H("2%")} axis="vertical" />
-                <Button
-                  text="Back to Home"
-                  onPress={() => navigation.navigate("Dashboard")}
-                  buttonStyleClassName="rounded-md"
-                  buttonStyle={{ width: "100%" }}
-                />
-              </View>
-            </>
+            page ? (
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("71%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Oops! No Listing Found
+                  </GradientText>
+                  <Spacer value={H("2%")} axis="vertical" />
+                  <Button
+                    text="Back to Home"
+                    onPress={() => navigation.navigate("Dashboard")}
+                    buttonStyleClassName="rounded-md"
+                    buttonStyle={{ width: "100%" }}
+                  />
+                </View>
+              </>
+            ) : null
           }
           renderItem={({ item }) => (
             <UserProfileCard

@@ -9,7 +9,11 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import { useIsFocused } from "@react-navigation/native";
-import { getNotification, getNotificationCount, markReadNotification } from "../../api/notification";
+import {
+  getNotification,
+  getNotificationCount,
+  markReadNotification,
+} from "../../api/notification";
 import Toast from "react-native-toast-message";
 import { SET_LOADER, SET_NOTIFICATION } from "../../store/formDataSlice";
 import moment from "moment";
@@ -25,6 +29,7 @@ const NotificationSection = ({
   const dispatch = useDispatch();
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const [notificationList, setNotificationList] = React.useState<any[]>([]);
+  const [loaded, setLoaded] = React.useState<boolean>(false);
 
   const getUsersNotifications = () => {
     dispatch(SET_LOADER(true));
@@ -36,6 +41,7 @@ const NotificationSection = ({
             getNotification(
               (response) => {
                 dispatch(SET_LOADER(false));
+                setLoaded(true);
                 setNotificationList(response.notifications);
               },
               (error) => {
@@ -43,20 +49,23 @@ const NotificationSection = ({
                   type: "error",
                   text1: error,
                 });
+                setLoaded(true);
                 dispatch(SET_LOADER(false));
               }
-            );
-          },
-          (error) => {
+              );
+            },
+            (error) => {
+            setLoaded(true);
             Toast.show({
               type: "error",
               text1: error,
             });
             dispatch(SET_LOADER(false));
           }
-        );
-      },
-      (error) => {
+          );
+        },
+        (error) => {
+        setLoaded(true);
         Toast.show({
           type: "error",
           text1: error,
@@ -80,23 +89,25 @@ const NotificationSection = ({
       keyExtractor={(item) => item.id.toString()}
       ItemSeparatorComponent={() => <Spacer value={H("1%")} axis="vertical" />}
       ListEmptyComponent={
-        <>
-          <View
-            className="flex-1 w-full h-full justify-center items-center px-4"
-            style={{ height: H("71%") }}
-          >
-            <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-              Oops! No Notification Found
-            </GradientText>
-            <Spacer value={H("2%")} axis="vertical" />
-            <Button
-              text="Back to Home"
-              onPress={() => navigation.navigate("Dashboard")}
-              buttonStyleClassName="rounded-md"
-              buttonStyle={{ width: "100%" }}
-            />
-          </View>
-        </>
+        loaded ? (
+          <>
+            <View
+              className="flex-1 w-full h-full justify-center items-center px-4"
+              style={{ height: H("71%") }}
+            >
+              <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                Oops! No Notification Found
+              </GradientText>
+              <Spacer value={H("2%")} axis="vertical" />
+              <Button
+                text="Back to Home"
+                onPress={() => navigation.navigate("Dashboard")}
+                buttonStyleClassName="rounded-md"
+                buttonStyle={{ width: "100%" }}
+              />
+            </View>
+          </>
+        ) : null
       }
       renderItem={({ item }) => (
         <View

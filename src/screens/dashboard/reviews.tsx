@@ -42,6 +42,7 @@ const Reviews = ({
   const { darkMode, access_token, loggedIn } = useSelector(
     (state: RootState) => state.auth
   );
+  const [loaded, setLoaded] = React.useState<boolean>(false);
   const [rating, setRating] = React.useState<any[]>([]);
 
   React.useEffect(() => {
@@ -52,8 +53,10 @@ const Reviews = ({
         (response) => {
           setRating(response);
           dispatch(SET_LOADER(false));
+          setLoaded(true);
         },
         (error) => {
+          setLoaded(true);
           dispatch(SET_LOADER(false));
           Toast.show({ type: "error", text1: error });
         }
@@ -136,35 +139,39 @@ const Reviews = ({
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
-
-          {rating.length === 0 ? (
+          {loaded && (
             <>
-              <View
-                className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("71%") }}
-              >
-                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Oops! No Reviews Found
-                </GradientText>
-                <Spacer value={H("2%")} axis="vertical" />
-                <Button
-                  text="Go Back"
-                  onPress={() => navigation.goBack()}
-                  buttonStyleClassName="rounded-md"
-                  buttonStyle={{ width: "100%" }}
-                />
-              </View>
-            </>
-          ) : (
-            <>
-              {rating.map((item: any, idx: number) => (
-                <React.Fragment key={idx}>
-                  <ReviewCard item={item} />
-                  <Spacer key={idx + 1} value={H("3%")} axis="vertical" />
-                </React.Fragment>
-              ))}
+              {rating.length === 0 ? (
+                <>
+                  <View
+                    className="flex-1 w-full h-full justify-center items-center"
+                    style={{ height: H("71%") }}
+                  >
+                    <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                      Oops! No Reviews Found
+                    </GradientText>
+                    <Spacer value={H("2%")} axis="vertical" />
+                    <Button
+                      text="Go Back"
+                      onPress={() => navigation.goBack()}
+                      buttonStyleClassName="rounded-md"
+                      buttonStyle={{ width: "100%" }}
+                    />
+                  </View>
+                </>
+              ) : (
+                <>
+                  {rating.map((item: any, idx: number) => (
+                    <React.Fragment key={idx}>
+                      <ReviewCard item={item} />
+                      <Spacer key={idx + 1} value={H("3%")} axis="vertical" />
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
             </>
           )}
+
           <Button
             text="Add Review"
             onPress={() =>

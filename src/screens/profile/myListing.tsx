@@ -49,6 +49,7 @@ const MyListing = ({
   const [details, setDetails] = React.useState<any>(null);
   const [search, setSearch] = React.useState<string>("");
   const [listing_id, setListingId] = React.useState<any>(null);
+   const [loaded, setLoaded] = React.useState<boolean>(false);
 
   const [rating, setRating] = React.useState<any[]>([]);
 
@@ -78,9 +79,11 @@ const MyListing = ({
       (response) => {
         dispatch(SET_LOADER(false));
         setListings(response);
+        setLoaded(true)
       },
       (error) => {
         dispatch(SET_LOADER(false));
+        setLoaded(true)
         Toast.show({
           type: "error",
           text1: error,
@@ -169,22 +172,24 @@ const MyListing = ({
           )}
           keyExtractor={(item) => item.id.toString()}
           ListEmptyComponent={
-            <>
-              <View
-                className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("71%") }}
-              >
-                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Oops! No Listing Found
-                </GradientText>
-                <Spacer value={H("2%")} axis="vertical" />
-                <Button
-                  text="Back to Menu"
-                  onPress={() => navigation.navigate("Profile")}
-                  buttonStyleClassName="rounded-md"
-                />
-              </View>
-            </>
+            loaded ? (
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("71%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Oops! No Listing Found
+                  </GradientText>
+                  <Spacer value={H("2%")} axis="vertical" />
+                  <Button
+                    text="Back to Menu"
+                    onPress={() => navigation.navigate("Profile")}
+                    buttonStyleClassName="rounded-md"
+                  />
+                </View>
+              </>
+            ) : null
           }
           ItemSeparatorComponent={() => (
             <View

@@ -42,7 +42,7 @@ const SearchResult = ({
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
 
   const [searchResults, setSearchResults] = React.useState<any[]>([]);
-  const [page, setPage] = React.useState<number>(1);
+  const [page, setPage] = React.useState<number | undefined>();
   const ref = React.useRef<boolean>(false);
 
   const handleSearch = () => {
@@ -57,7 +57,7 @@ const SearchResult = ({
         dispatch(SET_LOADER(false));
         setSearchResults([...searchResults, ...response.listing?.data]);
         ref.current = true;
-        setPage(response.listing.current_page + 1)
+        setPage(response.listing.current_page + 1);
       },
       (error) => {
         dispatch(SET_LOADER(false));
@@ -76,11 +76,7 @@ const SearchResult = ({
     return () => {
       setPage(1);
     };
-  }, [
-    focus,
-    route.params?.data?.location,
-    route.params?.data?.search,
-  ]);
+  }, [focus, route.params?.data?.location, route.params?.data?.search]);
 
   return (
     <KeyboardAvoidingView
@@ -108,22 +104,24 @@ const SearchResult = ({
           className="px-3"
           keyExtractor={(item) => item.id.toString()}
           ListEmptyComponent={
-            <>
-              <View
-                className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("71%") }}
-              >
-                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Oops! No result found
-                </GradientText>
-                <Spacer value={H("2%")} axis="vertical" />
-                <Button
-                  text="Back to Search"
-                  onPress={() => navigation.navigate("Search")}
-                  buttonStyleClassName="rounded-md"
-                />
-              </View>
-            </>
+            page ? (
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("71%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Oops! No result found
+                  </GradientText>
+                  <Spacer value={H("2%")} axis="vertical" />
+                  <Button
+                    text="Back to Search"
+                    onPress={() => navigation.navigate("Search")}
+                    buttonStyleClassName="rounded-md"
+                  />
+                </View>
+              </>
+            ) : null
           }
           ItemSeparatorComponent={() => (
             <Spacer value={H("1%")} axis="vertical" />

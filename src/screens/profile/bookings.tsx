@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Spacer, SmallText } from "../../components";
+import { Spacer, SmallText, Loader, Button } from "../../components";
 import TitleWithButton from "../../components/titleWithButton";
 import { width, height } from "../../utility/constant";
 import {
@@ -25,6 +25,7 @@ import { SET_LOADER } from "../../store/formDataSlice";
 import { bookListing, getAllBookings } from "../../api/booking";
 import Toast from "react-native-toast-message";
 import moment from "moment";
+import { GradientText } from "../../components/gradientText";
 
 const Booked = ({ booked }: { booked?: any[] }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
@@ -107,6 +108,7 @@ const Bookings = ({
     bookings: any[];
     booked: any[];
   } | null>(null);
+   const [loaded, setLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (focus) {
@@ -114,10 +116,12 @@ const Bookings = ({
       getAllBookings(
         (response) => {
           dispatch(SET_LOADER(false));
+          setLoaded(true)
           setBookListing(response);
         },
         (error) => {
           dispatch(SET_LOADER(false));
+          setLoaded(true)
           Toast.show({
             type: "error",
             text1: error,
@@ -245,10 +249,31 @@ const Bookings = ({
           </TouchableOpacity>
         </View>
         <Spacer value={H("3%")} axis="vertical" />
-        <ScrollView className="px-3 flex-1">
-          {type === "booked" && <Booked booked={bookedlisting?.booked} />}
-          {type === "booking" && <Booking booking={bookedlisting?.bookings} />}
-        </ScrollView>
+        {loaded ? (
+          <ScrollView className="px-3 flex-1">
+            {type === "booked" && <Booked booked={bookedlisting?.booked} />}
+            {type === "booking" && (
+              <Booking booking={bookedlisting?.bookings} />
+            )}
+          </ScrollView>
+        ) : (
+          <>
+            <View
+              className="flex-1 w-full h-full justify-center items-center"
+              style={{ height: H("60%") }}
+            >
+              <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                Oops! No Booking Found
+              </GradientText>
+              <Spacer value={H("2%")} axis="vertical" />
+              <Button
+                text="Back to Menu"
+                onPress={() => navigation.navigate("Profile")}
+                buttonStyleClassName="rounded-md"
+              />
+            </View>
+          </>
+        )}
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

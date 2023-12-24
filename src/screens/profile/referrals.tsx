@@ -40,16 +40,19 @@ const Referrals = ({
   const dispatch = useDispatch();
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [referral, setReferral] = React.useState<any>(null);
+  const [loaded, setLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (focus) {
       dispatch(SET_LOADER(true));
       getReferral(
         (response) => {
+          setLoaded(true);
           dispatch(SET_LOADER(false));
           setReferral(response?.referral);
         },
         (error) => {
+          setLoaded(true);
           dispatch(SET_LOADER(false));
           Toast.show({
             type: "error",
@@ -175,24 +178,26 @@ const Referrals = ({
               <Spacer value={H("3%")} axis="vertical" />
             )}
             ListEmptyComponent={
-              <>
-                <View
-                  className="flex-1 w-full h-full justify-center items-center"
-                  style={{ height: H("50%") }}
-                >
-                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                    Oops! No Referral Found
-                  </GradientText>
-                  <Spacer value={H("2%")} axis="vertical" />
-                  <Button
-                    text="Go to Menu"
-                    onPress={() => {
-                      navigation.navigate("Profile")
-                    }}
-                    buttonStyleClassName="rounded-md"
-                  />
-                </View>
-              </>
+              loaded ? (
+                <>
+                  <View
+                    className="flex-1 w-full h-full justify-center items-center"
+                    style={{ height: H("50%") }}
+                  >
+                    <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                      Oops! No Referral Found
+                    </GradientText>
+                    <Spacer value={H("2%")} axis="vertical" />
+                    <Button
+                      text="Go to Menu"
+                      onPress={() => {
+                        navigation.navigate("Profile");
+                      }}
+                      buttonStyleClassName="rounded-md"
+                    />
+                  </View>
+                </>
+              ) : null
             }
             renderItem={({ item }) => (
               <Pressable className="w-full">

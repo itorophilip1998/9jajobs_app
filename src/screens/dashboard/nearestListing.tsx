@@ -100,6 +100,7 @@ const NearestListing = ({
             <Spacer value={H("1%")} axis="vertical" />
           )}
           ListEmptyComponent={
+            page ? 
             <>
               <View
                 className="flex-1 w-full h-full justify-center items-center"
@@ -116,7 +117,7 @@ const NearestListing = ({
                   buttonStyle={{ width: "100%" }}
                 />
               </View>
-            </>
+            </> : null
           }
           onEndReached={() => {
             dispatch(SET_LOADER(true));
