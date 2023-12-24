@@ -42,6 +42,8 @@ const SearchResult = ({
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
 
   const [searchResults, setSearchResults] = React.useState<any[]>([]);
+  const [page, setPage] = React.useState<number>(1);
+  const ref = React.useRef<boolean>(false);
 
   const handleSearch = () => {
     dispatch(SET_LOADER(true));
@@ -49,10 +51,13 @@ const SearchResult = ({
       {
         listing_name: route.params?.data?.search,
         listing_city: route.params?.data?.location,
+        page,
       },
       (response) => {
         dispatch(SET_LOADER(false));
-        setSearchResults(response.listing);
+        setSearchResults([...searchResults, ...response.listing?.data]);
+        ref.current = true;
+        setPage(response.listing.current_page + 1)
       },
       (error) => {
         dispatch(SET_LOADER(false));
@@ -65,10 +70,17 @@ const SearchResult = ({
   };
 
   React.useEffect(() => {
-    if (focus) {
+    if (focus && !ref.current) {
       handleSearch();
     }
-  }, [focus, route.params?.data?.location, route.params?.data?.search]);
+    return () => {
+      setPage(1);
+    };
+  }, [
+    focus,
+    route.params?.data?.location,
+    route.params?.data?.search,
+  ]);
 
   return (
     <KeyboardAvoidingView
@@ -125,6 +137,7 @@ const SearchResult = ({
               }
             />
           )}
+          onEndReached={handleSearch}
         />
       </SafeAreaView>
     </KeyboardAvoidingView>

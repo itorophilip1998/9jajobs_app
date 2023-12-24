@@ -94,7 +94,7 @@ const InputField: React.FC<IProps> = ({
           }}
           style={{ color: darkMode ? "white" : "black", ...style }}
           placeholder={placeholder || ""}
-          autoCapitalize={autoCapitalize || "none"}
+          autoCapitalize={autoCapitalize || "sentences"}
         />
         {editable == false && (
           <View className="absolute w-full h-full top-0 left-0 bg-transparent"></View>

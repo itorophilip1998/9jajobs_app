@@ -81,6 +81,8 @@ export const getAllListing = async (
     address_latitude?: string | null;
     listing_category_id?: number;
     listing_name?: string;
+    autocomplete?: boolean;
+    page?: number;
     listing_city?: string;
     is_trending?: boolean;
     is_nearest?: boolean;
@@ -99,7 +101,9 @@ export const getAllListing = async (
       data?.listing_name || ""
     }&listing_city=${data?.listing_city || ""}&is_trending=${
       data?.is_trending || ""
-    }&is_nearest=${data?.is_nearest || ""}`,
+    }&is_nearest=${data?.is_nearest || ""}&page=${
+      data?.page ? data.page : 1
+    }&is_auto_complete=${data?.autocomplete ? data.autocomplete : false}`,
   };
 
   try {

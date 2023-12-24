@@ -43,8 +43,8 @@ const Dashboard = ({
 }) => {
   const focus = useIsFocused();
   const [category, setCategory] = React.useState<any[]>([]);
-  const [nearest, setNearest] = React.useState<any[]>([]);
-  const [trending, setTrending] = React.useState<any[]>([]);
+  const [nearest, setNearest] = React.useState<any>(null)
+  const [trending, setTrending] = React.useState<any>(null)
   const { location, search } = useSelector((state: RootState) => state.search);
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
@@ -231,7 +231,7 @@ const Dashboard = ({
             )}
             <Pressable
               onPress={() =>
-                navigation.navigate("TrendingListing", { data: trending })
+                navigation.navigate("TrendingListing")
               }
             >
               <GradientText className="!text-[#626262] text-[15px] font-RedHatDisplayMedium mt-3">
@@ -242,7 +242,7 @@ const Dashboard = ({
           <Spacer axis="vertical" value={H(3)} />
           <FlatList
             showsHorizontalScrollIndicator={false}
-            data={trending.filter((_item, idx) => idx < 10)}
+            data={trending?.data.filter((_item: any, idx: number) => idx < 10)}
             horizontal
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
@@ -272,7 +272,7 @@ const Dashboard = ({
             )}
             <Pressable
               onPress={() =>
-                navigation.navigate("NearestListing", { data: nearest })
+                navigation.navigate("NearestListing")
               }
             >
               <GradientText className="!text-[#626262] text-[15px] font-RedHatDisplayMedium">
@@ -284,7 +284,7 @@ const Dashboard = ({
           <Spacer axis="vertical" value={H(3)} />
           <FlatList
             showsHorizontalScrollIndicator={false}
-            data={nearest.filter((_item, idx) => idx < 10)}
+            data={nearest?.data.filter((_item: any, idx: number) => idx < 10)}
             horizontal
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
