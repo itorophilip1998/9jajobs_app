@@ -38,7 +38,7 @@ const Referrals = ({
 }) => {
   const focus = useIsFocused();
   const dispatch = useDispatch();
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [referral, setReferral] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -48,7 +48,6 @@ const Referrals = ({
         (response) => {
           dispatch(SET_LOADER(false));
           setReferral(response?.referral);
-          console.log(response?.referral);
         },
         (error) => {
           dispatch(SET_LOADER(false));
@@ -124,7 +123,7 @@ const Referrals = ({
                   style={{ color: darkMode ? "#FFFFFF" : COLORS.primary }}
                   className="text-[#FFFFFF] text-center text-[18px] p-0"
                 >
-                  {referral?.code}
+                  {profile?.ref_code}
                 </SmallText>
               </SmallText>
               <Ionicons

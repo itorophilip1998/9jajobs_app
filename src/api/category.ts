@@ -90,6 +90,7 @@ export const getAllListing = async (
 ) => {
   var config = {
     method: "get",
+    maxBodyLength: Infinity,
     url: `${BASE_URL}/categories/all-listing?address_longitude=${
       store.getState().auth.lng !== 0 ? store.getState().auth.lng : ""
     }&address_latitude=${
