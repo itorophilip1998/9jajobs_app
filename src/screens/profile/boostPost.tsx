@@ -38,19 +38,23 @@ const BoostPost = ({
   const { darkMode } = useSelector((state: RootState) => state.auth);
   const [listings, setListings] = React.useState<any[]>([]);
   const [search, setSearch] = React.useState<string>("");
+  const [loaded, setLoaded] = React.useState<boolean>(false);
   //   const sortRef = React.useState<RBSheet | null>(null);
 
   const handleSearch = () => {
+    setLoaded(true);
     dispatch(SET_LOADER(true));
     getUserListing(
       {
         listing_name: search,
       },
       (response) => {
+        setLoaded(true);
         dispatch(SET_LOADER(false));
         setListings(response);
       },
       (error) => {
+        setLoaded(true);
         dispatch(SET_LOADER(false));
         Toast.show({
           type: "error",
@@ -148,22 +152,24 @@ const BoostPost = ({
             )}
           keyExtractor={(item) => item.id.toString()}
           ListEmptyComponent={
-            <>
-              <View
-                className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("71%") }}
-              >
-                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Oops! No Listings Found
-                </GradientText>
-                <Spacer value={H("2%")} axis="vertical" />
-                <Button
-                  text="Back to Menu"
-                  onPress={() => navigation.navigate("Profile")}
-                  buttonStyleClassName="rounded-md"
-                />
-              </View>
-            </>
+            loaded ? (
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("71%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Oops! No Listings Found
+                  </GradientText>
+                  <Spacer value={H("2%")} axis="vertical" />
+                  <Button
+                    text="Back to Menu"
+                    onPress={() => navigation.navigate("Profile")}
+                    buttonStyleClassName="rounded-md"
+                  />
+                </View>
+              </>
+            ) : null
           }
           ItemSeparatorComponent={() => (
             <View

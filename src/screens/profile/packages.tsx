@@ -39,16 +39,19 @@ const Packages = ({
   const focus = useIsFocused();
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [packages, setPackages] = React.useState<any>(null);
+   const [loaded, setLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (focus) {
       dispatch(SET_LOADER(true));
       getPackages(
         (response) => {
+          setLoaded(true)
           setPackages(response?.package);
           dispatch(SET_LOADER(false));
         },
         (error) => {
+          setLoaded(true)
           dispatch(SET_LOADER(false));
           Toast.show({
             type: "error",
@@ -86,6 +89,7 @@ const Packages = ({
             <Spacer value={H("2%")} axis="vertical" />
           )}
           ListEmptyComponent={
+            loaded ?
             <>
               <View
                 className="flex-1 w-full h-full justify-center items-center"
@@ -103,7 +107,7 @@ const Packages = ({
                   buttonStyleClassName="rounded-md"
                 />
               </View>
-            </>
+            </>: null
           }
           renderItem={({ item }) => (
             <View

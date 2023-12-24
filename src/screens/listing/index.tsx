@@ -38,7 +38,7 @@ const Listing = ({
   const focus = useIsFocused();
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [allListing, setAllListing] = React.useState<any[]>([]);
-  const [page, setPage] = React.useState<number>(1);
+  const [page, setPage] = React.useState<number | undefined>();
   const ref = React.useRef<boolean>(false);
   React.useEffect(() => {
     if (focus && !ref.current) {
@@ -49,7 +49,7 @@ const Listing = ({
           dispatch(SET_LOADER(false));
           setAllListing([...allListing, ...response.listing.data]);
           ref.current = true;
-          setPage(response.listing.current_page + 1)
+          setPage(response.listing.current_page + 1);
         },
         (error) => {
           dispatch(SET_LOADER(false));
@@ -88,23 +88,25 @@ const Listing = ({
           className="px-3"
           keyExtractor={(item) => item.id.toString()}
           ListEmptyComponent={
-            <>
-              <View
-                className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("71%") }}
-              >
-                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Oops! No Listing Found
-                </GradientText>
-                <Spacer value={H("2%")} axis="vertical" />
-                <Button
-                  text="Go to Home"
-                  onPress={() => navigation.navigate("Dashboard")}
-                  buttonStyleClassName="rounded-md"
-                  buttonStyle={{ width: "100%" }}
-                />
-              </View>
-            </>
+            page ? (
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("71%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Oops! No Listing Found
+                  </GradientText>
+                  <Spacer value={H("2%")} axis="vertical" />
+                  <Button
+                    text="Go to Home"
+                    onPress={() => navigation.navigate("Dashboard")}
+                    buttonStyleClassName="rounded-md"
+                    buttonStyle={{ width: "100%" }}
+                  />
+                </View>
+              </>
+            ) : null
           }
           ItemSeparatorComponent={() => (
             <Spacer value={H("1%")} axis="vertical" />

@@ -67,6 +67,7 @@ const MyWallet = ({
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const withdrawRef = React.useRef<RBSheet | null>(null);
   const fundRef = React.useRef<RBSheet | null>(null);
+   const [loaded, setLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (focus)
@@ -112,11 +113,13 @@ const MyWallet = ({
       getWalletDetails(
         null,
         (response) => {
+          setLoaded(true)
           console.log(response);
           setDetails(response);
           dispatch(SET_LOADER(false));
         },
         (error) => {
+          setLoaded(true)
           Toast.show({
             type: "error",
             text1: error,
@@ -226,25 +229,27 @@ const MyWallet = ({
             <Spacer value={H("3%")} axis="vertical" />
           )}
           ListEmptyComponent={
-            <>
-              <View
-                className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("50%") }}
-              >
-                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Oops! No Transaction Found
-                </GradientText>
-                <Spacer value={H("2%")} axis="vertical" />
-                <Button
-                  text="Fund Wallet"
-                  onPress={() => {
-                    setAmount("");
-                    fundRef.current?.open();
-                  }}
-                  buttonStyleClassName="rounded-md"
-                />
-              </View>
-            </>
+            loaded ? (
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("50%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Oops! No Transaction Found
+                  </GradientText>
+                  <Spacer value={H("2%")} axis="vertical" />
+                  <Button
+                    text="Fund Wallet"
+                    onPress={() => {
+                      setAmount("");
+                      fundRef.current?.open();
+                    }}
+                    buttonStyleClassName="rounded-md"
+                  />
+                </View>
+              </>
+            ) : null
           }
           ListFooterComponent={<Spacer value={H("3%")} axis="vertical" />}
           renderItem={({ item }) => (

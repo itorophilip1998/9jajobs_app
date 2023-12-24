@@ -49,6 +49,7 @@ const Search = ({
   const ref = React.useRef<RBSheet | null>(null);
 
   const [searchResults, setSearchResults] = React.useState<any[]>([]);
+  const [loaded, setLoaded] = React.useState<boolean>(false);
 
   const handleSearch = (loading: boolean = true) => {
     loading && dispatch(SET_LOADER(true));
@@ -60,9 +61,11 @@ const Search = ({
       },
       (response) => {
         loading && dispatch(SET_LOADER(false));
+        setLoaded(true);
         setSearchResults(response.auto_complete);
       },
       (error) => {
+        setLoaded(true);
         loading && dispatch(SET_LOADER(false));
         Toast.show({
           type: "error",
@@ -181,22 +184,24 @@ const Search = ({
             </>
           )}
           ListEmptyComponent={
-            <>
-              <View
-                className="flex-1 w-full h-full justify-center items-center"
-                style={{ height: H("71%") }}
-              >
-                <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                  Oops! No result found
-                </GradientText>
-                <Spacer value={H("2%")} axis="vertical" />
-                <Button
-                  text="Back to Home"
-                  onPress={() => navigation.navigate("Dashboard")}
-                  buttonStyleClassName="rounded-md"
-                />
-              </View>
-            </>
+            loaded ? (
+              <>
+                <View
+                  className="flex-1 w-full h-full justify-center items-center"
+                  style={{ height: H("71%") }}
+                >
+                  <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                    Oops! No result found
+                  </GradientText>
+                  <Spacer value={H("2%")} axis="vertical" />
+                  <Button
+                    text="Back to Home"
+                    onPress={() => navigation.navigate("Dashboard")}
+                    buttonStyleClassName="rounded-md"
+                  />
+                </View>
+              </>
+            ) : null
           }
           renderItem={({ item }) => (
             // <UserProfileCard
