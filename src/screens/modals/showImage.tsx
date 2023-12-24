@@ -26,7 +26,7 @@ const ShowImage = ({
           className="w-full h-full"
           resizeMode="contain"
         />
-        <View className="absolute top-3 right-3">
+        <View className="absolute top-10 right-3">
           <AntDesign
             name="closecircle"
             size={24}
