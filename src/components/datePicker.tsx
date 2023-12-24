@@ -45,7 +45,7 @@ export const DatePicker = ({
         display={Platform.OS === "ios" ? "spinner" : "default"}
         onConfirm={(date) => {
           // console.log();
-          setDate(moment(date).format("DD-MM-YYYY"));
+          setDate(moment(date).format("YYYY-MM-DD"));
           setDateActive(false);
         }}
         onCancel={() => setDateActive(false)}

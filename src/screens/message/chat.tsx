@@ -106,9 +106,11 @@ const Chat = ({
         friend_id: route.params?.data?.id,
         message: message.trim() === "" ? "Photo" : message,
         photo: selectedImages.map((item) => ({
-          name: item.fileName,
+          name:
+            item.fileName ||
+            "image." + item?.uri?.split(".").pop()?.toLowerCase(),
           uri: item.uri,
-          type: "image/png",
+          type: "image/" + item?.uri?.split(".").pop()?.toLowerCase(),
         })),
       },
       (response1) => {
