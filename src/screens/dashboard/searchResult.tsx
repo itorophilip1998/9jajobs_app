@@ -55,7 +55,7 @@ const SearchResult = ({
       },
       (response) => {
         dispatch(SET_LOADER(false));
-        setSearchResults([...searchResults, ...response.listing?.data]);
+        setSearchResults([...response.listing?.data]);
         ref.current = true;
         setPage(response.listing.current_page + 1);
       },
@@ -74,6 +74,7 @@ const SearchResult = ({
       handleSearch();
     }
     return () => {
+      ref.current = false;
       setPage(1);
     };
   }, [focus, route.params?.data?.location, route.params?.data?.search]);

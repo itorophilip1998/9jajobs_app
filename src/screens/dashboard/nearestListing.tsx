@@ -52,7 +52,7 @@ const NearestListing = ({
           is_nearest: true,
         },
         (response) => {
-          setNearest([...nearest, ...response.listing?.data]);
+          setNearest([...response.listing?.data]);
           dispatch(SET_LOADER(false));
           ref.current = true;
           setPage(response?.listing?.current_page + 1)
@@ -67,6 +67,7 @@ const NearestListing = ({
       );
     }
     return () => {
+      ref.current = false;
       setPage(1);
     };
   }, [focus]);

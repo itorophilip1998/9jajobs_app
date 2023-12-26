@@ -241,11 +241,21 @@ const Verification = ({
             : null,
         },
         (response) => {
+          setDetail(null);
+          setRegNo("");
+          setIdFront(null);
+          setSkill(null);
+          setIdBack(null);
+          setCac(null);
+          setUtility(null);
+          setServices([]);
+          setChecked(false);
           dispatch(SET_LOADER(false));
           Toast.show({
             type: "success",
             text1: response.message,
           });
+          navigation.goBack();
         },
         (error) => {
           Toast.show({

@@ -3,7 +3,6 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -58,6 +57,8 @@ const BoostDetail = ({
         },
         (response) => {
           dispatch(SET_LOADER(false));
+          setDuration(1);
+          navigation.goBack();
           Toast.show({
             type: "success",
             text1: response?.message,

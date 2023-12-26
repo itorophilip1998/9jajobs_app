@@ -42,7 +42,6 @@ const BoostPost = ({
   //   const sortRef = React.useState<RBSheet | null>(null);
 
   const handleSearch = () => {
-    setLoaded(true);
     dispatch(SET_LOADER(true));
     getUserListing(
       {
