@@ -11,6 +11,7 @@ import AppNavigator from "./src/navigation";
 import Toast from "react-native-toast-message";
 import { ToastConfig, BaseToast, ErrorToast } from "react-native-toast-message";
 import { FONTS } from "./src/utility/fonts";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,11 +24,12 @@ export default function App() {
     return null;
   }
 
-
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <AppNavigator />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <AppNavigator />
+        </GestureHandlerRootView>
       </PersistGate>
     </Provider>
   );

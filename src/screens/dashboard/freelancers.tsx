@@ -48,7 +48,7 @@ const Freelancers = ({
         { listing_category_id: route.params?.data.id, page },
         (response) => {
           dispatch(SET_LOADER(false));
-          setListing([...listings, ...response?.listing?.data]);
+          setListing([...response?.listing?.data]);
           ref.current = true;
           setPage(response.listing.current_page + 1)
         },
@@ -62,6 +62,7 @@ const Freelancers = ({
       );
     }
     return () => {
+      ref.current = false;
       setPage(1);
     };
   }, [focus, route.params?.data]);

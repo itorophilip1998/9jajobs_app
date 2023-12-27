@@ -49,7 +49,7 @@ const MyListing = ({
   const [details, setDetails] = React.useState<any>(null);
   const [search, setSearch] = React.useState<string>("");
   const [listing_id, setListingId] = React.useState<any>(null);
-   const [loaded, setLoaded] = React.useState<boolean>(false);
+  const [loaded, setLoaded] = React.useState<boolean>(false);
 
   const [rating, setRating] = React.useState<any[]>([]);
 
@@ -79,11 +79,11 @@ const MyListing = ({
       (response) => {
         dispatch(SET_LOADER(false));
         setListings(response);
-        setLoaded(true)
+        setLoaded(true);
       },
       (error) => {
         dispatch(SET_LOADER(false));
-        setLoaded(true)
+        setLoaded(true);
         Toast.show({
           type: "error",
           text1: error,
@@ -93,7 +93,9 @@ const MyListing = ({
   };
 
   React.useEffect(() => {
-    if (focus) handleSearch();
+    if (focus) {
+      handleSearch();
+    }
   }, [focus]);
 
   return (

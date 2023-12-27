@@ -93,28 +93,30 @@ const FreelancerProfile = ({
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 items-center bg-black px-4"
+      className="flex-1 items-center bg-black"
       style={{
         width: width,
         height: height,
         backgroundColor: darkMode ? "black" : "white",
       }}
     >
-      <SafeAreaView className="flex-1 w-full pt-4">
-        <ScrollView showsVerticalScrollIndicator={false}>
+      <SafeAreaView className="flex-1 w-full pt-4 ">
+        <View className="w-full px-4 mb-3">
           <TitleWithButton title="" fire={() => navigation.goBack()} />
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false} className="px-4">
           <Pressable
             style={{
               shadowColor: "#969191", // Shadow color
-              shadowOffset: { width: 0, height: 3 }, // Shadow offset
+              shadowOffset: { width: 0, height: 2 }, // Shadow offset
               shadowOpacity: 0.4, // Shadow opacity
-              shadowRadius: 15, // Shadow radius
-              elevation: 5,
+              shadowRadius: 7, // Shadow radius
+              elevation: 3,
             }}
             onPress={() =>
               setProfileImg(route.params?.data?.listing_featured_photo || "")
             }
-            className="w-full h-[230px] rounded-full mx-auto bg-[#0f0f0f]"
+            className="w-full h-[230px] rounded-full mx-auto"
           >
             <Image
               source={
@@ -272,7 +274,17 @@ const FreelancerProfile = ({
               <TouchableOpacity
                 className="items-center"
                 onPress={() =>
-                  navigation.navigate("Report", { data: route.params?.data })
+                  Boolean(loggedIn && access_token)
+                    ? navigation.navigate("Report", {
+                        data: route.params?.data,
+                      })
+                    : (() => {
+                        Toast.show({
+                          type: "error",
+                          text1: "Login to report this listing.",
+                        });
+                        navigation.navigate("Signin");
+                      })()
                 }
               >
                 <View
@@ -309,10 +321,9 @@ const FreelancerProfile = ({
             style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
             className="text-[#D4E1D2] text-left p-0 text-[15px] font-RedHatDisplayRegular"
           >
-            {route.params?.data?.listing_description?.replaceAll(
-              /<\/?[^>]+(>|$)/gi,
-              ""
-            )}
+            {route.params?.data?.listing_description
+              ?.replaceAll(/<\/?[^>]+(>|$)/gi, "")
+              ?.replaceAll(/&nbsp;/g, " ")}
           </SmallText>
           <Spacer value={H("2%")} axis="vertical" />
           <BorderBottom />
@@ -867,6 +878,13 @@ const FreelancerProfile = ({
             text="Book Date"
             buttonStyle={{ width: "100%" }}
             onPress={() => {
+              if (time === "" || date === "") {
+                Toast.show({
+                  type: "success",
+                  text1: "Time and date cannot be empty",
+                });
+                return;
+              }
               bookRef.current?.close();
               DelayFor(200, () => {
                 dispatch(SET_LOADER(true));
@@ -878,6 +896,7 @@ const FreelancerProfile = ({
                   },
                   (response) => {
                     dispatch(SET_LOADER(false));
+                    navigation.navigate("Dashboard");
                     Toast.show({
                       type: "success",
                       text1: response.message,

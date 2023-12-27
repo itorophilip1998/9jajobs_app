@@ -52,7 +52,7 @@ const TrendingListing = ({
           is_trending: true,
         },
         (response) => {
-          setTrending([...trending, ...response.listing.data]);
+          setTrending([...response.listing.data]);
           ref.current = true;
           dispatch(SET_LOADER(false));
           setPage(response?.listing?.current_page + 1);
@@ -67,6 +67,7 @@ const TrendingListing = ({
       );
     }
     return () => {
+      ref.current = false;
       setPage(1);
     };
   }, [focus]);

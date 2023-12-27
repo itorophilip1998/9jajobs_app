@@ -47,7 +47,7 @@ const Listing = ({
         { page },
         (response) => {
           dispatch(SET_LOADER(false));
-          setAllListing([...allListing, ...response.listing.data]);
+          setAllListing([...response.listing.data]);
           ref.current = true;
           setPage(response.listing.current_page + 1);
         },
@@ -60,7 +60,10 @@ const Listing = ({
         }
       );
     }
-    return () => setPage(1);
+    return () => {
+      setPage(1);
+      ref.current = false;
+    };
   }, [focus]);
   return (
     <KeyboardAvoidingView
