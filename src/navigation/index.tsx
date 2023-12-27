@@ -146,8 +146,8 @@ const NavigationSetup = () => {
     }
   }, [LoggedIn, authToken]);
 
-  let timer: NodeJS.Timeout | undefined;
   React.useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
     if (Boolean(LoggedIn === true && authToken !== null)) {
       timer = setTimeout(() => {
         refreshToken(

@@ -321,10 +321,9 @@ const FreelancerProfile = ({
             style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
             className="text-[#D4E1D2] text-left p-0 text-[15px] font-RedHatDisplayRegular"
           >
-            {route.params?.data?.listing_description?.replaceAll(
-              /<\/?[^>]+(>|$)/gi,
-              ""
-            )}
+            {route.params?.data?.listing_description
+              ?.replaceAll(/<\/?[^>]+(>|$)/gi, "")
+              ?.replaceAll(/&nbsp;/g, " ")}
           </SmallText>
           <Spacer value={H("2%")} axis="vertical" />
           <BorderBottom />

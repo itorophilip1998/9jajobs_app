@@ -400,7 +400,12 @@ const EditListing = ({
         text1: "Invalid linkedin Link.",
       });
     } else {
-      dispatch(SET_LOADER(true));
+      // dispatch(SET_LOADER(true));
+      Toast.show({
+        type: "success",
+        text1: "Update in Progress"
+      })
+      navigation.goBack()
       editListing(
         {
           listing_id: route.params?.data?.id,
@@ -467,14 +472,14 @@ const EditListing = ({
             type: "success",
             text1: response?.message,
           });
-          dispatch(SET_LOADER(false));
+          // dispatch(SET_LOADER(false));
         },
         (error) => {
           Toast.show({
             type: "error",
             text1: error,
           });
-          dispatch(SET_LOADER(false));
+          // dispatch(SET_LOADER(false));
         }
       );
     }
