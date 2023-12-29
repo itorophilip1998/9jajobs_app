@@ -28,6 +28,11 @@ export const refreshToken = async (
     store.dispatch(LOGIN(false));
     store.dispatch(SET_TOKEN(null));
     store.dispatch(SET_PROFILE(null));
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("refresh", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -71,6 +76,11 @@ export const signUp = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("register", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || "Something went wrong. Try again.");
@@ -106,6 +116,11 @@ export const signIn = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("login", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || err?.response?.status === 500);
@@ -139,6 +154,11 @@ export const forgot = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("forgot-password", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || err?.response?.status === 500);
@@ -178,6 +198,11 @@ export const verifyAndReset = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("verify-reset-error", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || err?.response?.status === 500);
@@ -206,6 +231,11 @@ export const logout = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("logout", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));

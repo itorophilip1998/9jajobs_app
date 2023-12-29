@@ -30,6 +30,11 @@ export const bookListing = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("Book-Listing", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -63,6 +68,11 @@ export const getAllBookings = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("all-booking", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));

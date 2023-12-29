@@ -16,6 +16,11 @@ export const getAmenities = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("categories", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -40,6 +45,11 @@ export const getCategories = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("categories", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -64,6 +74,11 @@ export const getCategoryListing = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("category-listing", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -110,6 +125,11 @@ export const getAllListing = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("all-listing", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -154,6 +174,11 @@ export const getUserListing = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("user-listings", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));

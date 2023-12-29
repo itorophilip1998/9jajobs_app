@@ -20,6 +20,11 @@ export const getNotification = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("get-notification", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -53,6 +58,11 @@ export const getNotificationCount = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("get-notification-count", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -86,6 +96,11 @@ export const markReadNotification = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("mark-notification", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));

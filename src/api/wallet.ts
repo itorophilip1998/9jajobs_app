@@ -28,6 +28,11 @@ export const getWalletDetails = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("auth-user", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -91,6 +96,11 @@ export const initiateWalletTransaction = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("initiate-transaction", err?.response?.data);
     console.log(err?.response?.status);
     if (err?.response?.status === 401) {
@@ -126,6 +136,11 @@ export const getBanks = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("get-banks", err?.response?.data);
 
     if (typeof err?.response?.data === "string") {
@@ -158,6 +173,11 @@ export const getAccountName = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("verify-account", err?.response?.data?.message);
     if (typeof err?.response?.data?.message === "string") {
       error(err?.response?.data?.message);
@@ -216,6 +236,11 @@ export const transfer = async (
     console.log("Transfer-recept", response1.data);
     execute(response1.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("verify-account", err?.response?.data);
     if (typeof err?.response?.data.message === "string") {
       error(err?.response?.data);

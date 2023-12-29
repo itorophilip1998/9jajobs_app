@@ -20,6 +20,11 @@ export const getPackages = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("get-packages", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -64,6 +69,11 @@ export const subscribePackage = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("get-packages", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -110,6 +120,11 @@ export const subscribeBoosting = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("boost-listing", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));

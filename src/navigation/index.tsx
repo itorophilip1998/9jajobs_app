@@ -1,11 +1,14 @@
 import React from "react";
+import {Modal as NativeModal} from "react-native"
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import NetInfo from "@react-native-community/netinfo";
 import {
   ErrorModalContent,
   Loader,
   Modal,
+  SmallText,
   SuccessModalContent,
 } from "../components";
 import {
@@ -292,6 +295,25 @@ const AppNavigator = () => {
       />
     ),
   };
+
+  const [isConnected, setIsConnected] = React.useState(true);
+
+  React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(Boolean(state.isConnected));
+    });
+
+    // Initial check for internet connection
+    NetInfo.fetch().then((state) => {
+      setIsConnected(Boolean(state.isConnected));
+    });
+
+    return () => {
+      // Cleanup: unsubscribe from the event listener
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <>
       <View
@@ -299,6 +321,11 @@ const AppNavigator = () => {
         style={{ backgroundColor: darkMode ? "black" : "#fff" }}
       >
         <StatusBar style={darkMode ? "light" : "dark"} />
+        {!isConnected && (
+          <View className="bg-red-500 w-full pt-12 pb-3">
+            <SmallText className="text-white p-0">No Internet Connection</SmallText>
+          </View>
+        )}
         <NavigationSetup />
         <Modal showModal={loader}>
           <Loader />

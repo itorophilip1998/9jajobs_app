@@ -32,6 +32,11 @@ export const chatUser = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("chat-user", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -74,6 +79,11 @@ export const spamUser = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("spam-user", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -113,6 +123,11 @@ export const markRead = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("mark-read", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -149,6 +164,11 @@ export const getChats = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("get-chats", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -182,6 +202,11 @@ export const getFriendList = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("get-chats", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
