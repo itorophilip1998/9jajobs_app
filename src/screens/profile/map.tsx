@@ -14,7 +14,7 @@ import { RootState } from "../../store";
 import { RouteProp } from "@react-navigation/native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
-const MapScreen = ({
+const ContactMap = ({
   navigation,
   route,
 }: {
@@ -38,7 +38,7 @@ const MapScreen = ({
           className="relative flex flex-row items-center w-full justify-between px-3 bg-[#0f0f0f] mb-3"
         >
           <TitleWithButton
-            title={route.params?.data?.listing_name}
+            title={route.params?.data?.name}
             fire={() => navigation.goBack()}
           />
         </View>
@@ -46,22 +46,18 @@ const MapScreen = ({
           className="flex-1 w-full"
           provider={PROVIDER_GOOGLE}
           initialRegion={{
-            latitude: Number(route.params?.data?.address_latitude),
-            longitude: Number(route.params?.data?.address_longitude),
+            latitude: Number(route.params?.data?.lat),
+            longitude: Number(route.params?.data?.lng),
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
           <Marker
             coordinate={{
-              latitude: Number(route.params?.data?.address_latitude),
-              longitude: Number(route.params?.data?.address_longitude),
+              latitude: Number(route.params?.data?.lat),
+              longitude: Number(route.params?.data?.lng),
             }}
-            title={route.params?.data?.listing_name}
-            description={route.params?.data?.listing_description?.replaceAll(
-              /<\/?[^>]+(>|$)/gi,
-              ""
-            )}
+            title={route.params?.data?.name}
           />
         </MapView>
       </SafeAreaView>
@@ -69,4 +65,4 @@ const MapScreen = ({
   );
 };
 
-export default MapScreen;
+export default ContactMap;

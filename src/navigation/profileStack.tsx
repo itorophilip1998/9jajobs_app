@@ -20,6 +20,10 @@ import { useIsFocused } from "@react-navigation/native";
 import { useAuthorize } from "../hooks/useAuthorized";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import About from "../screens/profile/about";
+import Contact from "../screens/profile/contact";
+import ContactMap from "../screens/profile/map";
+import Faq from "../screens/profile/faq";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +63,10 @@ const ProfileStack = ({
       <Stack.Screen name="BoostPost" component={BoostPost} />
       <Stack.Screen name="MyListing" component={MyListing} />
       <Stack.Screen name="EditListing" component={EditListing} />
+      <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="Faq" component={Faq} />
+      <Stack.Screen name="Contact" component={Contact} />
+      <Stack.Screen name="ContactMap" component={ContactMap} />
     </Stack.Navigator>
   );
 };
