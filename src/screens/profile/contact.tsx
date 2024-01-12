@@ -57,25 +57,25 @@ const Contact = ({
           <MapView
             onPress={() => {
               navigation.navigate("ContactMap", {
-                data: { name: "9JAJOB.COM INT’L", lng: 0, lat: 0 },
+                data: { name: "9JAJOB.COM", lng: 7.4801, lat: 6.4266 },
               });
             }}
             className="flex-1 w-full h-[200px]"
             style={[shadowBoxDark]}
             provider={PROVIDER_GOOGLE}
             initialRegion={{
-              latitude: lat,
-              longitude: lng,
+              latitude: 6.4266,
+              longitude: 7.4801,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
           >
             <Marker
               coordinate={{
-                latitude: lat,
-                longitude: lng,
+                latitude: 6.4266,
+                longitude: 7.4801,
               }}
-              title={"My Location"}
+              title={"9JAJOB.COM"}
             />
           </MapView>
           <Spacer value={H("3%")} axis="vertical" />
@@ -97,7 +97,7 @@ const Contact = ({
               style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
               className="font-RedHatDisplayRegular text-[18px] text-left p-0"
             >
-              Ikeja, Lagos Nigeria
+              Amechi junction Agbani Road Enugu Nigeria
             </SmallText>
           </View>
           <BorderBottom />

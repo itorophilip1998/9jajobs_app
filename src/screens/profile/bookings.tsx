@@ -31,12 +31,18 @@ const Booked = ({ booked }: { booked?: any[] }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View className="w-full">
+      <View className="mb-3 flex-row items-center">
+        <SmallText className="text-primary text-[16px] text-left p-0 pr-2">
+          Pending Booking
+        </SmallText>
+        <View className="border-[0.5px] border-primary flex-1" />
+      </View>
       <View className="w-full flex-row justify-between  items-center pb-3">
         <SmallText
           style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
           className="text-[#D4E1D2] text-left p-0"
         >
-          Booked Business
+          Booking Details
         </SmallText>
         <SmallText
           style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
@@ -46,16 +52,57 @@ const Booked = ({ booked }: { booked?: any[] }) => {
         </SmallText>
       </View>
 
-      {booked?.map((item, idx) => (
-        <View key={idx} className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]">
-          <SmallText className="text-[#6A6A6A] text-left p-0">
-           {item.listings.listing_name} ({item.status})
-          </SmallText>
-          <SmallText className="text-[#6A6A6A] text-left p-0">
-            {moment(item.date).format("DD/MM/YYYY")}
-          </SmallText>
-        </View>
-      ))}
+      {booked
+        ?.filter((item, idx) => item.status.toLowerCase() === "pending")
+        .map((item, idx) => (
+          <View
+            key={idx}
+            className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
+          >
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {item.listings.listing_name} ({item.status})
+            </SmallText>
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {moment(item.date).format("DD/MM/YYYY")}
+            </SmallText>
+          </View>
+        ))}
+      <View className="mb-3 flex-row items-center mt-4">
+        <SmallText className="text-primary text-[16px] text-left p-0 pr-2">
+          Completed Booking
+        </SmallText>
+        <View className="border-[0.5px] border-primary flex-1" />
+      </View>
+      <View className="w-full flex-row justify-between  items-center pb-3">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
+          Booking Details
+        </SmallText>
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
+          Date Completed
+        </SmallText>
+      </View>
+
+      {booked
+        ?.filter((item, idx) => item.status.toLowerCase() === "completed")
+        .map((item, idx) => (
+          <View
+            key={idx}
+            className="w-full flex-row justify-between  items-center py-3 border-t border-b-[#473F474D]"
+          >
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {item.listings.listing_name} ({item.status})
+            </SmallText>
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {moment(item.date).format("DD/MM/YYYY")}
+            </SmallText>
+          </View>
+        ))}
     </View>
   );
 };
@@ -108,7 +155,7 @@ const Bookings = ({
     bookings: any[];
     booked: any[];
   } | null>(null);
-   const [loaded, setLoaded] = React.useState<boolean>(false);
+  const [loaded, setLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (focus) {
@@ -116,12 +163,12 @@ const Bookings = ({
       getAllBookings(
         (response) => {
           dispatch(SET_LOADER(false));
-          setLoaded(true)
+          setLoaded(true);
           setBookListing(response);
         },
         (error) => {
           dispatch(SET_LOADER(false));
-          setLoaded(true)
+          setLoaded(true);
           Toast.show({
             type: "error",
             text1: error,
@@ -141,7 +188,7 @@ const Bookings = ({
         backgroundColor: darkMode ? "black" : "#D4E1D2",
       }}
     >
-      <SafeAreaView className="flex-1 w-full pb-4">
+      <SafeAreaView edges={["top"]} className="flex-1 w-full pb-4">
         <View
           style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
           className="relative flex flex-row items-center w-full justify-between px-3 bg-[#0f0f0f]"
@@ -220,7 +267,7 @@ const Bookings = ({
                   color: type === "booking" ? "#1A911B" : "#696969",
                 }}
               >
-                Booking
+                My Bookings
               </SmallText>
             ) : type === "booking" ? (
               <LinearGradient
@@ -233,7 +280,7 @@ const Bookings = ({
                   }}
                   className="!text-[16px] !text-white"
                 >
-                  Booking
+                  My Bookings
                 </SmallText>
               </LinearGradient>
             ) : (
@@ -243,19 +290,30 @@ const Bookings = ({
                   color: type === "booked" ? "#696969" : "#1A911B",
                 }}
               >
-                Booking
+                My Bookings
               </SmallText>
             )}
           </TouchableOpacity>
         </View>
         <Spacer value={H("3%")} axis="vertical" />
         {loaded ? (
-          <ScrollView className="px-3 flex-1">
-            {type === "booked" && <Booked booked={bookedlisting?.booked} />}
-            {type === "booking" && (
-              <Booking booking={bookedlisting?.bookings} />
-            )}
-          </ScrollView>
+          <>
+            <ScrollView className="px-3 flex-1">
+              {type === "booked" && <Booked booked={bookedlisting?.booked} />}
+              {type === "booking" && (
+                <Booking booking={bookedlisting?.bookings} />
+              )}
+            </ScrollView>
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+              className="text-left p-0 text-[15px] px-3 text-[#696969] mb-2"
+            >
+              Endeavor to follow our booking guidelines{" "}
+              <Text className="text-primary underline">guidelines link</Text>{" "}
+              and also try to reach out to the client or service provider
+              through phone calls or our chart page for more confirmations .
+            </SmallText>
+          </>
         ) : (
           <>
             <View

@@ -26,7 +26,6 @@ const Faq = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const [activeSections, setActiveSections] = React.useState<any[]>([]);
   const { darkMode } = useSelector((state: RootState) => state.auth);
 
   return (
