@@ -43,7 +43,8 @@ export const getRating = async (
 
 export const postRate = async (
   data: {
-    listing_id: string;
+    booking_id?: string;
+    listing_id?: string;
     review: string;
     rating: string;
   },
@@ -51,7 +52,8 @@ export const postRate = async (
   error: (e: string) => void
 ) => {
   const formData = new FormData();
-  formData.append("listing_id", data.listing_id);
+  formData.append("listing_id", data.listing_id || "0");
+  formData.append("booking_id", data.booking_id || "0");
   formData.append("review", data.review);
   formData.append("rating", data.rating);
   var config = {
@@ -88,7 +90,6 @@ export const postRate = async (
     }
   }
 };
-
 
 export const postReport = async (
   data: {

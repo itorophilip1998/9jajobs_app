@@ -9,6 +9,7 @@ export interface IAuth {
   profile: any;
   lat: number;
   lng: number;
+  data: any;
 }
 
 const initialState: IAuth = {
@@ -19,6 +20,7 @@ const initialState: IAuth = {
   profile: null,
   lat: 0,
   lng: 0,
+  data: null,
 };
 
 export const authSlice = createSlice({
@@ -47,10 +49,20 @@ export const authSlice = createSlice({
       state.lat = action.payload?.lat || state.lat;
       state.lng = action.payload?.lng || state.lng;
     },
+    SET_DATA: (state, action: PayloadAction<any>) => {
+      state.data = action.payload;
+    },
   },
 });
 
-export const { LOGIN, SET_ON_BOARD, SET_DARK_MODE, SET_TOKEN, SET_PROFILE, SET_COORDINATE } =
-  authSlice.actions;
+export const {
+  LOGIN,
+  SET_ON_BOARD,
+  SET_DARK_MODE,
+  SET_TOKEN,
+  SET_PROFILE,
+  SET_COORDINATE,
+  SET_DATA,
+} = authSlice.actions;
 
 export default authSlice.reducer;

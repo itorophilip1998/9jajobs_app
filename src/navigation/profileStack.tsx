@@ -24,6 +24,8 @@ import About from "../screens/profile/about";
 import Contact from "../screens/profile/contact";
 import ContactMap from "../screens/profile/map";
 import Faq from "../screens/profile/faq";
+import BookingDetails from "../screens/profile/bookingDetails";
+import RateBooking from "../screens/profile/rateBooking";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +58,8 @@ const ProfileStack = ({
       <Stack.Screen name="MyWallet" component={MyWallet} />
       <Stack.Screen name="Payment" component={Payment} />
       <Stack.Screen name="Bookings" component={Bookings} />
+      <Stack.Screen name="BookingDetails" component={BookingDetails} />
+      <Stack.Screen name="RateBooking" component={RateBooking} />
       <Stack.Screen name="Referrals" component={Referrals} />
       <Stack.Screen name="Packages" component={Packages} />
       <Stack.Screen name="MyReviews" component={MyReviews} />

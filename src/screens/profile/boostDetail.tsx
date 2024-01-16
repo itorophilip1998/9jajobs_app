@@ -12,7 +12,6 @@ import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
-import { darkMode } from "../../../tailwind.config";
 import TitleWithButton from "../../components/titleWithButton";
 import { width, height } from "../../utility/constant";
 import { Button, InputField, SmallText, Spacer } from "../../components";

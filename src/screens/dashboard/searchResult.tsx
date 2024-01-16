@@ -10,14 +10,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Button, Spacer } from "../../components";
 import CategoryCard from "../../components/categoryCard";
 import TitleWithButton from "../../components/titleWithButton";
-import { CATEGORIES } from "../../data/category";
 import { width, height } from "../../utility/constant";
 import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
 import UserProfileCard from "../../components/userProfileCard";
-import { MAIN_USERS } from "../../data/listing";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -31,7 +29,6 @@ import { GradientText } from "../../components/gradientText";
 
 const SearchResult = ({
   navigation,
-
   route,
 }: {
   navigation: NativeStackNavigationProp<any>;
@@ -39,7 +36,7 @@ const SearchResult = ({
 }) => {
   const dispatch = useDispatch();
   const focus = useIsFocused();
-  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
+  const { darkMode } = useSelector((state: RootState) => state.auth);
 
   const [searchResults, setSearchResults] = React.useState<any[]>([]);
   const [page, setPage] = React.useState<number | undefined>();
@@ -49,15 +46,15 @@ const SearchResult = ({
     dispatch(SET_LOADER(true));
     getAllListing(
       {
-        listing_name: route.params?.data?.search,
+        listing_category_name: route.params?.data?.search,
         listing_city: route.params?.data?.location,
         page,
       },
       (response) => {
         dispatch(SET_LOADER(false));
-        setSearchResults([...response.listing?.data]);
+        setSearchResults([...searchResults, ...response?.data]);
         ref.current = true;
-        setPage(response.listing.current_page + 1);
+        setPage(response.current_page + 1);
       },
       (error) => {
         dispatch(SET_LOADER(false));
@@ -75,6 +72,7 @@ const SearchResult = ({
     }
     return () => {
       ref.current = false;
+      setSearchResults([]);
       setPage(1);
     };
   }, [focus, route.params?.data?.location, route.params?.data?.search]);

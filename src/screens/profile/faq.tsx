@@ -18,7 +18,6 @@ import { RootState } from "../../store";
 import { width, height } from "../../utility/constant";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, SmallText, Spacer, Title } from "../../components";
-import { FAQ } from "../../data/faq";
 import Accordion from "../../components/accordion";
 
 const Faq = ({
@@ -27,6 +26,7 @@ const Faq = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { data } = useSelector((state: RootState) => state.auth);
 
   return (
     <KeyboardAvoidingView
@@ -48,7 +48,7 @@ const Faq = ({
         <FlatList
           className="px-3"
           showsVerticalScrollIndicator={false}
-          data={FAQ}
+          data={data?.faq}
           keyExtractor={(item, idx) => idx.toString()}
           ItemSeparatorComponent={() => (
             <Spacer value={H("2%")} axis="vertical" />

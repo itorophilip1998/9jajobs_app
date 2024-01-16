@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TitleWithButton from "../../components/titleWithButton";
 import { RootState } from "../../store";
 import { width, height } from "../../utility/constant";
@@ -24,6 +24,10 @@ import { shadowBoxDark } from "../../style/Typography";
 import BorderBottom from "../../components/borderBottom";
 import { COLORS } from "../../utility/colors";
 import { GradientText } from "../../components/gradientText";
+import { validateEmail, validatePhone } from "../../utility/helpers";
+import Toast from "react-native-toast-message";
+import { SET_LOADER } from "../../store/formDataSlice";
+import { sendContactForm } from "../../api/user";
 
 const Contact = ({
   navigation,
@@ -34,8 +38,57 @@ const Contact = ({
   const [name, setName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [phone, setPhone] = React.useState<string>("");
-
+  const dispatch = useDispatch();
   const { darkMode, lat, lng } = useSelector((state: RootState) => state.auth);
+  const { data } = useSelector((state: RootState) => state.auth);
+  const validate = () => {
+    if (!name) {
+      Toast.show({
+        type: "error",
+        text1: "Name is required.",
+      });
+    } else if (!validateEmail(email)) {
+      Toast.show({
+        type: "error",
+        text1: "Email is Invalid.",
+      });
+    } else if (!validatePhone(phone, 11)) {
+      Toast.show({
+        type: "error",
+        text1: "Phone number must be 11 digits",
+      });
+    } else if (!message) {
+      Toast.show({
+        type: "error",
+        text1: "Message is required.",
+      });
+    } else {
+      dispatch(SET_LOADER(true));
+      sendContactForm(
+        {
+          name,
+          email,
+          phone,
+          message,
+        },
+        (response) => {
+          Toast.show({
+            type: "success",
+            text1: response.message,
+          });
+          navigation.goBack();
+          dispatch(SET_LOADER(false));
+        },
+        (error) => {
+          Toast.show({
+            type: "error",
+            text1: error,
+          });
+          dispatch(SET_LOADER(false));
+        }
+      );
+    }
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -57,25 +110,29 @@ const Contact = ({
           <MapView
             onPress={() => {
               navigation.navigate("ContactMap", {
-                data: { name: "9JAJOB.COM", lng: 7.4801, lat: 6.4266 },
+                data: {
+                  name: data?.contact?.business_name,
+                  lng: data?.contact?.coordinates?.lng,
+                  lat: data?.contact?.coordinates?.lat,
+                },
               });
             }}
             className="flex-1 w-full h-[200px]"
             style={[shadowBoxDark]}
             provider={PROVIDER_GOOGLE}
             initialRegion={{
-              latitude: 6.4266,
-              longitude: 7.4801,
+              latitude: data?.contact.coordinates.lat,
+              longitude: data?.contact.coordinates.lng,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
           >
             <Marker
               coordinate={{
-                latitude: 6.4266,
-                longitude: 7.4801,
+                latitude: data?.contact.coordinates.lat,
+                longitude: data?.contact.coordinates.lng,
               }}
-              title={"9JAJOB.COM"}
+              title={data?.contact.business_name}
             />
           </MapView>
           <Spacer value={H("3%")} axis="vertical" />
@@ -93,12 +150,15 @@ const Contact = ({
                 Address
               </SmallText>
             </View>
-            <SmallText
-              style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
-              className="font-RedHatDisplayRegular text-[18px] text-left p-0"
-            >
-              Amechi junction Agbani Road Enugu Nigeria
-            </SmallText>
+            {data?.contact.address.map((item: any, idx: number) => (
+              <SmallText
+                key={idx}
+                style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
+                className="font-RedHatDisplayRegular text-[18px] text-left p-0"
+              >
+                {item}
+              </SmallText>
+            ))}
           </View>
           <BorderBottom />
           <View className="py-3 w-full">
@@ -115,20 +175,16 @@ const Contact = ({
                 Email Address
               </SmallText>
             </View>
-            <SmallText
-              onPress={() => Linking.openURL("mailto:info@9jajob.com")}
-              style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
-              className="font-RedHatDisplayRegular text-[18px] text-left p-0"
-            >
-              info@9jajob.com
-            </SmallText>
-            <SmallText
-              onPress={() => Linking.openURL("mailto:9jajobconnect@gmail.com")}
-              style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
-              className="font-RedHatDisplayRegular text-[18px] text-left p-0"
-            >
-              9jajobconnect@gmail.com
-            </SmallText>
+            {data?.contact.email.map((item: any, idx: number) => (
+              <SmallText
+                key={idx}
+                onPress={() => Linking.openURL(`mailto:${item}`)}
+                style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
+                className="font-RedHatDisplayRegular text-[18px] text-left p-0"
+              >
+                {item}
+              </SmallText>
+            ))}
           </View>
           <BorderBottom />
           <View className="py-3 w-full">
@@ -145,13 +201,16 @@ const Contact = ({
                 Phone
               </SmallText>
             </View>
-            <SmallText
-              onPress={() => Linking.openURL("tel:+2349151987637")}
-              style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
-              className="font-RedHatDisplayRegular text-[18px] text-left p-0"
-            >
-              +234 915 198 7637
-            </SmallText>
+            {data?.contact.phone.map((item: any, idx: number) => (
+              <SmallText
+                key={idx}
+                onPress={() => Linking.openURL(`tel:${item}`)}
+                style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
+                className="font-RedHatDisplayRegular text-[18px] text-left p-0"
+              >
+                {item}
+              </SmallText>
+            ))}
           </View>
           <BorderBottom />
           <Spacer value={H("3%")} axis="vertical" />
@@ -252,6 +311,7 @@ const Contact = ({
               text={"Send Message"}
               buttonStyle={{ width: "100%" }}
               buttonStyleClassName="rounded-lg"
+              onPress={validate}
             />
           </View>
         </ScrollView>

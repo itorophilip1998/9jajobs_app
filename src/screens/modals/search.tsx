@@ -48,7 +48,7 @@ const Search = ({
   const dispatch = useDispatch();
   const ref = React.useRef<RBSheet | null>(null);
 
-  const [searchResults, setSearchResults] = React.useState<any[]>([]);
+  const [searchResults, setSearchResults] = React.useState<any>(null);
   const [loaded, setLoaded] = React.useState<boolean>(false);
 
   const handleSearch = (loading: boolean = true) => {
@@ -56,7 +56,7 @@ const Search = ({
     getAllListing(
       {
         // listing_name: search,
-        listing_city: location,
+        // listing_city: location,
         autocomplete: true,
       },
       (response) => {
@@ -170,9 +170,16 @@ const Search = ({
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={searchResults.filter((item) =>
-            item.toLowerCase().trim().includes(search.trim().toLowerCase())
-          )}
+          data={
+            searchResults && [
+              ...searchResults?.listing_category_name?.filter((item: any) =>
+                item.toLowerCase().trim().includes(search.trim().toLowerCase())
+              ),
+              ...searchResults?.listing_name?.filter((item: any) =>
+                item.toLowerCase().trim().includes(search.trim().toLowerCase())
+              ),
+            ]
+          }
           // className="px-2"
           ListHeaderComponent={() => <Spacer value={H("2%")} axis="vertical" />}
           keyExtractor={(item, idx) => idx.toString()}
@@ -204,23 +211,37 @@ const Search = ({
             ) : null
           }
           renderItem={({ item }) => (
-            // <UserProfileCard
-            //   navigation={navigation}
-            //   item={item}
-            //   onPress={() =>
-            //     navigation.navigate("FreelancerProfile", { data: item })
-            //   }
-            // />
             <Pressable
               className="py-2"
-              onPress={() =>
-                navigation.navigate("SearchResult", {
-                  data: {
-                    search,
-                    location,
-                  },
-                })
-              }
+              onPress={() => {
+                const type = item.split(" (");
+                if (type[1].toLowerCase().includes("category")) {
+                  navigation.navigate("SearchResult", {
+                    data: {
+                      search: type[0].trim(),
+                      location,
+                    },
+                  });
+                } else if (type[1].toLowerCase().includes("business")) {
+                  dispatch(SET_LOADER(true));
+                  getAllListing(
+                    { listing_name: item.split(" (")[0] },
+                    (newData) => {
+                      dispatch(SET_LOADER(false));
+                      navigation.navigate("FreelancerProfile", {
+                        data: newData?.listing?.data[0],
+                      });
+                    },
+                    (error) => {
+                      dispatch(SET_LOADER(false));
+                      Toast.show({
+                        type: "error",
+                        text1: error,
+                      });
+                    }
+                  );
+                }
+              }}
             >
               <SmallText
                 numberOfLine={1}
@@ -232,6 +253,36 @@ const Search = ({
             </Pressable>
           )}
         />
+        {/* <FlatList
+          showsVerticalScrollIndicator={false}
+          data={}
+          // className="px-2"
+          ListHeaderComponent={() => <Spacer value={H("2%")} axis="vertical" />}
+          keyExtractor={(item, idx) => idx.toString()}
+          ItemSeparatorComponent={() => (
+            <>
+              <Spacer value={H("0.5%")} axis="vertical" />
+              <BorderBottom />
+              <Spacer value={H("0.5%")} axis="vertical" />
+            </>
+          )}
+          renderItem={({ item }) => (
+            <Pressable
+              className="py-2"
+              onPress={() => {
+                
+              }}
+            >
+              <SmallText
+                numberOfLine={1}
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-left text-[16px]"
+              >
+                {item}
+              </SmallText>
+            </Pressable>
+          )}
+        /> */}
       </SafeAreaView>
       <BottomSheet ref={ref} duration={0}>
         <View

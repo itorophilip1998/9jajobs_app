@@ -5,6 +5,7 @@ import {
   Platform,
   TouchableOpacity,
   ScrollView,
+  Pressable,
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -26,8 +27,15 @@ import { bookListing, getAllBookings } from "../../api/booking";
 import Toast from "react-native-toast-message";
 import moment from "moment";
 import { GradientText } from "../../components/gradientText";
+import { FirstLetterUppercase } from "../../utility/helpers";
 
-const Booked = ({ booked }: { booked?: any[] }) => {
+const Booked = ({
+  booked,
+  navigation,
+}: {
+  booked?: any[];
+  navigation: NativeStackNavigationProp<any>;
+}) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View className="w-full">
@@ -55,19 +63,151 @@ const Booked = ({ booked }: { booked?: any[] }) => {
       {booked
         ?.filter((item, idx) => item.status.toLowerCase() === "pending")
         .map((item, idx) => (
-          <View
+          <Pressable
+            onPress={() =>
+              navigation.navigate("BookingDetails", {
+                data: item,
+                client: true,
+              })
+            }
             key={idx}
             className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
           >
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {item.listings.listing_name} ({item.status})
+              {FirstLetterUppercase(item.listings.listing_name || "")}
             </SmallText>
             <SmallText className="text-[#6A6A6A] text-left p-0">
               {moment(item.date).format("DD/MM/YYYY")}
             </SmallText>
-          </View>
+          </Pressable>
         ))}
-      <View className="mb-3 flex-row items-center mt-4">
+      <View className="mb-3 mt-5 flex-row items-center">
+        <SmallText className="text-primary text-[16px] text-left p-0 pr-2">
+          Accepted Booking
+        </SmallText>
+        <View className="border-[0.5px] border-primary flex-1" />
+      </View>
+      <View className="w-full flex-row justify-between  items-center pb-3">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
+          Booking Details
+        </SmallText>
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
+          Date booked
+        </SmallText>
+      </View>
+
+      {booked
+        ?.filter((item, idx) => item.status.toLowerCase() === "accepted")
+        .map((item, idx) => (
+          <Pressable
+            onPress={() =>
+              navigation.navigate("BookingDetails", {
+                data: item,
+                client: true,
+              })
+            }
+            key={idx}
+            className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
+          >
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {FirstLetterUppercase(item.listings.listing_name || "")}
+            </SmallText>
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {moment(item.date).format("DD/MM/YYYY")}
+            </SmallText>
+          </Pressable>
+        ))}
+      <View className="mb-3 mt-5 flex-row items-center">
+        <SmallText className="text-primary text-[16px] text-left p-0 pr-2">
+          Declined Booking
+        </SmallText>
+        <View className="border-[0.5px] border-primary flex-1" />
+      </View>
+      <View className="w-full flex-row justify-between  items-center pb-3">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
+          Booking Details
+        </SmallText>
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
+          Date booked
+        </SmallText>
+      </View>
+
+      {booked
+        ?.filter((item, idx) => item.status.toLowerCase() === "declined")
+        .map((item, idx) => (
+          <Pressable
+            onPress={() =>
+              navigation.navigate("BookingDetails", {
+                data: item,
+                client: true,
+              })
+            }
+            key={idx}
+            className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
+          >
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {FirstLetterUppercase(item.listings.listing_name || "")}
+            </SmallText>
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {moment(item.date).format("DD/MM/YYYY")}
+            </SmallText>
+          </Pressable>
+        ))}
+      <View className="mb-3 mt-5 flex-row items-center">
+        <SmallText className="text-primary text-[16px] text-left p-0 pr-2">
+          Cancelled Booking
+        </SmallText>
+        <View className="border-[0.5px] border-primary flex-1" />
+      </View>
+      <View className="w-full flex-row justify-between  items-center pb-3">
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
+          Booking Details
+        </SmallText>
+        <SmallText
+          style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+          className="text-[#D4E1D2] text-left p-0"
+        >
+          Date booked
+        </SmallText>
+      </View>
+
+      {booked
+        ?.filter((item, idx) => item.status.toLowerCase() === "cancelled")
+        .map((item, idx) => (
+          <Pressable
+            onPress={() =>
+              navigation.navigate("BookingDetails", {
+                data: item,
+                client: true,
+              })
+            }
+            key={idx}
+            className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
+          >
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {FirstLetterUppercase(item.listings.listing_name || "")}
+            </SmallText>
+            <SmallText className="text-[#6A6A6A] text-left p-0">
+              {moment(item.date).format("DD/MM/YYYY")}
+            </SmallText>
+          </Pressable>
+        ))}
+      <View className="mb-3 flex-row items-center mt-5">
         <SmallText className="text-primary text-[16px] text-left p-0 pr-2">
           Completed Booking
         </SmallText>
@@ -91,7 +231,13 @@ const Booked = ({ booked }: { booked?: any[] }) => {
       {booked
         ?.filter((item, idx) => item.status.toLowerCase() === "completed")
         .map((item, idx) => (
-          <View
+          <Pressable
+            onPress={() =>
+              navigation.navigate("BookingDetails", {
+                data: item,
+                client: true,
+              })
+            }
             key={idx}
             className="w-full flex-row justify-between  items-center py-3 border-t border-b-[#473F474D]"
           >
@@ -101,13 +247,19 @@ const Booked = ({ booked }: { booked?: any[] }) => {
             <SmallText className="text-[#6A6A6A] text-left p-0">
               {moment(item.date).format("DD/MM/YYYY")}
             </SmallText>
-          </View>
+          </Pressable>
         ))}
     </View>
   );
 };
 
-const Booking = ({ booking }: { booking?: any[] }) => {
+const Booking = ({
+  booking,
+  navigation,
+}: {
+  booking?: any[];
+  navigation: NativeStackNavigationProp<any>;
+}) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
   return (
     <View className="w-full">
@@ -126,17 +278,18 @@ const Booking = ({ booking }: { booking?: any[] }) => {
         </SmallText>
       </View>
       {booking?.map((item, idx) => (
-        <View
+        <Pressable
+          onPress={() => navigation.navigate("BookingDetails", { data: item })}
           key={idx}
           className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
         >
           <SmallText className="text-[#6A6A6A] text-left p-0">
-            {item.listings.listing_name} ({item.status})
+            {FirstLetterUppercase(item.listings.listing_name || "")}
           </SmallText>
           <SmallText className="text-[#6A6A6A] text-left p-0">
             {moment(item.date).format("DD/MM/YYYY")}
           </SmallText>
-        </View>
+        </Pressable>
       ))}
     </View>
   );
@@ -162,6 +315,7 @@ const Bookings = ({
       dispatch(SET_LOADER(true));
       getAllBookings(
         (response) => {
+          console.log(response.booked);
           dispatch(SET_LOADER(false));
           setLoaded(true);
           setBookListing(response);
@@ -299,11 +453,20 @@ const Bookings = ({
         {loaded ? (
           <>
             <ScrollView className="px-3 flex-1">
-              {type === "booked" && <Booked booked={bookedlisting?.booked} />}
+              {type === "booked" && (
+                <Booked
+                  navigation={navigation}
+                  booked={bookedlisting?.bookings}
+                />
+              )}
               {type === "booking" && (
-                <Booking booking={bookedlisting?.bookings} />
+                <Booking
+                  navigation={navigation}
+                  booking={bookedlisting?.booked}
+                />
               )}
             </ScrollView>
+            <Spacer value={H("3%")} axis="vertical" />
             <SmallText
               style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
               className="text-left p-0 text-[15px] px-3 text-[#696969] mb-2"

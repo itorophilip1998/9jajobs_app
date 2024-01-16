@@ -20,6 +20,7 @@ const Terms = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { data } = useSelector((state: RootState) => state.auth);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -42,21 +43,7 @@ const Terms = ({
             style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
             className="text-[#696969] text-left text-lg"
           >
-            Lorem ipsum dolor sit amet consectetur. Lacinia posuere lacinia ut
-            metus. Tortor pellentesque faucibus sed in sem. Semper orci pulvinar
-            pulvinar eget porta id mattis. Elementum erat at sapien interdum
-            velit amet risus. Et a venenatis risus faucibus nulla convallis
-            vitae amet sollicitudin. Venenatis in sit nibh orci. Donec feugiat
-            at risus aliquet enim. Cursus purus aliquam odio vitae posuere
-            tortor. Sollicitudin cursus imperdiet cum vel habitant. Rutrum
-            feugiat consectetur nec nisl. Lacinia risus condimentum neque etiam
-            mauris sit sed. Quisque sed volutpat orci id id hendrerit. Non eget
-            id ligula pharetra diam sit sit. Tellus porttitor risus vitae id
-            nec. Mauris diam dictum nisi sapien. Fusce nunc mauris eget morbi
-            lectus ac tortor sit. Vivamus felis diam commodo urna massa
-            pellentesque dictumst. Egestas sapien pulvinar iaculis venenatis
-            ultrices id porttitor ullamcorper tortor. Lobortis eget dui eget
-            accumsan nunc gravida at non.
+            {data?.terms}
           </SmallText>
         </ScrollView>
 

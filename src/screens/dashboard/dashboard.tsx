@@ -13,12 +13,10 @@ import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
-import { CATEGORIES } from "../../data/category";
 import CategoryCard from "../../components/categoryCard";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { COLORS } from "../../utility/colors";
 import SliderIcon from "../../components/sliderIcon";
-import { MAIN_USERS, SPONSORED_MAIN_USERS } from "../../data/listing";
 import UserCard from "../../components/userCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";

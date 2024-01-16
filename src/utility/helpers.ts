@@ -235,3 +235,19 @@ export function isInstagramLink(url: string) {
   const instagramPattern = /^(https?:\/\/)?(www\.)?instagram\.com\/.*/;
   return instagramPattern.test(url);
 }
+
+export function convertTo12HourFormat(time24: string) {
+  // Split the input time into hours, minutes, and seconds
+  let [hours, minutes, seconds] = time24.split(':').map(Number);
+
+  // Determine whether it's AM or PM
+  let period = hours >= 12 ? 'PM' : 'AM';
+
+  // Convert to 12-hour format
+  hours = hours % 12 || 12; // If hours is 0, set it to 12
+
+  // Format the result
+  let time12 = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+
+  return time12;
+}

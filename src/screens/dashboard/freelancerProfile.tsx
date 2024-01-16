@@ -154,8 +154,8 @@ const FreelancerProfile = ({
                     )}
                   </GradientText>
                 )}
-                {route.params?.data.verified &&
-                  route.params?.data.verified?.status === "completed" && (
+                {route.params?.data?.verified &&
+                  route.params?.data?.verified?.status === "completed" && (
                     <MaterialIcons
                       name="verified"
                       size={18}

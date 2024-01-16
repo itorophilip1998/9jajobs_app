@@ -95,6 +95,7 @@ export const getAllListing = async (
     address_longitude?: string | null;
     address_latitude?: string | null;
     listing_category_id?: number;
+    listing_category_name?: string;
     listing_name?: string;
     autocomplete?: boolean;
     page?: number;
@@ -112,7 +113,9 @@ export const getAllListing = async (
       store.getState().auth.lng !== 0 ? store.getState().auth.lng : ""
     }&address_latitude=${
       store.getState().auth.lat !== 0 ? store.getState().auth.lat : ""
-    }&listing_category_id=${data?.listing_category_id || ""}&listing_name=${
+    }&listing_category_id=${data?.listing_category_id || ""}&listing_category_name=${
+      data?.listing_category_name || ""
+    }&listing_name=${
       data?.listing_name || ""
     }&listing_city=${data?.listing_city || ""}&is_trending=${
       data?.is_trending || ""
