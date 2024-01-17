@@ -20,7 +20,6 @@ import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
-import { MESSAGES } from "../../data/messages";
 import UserProfileCard from "../../components/userProfileCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSelector } from "react-redux";

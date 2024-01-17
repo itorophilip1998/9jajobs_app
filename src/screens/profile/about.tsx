@@ -14,7 +14,7 @@ import { width, height } from "../../utility/constant";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, SmallText, Spacer, Title } from "../../components";
 
-const Terms = ({
+const About = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
@@ -28,33 +28,27 @@ const Terms = ({
       style={{
         width: width,
         height: height,
-        backgroundColor: darkMode ? "black" : "#FFFFFF",
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
       }}
     >
       <SafeAreaView className="flex-1 w-full">
-        <Title
-          style={{ color: darkMode ? "white" : "#0f0f0f" }}
-          className="text-white px-3 py-3"
+        <View
+          style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
+          className="relative flex flex-row items-center w-full justify-between px-3 mb-3 bg-[#0f0f0f]"
         >
-          Terms and condition
-        </Title>
+          <TitleWithButton title="About" fire={() => navigation.goBack()} />
+        </View>
         <ScrollView className="w-full flex-1">
           <SmallText
             style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
-            className="text-[#696969] text-left text-lg"
+            className="text-[#696969] text-left text-lg mb-3"
           >
-            {data?.terms}
+            {data?.about}
           </SmallText>
         </ScrollView>
-
-        <Button
-          text={"Close"}
-          onPress={() => navigation.goBack()}
-          buttonStyleClassName="mx-auto my-3"
-        />
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
 };
 
-export default Terms;
+export default About;

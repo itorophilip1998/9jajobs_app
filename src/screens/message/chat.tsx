@@ -7,6 +7,7 @@ import {
   Linking,
   Pressable,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -46,6 +47,7 @@ const Chat = ({
     (state: RootState) => state.auth
   );
   const [chats, setChats] = React.useState<any>(null);
+  const [loader, setLoader] = React.useState<boolean>(false);
   const [visible, setVisible] = React.useState<boolean>(false);
   const [visible1, setVisible1] = React.useState<boolean>(false);
   const [selectedImages, setSelectedImages] = React.useState<any[]>([]);
@@ -100,7 +102,7 @@ const Chat = ({
 
   const sendMessage = () => {
     setVisible(false);
-    dispatch(SET_LOADER(true));
+    setLoader(true);
     chatUser(
       {
         friend_id: route.params?.data?.id,
@@ -122,25 +124,25 @@ const Chat = ({
             getChats(
               { friend_id: route.params?.data?.id },
               (response) => {
-                dispatch(SET_LOADER(false));
+                setLoader(false);
                 setChats(response);
                 setMessage("");
               },
               (error) => {
+                setLoader(false);
                 Toast.show({
                   type: "error",
                   text1: error,
                 });
-                dispatch(SET_LOADER(false));
               }
             );
           },
           (error) => {
+            setLoader(false);
             Toast.show({
               type: "error",
               text1: error,
             });
-            dispatch(SET_LOADER(false));
           }
         );
       },
@@ -149,16 +151,11 @@ const Chat = ({
           type: "error",
           text1: error,
         });
-        dispatch(SET_LOADER(false));
+        setLoader(false);
       }
     );
   };
-  // console.log(
-  //   chats?.chats?.find((item: any) => {
-  //     console.log("chat", item);
-  //     return item !== undefined;
-  //   })
-  // );
+
   const pickImages = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === "granted") {
@@ -296,9 +293,13 @@ const Chat = ({
             <Pressable onPress={pickImages}>
               <Feather name="paperclip" size={24} color={COLORS.primary} />
             </Pressable>
-            <Pressable onPress={() => message.trim() !== "" && sendMessage()}>
-              <FontAwesome name="send" size={24} color={COLORS.primary} />
-            </Pressable>
+            {loader ? (
+              <ActivityIndicator size={"small"} color={COLORS.primary} />
+            ) : (
+              <Pressable onPress={() => message.trim() !== "" && sendMessage()}>
+                <FontAwesome name="send" size={24} color={COLORS.primary} />
+              </Pressable>
+            )}
           </View>
         )}
       </View>

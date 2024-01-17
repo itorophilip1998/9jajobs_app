@@ -21,21 +21,17 @@ import {
   BottomSheet,
   Button,
   InputField,
-  PrimaryText,
   SmallText,
   Spacer,
 } from "../../components";
 import FundIcon from "../../../assets/icons/fund.svg";
-import PaymentIcon from "../../../assets/icons/payment.svg";
 import WithdrawIcon from "../../../assets/icons/withdraw.svg";
-import { TRANSACTION } from "../../data/transactions";
 import { COLORS } from "../../utility/colors";
 import { FirstLetterUppercase } from "../../utility/helpers";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { paystackProps } from "react-native-paystack-webview";
 import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import { SET_ERROR, SET_LOADER } from "../../store/formDataSlice";

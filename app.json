@@ -19,6 +19,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "entitlements": {
+        "com.apple.developer.networking.wifi-info": true
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
       "buildNumber": "0.1.0",

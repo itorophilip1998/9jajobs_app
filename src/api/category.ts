@@ -16,6 +16,11 @@ export const getAmenities = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("categories", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -40,6 +45,11 @@ export const getCategories = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("categories", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -64,6 +74,11 @@ export const getCategoryListing = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("category-listing", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -80,6 +95,7 @@ export const getAllListing = async (
     address_longitude?: string | null;
     address_latitude?: string | null;
     listing_category_id?: number;
+    listing_category_name?: string;
     listing_name?: string;
     autocomplete?: boolean;
     page?: number;
@@ -97,7 +113,9 @@ export const getAllListing = async (
       store.getState().auth.lng !== 0 ? store.getState().auth.lng : ""
     }&address_latitude=${
       store.getState().auth.lat !== 0 ? store.getState().auth.lat : ""
-    }&listing_category_id=${data?.listing_category_id || ""}&listing_name=${
+    }&listing_category_id=${data?.listing_category_id || ""}&listing_category_name=${
+      data?.listing_category_name || ""
+    }&listing_name=${
       data?.listing_name || ""
     }&listing_city=${data?.listing_city || ""}&is_trending=${
       data?.is_trending || ""
@@ -110,6 +128,11 @@ export const getAllListing = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("all-listing", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -154,6 +177,11 @@ export const getUserListing = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
     console.log("user-listings", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));

@@ -8,24 +8,20 @@ import {
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Button, Spacer } from "../../components";
-import CategoryCard from "../../components/categoryCard";
 import TitleWithButton from "../../components/titleWithButton";
-import { CATEGORIES } from "../../data/category";
 import { width, height } from "../../utility/constant";
 import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
 import UserProfileCard from "../../components/userProfileCard";
-import { MAIN_USERS } from "../../data/listing";
-import RBSheet from "react-native-raw-bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { SET_LOADER } from "../../store/formDataSlice";
-import { getAllListing, getAmenities } from "../../api/category";
+import { getAllListing } from "../../api/category";
 import Toast from "react-native-toast-message";
 import { GradientText } from "../../components/gradientText";
 

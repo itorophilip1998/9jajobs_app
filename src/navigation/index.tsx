@@ -1,11 +1,14 @@
 import React from "react";
+import { Modal as NativeModal } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import NetInfo from "@react-native-community/netinfo";
 import {
   ErrorModalContent,
   Loader,
   Modal,
+  SmallText,
   SuccessModalContent,
 } from "../components";
 import {
@@ -39,9 +42,14 @@ import { FONTS } from "../utility/fonts";
 import Terms from "../screens/dashboard/terms";
 import Privacy from "../screens/dashboard/privacy";
 import PaystackScreen from "../screens/profile/paystack";
-import { refreshToken } from "../api/auth";
+import { getData, refreshToken } from "../api/auth";
 import { getUser } from "../api/user";
-import { SET_COORDINATE, SET_PROFILE, SET_TOKEN } from "../store/authSlice";
+import {
+  SET_COORDINATE,
+  SET_DATA,
+  SET_PROFILE,
+  SET_TOKEN,
+} from "../store/authSlice";
 import Forgot from "../screens/auth/forgot";
 import BoostDetail from "../screens/profile/boostDetail";
 import { getNotificationCount } from "../api/notification";
@@ -145,6 +153,17 @@ const NavigationSetup = () => {
       );
     }
   }, [LoggedIn, authToken]);
+
+  React.useEffect(() => {
+    getData(
+      (response) => {
+        dispatch(SET_DATA(response));
+      },
+      (error) => {
+        Toast.show({ type: "error", text1: error });
+      }
+    );
+  }, []);
 
   React.useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -292,6 +311,25 @@ const AppNavigator = () => {
       />
     ),
   };
+
+  const [isConnected, setIsConnected] = React.useState(true);
+
+  React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(Boolean(state.isConnected));
+    });
+
+    // Initial check for internet connection
+    NetInfo.fetch().then((state) => {
+      setIsConnected(Boolean(state.isConnected));
+    });
+
+    return () => {
+      // Cleanup: unsubscribe from the event listener
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <>
       <View
@@ -299,6 +337,13 @@ const AppNavigator = () => {
         style={{ backgroundColor: darkMode ? "black" : "#fff" }}
       >
         <StatusBar style={darkMode ? "light" : "dark"} />
+        {!isConnected && (
+          <View className="bg-red-500 w-full pt-12 pb-3">
+            <SmallText className="text-white p-0">
+              No Internet Connection
+            </SmallText>
+          </View>
+        )}
         <NavigationSetup />
         <Modal showModal={loader}>
           <Loader />

@@ -1,6 +1,7 @@
-import { View, Text, ImageBackground } from "react-native";
+import { View, Text, ImageBackground, Image } from "react-native";
 import React from "react";
-import bg from "../../../assets/images/body.jpg";
+import bg from "../../../assets/images/body2.jpg";
+import logo from "../../../assets/images/logo.png";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { PrimaryText, SmallText, Button } from "../../components";
 
@@ -15,9 +16,14 @@ const Body = ({
       className="flex-1 py-9 justify-between items-center px-4"
     >
       <View className="w-full">
-        <SmallText className="!text-white text-left text-[30px] font-RedHatDisplayBold">
-          9JAJOB
-        </SmallText>
+        <View className="w-full items-start mt-3">
+          <Image
+            source={logo}
+            alt=""
+            className="h-[60px] w-[110px]"
+            resizeMode="contain"
+          />
+        </View>
         <View className="w-full items-end mt-3">
           <PrimaryText
             className="!text-white "
@@ -33,14 +39,17 @@ const Body = ({
       </View> */}
       <View>
         <SmallText className="text-[18px] !text-white px-9">
-          The best place to find the best services in town
+          Refer and earn with 9jajob today
         </SmallText>
         <View className="flex-row justify-center my-5">
           <View className="border-2 mx-1 border-white rounded-full h-[10px] w-[10px]" />
           <View className="border-2 mx-1 bg-white border-white rounded-full h-[10px] w-[10px]" />
           <View className="border-2 mx-1 border-white rounded-full h-[10px] w-[10px]" />
         </View>
-        <Button text={"Next"} onPress={() => navigation.navigate("Finish")} />
+        <View className="mx-auto max-w-[150px]">
+
+        <Button text={"Next"} buttonStyle={{width: "100%"}} onPress={() => navigation.navigate("Finish")} />
+        </View>
       </View>
     </ImageBackground>
   );

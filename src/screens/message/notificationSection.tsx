@@ -1,7 +1,6 @@
-import { View, Image, FlatList, TouchableOpacity } from "react-native";
+import { View, FlatList, Pressable } from "react-native";
 import React from "react";
 import { Spacer, SmallText, Button } from "../../components";
-import { MESSAGES } from "../../data/messages";
 import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
@@ -52,9 +51,9 @@ const NotificationSection = ({
                 setLoaded(true);
                 dispatch(SET_LOADER(false));
               }
-              );
-            },
-            (error) => {
+            );
+          },
+          (error) => {
             setLoaded(true);
             Toast.show({
               type: "error",
@@ -62,9 +61,9 @@ const NotificationSection = ({
             });
             dispatch(SET_LOADER(false));
           }
-          );
-        },
-        (error) => {
+        );
+      },
+      (error) => {
         setLoaded(true);
         Toast.show({
           type: "error",
@@ -110,18 +109,22 @@ const NotificationSection = ({
         ) : null
       }
       renderItem={({ item }) => (
-        <View
+        <Pressable
+          onPress={() =>
+            item?.booking &&
+            navigation.navigate("BookingDetails", { data: item?.booking })
+          }
           style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}
           className="bg-[#0F0F0F] py-2 px-3 flex-row justify-between"
         >
           <View className="flex-1 pr-2 flex-row items-center">
             <View className="h-[60px] justify-center">
-              {/* <SmallText
+              <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="text-[#D4E1D2] text-left p-0 text-[18px] mb-1"
               >
-                {item.name}
-              </SmallText> */}
+                {item.title || "Notification"}
+              </SmallText>
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="text-left p-0 text-[14px] text-[#696969]"
@@ -135,7 +138,7 @@ const NotificationSection = ({
               {moment(item.created_at).format("DD/MM/YYYY")}
             </SmallText>
           </View>
-        </View>
+        </Pressable>
       )}
     />
   );

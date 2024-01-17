@@ -53,12 +53,12 @@ const routes = [
     icon: PrivacyIcon,
   },
   {
-    path: "https://9jajob.com/contact",
+    path: "Contact",
     name: "Contact Us",
     icon: FeedBackIcon,
   },
-  { path: "https://9jajob.com/faq", name: "FAQ", icon: FaqIcon },
-  { path: "https://9jajob.com/about", name: "About", icon: AboutIcon },
+  { path: "Faq", name: "FAQ", icon: FaqIcon },
+  { path: "About", name: "About", icon: AboutIcon },
 ];
 
 const Profile = ({

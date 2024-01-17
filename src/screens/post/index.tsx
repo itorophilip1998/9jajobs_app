@@ -29,7 +29,6 @@ import {
 } from "react-native-responsive-screen";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { AntDesign, Entypo, Feather, Ionicons } from "@expo/vector-icons";
-import { CATEGORIES } from "../../data/category";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { COLORS } from "../../utility/colors";
 import { FONTS } from "../../utility/fonts";

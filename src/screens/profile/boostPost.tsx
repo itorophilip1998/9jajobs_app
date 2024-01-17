@@ -19,7 +19,6 @@ import {
 } from "react-native-responsive-screen";
 import { Button, SmallText, Spacer } from "../../components";
 import UserProfileCard from "../../components/userProfileCard";
-import { MAIN_USERS } from "../../data/listing";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";

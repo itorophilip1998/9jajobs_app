@@ -167,7 +167,7 @@ const UserProfileCard = ({
             )}
             <TouchableOpacity
               onPress={() =>
-                item.user !== null
+                item?.user
                   ? navigation.navigate("Chat", { data: item.user })
                   : Toast.show({
                       type: "error",

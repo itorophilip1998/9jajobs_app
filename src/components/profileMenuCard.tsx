@@ -18,15 +18,7 @@ const ProfileMenuCard = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        if (
-          item.name === "Contact Us" ||
-          item.name === "FAQ" ||
-          item.name === "About"
-        ) {
-          Linking.openURL(item.path);
-        } else {
-          navigation.navigate(item.path);
-        }
+        navigation.navigate(item.path);
       }}
       className="w-[47%] h-[50px] flex-row items-center bg-[#0f0f0f] py-3 px-3 mb-3 rounded-full"
       style={[

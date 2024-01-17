@@ -4,11 +4,10 @@ import {
 } from "@react-navigation/native-stack";
 import React from "react";
 import Message from "../screens/message";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
-import navigation from ".";
-import { useAuthorize } from "../hooks/useAuthorized";
+import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import Notification from "../screens/message/notification";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +36,7 @@ const MessageStack = ({
       })}
     >
       <Stack.Screen name="MessageList" component={Message} />
+      <Stack.Screen name="Notification" component={Notification} />
     </Stack.Navigator>
   );
 };
