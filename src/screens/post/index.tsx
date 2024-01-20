@@ -216,7 +216,7 @@ const Post = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         aspect: [4, 4],
         quality: 1,
-        allowsEditing: true,
+        // allowsEditing: true,
       });
 
       if (!result.canceled) {
@@ -1249,10 +1249,10 @@ const Post = ({
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
+              components: "country:NG"
             }}
             fetchDetails={true}
             enablePoweredByContainer={true}
-            minLength={2}
             renderRow={(rowData) => (
               <View
                 style={{
@@ -1270,7 +1270,7 @@ const Post = ({
                 <Text
                   style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#c6c6c6",
+                    color: "#0f0f0f",
                   }}
                 >
                   {rowData.description}

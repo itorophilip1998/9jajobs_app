@@ -40,14 +40,13 @@ const VideoCard = ({
           useNativeControls={false}
           resizeMode={ResizeMode.CONTAIN}
           onFullscreenUpdate={(event) => {
-            console.log(event.fullscreenUpdate);
             if (event.fullscreenUpdate <= 1) {
               video.current?.playAsync();
             } else {
               video.current?.stopAsync();
             }
           }}
-          isLooping
+          isLooping={false}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
         />
       )}

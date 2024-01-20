@@ -8,6 +8,7 @@ export const bookListing = async (
     listing_id: string;
     date: string;
     time: string;
+    location: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void
@@ -16,6 +17,7 @@ export const bookListing = async (
   formData.append("listing_id", data.listing_id);
   formData.append("date", data.date);
   formData.append("time", data.time);
+  formData.append("location", data.location);
   var config = {
     method: "post",
     url: `${BASE_URL}/bookings`,

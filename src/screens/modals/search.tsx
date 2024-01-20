@@ -122,12 +122,14 @@ const Search = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               autoCapitalize={"none"}
               onSubmitEditing={() =>
-                navigation.navigate("SearchResult", {
-                  data: {
-                    search,
-                    location,
-                  },
-                })
+                search.length > 0
+                  ? navigation.navigate("SearchResult", {
+                      data: {
+                        search,
+                        location,
+                      },
+                    })
+                  : null
               }
             />
           </Pressable>
@@ -172,12 +174,48 @@ const Search = ({
           showsVerticalScrollIndicator={false}
           data={
             searchResults && [
-              ...searchResults?.listing_category_name?.filter((item: any) =>
-                item.toLowerCase().trim().includes(search.trim().toLowerCase())
-              ),
-              ...searchResults?.listing_name?.filter((item: any) =>
-                item.toLowerCase().trim().includes(search.trim().toLowerCase())
-              ),
+              ...searchResults?.listing_category_name
+                ?.filter((item: any) =>
+                  item.toLowerCase().includes(search.toLowerCase())
+                )
+                .sort((a: any, b: any) => {
+                  // Compare items based on whether they start with the search term
+                  const aStartsWithSearch = a
+                    .toLowerCase()
+                    .startsWith(search.toLowerCase());
+                  const bStartsWithSearch = b
+                    .toLowerCase()
+                    .startsWith(search.toLowerCase());
+
+                  // If both start with the search term, use regular sorting
+                  if (aStartsWithSearch && bStartsWithSearch) {
+                    return a.localeCompare(b);
+                  }
+
+                  // If only one starts with the search term, prioritize it
+                  return bStartsWithSearch - aStartsWithSearch;
+                }),
+              ...searchResults?.listing_name
+                ?.filter((item: any) =>
+                  item.toLowerCase().includes(search.toLowerCase())
+                )
+                .sort((a: any, b: any) => {
+                  // Compare items based on whether they start with the search term
+                  const aStartsWithSearch = a
+                    .toLowerCase()
+                    .startsWith(search.toLowerCase());
+                  const bStartsWithSearch = b
+                    .toLowerCase()
+                    .startsWith(search.toLowerCase());
+
+                  // If both start with the search term, use regular sorting
+                  if (aStartsWithSearch && bStartsWithSearch) {
+                    return a.localeCompare(b);
+                  }
+
+                  // If only one starts with the search term, prioritize it
+                  return bStartsWithSearch - aStartsWithSearch;
+                }),
             ]
           }
           // className="px-2"
@@ -253,36 +291,6 @@ const Search = ({
             </Pressable>
           )}
         />
-        {/* <FlatList
-          showsVerticalScrollIndicator={false}
-          data={}
-          // className="px-2"
-          ListHeaderComponent={() => <Spacer value={H("2%")} axis="vertical" />}
-          keyExtractor={(item, idx) => idx.toString()}
-          ItemSeparatorComponent={() => (
-            <>
-              <Spacer value={H("0.5%")} axis="vertical" />
-              <BorderBottom />
-              <Spacer value={H("0.5%")} axis="vertical" />
-            </>
-          )}
-          renderItem={({ item }) => (
-            <Pressable
-              className="py-2"
-              onPress={() => {
-                
-              }}
-            >
-              <SmallText
-                numberOfLine={1}
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-left text-[16px]"
-              >
-                {item}
-              </SmallText>
-            </Pressable>
-          )}
-        /> */}
       </SafeAreaView>
       <BottomSheet ref={ref} duration={0}>
         <View
@@ -333,11 +341,10 @@ const Search = ({
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
-              types: "(cities)",
+              components: "country:NG",
             }}
             fetchDetails={true}
             enablePoweredByContainer={true}
-            minLength={2}
             renderRow={(rowData) => (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Ionicons
@@ -349,7 +356,7 @@ const Search = ({
                 <Text
                   style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#c6c6c6",
+                    color: "#0f0f0f",
                   }}
                 >
                   {rowData.description}

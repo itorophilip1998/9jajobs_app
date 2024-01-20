@@ -76,7 +76,7 @@ const EditProfile = ({
       }
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
+        // allowsEditing: true,
         aspect: [4, 4],
         quality: 1,
       });
@@ -519,10 +519,10 @@ const EditProfile = ({
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
+              components: "country:NG"
             }}
             fetchDetails={true}
             enablePoweredByContainer={false}
-            minLength={2}
             renderRow={(rowData) => (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Ionicons
@@ -534,7 +534,7 @@ const EditProfile = ({
                 <Text
                   style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#c6c6c6",
+                    color: "#0f0f0f",
                   }}
                 >
                   {rowData.description}

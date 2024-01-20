@@ -74,10 +74,10 @@ const Booked = ({
             className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
           >
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {FirstLetterUppercase(item.listings.listing_name || "")}
+              {FirstLetterUppercase(item?.listings?.listing_name || "")}
             </SmallText>
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {moment(item.date).format("DD/MM/YYYY")}
+              {moment(item?.date).format("DD/MM/YYYY")}
             </SmallText>
           </Pressable>
         ))}
@@ -116,10 +116,10 @@ const Booked = ({
             className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
           >
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {FirstLetterUppercase(item.listings.listing_name || "")}
+              {FirstLetterUppercase(item?.listings?.listing_name || "")}
             </SmallText>
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {moment(item.date).format("DD/MM/YYYY")}
+              {moment(item?.date).format("DD/MM/YYYY")}
             </SmallText>
           </Pressable>
         ))}
@@ -158,10 +158,10 @@ const Booked = ({
             className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
           >
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {FirstLetterUppercase(item.listings.listing_name || "")}
+              {FirstLetterUppercase(item?.listings?.listing_name || "")}
             </SmallText>
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {moment(item.date).format("DD/MM/YYYY")}
+              {moment(item?.date).format("DD/MM/YYYY")}
             </SmallText>
           </Pressable>
         ))}
@@ -187,7 +187,7 @@ const Booked = ({
       </View>
 
       {booked
-        ?.filter((item, idx) => item.status.toLowerCase() === "cancelled")
+        ?.filter((item, idx) => item?.status?.toLowerCase() === "cancelled")
         .map((item, idx) => (
           <Pressable
             onPress={() =>
@@ -200,10 +200,10 @@ const Booked = ({
             className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
           >
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {FirstLetterUppercase(item.listings.listing_name || "")}
+              {FirstLetterUppercase(item?.listings?.listing_name || "")}
             </SmallText>
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {moment(item.date).format("DD/MM/YYYY")}
+              {moment(item?.date).format("DD/MM/YYYY")}
             </SmallText>
           </Pressable>
         ))}
@@ -242,10 +242,10 @@ const Booked = ({
             className="w-full flex-row justify-between  items-center py-3 border-t border-b-[#473F474D]"
           >
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {item.listings.listing_name} ({item.status})
+              {FirstLetterUppercase(item?.listings?.listing_name || "")}
             </SmallText>
             <SmallText className="text-[#6A6A6A] text-left p-0">
-              {moment(item.date).format("DD/MM/YYYY")}
+              {moment(item?.date).format("DD/MM/YYYY")}
             </SmallText>
           </Pressable>
         ))}
@@ -284,10 +284,10 @@ const Booking = ({
           className="w-full flex-row justify-between  items-center py-3 border-t border-t-[#473F474D]"
         >
           <SmallText className="text-[#6A6A6A] text-left p-0">
-            {FirstLetterUppercase(item.listings.listing_name || "")}
+            {FirstLetterUppercase(item?.listings?.listing_name || "")}
           </SmallText>
           <SmallText className="text-[#6A6A6A] text-left p-0">
-            {moment(item.date).format("DD/MM/YYYY")}
+            {moment(item?.date).format("DD/MM/YYYY")}
           </SmallText>
         </Pressable>
       ))}
@@ -472,7 +472,12 @@ const Bookings = ({
               className="text-left p-0 text-[15px] px-3 text-[#696969] mb-2"
             >
               Endeavor to follow our booking guidelines{" "}
-              <Text className="text-primary underline">guidelines link</Text>{" "}
+              <Text
+                className="text-primary underline"
+                onPress={() => navigation.navigate("Terms")}
+              >
+                guidelines link
+              </Text>{" "}
               and also try to reach out to the client or service provider
               through phone calls or our chart page for more confirmations .
             </SmallText>

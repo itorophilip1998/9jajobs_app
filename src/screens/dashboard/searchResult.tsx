@@ -52,9 +52,17 @@ const SearchResult = ({
       },
       (response) => {
         dispatch(SET_LOADER(false));
-        setSearchResults([...searchResults, ...response?.data]);
-        ref.current = true;
-        setPage(response.current_page + 1);
+        if(response?.data) {
+
+          setSearchResults([...searchResults, ...response?.data]);
+          ref.current = true;
+          setPage(response?.current_page + 1);
+        } else {
+          setSearchResults([...searchResults, ...response?.listing?.data]);
+          ref.current = true;
+          setPage(response?.listing?.current_page + 1);
+
+        }
       },
       (error) => {
         dispatch(SET_LOADER(false));

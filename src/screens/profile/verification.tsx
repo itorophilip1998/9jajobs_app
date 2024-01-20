@@ -32,7 +32,6 @@ import * as ImagePicker from "expo-image-picker";
 import { COLORS } from "../../utility/colors";
 import Checkbox from "expo-checkbox";
 import { toggleStringInArray } from "../../utility/helpers";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { FONTS } from "../../utility/fonts";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";

@@ -111,8 +111,9 @@ const NotificationSection = ({
       renderItem={({ item }) => (
         <Pressable
           onPress={() =>
-            item?.booking &&
-            navigation.navigate("BookingDetails", { data: item?.booking })
+            // item?.booking &&
+            // navigation.navigate("BookingDetails", { data: item?.booking })
+            navigation.navigate("Notification", { data: item })
           }
           style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}
           className="bg-[#0F0F0F] py-2 px-3 flex-row justify-between"

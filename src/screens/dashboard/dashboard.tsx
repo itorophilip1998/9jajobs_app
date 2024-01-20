@@ -41,8 +41,8 @@ const Dashboard = ({
 }) => {
   const focus = useIsFocused();
   const [category, setCategory] = React.useState<any[]>([]);
-  const [nearest, setNearest] = React.useState<any>(null)
-  const [trending, setTrending] = React.useState<any>(null)
+  const [nearest, setNearest] = React.useState<any>(null);
+  const [trending, setTrending] = React.useState<any>(null);
   const { location, search } = useSelector((state: RootState) => state.search);
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
@@ -120,7 +120,10 @@ const Dashboard = ({
           className="flex-1 bg-black px-3"
           style={{ backgroundColor: darkMode ? "black" : "white" }}
         >
-          <GradientText className="!text-[#626262] text-[27px] font-RedHatDisplaySemiBold mt-3">
+          <GradientText
+            style={{ fontSize: W("6.5%") }}
+            className="!text-[#626262] font-RedHatDisplaySemiBold mt-3"
+          >
             What are you looking for?
           </GradientText>
           <Spacer axis="vertical" value={H(3)} />
@@ -211,7 +214,7 @@ const Dashboard = ({
             />
             <SmallText
               className="text-center text-primary p-0"
-              style={!darkMode && { color: !darkMode ? "#0F0F0F": undefined }}
+              style={!darkMode && { color: !darkMode ? "#0F0F0F" : undefined }}
             >
               See More
             </SmallText>
@@ -227,11 +230,7 @@ const Dashboard = ({
                 Trending
               </GradientText>
             )}
-            <Pressable
-              onPress={() =>
-                navigation.navigate("TrendingListing")
-              }
-            >
+            <Pressable onPress={() => navigation.navigate("TrendingListing")}>
               <GradientText className="!text-[#626262] text-[15px] font-RedHatDisplayMedium mt-3">
                 View All
               </GradientText>
@@ -268,11 +267,7 @@ const Dashboard = ({
                 Nearest Listing
               </GradientText>
             )}
-            <Pressable
-              onPress={() =>
-                navigation.navigate("NearestListing")
-              }
-            >
+            <Pressable onPress={() => navigation.navigate("NearestListing")}>
               <GradientText className="!text-[#626262] text-[15px] font-RedHatDisplayMedium">
                 View All
               </GradientText>

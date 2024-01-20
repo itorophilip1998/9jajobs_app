@@ -168,10 +168,7 @@ const BookingDetails = ({
             >
               Address
             </SmallText>
-            <SmallText
-              numberOfLine={1}
-              className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
-            >
+            <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
               {route.params?.data?.listings?.listing_address}
             </SmallText>
           </View>
@@ -185,10 +182,7 @@ const BookingDetails = ({
             >
               Phone
             </SmallText>
-            <SmallText
-              numberOfLine={1}
-              className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
-            >
+            <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
               {route.params?.data?.listings?.listing_phone ||
                 route.params?.data?.listings?.user?.phone}
             </SmallText>

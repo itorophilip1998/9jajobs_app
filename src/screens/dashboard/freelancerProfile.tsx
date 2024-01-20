@@ -67,6 +67,8 @@ import { DatePicker, TimePicker } from "../../components/datePicker";
 import ShowImage from "../modals/showImage";
 import YoutubeVideos from "../modals/youtubeVideos";
 import BorderBottom from "../../components/borderBottom";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { FONTS } from "../../utility/fonts";
 
 const FreelancerProfile = ({
   navigation,
@@ -86,6 +88,7 @@ const FreelancerProfile = ({
   const [profileImg, setProfileImg] = React.useState<string>("");
   const [date, setDate] = React.useState<string>("");
   const [isDate, setDateActive] = React.useState<boolean>(false);
+  const [location, setLocation] = React.useState<string>("");
 
   const [time, setTime] = React.useState<string>("");
   const [isTime, setTimeActive] = React.useState<boolean>(false);
@@ -166,7 +169,7 @@ const FreelancerProfile = ({
               <Spacer value={H("0.5%")} axis="vertical" />
               <View className="flex-row justify-between items-center mb-1 w-full">
                 <SmallText
-                  numberOfLine={1}
+                  // numberOfLine={1}
                   style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                   className="text-[#D4E1D2] text-left p-0 text-[15px] w-[75%]"
                 >
@@ -618,7 +621,7 @@ const FreelancerProfile = ({
               Phone Number
             </SmallText>
             <SmallText
-              numberOfLine={1}
+              // numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
               onPress={() =>
@@ -656,7 +659,7 @@ const FreelancerProfile = ({
               Email Address
             </SmallText>
             <SmallText
-              numberOfLine={1}
+              // numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
               onPress={() =>
@@ -702,7 +705,7 @@ const FreelancerProfile = ({
               Website
             </SmallText>
             <SmallText
-              numberOfLine={1}
+              // numberOfLine={1}
               onPress={() =>
                 route.params?.data?.listing_website
                   ? Linking.openURL(
@@ -793,6 +796,8 @@ const FreelancerProfile = ({
                   navigation.navigate("MapScreen", { data: route.params?.data })
                 }
                 className="flex-1 w-full h-[200px]"
+                minZoomLevel={7}
+                scrollEnabled={false}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
                   latitude: Number(route.params?.data?.address_latitude),
@@ -874,14 +879,89 @@ const FreelancerProfile = ({
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
+          <View className="w-full flex-row justify-between items-center">
+            <View className="w-[100%]">
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+              >
+                Location
+              </SmallText>
+              <GooglePlacesAutocomplete
+                placeholder="Search location"
+                enableHighAccuracyLocation
+                debounce={400}
+                onPress={(data, details = null) => {
+                  setLocation(details?.formatted_address || "");
+                }}
+                query={{
+                  key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
+                  language: "en",
+                  components: "country:NG",
+                }}
+                fetchDetails={true}
+                enablePoweredByContainer={true}
+                renderRow={(rowData) => (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    <Ionicons
+                      name="ios-location-sharp"
+                      size={24}
+                      color={COLORS.primary}
+                      style={{ marginRight: 10 }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: FONTS.RedHatDisplayRegular,
+                        color: "#0f0f0f",
+                      }}
+                    >
+                      {rowData.description}
+                    </Text>
+                  </View>
+                )}
+                styles={{
+                  textInput: {
+                    fontFamily: FONTS.RedHatDisplayRegular,
+                    backgroundColor: darkMode ? "black" : "white",
+                    color: darkMode ? "#c6c6c6" : "#0f0f0f",
+                    fontSize: 15,
+                    borderWidth: 1,
+                    borderColor: COLORS.primary,
+                    height: 50,
+                  },
+                }}
+              />
+            </View>
+          </View>
+          <Spacer value={H("3%")} axis="vertical" />
           <Button
             text="Book Date"
             buttonStyle={{ width: "100%" }}
             onPress={() => {
-              if (time === "" || date === "") {
+              if (date === "") {
                 Toast.show({
                   type: "success",
-                  text1: "Time and date cannot be empty",
+                  text1: "Date cannot be empty",
+                });
+                return;
+              }
+              if (time === "") {
+                Toast.show({
+                  type: "success",
+                  text1: "Time cannot be empty",
+                });
+                return;
+              }
+              if (location === "") {
+                Toast.show({
+                  type: "success",
+                  text1: "Location cannot be empty",
                 });
                 return;
               }
@@ -893,6 +973,7 @@ const FreelancerProfile = ({
                     listing_id: route.params?.data.id,
                     date: date,
                     time: time,
+                    location,
                   },
                   (response) => {
                     dispatch(SET_LOADER(false));

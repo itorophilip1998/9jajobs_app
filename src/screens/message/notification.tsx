@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TitleWithButton from "../../components/titleWithButton";
 import { RootState } from "../../store";
 import { width, height } from "../../utility/constant";
@@ -18,13 +18,20 @@ import {
 } from "react-native-responsive-screen";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RouteProp } from "@react-navigation/native";
-import { Button, SmallText } from "../../components";
+import { Button, SmallText, Spacer } from "../../components";
 import moment from "moment";
 import { shadowBox, shadowBoxDark } from "../../style/Typography";
 import { AntDesign } from "@expo/vector-icons";
 import ErrorVerifyModalContent from "../../components/errorVerifyModalContent";
 import { COLORS } from "../../utility/colors";
-import { DelayFor } from "../../utility/helpers";
+import {
+  DelayFor,
+  FirstLetterUppercase,
+  convertTo12HourFormat,
+} from "../../utility/helpers";
+import Toast from "react-native-toast-message";
+import { updateBooking } from "../../api/booking";
+import { SET_LOADER } from "../../store/formDataSlice";
 
 const Notification = ({
   navigation,
@@ -35,7 +42,32 @@ const Notification = ({
 }) => {
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const { darkMode } = useSelector((state: RootState) => state.auth);
-  // console.log(route.params?.data);
+  const dispatch = useDispatch();
+
+  const updateStatus = (
+    status: "pending" | "completed" | "cancelled" | "accepted" | "declined"
+  ) => {
+    dispatch(SET_LOADER(true));
+    updateBooking(
+      { status, booking_id: route.params?.data?.booking?.id },
+      (response) => {
+        Toast.show({
+          type: "success",
+          text1: response.message,
+        });
+        navigation.goBack();
+        dispatch(SET_LOADER(false));
+      },
+      (error) => {
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+        dispatch(SET_LOADER(false));
+      }
+    );
+  };
+  console.log(route.params?.data);
 
   return (
     <KeyboardAvoidingView
@@ -53,7 +85,7 @@ const Notification = ({
           className="relative flex flex-row items-center w-full justify-between px-3 mb-3 bg-[#0f0f0f]"
         >
           <TitleWithButton
-            title={"Notification"}
+            title={route.params?.data?.title || "Notification"}
             fire={() => navigation.goBack()}
           />
         </View>
@@ -65,33 +97,153 @@ const Notification = ({
             style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
             className="text-right p-0 text-[14px] text-[#696969] mb-2"
           >
-            {moment(route.params?.data.created_at).format("DD/MM/YYYY")}
+            {moment(route.params?.data?.created_at).format("DD/MM/YYYY")}
           </SmallText>
-          <SmallText
-            style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
-            className="text-left p-0 text-[14px] text-[#696969]"
-          >
-            {route.params?.data.message}
-          </SmallText>
-          <View
-            className="w-[80%] mx-auto mt-8 rounded-lg"
-            style={shadowBoxDark}
-          >
-            <Button
-              text="Accept Booking"
-              buttonStyleClassName="rounded-lg"
-              buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
-            />
-          </View>
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={shadowBoxDark}
-            className="mx-auto w-[80%] mt-5 border border-primary items-center py-3 rounded-lg"
-          >
-            <SmallText style={{ color: darkMode ? "#fff" : "#0f0f0f" }}>
-              Decline Booking
+          {route.params?.data?.booking ? (
+            <>
+              <SmallText
+                style={{ color: darkMode ? COLORS.primary : "#0F0F0F" }}
+                className="text-center text-[22px] font-RedHatDisplayRegular text-primary"
+              >
+                {route.params?.data?.booking?.listings?.listing_name}
+              </SmallText>
+              <Spacer value={H("2%")} axis="vertical" />
+              <View
+                style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                className="py-2 flex-row justify-between items-center"
+              >
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
+                  Date booked
+                </SmallText>
+                <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                  {moment(route.params?.data?.booking?.created_at).format(
+                    "DD/MM/YYYY"
+                  )}
+                </SmallText>
+              </View>
+              <View
+                style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                className="py-2 flex-row justify-between items-center"
+              >
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
+                  Time
+                </SmallText>
+                <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                  {convertTo12HourFormat(route.params?.data?.booking?.time)}
+                </SmallText>
+              </View>
+              <View
+                style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                className="py-2 flex-row justify-between items-center"
+              >
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
+                  Status
+                </SmallText>
+                <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                  {FirstLetterUppercase(
+                    route.params?.data?.booking?.status || ""
+                  )}
+                </SmallText>
+              </View>
+              <View
+                style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                className="py-2 flex-row justify-between items-center"
+              >
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
+                  Service Provider
+                </SmallText>
+                <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                  {route.params?.data?.booking?.listings?.user?.name}
+                </SmallText>
+              </View>
+              <View
+                style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                className="py-2 flex-row justify-between items-center"
+              >
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
+                  Address
+                </SmallText>
+                <SmallText
+                  numberOfLine={1}
+                  className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
+                >
+                  {route.params?.data?.booking?.listings?.listing_address}
+                </SmallText>
+              </View>
+              <View
+                style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                className="py-2 flex-row justify-between items-center"
+              >
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 text-[15px]"
+                >
+                  Phone
+                </SmallText>
+                <SmallText
+                  numberOfLine={1}
+                  className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
+                >
+                  {route.params?.data?.booking?.listings?.listing_phone ||
+                    route.params?.data?.booking?.listings?.user?.phone}
+                </SmallText>
+              </View>
+              {route.params?.data?.booking?.status === "pending" && (
+                <>
+                  <View
+                    className="w-[100%] mx-auto mt-8 rounded-lg"
+                    style={shadowBoxDark}
+                  >
+                    <Button
+                      text="Accept Booking"
+                      buttonStyleClassName="rounded-lg"
+                      buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
+                      onPress={() => updateStatus("accepted")}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setModalVisible(true)}
+                    style={shadowBoxDark}
+                    className="mx-auto w-[100%] mt-5 border border-primary items-center py-3 rounded-lg"
+                  >
+                    <SmallText style={{ color: darkMode ? "#fff" : "#0f0f0f" }}>
+                      Decline Booking
+                    </SmallText>
+                  </TouchableOpacity>
+                </>
+              )}
+              {route.params?.data?.booking?.status === "accepted" && (
+                <Button
+                  text="Cancel Booking"
+                  buttonStyleClassName="rounded-lg"
+                  buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
+                  onPress={() => updateStatus("cancelled")}
+                />
+              )}
+            </>
+          ) : (
+            <SmallText
+              style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+              className="text-left p-0 text-[14px] text-[#696969]"
+            >
+              {route.params?.data?.message}
             </SmallText>
-          </TouchableOpacity>
+          )}
         </ScrollView>
       </SafeAreaView>
       <ErrorVerifyModalContent
