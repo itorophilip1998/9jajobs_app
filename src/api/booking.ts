@@ -94,6 +94,9 @@ export const updateBooking = async (
   data: {
     booking_id: string;
     status: "pending" | "completed" | "cancelled" | "accepted" | "declined";
+    time?: string;
+    date?: string;
+    location?: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void
@@ -101,6 +104,9 @@ export const updateBooking = async (
   const formData = new FormData();
   formData.append("booking_id", data.booking_id);
   formData.append("status", data.status);
+  data?.time && formData.append("time", data?.time);
+  data?.date && formData.append("date", data?.date);
+  data?.location && formData.append("location", data?.location);
 
   var config = {
     method: "post",

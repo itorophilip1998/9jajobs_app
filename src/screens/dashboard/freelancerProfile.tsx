@@ -10,6 +10,7 @@ import {
   Linking,
   Pressable,
   Alert,
+  FlatList,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
@@ -89,7 +90,7 @@ const FreelancerProfile = ({
   const [date, setDate] = React.useState<string>("");
   const [isDate, setDateActive] = React.useState<boolean>(false);
   const [location, setLocation] = React.useState<string>("");
-
+  const [locationFocus, setLocationFocus] = React.useState<boolean>(false);
   const [time, setTime] = React.useState<string>("");
   const [isTime, setTimeActive] = React.useState<boolean>(false);
 
@@ -761,7 +762,6 @@ const FreelancerProfile = ({
                               });
                             }
                           } catch (err) {
-                            // Alert.alert("Error", err, )
                             console.log(err);
                           }
                         }}
@@ -839,14 +839,16 @@ const FreelancerProfile = ({
           <Spacer value={H("1%")} axis="vertical" />
         </ScrollView>
       </SafeAreaView>
-      <BottomSheet ref={bookRef} duration={3000} height={100}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
+
+      <BottomSheet ref={bookRef} duration={3000} height={200}>
+        <View
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
-          className="flex-1 bg-[#1b1b1b] py-5 px-3"
+          className="flex-1 bg-[#1b1b1b] py-3 px-3"
         >
-          <View className="w-full flex-row justify-between items-center">
-            <View className="w-full">
+          {!locationFocus && (
+            <>
+              {/* <Spacer value={H("1%")} axis="vertical" /> */}
+
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-[#D4E1D2] text-left p-0 text-[17px] mb-2 font-RedHatDisplayRegular"
@@ -859,11 +861,8 @@ const FreelancerProfile = ({
                 setDate={setDate}
                 setDateActive={setDateActive}
               />
-            </View>
-          </View>
-          <Spacer value={H("3%")} axis="vertical" />
-          <View className="w-full flex-row justify-between items-center">
-            <View className="w-[100%]">
+              <Spacer value={H("3%")} axis="vertical" />
+
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                 className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
@@ -876,126 +875,135 @@ const FreelancerProfile = ({
                 setTimeActive={setTimeActive}
                 time={time}
               />
-            </View>
-          </View>
-          <Spacer value={H("3%")} axis="vertical" />
-          <View className="w-full flex-row justify-between items-center">
-            <View className="w-[100%]">
-              <SmallText
-                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+              <Spacer value={H("3%")} axis="vertical" />
+            </>
+          )}
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+            className="text-[#D4E1D2] text-left p-0 text-[17px] mb-3 font-RedHatDisplayRegular"
+          >
+            Location
+          </SmallText>
+          <GooglePlacesAutocomplete
+            placeholder="Search location"
+            enableHighAccuracyLocation
+            debounce={400}
+            textInputProps={{
+              onFocus: () => {
+                setLocationFocus(true);
+              },
+              onBlur: () => {
+                setLocationFocus(false);
+              },
+            }}
+            onPress={(data, details = null) => {
+              setLocation(details?.formatted_address || "");
+            }}
+            query={{
+              key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
+              language: "en",
+              components: "country:NG",
+            }}
+            fetchDetails={true}
+            enablePoweredByContainer={false}
+            renderRow={(rowData) => (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  backgroundColor: "transparent",
+                }}
               >
-                Location
-              </SmallText>
-              <GooglePlacesAutocomplete
-                placeholder="Search location"
-                enableHighAccuracyLocation
-                debounce={400}
-                onPress={(data, details = null) => {
-                  setLocation(details?.formatted_address || "");
-                }}
-                query={{
-                  key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
-                  language: "en",
-                  components: "country:NG",
-                }}
-                fetchDetails={true}
-                enablePoweredByContainer={true}
-                renderRow={(rowData) => (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      backgroundColor: "transparent",
-                    }}
-                  >
-                    <Ionicons
-                      name="ios-location-sharp"
-                      size={24}
-                      color={COLORS.primary}
-                      style={{ marginRight: 10 }}
-                    />
-                    <Text
-                      style={{
-                        fontFamily: FONTS.RedHatDisplayRegular,
-                        color: "#0f0f0f",
-                      }}
-                    >
-                      {rowData.description}
-                    </Text>
-                  </View>
-                )}
-                styles={{
-                  textInput: {
+                <Ionicons
+                  name="ios-location-sharp"
+                  size={24}
+                  color={COLORS.primary}
+                  style={{ marginRight: 10 }}
+                />
+                <Text
+                  style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    backgroundColor: darkMode ? "black" : "white",
-                    color: darkMode ? "#c6c6c6" : "#0f0f0f",
-                    fontSize: 15,
-                    borderWidth: 1,
-                    borderColor: COLORS.primary,
-                    height: 50,
-                  },
-                }}
-              />
-            </View>
-          </View>
-          <Spacer value={H("3%")} axis="vertical" />
-          <Button
-            text="Book Date"
-            buttonStyle={{ width: "100%" }}
-            onPress={() => {
-              if (date === "") {
-                Toast.show({
-                  type: "success",
-                  text1: "Date cannot be empty",
-                });
-                return;
-              }
-              if (time === "") {
-                Toast.show({
-                  type: "success",
-                  text1: "Time cannot be empty",
-                });
-                return;
-              }
-              if (location === "") {
-                Toast.show({
-                  type: "success",
-                  text1: "Location cannot be empty",
-                });
-                return;
-              }
-              bookRef.current?.close();
-              DelayFor(200, () => {
-                dispatch(SET_LOADER(true));
-                bookListing(
-                  {
-                    listing_id: route.params?.data.id,
-                    date: date,
-                    time: time,
-                    location,
-                  },
-                  (response) => {
-                    dispatch(SET_LOADER(false));
-                    navigation.navigate("Dashboard");
-                    Toast.show({
-                      type: "success",
-                      text1: response.message,
-                    });
-                  },
-                  (error) => {
-                    dispatch(SET_LOADER(false));
-                    Toast.show({
-                      type: "error",
-                      text1: error,
-                    });
-                  }
-                );
-              });
+                    color: "#0f0f0f",
+                  }}
+                >
+                  {rowData.description}
+                </Text>
+              </View>
+            )}
+            styles={{
+              textInput: {
+                fontFamily: FONTS.RedHatDisplayRegular,
+                backgroundColor: darkMode ? "black" : "white",
+                color: darkMode ? "#c6c6c6" : "#0f0f0f",
+                fontSize: 15,
+                borderWidth: 1,
+                borderColor: locationFocus ? COLORS.primary : "#696969",
+                height: 50,
+              },
             }}
           />
-          <Spacer value={H("6%")} axis="vertical" />
-        </ScrollView>
+          {!locationFocus && (
+            <>
+              <Spacer value={H("3%")} axis="vertical" />
+
+              <Button
+                text="Book Date"
+                buttonStyle={{ width: "100%" }}
+                onPress={() => {
+                  if (date === "") {
+                    Toast.show({
+                      type: "success",
+                      text1: "Date cannot be empty",
+                    });
+                    return;
+                  }
+                  if (time === "") {
+                    Toast.show({
+                      type: "success",
+                      text1: "Time cannot be empty",
+                    });
+                    return;
+                  }
+                  if (location === "") {
+                    Toast.show({
+                      type: "success",
+                      text1: "Location cannot be empty",
+                    });
+                    return;
+                  }
+                  bookRef.current?.close();
+                  DelayFor(200, () => {
+                    dispatch(SET_LOADER(true));
+                    bookListing(
+                      {
+                        listing_id: route.params?.data.id,
+                        date: date,
+                        time: time,
+                        location,
+                      },
+                      (response) => {
+                        dispatch(SET_LOADER(false));
+                        navigation.navigate("Dashboard");
+                        Toast.show({
+                          type: "success",
+                          text1: response.message,
+                        });
+                      },
+                      (error) => {
+                        dispatch(SET_LOADER(false));
+                        Toast.show({
+                          type: "error",
+                          text1: error,
+                        });
+                      }
+                    );
+                  });
+                }}
+              />
+              <Spacer value={H("2%")} axis="vertical" />
+            </>
+          )}
+        </View>
       </BottomSheet>
       <ShowImage
         close={() => setProfileImg("")}

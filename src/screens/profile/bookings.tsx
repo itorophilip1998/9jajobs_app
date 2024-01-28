@@ -352,7 +352,7 @@ const Bookings = ({
         <Spacer value={H("3%")} axis="vertical" />
         <View
           style={{ backgroundColor: darkMode ? "#1E1E1E" : "white" }}
-          className="w-[80%] bg-[#1E1E1E] mx-auto h-[48px] rounded-full flex-row justify-center overflow-hidden"
+          className="w-[90%] bg-[#1E1E1E] mx-auto h-[48px] rounded-full flex-row justify-center overflow-hidden"
         >
           <TouchableOpacity
             className="w-[50%] justify-center items-center rounded-full"
@@ -374,7 +374,7 @@ const Bookings = ({
                   color: type === "booked" ? "#1A911B" : "#696969",
                 }}
               >
-                Booked
+                Services I Booked
               </SmallText>
             ) : type === "booked" ? (
               <LinearGradient
@@ -387,7 +387,8 @@ const Bookings = ({
                   }}
                   className="!text-[16px] !text-white"
                 >
-                  Booked
+                Services I Booked
+                  
                 </SmallText>
               </LinearGradient>
             ) : (
@@ -397,7 +398,7 @@ const Bookings = ({
                   color: type === "booking" ? "#696969" : "#1A911B",
                 }}
               >
-                Booked
+                Services I Booked
               </SmallText>
             )}
           </TouchableOpacity>
@@ -416,12 +417,12 @@ const Bookings = ({
           >
             {darkMode ? (
               <SmallText
-                className="!text-[16px] !text-white"
-                style={{
-                  color: type === "booking" ? "#1A911B" : "#696969",
-                }}
+              className="!text-[16px] !text-white"
+              style={{
+                color: type === "booking" ? "#1A911B" : "#696969",
+              }}
               >
-                My Bookings
+                My Appointments
               </SmallText>
             ) : type === "booking" ? (
               <LinearGradient
@@ -434,7 +435,8 @@ const Bookings = ({
                   }}
                   className="!text-[16px] !text-white"
                 >
-                  My Bookings
+                  
+                My Appointments
                 </SmallText>
               </LinearGradient>
             ) : (
@@ -444,7 +446,7 @@ const Bookings = ({
                   color: type === "booked" ? "#696969" : "#1A911B",
                 }}
               >
-                My Bookings
+                My Appointments
               </SmallText>
             )}
           </TouchableOpacity>

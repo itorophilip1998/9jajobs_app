@@ -61,9 +61,10 @@ const BottomSheet = React.forwardRef(
     return (
       <RBSheet
         ref={ref}
-        height={props.height || 700}
+        height={props.height || 900}
         openDuration={3000}
         animationType="slide"
+        // keyboardAvoidingViewEnabled={false}
         customStyles={{
           container: {
             flex: 1,

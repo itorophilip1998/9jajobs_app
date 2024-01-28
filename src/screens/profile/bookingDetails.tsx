@@ -95,6 +95,15 @@ const BookingDetails = ({
           />
         </View>
         <ScrollView className="w-full flex-1 px-3">
+          {route.params?.client &&
+            route.params?.data?.status === "completed" && (
+              <SmallText
+                style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+                className="text-left p-0 text-[18px] text-[#696969] mb-4 mt-5"
+              >
+                Congratulations on your completed Service
+              </SmallText>
+            )}
           <SmallText
             style={{ color: darkMode ? COLORS.primary : "#0F0F0F" }}
             className="text-center text-[22px] font-RedHatDisplayRegular text-primary"
@@ -130,34 +139,37 @@ const BookingDetails = ({
               {convertTo12HourFormat(route.params?.data.time)}
             </SmallText>
           </View>
-          <View
-            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
-            className="py-2 flex-row justify-between items-center"
-          >
-            <SmallText
-              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#696969] text-left p-0 text-[15px]"
+          {route.params?.client ? (
+            <View
+              style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+              className="py-2 flex-row justify-between items-center"
             >
-              Status
-            </SmallText>
-            <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
-              {FirstLetterUppercase(route.params?.data?.status || "")}
-            </SmallText>
-          </View>
-          <View
-            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
-            className="py-2 flex-row justify-between items-center"
-          >
-            <SmallText
-              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#696969] text-left p-0 text-[15px]"
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#696969] text-left p-0 text-[15px]"
+              >
+                Service Provider
+              </SmallText>
+              <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                {route.params?.data?.listings?.user?.name}
+              </SmallText>
+            </View>
+          ) : (
+            <View
+              style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+              className="py-2 flex-row justify-between items-center"
             >
-              Service Provider
-            </SmallText>
-            <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
-              {route.params?.data?.listings?.user?.name}
-            </SmallText>
-          </View>
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#696969] text-left p-0 text-[15px]"
+              >
+                Service Receiver
+              </SmallText>
+              <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                {route.params?.data?.user?.name}
+              </SmallText>
+            </View>
+          )}
           <View
             style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
             className="py-2 flex-row justify-between items-center"
@@ -169,65 +181,97 @@ const BookingDetails = ({
               Address
             </SmallText>
             <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
-              {route.params?.data?.listings?.listing_address}
+              {route.params?.data?.location || "N/A"}
             </SmallText>
           </View>
-          <View
-            style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
-            className="py-2 flex-row justify-between items-center"
-          >
-            <SmallText
-              style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#696969] text-left p-0 text-[15px]"
+          {route.params?.client ? (
+            <View
+              style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+              className="py-2 flex-row justify-between items-center"
             >
-              Phone
-            </SmallText>
-            <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
-              {route.params?.data?.listings?.listing_phone ||
-                route.params?.data?.listings?.user?.phone}
-            </SmallText>
-          </View>
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#696969] text-left p-0 text-[15px]"
+              >
+                Phone
+              </SmallText>
+              <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                {route.params?.data?.listings?.listing_phone ||
+                  route.params?.data?.listings?.user?.phone}
+              </SmallText>
+            </View>
+          ) : (
+            <View
+              style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+              className="py-2 flex-row justify-between items-center"
+            >
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#696969] text-left p-0 text-[15px]"
+              >
+                Phone
+              </SmallText>
+              <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                {route.params?.data?.user?.phone}
+              </SmallText>
+            </View>
+          )}
           <View className="py-2 flex-row justify-between items-center">
             <View>
-              {route.params?.data?.status === "completed" && (
-                <Pressable
-                  onPress={() =>
-                    navigation.navigate("RateBooking", {
-                      data: route.params?.data,
-                    })
-                  }
-                  className="flex-row items-center"
+              <Pressable
+                onPress={() =>
+                  route.params?.client
+                    ? navigation.navigate("RateBooking", {
+                        data: route.params?.data,
+                      })
+                    : Toast.show({
+                        type: "error",
+                        text1: "Only the client can drop a review",
+                      })
+                }
+                className="flex-row items-center"
+              >
+                <ReviewIcon />
+                <SmallText
+                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                  className="text-[#696969] text-left p-0 ml-2 text-[15px]"
                 >
-                  <ReviewIcon />
-                  <SmallText
-                    style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                    className="text-[#696969] text-left p-0 ml-2 text-[15px]"
-                  >
-                    Drop Review
-                  </SmallText>
-                </Pressable>
-              )}
+                  Drop Review
+                </SmallText>
+              </Pressable>
             </View>
             <View className="flex-row items-start">
               <Pressable
                 onPress={() =>
-                  !route.params?.data?.listings?.listing_phone &&
-                  !route.params?.data?.listings?.user?.phone
+                  route.params?.client
+                    ? !route.params?.data?.listings?.listing_phone &&
+                      !route.params?.data?.listings?.user?.phone
+                      ? Toast.show({
+                          type: "error",
+                          text1: "This listing does not have a phone number.",
+                        })
+                      : Linking.openURL(
+                          `tel:${
+                            route.params?.data?.listings?.listing_phone.replace(
+                              /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                              ""
+                            ) ||
+                            route.params?.data?.listings?.user?.phone.replace(
+                              /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                              ""
+                            )
+                          }`
+                        )
+                    : !route.params?.data?.user?.phone
                     ? Toast.show({
                         type: "error",
-                        text1: "This listing does not have a phone number.",
+                        text1: "This user does not have a phone number.",
                       })
                     : Linking.openURL(
-                        `tel:${
-                          route.params?.data?.listings?.listing_phone.replace(
-                            /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
-                            ""
-                          ) ||
-                          route.params?.data?.listings?.user?.phone.replace(
-                            /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
-                            ""
-                          )
-                        }`
+                        `tel:${route.params?.data?.user?.phone.replace(
+                          /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                          ""
+                        )}`
                       )
                 }
                 className="flex-row items-center"
@@ -242,13 +286,22 @@ const BookingDetails = ({
               </Pressable>
               <Pressable
                 onPress={() =>
-                  route.params?.data?.listings?.user
+                  route.params?.client
+                    ? route.params?.data?.listings?.user
+                      ? navigation.navigate("Chat", {
+                          data: route.params?.data?.listings?.user,
+                        })
+                      : Toast.show({
+                          type: "error",
+                          text1: "This listing does not have a user.",
+                        })
+                    : route.params?.data?.user
                     ? navigation.navigate("Chat", {
-                        data: route.params?.data?.listings?.user,
+                        data: route.params?.data?.user,
                       })
                     : Toast.show({
                         type: "error",
-                        text1: "This listing does not have a user.",
+                        text1: "This client does not have a profile.",
                       })
                 }
                 className="flex-row items-center ml-2"
@@ -265,21 +318,47 @@ const BookingDetails = ({
           </View>
           <Spacer value={H("3%")} axis="vertical" />
           {route.params?.client && route.params?.data?.status === "pending" && (
-            <Button
-              text="Cancel Booking"
-              buttonStyleClassName="rounded-lg"
-              buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
-              onPress={() => updateStatus("cancelled")}
-            />
+            <>
+              <Button
+                text="Modify Booking"
+                buttonStyleClassName="rounded-lg"
+                buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
+                onPress={() =>
+                  navigation.navigate("ModifyBooking", {
+                    data: route.params?.data,
+                  })
+                }
+              />
+              <TouchableOpacity
+                onPress={() => updateStatus("cancelled")}
+                style={shadowBoxDark}
+                className="mx-auto w-[100%] mt-5 border border-primary items-center py-3 rounded-lg"
+              >
+                <SmallText style={{ color: darkMode ? "#fff" : "#0f0f0f" }}>
+                  Cancel Booking
+                </SmallText>
+              </TouchableOpacity>
+            </>
           )}
           {route.params?.client &&
             route.params?.data?.status === "accepted" && (
-              <Button
-                text="Complete Booking"
-                buttonStyleClassName="rounded-lg"
-                buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
-                onPress={() => updateStatus("completed")}
-              />
+              <>
+                <Button
+                  text="Confirm and Rate"
+                  buttonStyleClassName="rounded-lg"
+                  buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
+                  onPress={() => updateStatus("completed")}
+                />
+                <TouchableOpacity
+                  onPress={() => updateStatus("cancelled")}
+                  style={shadowBoxDark}
+                  className="mx-auto w-[100%] mt-5 border border-primary items-center py-3 rounded-lg"
+                >
+                  <SmallText style={{ color: darkMode ? "#fff" : "#0f0f0f" }}>
+                    Cancel Booking
+                  </SmallText>
+                </TouchableOpacity>
+              </>
             )}
           {!route.params?.client &&
             route.params?.data?.status === "pending" && (
@@ -314,6 +393,19 @@ const BookingDetails = ({
                 buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
                 onPress={() => updateStatus("cancelled")}
               />
+            )}
+          {route.params?.client &&
+            route.params?.data?.status === "accepted" && (
+              <>
+                <View className="flex-1" />
+                <SmallText
+                  style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
+                  className="text-left p-0 text-[15px] text-[#696969] mb-2 mt-5"
+                >
+                  Note: Do not confirm a booking until the service is rendered
+                  and completed.
+                </SmallText>
+              </>
             )}
         </ScrollView>
       </SafeAreaView>

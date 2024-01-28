@@ -252,18 +252,26 @@ const Search = ({
             <Pressable
               className="py-2"
               onPress={() => {
-                const type = item.split(" (");
-                if (type[1].toLowerCase().includes("category")) {
+                if (
+                  searchResults?.listing_category_name.some(
+                    (data: string) => data.toLowerCase() === item?.toLowerCase()
+                  )
+                ) {
                   navigation.navigate("SearchResult", {
                     data: {
-                      search: type[0].trim(),
+                      search: search,
                       location,
                     },
                   });
-                } else if (type[1].toLowerCase().includes("business")) {
+                } else if (
+                  searchResults?.listing_name.some(
+                    (data: string) =>
+                      data?.toLowerCase() === item?.toLowerCase()
+                  )
+                ) {
                   dispatch(SET_LOADER(true));
                   getAllListing(
-                    { listing_name: item.split(" (")[0] },
+                    { listing_name: item },
                     (newData) => {
                       dispatch(SET_LOADER(false));
                       navigation.navigate("FreelancerProfile", {

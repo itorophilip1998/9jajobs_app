@@ -19,7 +19,7 @@ import {
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
 import { width, height } from "../../utility/constant";
-import { Feather, AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { COLORS } from "../../utility/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -153,13 +153,13 @@ const MyListing = ({
               <View className="px-3 flex-row justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
-                  className="text-[#696969] text-[20px] text-left p-0 w-[45%]"
+                  className="text-[#696969] text-[20px] text-left p-0 w-[33%]"
                 >
                   Brand Name
                 </SmallText>
                 <SmallText
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
-                  className="text-[#696969] text-[20px] text-left p-0 w-[45%]"
+                  className="text-[#696969] text-[20px] text-left p-0 w-[65%]"
                 >
                   Action
                 </SmallText>
@@ -218,11 +218,32 @@ const MyListing = ({
                       : "#696969",
                 }}
                 numberOfLine={1}
-                className="text-[#D4E1D2] text-[19px] w-[45%] text-left p-0"
+                className="text-[#D4E1D2] text-[19px] w-[33%] text-left p-0"
               >
                 {item.listing_name}
               </SmallText>
-              <View className="w-[47%] flex-row justify-between items-center">
+              <View className="w-[65%] flex-row justify-between items-center">
+                <TouchableOpacity
+                  style={[
+                    !darkMode && shadowBoxDark,
+                    {
+                      backgroundColor: darkMode ? "#0f0f0f" : "white",
+                    },
+                  ]}
+                  // onPress={() =>
+                  //   navigation.navigate("EditListing", { data: item })
+                  // }
+                  className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
+                >
+                  <MaterialIcons
+                    name="autorenew"
+                    size={15}
+                    color={COLORS.primary}
+                  />
+                  <SmallText className="text-primary p-0 text-[13px] w- pl-1">
+                    Renew
+                  </SmallText>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={[
                     !darkMode && shadowBoxDark,

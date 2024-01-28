@@ -27,7 +27,7 @@ import {
 import FundIcon from "../../../assets/icons/fund.svg";
 import WithdrawIcon from "../../../assets/icons/withdraw.svg";
 import { COLORS } from "../../utility/colors";
-import { FirstLetterUppercase } from "../../utility/helpers";
+import { DelayFor, FirstLetterUppercase } from "../../utility/helpers";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GradientText } from "../../components/gradientText";
@@ -63,7 +63,7 @@ const MyWallet = ({
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const withdrawRef = React.useRef<RBSheet | null>(null);
   const fundRef = React.useRef<RBSheet | null>(null);
-   const [loaded, setLoaded] = React.useState<boolean>(false);
+  const [loaded, setLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (focus)
@@ -109,13 +109,13 @@ const MyWallet = ({
       getWalletDetails(
         null,
         (response) => {
-          setLoaded(true)
+          setLoaded(true);
           console.log(response);
           setDetails(response);
           dispatch(SET_LOADER(false));
         },
         (error) => {
-          setLoaded(true)
+          setLoaded(true);
           Toast.show({
             type: "error",
             text1: error,
@@ -493,7 +493,13 @@ const MyWallet = ({
                 });
               } else {
                 fundRef.current?.close();
-                navigation.navigate("Paystack", { amount });
+                DelayFor(300, () =>
+                  navigation.navigate("Paystack", { amount })
+                );
+
+                // navigation.navigate("Paystack", {
+                //   amount: amount || 0,
+                // });
               }
             }}
           />

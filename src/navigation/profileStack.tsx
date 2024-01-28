@@ -26,6 +26,7 @@ import ContactMap from "../screens/profile/map";
 import Faq from "../screens/profile/faq";
 import BookingDetails from "../screens/profile/bookingDetails";
 import RateBooking from "../screens/profile/rateBooking";
+import ModifyBooking from "../screens/profile/modifyBooking";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +60,7 @@ const ProfileStack = ({
       <Stack.Screen name="Payment" component={Payment} />
       <Stack.Screen name="Bookings" component={Bookings} />
       <Stack.Screen name="BookingDetails" component={BookingDetails} />
+      <Stack.Screen name="ModifyBooking" component={ModifyBooking} />
       <Stack.Screen name="RateBooking" component={RateBooking} />
       <Stack.Screen name="Referrals" component={Referrals} />
       <Stack.Screen name="Packages" component={Packages} />

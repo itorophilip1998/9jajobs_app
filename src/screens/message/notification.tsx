@@ -138,7 +138,7 @@ const Notification = ({
                   {convertTo12HourFormat(route.params?.data?.booking?.time)}
                 </SmallText>
               </View>
-              <View
+              {/* <View
                 style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
                 className="py-2 flex-row justify-between items-center"
               >
@@ -153,7 +153,7 @@ const Notification = ({
                     route.params?.data?.booking?.status || ""
                   )}
                 </SmallText>
-              </View>
+              </View> */}
               <View
                 style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
                 className="py-2 flex-row justify-between items-center"
@@ -162,10 +162,10 @@ const Notification = ({
                   style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
                   className="text-[#696969] text-left p-0 text-[15px]"
                 >
-                  Service Provider
+                  Service Receiver
                 </SmallText>
                 <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
-                  {route.params?.data?.booking?.listings?.user?.name}
+                  {route.params?.data?.booking?.user?.name}
                 </SmallText>
               </View>
               <View
@@ -182,7 +182,7 @@ const Notification = ({
                   numberOfLine={1}
                   className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
                 >
-                  {route.params?.data?.booking?.listings?.listing_address}
+                  {route.params?.data?.booking?.location || "N/A"}
                 </SmallText>
               </View>
               <View
@@ -199,8 +199,7 @@ const Notification = ({
                   numberOfLine={1}
                   className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
                 >
-                  {route.params?.data?.booking?.listings?.listing_phone ||
-                    route.params?.data?.booking?.listings?.user?.phone}
+                  {route.params?.data?.booking?.user?.phone || "N/A"}
                 </SmallText>
               </View>
               {route.params?.data?.booking?.status === "pending" && (

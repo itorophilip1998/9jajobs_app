@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, KeyboardAvoidingView, Platform } from "react-native";
 import React from "react";
 import { Paystack, paystackProps } from "react-native-paystack-webview";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +10,7 @@ import { initiateWalletTransaction } from "../../api/wallet";
 import Toast from "react-native-toast-message";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { width, height } from "../../utility/constant";
 
 const PaystackScreen = ({
   navigation,
@@ -19,10 +20,19 @@ const PaystackScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const dispatch = useDispatch();
-  const { profile } = useSelector((state: RootState) => state.auth);
+  const { profile, darkMode } = useSelector((state: RootState) => state.auth);
+
   return (
-    <SafeAreaView className="flex-1">
-      <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 items-center bg-[#0f0f0f]"
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: darkMode ? "black" : "#D4E1D2",
+      }}
+    >
+      <SafeAreaView className="flex-1 w-full">
         <Paystack
           paystackKey="pk_test_b9ac9968f82485184ceaa9a31ab524bdc9efb58c"
           billingEmail={profile?.email}
@@ -51,7 +61,7 @@ const PaystackScreen = ({
               },
               (response) => {
                 dispatch(SET_LOADER(false));
-                route.params?.callback && route.params?.callback(); 
+                route.params?.callback && route.params?.callback();
               },
               (error) => {
                 dispatch(SET_LOADER(false));
@@ -63,8 +73,8 @@ const PaystackScreen = ({
             );
           }}
         />
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
