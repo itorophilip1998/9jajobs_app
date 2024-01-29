@@ -97,6 +97,7 @@ export const updateBooking = async (
     time?: string;
     date?: string;
     location?: string;
+    modify?: boolean;
   },
   execute: (e: any) => void,
   error: (e: string) => void
@@ -106,6 +107,7 @@ export const updateBooking = async (
   formData.append("status", data.status);
   data?.time && formData.append("time", data?.time);
   data?.date && formData.append("date", data?.date);
+  formData.append("modify", data?.modify ? "true" : "false");
   data?.location && formData.append("location", data?.location);
 
   var config = {

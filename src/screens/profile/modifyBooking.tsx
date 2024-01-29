@@ -76,6 +76,7 @@ const ModifyBooking = ({
           date,
           location,
           time,
+          modify: true,
         },
         (response) => {
           dispatch(SET_LOADER(false));

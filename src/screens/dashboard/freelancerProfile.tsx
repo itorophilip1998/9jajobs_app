@@ -79,7 +79,7 @@ const FreelancerProfile = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const dispatch = useDispatch();
-  const { darkMode, loggedIn, access_token } = useSelector(
+  const { darkMode, loggedIn, access_token, profile } = useSelector(
     (state: RootState) => state.auth
   );
   const [amenities, setAmenities] = React.useState<any[]>([]);
@@ -950,23 +950,29 @@ const FreelancerProfile = ({
                 text="Book Date"
                 buttonStyle={{ width: "100%" }}
                 onPress={() => {
-                  if (date === "") {
+                  if (route.params?.data?.user?.id === profile?.id) {
                     Toast.show({
-                      type: "success",
+                      type: "error",
+                      text1: "You cannot book yourself",
+                    });
+                    return;
+                  } else if (date === "") {
+                    Toast.show({
+                      type: "error",
                       text1: "Date cannot be empty",
                     });
                     return;
                   }
                   if (time === "") {
                     Toast.show({
-                      type: "success",
+                      type: "error",
                       text1: "Time cannot be empty",
                     });
                     return;
                   }
                   if (location === "") {
                     Toast.show({
-                      type: "success",
+                      type: "error",
                       text1: "Location cannot be empty",
                     });
                     return;
