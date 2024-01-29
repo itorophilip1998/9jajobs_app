@@ -178,7 +178,7 @@ const NavigationSetup = () => {
             console.log(error);
           }
         );
-      }, 1 * 60 * 60 * 1000);
+      }, 10 * 1000);
     } else {
       clearTimeout(timer);
     }
@@ -260,7 +260,7 @@ const AppNavigator = () => {
     if (loggedIn) {
       getUser(
         (response) => {
-          // console.log(response);
+          // console.log("profile", response);
           dispatch(SET_PROFILE(response));
         },
         (error) => {

@@ -2,6 +2,7 @@ import axios from "axios";
 import { store } from "../store";
 import { LOGIN, SET_TOKEN, SET_PROFILE } from "../store/authSlice";
 import { BASE_URL } from "./config";
+import moment from "moment";
 
 export const addListing = async (
   data: {
@@ -51,6 +52,16 @@ export const addListing = async (
   formData.append("listing_oh_sunday", data.listing_oh_sunday);
   formData.append("listing_featured_photo", data.listing_featured_photo);
   formData.append("listing_category_id", data.listing_category_id);
+  formData.append(
+    "start_date",
+    moment(new Date().toISOString()).format("YYYY-MM-DD")
+  );
+  formData.append(
+    "end_date",
+    moment(
+      new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toISOString()
+    ).format("YYYY-MM-DD")
+  );
   formData.append("listing_status", data.listing_status);
   formData.append("listing_creation_amount", data.listing_creation_amount);
   formData.append("is_featured", data.is_featured.toString());
@@ -156,18 +167,20 @@ export const editListing = async (
   formData.append("listing_category_id", data.listing_category_id);
   formData.append("listing_status", data.listing_status);
   formData.append("is_featured", data.is_featured.toString());
- data.photo_list.map((item, idx) =>
-   formData.append("photo_list[" + idx + "]", item)
- );
- data.video.map((item, idx) => formData.append("video[" + idx + "]", item));
- data.amenity.map((item, idx) => formData.append("amenity[" + idx + "]", item));
- data.social_media
-   .filter((item) => typeof item === "object" && item !== null)
-   .map((item, index) =>
-     Object.entries(item).forEach(([key, value]) => {
-       formData.append(`social_media[${index}][${key}]`, value);
-     })
-   );
+  data.photo_list.map((item, idx) =>
+    formData.append("photo_list[" + idx + "]", item)
+  );
+  data.video.map((item, idx) => formData.append("video[" + idx + "]", item));
+  data.amenity.map((item, idx) =>
+    formData.append("amenity[" + idx + "]", item)
+  );
+  data.social_media
+    .filter((item) => typeof item === "object" && item !== null)
+    .map((item, index) =>
+      Object.entries(item).forEach(([key, value]) => {
+        formData.append(`social_media[${index}][${key}]`, value);
+      })
+    );
 
   var config = {
     method: "post",
@@ -244,20 +257,34 @@ export const deleteListing = async (
   }
 };
 
-
 export const renewListing = async (
   data: {
-    id: number;
+    listing_id: string;
+    listing_creation_amount: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void
 ) => {
+  const formData = new FormData();
+  formData.append("listing_id", data.listing_id);
+  formData.append("listing_creation_amount", data.listing_creation_amount);
+  formData.append(
+    "start_date",
+    moment(new Date().toISOString()).format("YYYY-MM-DD")
+  );
+  formData.append(
+    "end_date",
+    moment(
+      new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toISOString()
+    ).format("YYYY-MM-DD")
+  );
   var config = {
-    method: "delete",
-    url: `${BASE_URL}/delete-listings/${data.id}`,
+    method: "post",
+    url: `${BASE_URL}/renew-listings`,
     headers: {
       Authorization: `Bearer ${store.getState().auth.access_token}`,
     },
+    data: formData,
   };
 
   try {

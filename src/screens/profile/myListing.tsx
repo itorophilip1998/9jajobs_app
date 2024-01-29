@@ -32,7 +32,7 @@ import { useIsFocused } from "@react-navigation/native";
 import userImg from "../../../assets/images/user.jpg";
 import { getRating } from "../../api/rating";
 import ReviewCard from "../../components/reviewCard";
-import { deleteListing } from "../../api/listings";
+import { deleteListing, renewListing } from "../../api/listings";
 import { GradientText } from "../../components/gradientText";
 import ErrorVerifyModalContent from "../../components/errorVerifyModalContent";
 import { DelayFor } from "../../utility/helpers";
@@ -44,7 +44,7 @@ const MyListing = ({
 }) => {
   const focus = useIsFocused();
   const dispatch = useDispatch();
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [listings, setListings] = React.useState<any[]>([]);
   const [details, setDetails] = React.useState<any>(null);
   const [search, setSearch] = React.useState<string>("");
@@ -79,6 +79,7 @@ const MyListing = ({
       (response) => {
         dispatch(SET_LOADER(false));
         setListings(response);
+        console.log(response);
         setLoaded(true);
       },
       (error) => {
@@ -97,6 +98,42 @@ const MyListing = ({
       handleSearch();
     }
   }, [focus]);
+
+  const reactivate = (id: string, amount: string) => {
+    dispatch(SET_LOADER(true));
+    renewListing(
+      { listing_id: id, listing_creation_amount: amount },
+      (response) => {
+        getUserListing(
+          {
+            listing_name: search,
+          },
+          (response1) => {
+            dispatch(SET_LOADER(false));
+            Toast.show({
+              type: "success",
+              text1: response.message,
+            });
+            setListings(response1);
+          },
+          (error) => {
+            dispatch(SET_LOADER(false));
+            Toast.show({
+              type: "error",
+              text1: error,
+            });
+          }
+        );
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  };
 
   return (
     <KeyboardAvoidingView
@@ -149,17 +186,17 @@ const MyListing = ({
         <FlatList
           ListHeaderComponent={
             <>
-              <Spacer value={H("3%")} axis="vertical" />
+              <Spacer value={H("2%")} axis="vertical" />
               <View className="px-3 flex-row justify-between items-center">
                 <SmallText
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
-                  className="text-[#696969] text-[20px] text-left p-0 w-[33%]"
+                  className="text-[#696969] text-[20px] text-center p-0 w-[50%]"
                 >
-                  Brand Name
+                  My Listings
                 </SmallText>
                 <SmallText
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
-                  className="text-[#696969] text-[20px] text-left p-0 w-[65%]"
+                  className="text-[#696969] text-[20px] text-center p-0 w-[50%]"
                 >
                   Action
                 </SmallText>
@@ -218,32 +255,38 @@ const MyListing = ({
                       : "#696969",
                 }}
                 numberOfLine={1}
-                className="text-[#D4E1D2] text-[19px] w-[33%] text-left p-0"
+                className="text-[#D4E1D2] text-[19px] flex-1 text-left p-0"
               >
-                {item.listing_name}
+                {item.listing_name}({item?.listing_subscription?.status})
               </SmallText>
-              <View className="w-[65%] flex-row justify-between items-center">
-                <TouchableOpacity
-                  style={[
-                    !darkMode && shadowBoxDark,
-                    {
-                      backgroundColor: darkMode ? "#0f0f0f" : "white",
-                    },
-                  ]}
-                  // onPress={() =>
-                  //   navigation.navigate("EditListing", { data: item })
-                  // }
-                  className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
-                >
-                  <MaterialIcons
-                    name="autorenew"
-                    size={15}
-                    color={COLORS.primary}
-                  />
-                  <SmallText className="text-primary p-0 text-[13px] w- pl-1">
-                    Renew
-                  </SmallText>
-                </TouchableOpacity>
+              <View className=" flex-row justify-between items-center">
+                {item?.listing_subscription?.status !== "active" && (
+                  <TouchableOpacity
+                    style={[
+                      !darkMode && shadowBoxDark,
+                      {
+                        backgroundColor: darkMode ? "#0f0f0f" : "white",
+                      },
+                    ]}
+                    onPress={() =>
+                      reactivate(
+                        item.id,
+                        item?.listing_subscription?.amount ||
+                          profile?.listing_creation_amount
+                      )
+                    }
+                    className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
+                  >
+                    <MaterialIcons
+                      name="autorenew"
+                      size={15}
+                      color={COLORS.primary}
+                    />
+                    <SmallText className="text-primary p-0 text-[13px] pl-1">
+                      Renew
+                    </SmallText>
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity
                   style={[
                     !darkMode && shadowBoxDark,
@@ -254,10 +297,10 @@ const MyListing = ({
                   onPress={() =>
                     navigation.navigate("EditListing", { data: item })
                   }
-                  className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
+                  className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg ml-2"
                 >
                   <AntDesign name="edit" size={15} color={COLORS.primary} />
-                  <SmallText className="text-primary p-0 text-[13px] w- pl-1">
+                  <SmallText className="text-primary p-0 text-[13px] pl-1">
                     Edit
                   </SmallText>
                 </TouchableOpacity>
@@ -268,7 +311,7 @@ const MyListing = ({
                       backgroundColor: darkMode ? "#0f0f0f" : "white",
                     },
                   ]}
-                  className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
+                  className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg ml-2"
                   onPress={() => {
                     setListingId(item);
                   }}

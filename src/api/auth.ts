@@ -19,15 +19,13 @@ export const refreshToken = async (
       Authorization: `Bearer ${store.getState().auth.access_token}`,
       "Content-Type": "multipart/form-data",
     },
+    data: formData,
   };
 
   try {
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    store.dispatch(LOGIN(false));
-    store.dispatch(SET_TOKEN(null));
-    store.dispatch(SET_PROFILE(null));
     if (err?.message === "Network Error") {
       error("No internet connection");
       return;

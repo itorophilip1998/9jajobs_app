@@ -324,17 +324,17 @@ const Search = ({
                 details ? details.geometry.location.lng.toString() : null
               );
               ref.current?.close();
-              DelayFor(200, () => {
+              DelayFor(700, () => {
                 dispatch(SET_LOADER(true));
                 getAllListing(
                   {
-                    // listing_name: search,
                     autocomplete: true,
                     listing_city: `${city?.long_name}`,
                   },
                   (response) => {
                     dispatch(SET_LOADER(false));
-                    setSearchResults(response.listing);
+                    console.log(response.auto_complete);
+                    setSearchResults(response.auto_complete);
                   },
                   (error) => {
                     dispatch(SET_LOADER(false));
