@@ -840,7 +840,7 @@ const FreelancerProfile = ({
         </ScrollView>
       </SafeAreaView>
 
-      <BottomSheet ref={bookRef} duration={3000} height={200}>
+      <BottomSheet ref={bookRef} duration={3000} height={H("50%")}>
         <View
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
           className="flex-1 bg-[#1b1b1b] py-3 px-3"

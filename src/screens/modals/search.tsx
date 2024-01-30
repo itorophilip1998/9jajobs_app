@@ -173,7 +173,8 @@ const Search = ({
         <FlatList
           showsVerticalScrollIndicator={false}
           data={
-            searchResults && [
+            searchResults &&
+            search.length > 0 && [
               ...searchResults?.listing_category_name
                 ?.filter((item: any) =>
                   item.toLowerCase().includes(search.toLowerCase())

@@ -142,15 +142,21 @@ const NavigationSetup = () => {
   }, []);
 
   React.useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
     if (Boolean(LoggedIn === true && authToken !== null)) {
-      getNotificationCount(
-        (response) => {
-          dispatch(SET_NOTIFICATION(response));
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      timer = setTimeout(() => {
+        getNotificationCount(
+          (response) => {
+            // console.log(response);
+            dispatch(SET_NOTIFICATION(response));
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }, 5 * 1000);
+    } else {
+      clearTimeout(timer);
     }
   }, [LoggedIn, authToken]);
 
@@ -178,7 +184,7 @@ const NavigationSetup = () => {
             console.log(error);
           }
         );
-      }, 10 * 1000);
+      }, 30 * 60 * 1000);
     } else {
       clearTimeout(timer);
     }

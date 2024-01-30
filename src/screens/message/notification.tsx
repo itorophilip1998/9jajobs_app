@@ -41,7 +41,7 @@ const Notification = ({
   route: RouteProp<any>;
 }) => {
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
-  const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const updateStatus = (
@@ -154,20 +154,37 @@ const Notification = ({
                   )}
                 </SmallText>
               </View> */}
-              <View
-                style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
-                className="py-2 flex-row justify-between items-center"
-              >
-                <SmallText
-                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                  className="text-[#696969] text-left p-0 text-[15px]"
+              {profile?.id === route.params?.data?.bookings?.user?.id ? (
+                <View
+                  style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                  className="py-2 flex-row justify-between items-center"
                 >
-                  Service Receiver
-                </SmallText>
-                <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
-                  {route.params?.data?.booking?.user?.name}
-                </SmallText>
-              </View>
+                  <SmallText
+                    style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                    className="text-[#696969] text-left p-0 text-[15px]"
+                  >
+                    Service Provider
+                  </SmallText>
+                  <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                    {route.params?.data?.booking?.listings?.user?.name}
+                  </SmallText>
+                </View>
+              ) : (
+                <View
+                  style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                  className="py-2 flex-row justify-between items-center"
+                >
+                  <SmallText
+                    style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                    className="text-[#696969] text-left p-0 text-[15px]"
+                  >
+                    Service Receiver
+                  </SmallText>
+                  <SmallText className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]">
+                    {route.params?.data?.booking?.user?.name}
+                  </SmallText>
+                </View>
+              )}
               <View
                 style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
                 className="py-2 flex-row justify-between items-center"
@@ -185,55 +202,101 @@ const Notification = ({
                   {route.params?.data?.booking?.location || "N/A"}
                 </SmallText>
               </View>
-              <View
-                style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
-                className="py-2 flex-row justify-between items-center"
-              >
-                <SmallText
-                  style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                  className="text-[#696969] text-left p-0 text-[15px]"
+              {profile?.id === route.params?.data?.booking?.user?.id ? (
+                <View
+                  style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                  className="py-2 flex-row justify-between items-center"
                 >
-                  Phone
-                </SmallText>
-                <SmallText
-                  numberOfLine={1}
-                  className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
-                >
-                  {route.params?.data?.booking?.user?.phone || "N/A"}
-                </SmallText>
-              </View>
-              {route.params?.data?.booking?.status === "pending" && (
-                <>
-                  <View
-                    className="w-[100%] mx-auto mt-8 rounded-lg"
-                    style={shadowBoxDark}
+                  <SmallText
+                    style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                    className="text-[#696969] text-left p-0 text-[15px]"
                   >
+                    Phone
+                  </SmallText>
+                  <SmallText
+                    numberOfLine={1}
+                    className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
+                  >
+                    {route.params?.data?.booking?.listings?.listing_phone ||
+                      route.params?.data?.booking?.listings?.user?.phone ||
+                      "N/A"}
+                  </SmallText>
+                </View>
+              ) : (
+                <View
+                  style={{ borderTopColor: darkMode ? "#0F0F0F" : "#69696926" }}
+                  className="py-2 flex-row justify-between items-center"
+                >
+                  <SmallText
+                    style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                    className="text-[#696969] text-left p-0 text-[15px]"
+                  >
+                    Phone
+                  </SmallText>
+                  <SmallText
+                    numberOfLine={1}
+                    className="text-[#6A6A6A] text-right p-0 text-[15px] w-[70%]"
+                  >
+                    {route.params?.data?.booking?.user?.phone || "N/A"}
+                  </SmallText>
+                </View>
+              )}
+              {profile?.id !== route.params?.data?.booking?.user?.id &&
+                route.params?.data?.booking?.status === "pending" && (
+                  <>
+                    <View
+                      className="w-[100%] mx-auto mt-8 rounded-lg"
+                      style={shadowBoxDark}
+                    >
+                      <Button
+                        text="Accept Booking"
+                        buttonStyleClassName="rounded-lg"
+                        buttonStyle={{
+                          width: "100%",
+                          marginHorizontal: "auto",
+                        }}
+                        onPress={() => updateStatus("accepted")}
+                      />
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => setModalVisible(true)}
+                      style={shadowBoxDark}
+                      className="mx-auto w-[100%] mt-5 border border-primary items-center py-3 rounded-lg"
+                    >
+                      <SmallText
+                        style={{ color: darkMode ? "#fff" : "#0f0f0f" }}
+                      >
+                        Decline Booking
+                      </SmallText>
+                    </TouchableOpacity>
+                  </>
+                )}
+              {profile?.id === route.params?.data?.booking?.user?.id &&
+                route.params?.data?.booking?.status === "pending" && (
+                  <>
                     <Button
-                      text="Accept Booking"
-                      buttonStyleClassName="rounded-lg"
+                      text="Modify Booking"
+                      buttonStyleClassName="rounded-lg mt-8"
                       buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
-                      onPress={() => updateStatus("accepted")}
+                      onPress={() =>
+                        navigation.navigate("ModifyBooking", {
+                          data: route.params?.data,
+                        })
+                      }
                     />
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => setModalVisible(true)}
-                    style={shadowBoxDark}
-                    className="mx-auto w-[100%] mt-5 border border-primary items-center py-3 rounded-lg"
-                  >
-                    <SmallText style={{ color: darkMode ? "#fff" : "#0f0f0f" }}>
-                      Decline Booking
-                    </SmallText>
-                  </TouchableOpacity>
-                </>
-              )}
-              {route.params?.data?.booking?.status === "accepted" && (
-                <Button
-                  text="Cancel Booking"
-                  buttonStyleClassName="rounded-lg"
-                  buttonStyle={{ width: "100%", marginHorizontal: "auto" }}
-                  onPress={() => updateStatus("cancelled")}
-                />
-              )}
+                    <TouchableOpacity
+                      onPress={() => updateStatus("cancelled")}
+                      style={shadowBoxDark}
+                      className="mx-auto w-[100%] mt-5 border border-primary items-center py-3 rounded-lg"
+                    >
+                      <SmallText
+                        style={{ color: darkMode ? "#fff" : "#0f0f0f" }}
+                      >
+                        Cancel Booking
+                      </SmallText>
+                    </TouchableOpacity>
+                  </>
+                )}
             </>
           ) : (
             <SmallText
