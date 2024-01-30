@@ -32,7 +32,7 @@ const PaystackScreen = ({
           activityIndicatorColor="transparent"
           onCancel={(e) => {
             // handle response here
-            console.log(e);
+            // console.log(e);
             navigation.goBack();
           }}
           onSuccess={(res) => {
