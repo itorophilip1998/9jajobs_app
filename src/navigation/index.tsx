@@ -142,22 +142,22 @@ const NavigationSetup = () => {
   }, []);
 
   React.useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
-    if (Boolean(LoggedIn === true && authToken !== null)) {
-      timer = setTimeout(() => {
+    const getData = () => {
+      if (Boolean(LoggedIn === true && authToken !== null)) {
         getNotificationCount(
           (response) => {
-            // console.log(response);
             dispatch(SET_NOTIFICATION(response));
           },
           (error) => {
             console.log(error);
           }
         );
-      }, 5 * 1000);
-    } else {
-      clearTimeout(timer);
-    }
+      }
+    };
+    getData();
+
+    const intervalId = setInterval(getData, 5000);
+    return () => clearInterval(intervalId);
   }, [LoggedIn, authToken]);
 
   React.useEffect(() => {
@@ -172,9 +172,8 @@ const NavigationSetup = () => {
   }, []);
 
   React.useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
-    if (Boolean(LoggedIn === true && authToken !== null)) {
-      timer = setTimeout(() => {
+    const getFetchData = () => {
+      if (Boolean(LoggedIn === true && authToken !== null)) {
         refreshToken(
           { expo_token: expoPushToken.length > 0 ? expoPushToken : null },
           (response) => {
@@ -184,11 +183,15 @@ const NavigationSetup = () => {
             console.log(error);
           }
         );
-      }, 30 * 60 * 1000);
-    } else {
-      clearTimeout(timer);
-    }
-    // return () => clearTimeout(timer);
+      }
+    };
+
+    getFetchData();
+
+    const intervalId = setInterval(getFetchData, 30 * 60 * 1000);
+
+    return () => clearTimeout(intervalId);
+    
   }, [LoggedIn, authToken, expoPushToken]);
 
   React.useEffect(() => {
