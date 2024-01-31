@@ -52,23 +52,36 @@ const Chat = ({
   const [visible1, setVisible1] = React.useState<boolean>(false);
   const [selectedImages, setSelectedImages] = React.useState<any[]>([]);
   React.useEffect(() => {
+    let timer: any;
     if (focus) {
       if (!Boolean(loggedIn && access_token)) {
         navigation.navigate("Signin", { two_step: true });
       } else {
-        dispatch(SET_LOADER(true));
-        markRead(
-          { friend_id: route.params?.data?.friend_id },
-          (response1) => {
-            getNotificationCount(
-              (response) => {
-                dispatch(SET_NOTIFICATION(response));
-                getChats(
+        const getFetchData = (mainLoad?: boolean) => {
+          mainLoad && dispatch(SET_LOADER(true));
+          getChats(
+            { friend_id: route.params?.data?.friend?.id },
+            (response) => {
+              setChats(response);
+              if (
+                response?.chats[response?.chats?.length - 1].status === "read"
+              ) {
+                markRead(
                   { friend_id: route.params?.data?.friend?.id },
-                  (response) => {
-                    console.log(response);
-                    setChats(response);
-                    dispatch(SET_LOADER(false));
+                  (response1) => {
+                    getNotificationCount(
+                      (response2) => {
+                        dispatch(SET_NOTIFICATION(response2));
+                        mainLoad && dispatch(SET_LOADER(false));
+                      },
+                      (error) => {
+                        Toast.show({
+                          type: "error",
+                          text1: error,
+                        });
+                        dispatch(SET_LOADER(false));
+                      }
+                    );
                   },
                   (error) => {
                     Toast.show({
@@ -78,26 +91,38 @@ const Chat = ({
                     dispatch(SET_LOADER(false));
                   }
                 );
-              },
-              (error) => {
-                Toast.show({
-                  type: "error",
-                  text1: error,
-                });
-                dispatch(SET_LOADER(false));
+              } else {
+                getNotificationCount(
+                  (response2) => {
+                    dispatch(SET_NOTIFICATION(response2));
+                    mainLoad && dispatch(SET_LOADER(false));
+                  },
+                  (error) => {
+                    Toast.show({
+                      type: "error",
+                      text1: error,
+                    });
+                    dispatch(SET_LOADER(false));
+                  }
+                );
               }
-            );
-          },
-          (error) => {
-            Toast.show({
-              type: "error",
-              text1: error,
-            });
-            dispatch(SET_LOADER(false));
-          }
-        );
+            },
+            (error) => {
+              Toast.show({
+                type: "error",
+                text1: error,
+              });
+              dispatch(SET_LOADER(false));
+            }
+          );
+        };
+
+        getFetchData(true);
+
+        timer = setInterval(() => getFetchData(false), 5000);
       }
     }
+    return () => clearInterval(timer);
   }, [focus, loggedIn, access_token]);
 
   const sendMessage = () => {
@@ -105,7 +130,7 @@ const Chat = ({
     setLoader(true);
     chatUser(
       {
-        friend_id: route.params?.data?.friend_id,
+        friend_id: route.params?.data?.friend?.id,
         message: message.trim() === "" ? "Photo" : message,
         photo: selectedImages.map((item) => ({
           name:
@@ -118,11 +143,11 @@ const Chat = ({
       (response1) => {
         setMessage("");
         markRead(
-          { friend_id: route.params?.data?.friend_id },
+          { friend_id: route.params?.data?.friend?.id },
           (response2) => {
             dispatch(SET_NOTIFICATION({ messages: 0 }));
             getChats(
-              { friend_id: route.params?.data?.friend_id },
+              { friend_id: route.params?.data?.friend?.id },
               (response) => {
                 setLoader(false);
                 setChats(response);

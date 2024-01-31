@@ -209,7 +209,9 @@ const FreelancerProfile = ({
                 onPress={() =>
                   route.params?.data?.user
                     ? navigation.navigate("Chat", {
-                        data: route.params?.data?.user,
+                        data: {
+                          friend: route.params?.data?.user,
+                        },
                       })
                     : Toast.show({
                         type: "error",

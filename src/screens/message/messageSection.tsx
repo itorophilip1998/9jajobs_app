@@ -46,11 +46,11 @@ const MessageSection = ({
   const [messagesList, setMessagesList] = React.useState<any[]>([]);
   const [loaded, setLoaded] = React.useState<boolean>(false);
 
-  const getMessages = () => {
-    dispatch(SET_LOADER(true));
+  const getMessages = (mainLoad?: boolean) => {
+    mainLoad && dispatch(SET_LOADER(true));
     getFriendList(
       (response) => {
-        dispatch(SET_LOADER(false));
+        mainLoad && dispatch(SET_LOADER(false));
         setMessagesList(response.chatted_users);
         setLoaded(true);
       },
@@ -60,15 +60,19 @@ const MessageSection = ({
           text1: error,
         });
         setLoaded(true);
-        dispatch(SET_LOADER(false));
+        mainLoad && dispatch(SET_LOADER(false));
       }
     );
   };
 
   React.useEffect(() => {
+    let timer: any;
     if (focus) {
-      getMessages();
+      getMessages(true);
+      timer = setInterval(() => getMessages(false), 5000);
     }
+
+    return () => clearInterval(timer);
   }, [focus]);
   return (
     <View className="flex-1">
