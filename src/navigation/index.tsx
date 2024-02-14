@@ -171,28 +171,28 @@ const NavigationSetup = () => {
     );
   }, []);
 
-  React.useEffect(() => {
-    const getFetchData = () => {
-      if (Boolean(LoggedIn === true && authToken !== null)) {
-        refreshToken(
-          { expo_token: expoPushToken.length > 0 ? expoPushToken : null },
-          (response) => {
-            dispatch(SET_TOKEN(response.access_token));
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-    };
+  // React.useEffect(() => {
+  //   const getFetchData = () => {
+  //     if (Boolean(LoggedIn === true && authToken !== null)) {
+  //       refreshToken(
+  //         { expo_token: expoPushToken.length > 0 ? expoPushToken : null },
+  //         (response) => {
+  //           dispatch(SET_TOKEN(response.access_token));
+  //         },
+  //         (error) => {
+  //           console.log(error);
+  //         }
+  //       );
+  //     }
+  //   };
 
-    getFetchData();
+  //   getFetchData();
 
-    const intervalId = setInterval(getFetchData, 30 * 60 * 1000);
+  //   const intervalId = setInterval(getFetchData, 30 * 60 * 1000);
 
-    return () => clearTimeout(intervalId);
-    
-  }, [LoggedIn, authToken, expoPushToken]);
+  //   return () => clearTimeout(intervalId);
+
+  // }, [LoggedIn, authToken, expoPushToken]);
 
   React.useEffect(() => {
     (async () => {
