@@ -11,7 +11,6 @@ import React from "react";
 import TitleWithButton from "../../components/titleWithButton";
 import { width, height } from "../../utility/constant";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CATEGORIES } from "../../data/category";
 import CategoryCard from "../../components/categoryCard";
 import {
   widthPercentageToDP as W,

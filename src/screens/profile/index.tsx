@@ -58,6 +58,11 @@ const routes = [
     icon: FeedBackIcon,
   },
   { path: "Faq", name: "FAQ", icon: FaqIcon },
+  {
+    path: "Terms",
+    name: "Terms & Condition",
+    icon: PrivacyIcon,
+  },
   { path: "About", name: "About", icon: AboutIcon },
 ];
 

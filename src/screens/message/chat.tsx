@@ -58,13 +58,13 @@ const Chat = ({
       } else {
         dispatch(SET_LOADER(true));
         markRead(
-          { friend_id: route.params?.data?.id },
+          { friend_id: route.params?.data?.friend_id },
           (response1) => {
             getNotificationCount(
               (response) => {
                 dispatch(SET_NOTIFICATION(response));
                 getChats(
-                  { friend_id: route.params?.data?.id },
+                  { friend_id: route.params?.data?.friend?.id },
                   (response) => {
                     console.log(response);
                     setChats(response);
@@ -105,7 +105,7 @@ const Chat = ({
     setLoader(true);
     chatUser(
       {
-        friend_id: route.params?.data?.id,
+        friend_id: route.params?.data?.friend_id,
         message: message.trim() === "" ? "Photo" : message,
         photo: selectedImages.map((item) => ({
           name:
@@ -118,11 +118,11 @@ const Chat = ({
       (response1) => {
         setMessage("");
         markRead(
-          { friend_id: route.params?.data?.id },
+          { friend_id: route.params?.data?.friend_id },
           (response2) => {
             dispatch(SET_NOTIFICATION({ messages: 0 }));
             getChats(
-              { friend_id: route.params?.data?.id },
+              { friend_id: route.params?.data?.friend_id },
               (response) => {
                 setLoader(false);
                 setChats(response);
@@ -209,9 +209,9 @@ const Chat = ({
             <View className="flex-row items-center ml-3">
               <Image
                 source={
-                  route.params?.data?.photo
+                  route.params?.data?.friend?.photo
                     ? {
-                        uri: route.params?.data?.photo,
+                        uri: route.params?.data?.friend?.photo,
                       }
                     : userImg
                 }
@@ -223,7 +223,7 @@ const Chat = ({
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="text-[#D4E1D2] text-left p-0 text-[20px]"
                 >
-                  {route.params?.data?.name}
+                  {route.params?.data?.friend?.name}
                 </SmallText>
                 {/* <SmallText className="text-left p-0 text-[14px] text-[#696969]">
                   Online
@@ -232,10 +232,15 @@ const Chat = ({
             </View>
           </View>
           <View className="flex-row items-center">
-            {route.params?.data?.phone && (
+            {route.params?.data?.friend?.phone && (
               <Pressable
                 onPress={() =>
-                  Linking.openURL(`tel:${route.params?.data?.phone}`)
+                  Linking.openURL(
+                    `tel:${route.params?.data?.friend?.phone?.replace(
+                      /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
+                      ""
+                    )}`
+                  )
                 }
                 className="mr-3"
               >
@@ -319,12 +324,11 @@ const Chat = ({
           if (value === "Spam") {
             dispatch(SET_LOADER(true));
             spamUser(
-              { friend_id: route.params?.data?.id, status: "spam" },
+              { friend_id: route.params?.data?.friend?.id, status: "spam" },
               (response1) => {
                 getChats(
-                  { friend_id: route.params?.data?.id },
+                  { friend_id: route.params?.data?.friend?.id },
                   (response) => {
-                    console.log(response);
                     dispatch(SET_LOADER(false));
                     setChats(response);
                   },
@@ -348,12 +352,11 @@ const Chat = ({
           } else {
             dispatch(SET_LOADER(true));
             spamUser(
-              { friend_id: route.params?.data?.id, status: "unspam" },
+              { friend_id: route.params?.data?.friend?.id, status: "unspam" },
               (response1) => {
                 getChats(
-                  { friend_id: route.params?.data?.id },
+                  { friend_id: route.params?.data?.friend?.id },
                   (response) => {
-                    console.log(response);
                     dispatch(SET_LOADER(false));
                     setChats(response);
                   },

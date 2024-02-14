@@ -48,7 +48,7 @@
     "react-native-maps": "1.7.1",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-paystack-webview": "^4.0.3",
-    "react-native-raw-bottom-sheet": "git+https://github.com/vincentovie39/react-native-raw-bottom-sheet.git#master",
+    "react-native-raw-bottom-sheet": "~2.2.0",
     "react-native-reanimated": "~3.3.0",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "4.6.3",

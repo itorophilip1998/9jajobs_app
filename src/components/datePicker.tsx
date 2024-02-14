@@ -13,10 +13,12 @@ export const DatePicker = ({
   setDateActive,
   date,
   setDate,
+  className,
 }: {
   isDate: boolean;
   date: string;
   setDate: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
   setDateActive: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
@@ -27,7 +29,7 @@ export const DatePicker = ({
         defaultValue={date}
         editable={false}
         placeholder="Select Date"
-        containerClassName="border border-[#696969] bg-[#000000]"
+        containerClassName={`border border-[#696969] bg-[#000000] ${className && className}`}
         containerStyle={{
           width: "100%",
           backgroundColor: darkMode ? "black" : "white",
@@ -44,7 +46,6 @@ export const DatePicker = ({
         mode="date"
         display={Platform.OS === "ios" ? "spinner" : "default"}
         onConfirm={(date) => {
-          // console.log();
           setDate(moment(date).format("YYYY-MM-DD"));
           setDateActive(false);
         }}
@@ -58,10 +59,12 @@ export const TimePicker = ({
   isTime,
   setTimeActive,
   time,
+  className,
   setTime,
 }: {
   isTime: boolean;
   time: string;
+  className?: string;
   setTime: React.Dispatch<React.SetStateAction<string>>;
   setTimeActive: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -73,7 +76,7 @@ export const TimePicker = ({
         defaultValue={time}
         editable={false}
         placeholder="Select Time"
-        containerClassName="border border-[#696969] bg-[#000000]"
+        containerClassName={`border border-[#696969] bg-[#000000] ${className && className}`}
         containerStyle={{
           width: "100%",
           backgroundColor: darkMode ? "black" : "white",

@@ -1,13 +1,24 @@
-import { View, Text, Animated, TouchableWithoutFeedback, UIManager, Platform, LayoutAnimation } from "react-native";
+import {
+  View,
+  Text,
+  Animated,
+  TouchableWithoutFeedback,
+  UIManager,
+  Platform,
+  LayoutAnimation,
+} from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import SmallText from "./smallText";
 import { AntDesign } from "@expo/vector-icons";
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const Accordion = ({ title, body }: { title: string; body: string }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
@@ -15,7 +26,7 @@ const Accordion = ({ title, body }: { title: string; body: string }) => {
   const [animation] = React.useState<Animated.Value>(new Animated.Value(0));
 
   const toggle = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setOpen(!open);
   };
 
@@ -25,11 +36,11 @@ const Accordion = ({ title, body }: { title: string; body: string }) => {
   });
   return (
     <View
-      className="rounded-md py-3 px-3"
+      className="rounded-md"
       style={{ backgroundColor: darkMode ? "#0f0f0f" : "#fff" }}
     >
       <TouchableWithoutFeedback onPress={toggle}>
-        <View className="flex-row justify-between items-center">
+        <View className="flex-row justify-between items-center rounded-md py-3 px-3">
           <SmallText
             style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
             className="font-RedHatDisplayRegular text-[16px] p-0 text-left"
@@ -44,11 +55,12 @@ const Accordion = ({ title, body }: { title: string; body: string }) => {
         </View>
       </TouchableWithoutFeedback>
       <View
-        style={{ height: open ? 'auto' : 0, overflow: 'hidden', paddingTop: 8 }}
+        className="px-3"
+        style={{ height: open ? "auto" : 0, overflow: "hidden", paddingTop: 8 }}
       >
         <Text
           style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
-          className="font-RedHatDisplayRegular text-[16px] p-0 text-left"
+          className="font-RedHatDisplayRegular text-[16px] p-0 text-left pb-4"
         >
           {body}
         </Text>

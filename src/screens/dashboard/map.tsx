@@ -45,6 +45,8 @@ const MapScreen = ({
         <MapView
           className="flex-1 w-full"
           provider={PROVIDER_GOOGLE}
+          minZoomLevel={7}
+          scrollEnabled={false}
           initialRegion={{
             latitude: Number(route.params?.data?.address_latitude),
             longitude: Number(route.params?.data?.address_longitude),

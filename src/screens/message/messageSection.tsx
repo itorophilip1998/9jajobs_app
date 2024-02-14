@@ -155,7 +155,7 @@ const MessageSection = ({
               return obj?.spam === null || obj?.spam === "unspam";
             } else if (status === "unread") {
               return (
-                obj.chats.status === "unread" &&
+                obj.status === "unread" &&
                 (obj?.spam === null || obj?.spam === "unspam")
               );
             } else if (status === "spam") {
@@ -164,7 +164,7 @@ const MessageSection = ({
             return false;
           })
           .filter((item) =>
-            item.name.toLowerCase().includes(search.toLowerCase())
+            item.friend.name.toLowerCase().includes(search.toLowerCase())
           )}
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => (
@@ -179,9 +179,9 @@ const MessageSection = ({
             <View className="w-[50%] flex-row items-center">
               <Image
                 source={
-                  item?.photo
+                  item?.friend?.photo
                     ? {
-                        uri: item?.photo,
+                        uri: item?.friend?.photo,
                       }
                     : userImg
                 }
@@ -193,21 +193,21 @@ const MessageSection = ({
                   style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                   className="text-[#D4E1D2] text-left p-0 text-[18px] mb-1"
                 >
-                  {item.name}
+                  {item?.friend?.name}
                 </SmallText>
                 <SmallText
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
                   className="text-left p-0 text-[14px] text-[#696969]"
                 >
-                  {item?.chats?.message || "Photo"}
+                  {item?.chat?.message || "Photo"}
                 </SmallText>
               </View>
             </View>
             <View className="h-[60px] justify-center items-end">
               <SmallText className="text-right p-0 text-[14px] text-[#696969] mb-2">
-                {moment(item?.chats?.created_at).format("DD/MM/YYYY") || ""}
+                {moment(item?.chat?.created_at).format("DD/MM/YYYY") || ""}
               </SmallText>
-              {item?.read === "unread" && (
+              {item?.status === "unread" && (
                 <GradientText className="text-primary font-RedHatDisplayRegular text-right p-0 text-[14px]">
                   New
                 </GradientText>

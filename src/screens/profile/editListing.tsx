@@ -30,7 +30,6 @@ import {
 } from "react-native-responsive-screen";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { AntDesign, Entypo, Feather, Ionicons } from "@expo/vector-icons";
-import { CATEGORIES } from "../../data/category";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { COLORS } from "../../utility/colors";
 import { FONTS } from "../../utility/fonts";
@@ -38,14 +37,12 @@ import { ResizeMode, Video } from "expo-av";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { shadowBoxDark } from "../../style/Typography";
-import { useAuthorize } from "../../hooks/useAuthorized";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import Toast from "react-native-toast-message";
 import {
   getAmenities,
   getCategoryListing,
-  getUserListing,
 } from "../../api/category";
 import { SET_LOADER } from "../../store/formDataSlice";
 import {
@@ -57,7 +54,7 @@ import {
   validatePhone,
   validateUrl,
 } from "../../utility/helpers";
-import { addListing, editListing } from "../../api/listings";
+import { editListing } from "../../api/listings";
 import { GradientText } from "../../components/gradientText";
 import { getFreeDiskStorageAsync } from "expo-file-system";
 
@@ -259,7 +256,7 @@ const EditListing = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         aspect: [4, 4],
         quality: 1,
-        allowsEditing: true,
+        // allowsEditing: true,
       });
 
       if (!result.canceled) {
@@ -1244,10 +1241,10 @@ const EditListing = ({
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
+              components: "country:NG"
             }}
             fetchDetails={true}
             enablePoweredByContainer={true}
-            minLength={2}
             renderRow={(rowData) => (
               <View
                 style={{
@@ -1265,7 +1262,7 @@ const EditListing = ({
                 <Text
                   style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#c6c6c6",
+                    color: "#0f0f0f",
                   }}
                 >
                   {rowData.description}

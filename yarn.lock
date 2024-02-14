@@ -7201,9 +7201,10 @@ react-native-paystack-webview@^4.0.3:
     react-native-webview "*"
     validator "^13.6.0"
 
-"react-native-raw-bottom-sheet@git+https://github.com/vincentovie39/react-native-raw-bottom-sheet.git#master":
+react-native-raw-bottom-sheet@~2.2.0:
   version "2.2.0"
-  resolved "git+https://github.com/vincentovie39/react-native-raw-bottom-sheet.git#0a9e5c305ae16907099941dc36efc69fd73c486c"
+  resolved "https://registry.yarnpkg.com/react-native-raw-bottom-sheet/-/react-native-raw-bottom-sheet-2.2.0.tgz#d11dabb86aadb014273767ef7b554924b13633c5"
+  integrity sha512-qL4JKIqvbcVxbkKzeh51hjV7suoJN3ouxzvLmOg0FBUV1yiJAfEbacjQdtRCI6+OU5pyGFBIifLsTXcFDwHggg==
 
 react-native-reanimated@~3.3.0:
   version "3.3.0"

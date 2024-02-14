@@ -216,7 +216,7 @@ const Post = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         aspect: [4, 4],
         quality: 1,
-        allowsEditing: true,
+        // allowsEditing: true,
       });
 
       if (!result.canceled) {
@@ -278,7 +278,7 @@ const Post = ({
       type: "success",
       text1: "Listing creation in progress...",
     });
-    navigation.navigate("Dashboard")
+    navigation.navigate("Dashboard");
     addListing(
       {
         listing_creation_amount: profile?.listing_creation_amount?.toString(),
@@ -1249,10 +1249,10 @@ const Post = ({
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
+              components: "country:NG",
             }}
             fetchDetails={true}
             enablePoweredByContainer={true}
-            minLength={2}
             renderRow={(rowData) => (
               <View
                 style={{
@@ -1270,7 +1270,7 @@ const Post = ({
                 <Text
                   style={{
                     fontFamily: FONTS.RedHatDisplayRegular,
-                    color: "#c6c6c6",
+                    color: "#0f0f0f",
                   }}
                 >
                   {rowData.description}
@@ -1294,7 +1294,7 @@ const Post = ({
       <ErrorVerifyModalContent
         message={{
           title: "Confirm",
-          message: `You will be charged the sum of ₦${profile?.listing_creation_amount?.toLocaleString()} to create this listing. Do you want to proceed?`,
+          message: `You will be charged the sum of ₦${profile?.listing_creation_amount?.toLocaleString()} to create this listing. Payment will last for a year. Do you want to proceed?`,
         }}
         color={COLORS.primary}
         visible={modalVisible}

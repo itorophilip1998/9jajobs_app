@@ -51,6 +51,8 @@ const ContactMap = ({
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
+          minZoomLevel={7}
+          scrollEnabled={false}
         >
           <Marker
             coordinate={{
