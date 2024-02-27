@@ -34,7 +34,7 @@ const PaystackScreen = ({
     >
       <SafeAreaView className="flex-1 w-full">
         <Paystack
-          paystackKey="pk_test_b9ac9968f82485184ceaa9a31ab524bdc9efb58c"
+          paystackKey="pk_live_815672e26d462a88c01d3faef42356f8138be296"
           billingEmail={profile?.email}
           amount={route.params?.amount || "0" + ".00"}
           channels={["card", "bank", "ussd", "qr", "mobile_money"]}

@@ -18,7 +18,7 @@ import {
   heightPercentageToDP as H,
 } from "react-native-responsive-screen";
 import { BottomSheet, Button, InputField, SmallText } from "../../components";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import {
@@ -32,13 +32,18 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { FONTS } from "../../utility/fonts";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { SET_LOADER } from "../../store/formDataSlice";
-import { logout } from "../../api/auth";
+import { deleteAccount, logout } from "../../api/auth";
 import Toast from "react-native-toast-message";
 import userImg from "../../../assets/images/user.jpg";
-import { VALIDATE_USER_DATA, validatePhone } from "../../utility/helpers";
+import {
+  DelayFor,
+  VALIDATE_USER_DATA,
+  validatePhone,
+} from "../../utility/helpers";
 import { editUser, getUser } from "../../api/user";
 import { useIsFocused } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
+import ErrorVerifyModalContent from "../../components/errorVerifyModalContent";
 
 const EditProfile = ({
   navigation,
@@ -49,6 +54,7 @@ const EditProfile = ({
   const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const locationRef = React.useRef<RBSheet | null>(null);
+  console.log(profile);
 
   const [name, setName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
@@ -62,6 +68,8 @@ const EditProfile = ({
   const [selectedImage, setSelectedImage] = React.useState<string>("");
   const [visible, setVisible] = React.useState<boolean>(false);
   const [visible1, setVisible1] = React.useState<boolean>(false);
+
+  const [deleteModal, setDeleteModal] = React.useState<boolean>(false);
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -251,6 +259,26 @@ const EditProfile = ({
     }
   };
 
+  const deleteUser = () => {
+    dispatch(SET_LOADER(true));
+    deleteAccount(
+      { user_id: profile?.id, status: "inactive" },
+      (response) => {
+        dispatch(LOGIN(false));
+        dispatch(SET_TOKEN(null));
+        dispatch(SET_LOADER(false));
+        navigation.navigate("HomeStack");
+      },
+      (error) => {
+        dispatch(SET_LOADER(false));
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+      }
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -339,8 +367,14 @@ const EditProfile = ({
           </View> */}
           <View
             style={{ borderBottomColor: darkMode ? "#0F0F0F" : "#CCC5D5" }}
-            className="w-full flex-row justify-end items-center px-3 py-4 pb-5 border-b-2 border-b-[#0F0F0F]"
+            className="w-full flex-row justify-between items-center px-3 py-4 pb-5 border-b-2 border-b-[#0F0F0F]"
           >
+            <Button
+              text="Delete"
+              buttonStyle={{ width: W(23), height: H(5) }}
+              textStyleClassName="text-[14px]"
+              onPress={() => setDeleteModal(true)}
+            />
             <Button
               text="Logout"
               buttonStyle={{ width: W(23), height: H(5) }}
@@ -519,7 +553,7 @@ const EditProfile = ({
             query={{
               key: "AIzaSyC6yqP8_qWQsmhyqkSrAgTm7CUQ6yHwzRY",
               language: "en",
-              components: "country:NG"
+              components: "country:NG",
             }}
             fetchDetails={true}
             enablePoweredByContainer={false}
@@ -555,6 +589,34 @@ const EditProfile = ({
           />
         </View>
       </BottomSheet>
+      <ErrorVerifyModalContent
+        message={{
+          title: "Warning",
+          message: `You are about to delete your account. This action is irreversable. Do you wish to proceed?`,
+        }}
+        color={COLORS.danger}
+        visible={deleteModal}
+        icon={<AntDesign name="warning" size={24} color={COLORS.danger} />}
+      >
+        <View className="flex-row justify-between items-center">
+          <Button
+            text="Yes"
+            buttonStyle={{ width: W("36%"), marginRight: W("3%") }}
+            // buttonStyleClassName="bg-[#C93636]"
+            onPress={() => {
+              setDeleteModal(false);
+              DelayFor(500, deleteUser);
+            }}
+          />
+          <Button
+            text="No"
+            buttonStyle={{ width: W("36%") }}
+            // buttonStyleClassName="bg-transparent border border-[#C3B9B9]"
+            // textStyleClassName="text-[#212121]"
+            onPress={() => setDeleteModal(false)}
+          />
+        </View>
+      </ErrorVerifyModalContent>
     </KeyboardAvoidingView>
   );
 };
