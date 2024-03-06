@@ -152,7 +152,7 @@ const Signin = ({
             dispatch(LOGIN(true));
             Toast.show({
               type: "success",
-              text1: response.message,
+              text1: "Account Created. Please verify your account.",
             });
             navigation.goBack();
             dispatch(SET_LOADER(false));

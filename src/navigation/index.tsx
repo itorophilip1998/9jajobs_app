@@ -12,6 +12,7 @@ import {
   SuccessModalContent,
 } from "../components";
 import {
+  SET_DYNAMIC_FORM,
   SET_LOADER,
   SET_NOTIFICATION,
   UNSET_ERROR,
@@ -42,7 +43,7 @@ import { FONTS } from "../utility/fonts";
 import Terms from "../screens/dashboard/terms";
 import Privacy from "../screens/dashboard/privacy";
 import PaystackScreen from "../screens/profile/paystack";
-import { getData, refreshToken } from "../api/auth";
+import { dynamicForm, expoTokenApi, getData, refreshToken } from "../api/auth";
 import { getUser } from "../api/user";
 import {
   SET_COORDINATE,
@@ -147,6 +148,7 @@ const NavigationSetup = () => {
         getNotificationCount(
           (response) => {
             dispatch(SET_NOTIFICATION(response));
+            // console.log(response);
           },
           (error) => {
             console.log(error);
@@ -171,12 +173,55 @@ const NavigationSetup = () => {
     );
   }, []);
 
+  React.useEffect(() => {
+    const getFetchData = () => {
+      dynamicForm(
+        (response) => {
+          dispatch(SET_DYNAMIC_FORM(response.dynamic_forms));
+        },
+        (error) => {
+          console.group(error);
+        }
+      );
+    };
+
+    getFetchData();
+
+    const intervalId = setInterval(getFetchData, 10 * 1000);
+
+    return () => clearTimeout(intervalId);
+  }, []);
+
+  React.useEffect(() => {
+    const getFetchData = () => {
+      if (Boolean(LoggedIn === true && authToken !== null)) {
+        expoTokenApi(
+          { expo_token: expoPushToken },
+          (response) => {
+            // console.log("expo-token", expoPushToken);
+            // console.log("expo-token-response", response);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    };
+
+    getFetchData();
+
+    const intervalId = setInterval(getFetchData, 10 * 1000);
+
+    return () => clearTimeout(intervalId);
+  }, [LoggedIn, authToken, expoPushToken]);
+
   // React.useEffect(() => {
   //   const getFetchData = () => {
   //     if (Boolean(LoggedIn === true && authToken !== null)) {
   //       refreshToken(
-  //         { expo_token: expoPushToken.length > 0 ? expoPushToken : null },
+  //         { expo_token: expoPushToken },
   //         (response) => {
+  //           console.log("expo-token", expoPushToken);
   //           dispatch(SET_TOKEN(response.access_token));
   //         },
   //         (error) => {
@@ -188,11 +233,10 @@ const NavigationSetup = () => {
 
   //   getFetchData();
 
-  //   const intervalId = setInterval(getFetchData, 30 * 60 * 1000);
+  //   const intervalId = setInterval(getFetchData, 10 * 1000);
 
   //   return () => clearTimeout(intervalId);
-
-  // }, [LoggedIn, authToken, expoPushToken]);
+  // }, []);
 
   React.useEffect(() => {
     (async () => {

@@ -275,6 +275,7 @@ const Search = ({
                     { listing_name: item },
                     (newData) => {
                       dispatch(SET_LOADER(false));
+                      console.log(newData?.listing?.data[0]);
                       navigation.navigate("FreelancerProfile", {
                         data: newData?.listing?.data[0],
                       });
@@ -309,6 +310,10 @@ const Search = ({
           <GooglePlacesAutocomplete
             placeholder="Search City"
             enableHighAccuracyLocation
+            textInputProps={{
+              placeholderTextColor: darkMode ? "#c6c6c6" : "#000",
+              returnKeyType: "search",
+            }}
             debounce={400}
             onPress={(data, details = null) => {
               const city = details?.address_components.find(

@@ -3,6 +3,77 @@ import { BASE_URL } from "./config";
 import { store } from "../store";
 import { LOGIN, SET_PROFILE, SET_TOKEN } from "../store/authSlice";
 
+export const dynamicForm = async (
+  execute: (arg: any) => void,
+  error: (arg: string) => void
+) => {
+  var config = {
+    method: "get",
+    url: `${BASE_URL}/dynamic-forms`,
+    headers: {
+      Authorization: `Bearer ${store.getState().auth.access_token}`,
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
+    console.log("refresh", err?.response?.data);
+    if (typeof err?.response?.data === "string") {
+      error(err?.response?.data);
+    } else if (!err?.response?.data || err?.response?.status === 500) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data === "object") {
+      error(Object.values(err?.response?.data).flat().join("\n"));
+    }
+  }
+};
+
+export const expoTokenApi = async (
+  data: {
+    expo_token: string;
+  },
+  execute: (arg: any) => void,
+  error: (arg: string) => void
+) => {
+  const formData = new FormData();
+  formData.append("expo_token", data.expo_token);
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/update-expo-token`,
+    headers: {
+      Authorization: `Bearer ${store.getState().auth.access_token}`,
+      "Content-Type": "multipart/form-data",
+    },
+    data: formData,
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("No internet connection");
+      return;
+      // Handle the case when there is no internet connection
+    }
+    console.log("refresh", err?.response?.data);
+    if (typeof err?.response?.data === "string") {
+      error(err?.response?.data);
+    } else if (!err?.response?.data || err?.response?.status === 500) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data === "object") {
+      error(Object.values(err?.response?.data).flat().join("\n"));
+    }
+  }
+};
+
 export const refreshToken = async (
   data: {
     expo_token?: string | null;
@@ -255,7 +326,7 @@ export const deleteAccount = async (
   execute: (e: any) => void,
   error: (e: string) => void
 ) => {
-  const formData = new FormData()
+  const formData = new FormData();
   formData.append("user_id", data.user_id);
   formData.append("status", data.status);
 
@@ -266,7 +337,7 @@ export const deleteAccount = async (
       Authorization: `Bearer ${store.getState().auth.access_token}`,
       "Content-Type": "multipart/form-data",
     },
-    data: formData
+    data: formData,
   };
 
   try {

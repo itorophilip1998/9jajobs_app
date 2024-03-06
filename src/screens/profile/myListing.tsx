@@ -99,6 +99,8 @@ const MyListing = ({
     }
   }, [focus, loggedIn, access_token]);
 
+  console.log(listings)
+
   React.useEffect(() => {
     if (focus && details?.id) {
       dispatch(SET_LOADER(true));

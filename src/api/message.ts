@@ -179,6 +179,11 @@ export const getChats = async (
       error(err?.response?.data);
     } else if (!err?.response?.data || err?.response?.status === 500) {
       error("Something went wrong. Try again.");
+    } else if (
+      typeof err?.response?.data === "object" &&
+      err?.response?.status === 401
+    ) {
+      // error(Object.values(err?.response?.data).flat().join("\n"));
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
     }

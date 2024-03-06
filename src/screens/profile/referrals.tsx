@@ -18,8 +18,6 @@ import { width, height } from "../../utility/constant";
 import { shadowBox, shadowBoxDark } from "../../style/Typography";
 import { COLORS } from "../../utility/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { REFERRAL_HISTORY } from "../../data/transactions";
-import { FirstLetterUppercase } from "../../utility/helpers";
 import * as Clipboard from "expo-clipboard";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
@@ -134,8 +132,10 @@ const Referrals = ({
                 size={24}
                 color={COLORS.primary}
                 onPress={async () => {
-                  if (referral?.code) {
-                    const set = await Clipboard.setStringAsync(referral?.code);
+                  if (profile?.ref_code) {
+                    const set = await Clipboard.setStringAsync(
+                      profile?.ref_code
+                    );
                     if (set) {
                       Toast.show({
                         type: "success",

@@ -34,10 +34,12 @@ const BoostDetail = ({
   navigation: NativeStackNavigationProp<any>;
   route: RouteProp<any>;
 }) => {
-  const amount = 1000;
   const dispatch = useDispatch();
-  const [duration, setDuration] = React.useState<number>(1);
   const [isChecked, setChecked] = React.useState<boolean>(false);
+  const { boosting_amount: amount, boosting_estimated_users } = useSelector(
+    (state: RootState) => state.formData.dynamicForm
+  );
+  const [duration, setDuration] = React.useState<number>(1);
   const { darkMode } = useSelector((state: RootState) => state.auth);
 
   const validate = () => {
@@ -50,7 +52,7 @@ const BoostDetail = ({
       dispatch(SET_LOADER(true));
       subscribeBoosting(
         {
-          amount: amount * duration,
+          amount: Number(amount) * duration,
           duration: duration,
           listing_id: route.params?.data.id,
         },
@@ -107,7 +109,7 @@ const BoostDetail = ({
           <Spacer axis="vertical" value={H(2)} />
           <InputField
             onTextChange={(value) => {}}
-            defaultValue={Number(amount * duration).toLocaleString()}
+            defaultValue={(Number(amount) * duration).toLocaleString()}
             placeholder="Enter your business name here"
             containerStyle={{ width: "100%" }}
             editable={false}
@@ -168,7 +170,7 @@ const BoostDetail = ({
           <InputField
             onTextChange={(value) => {}}
             style={{ backgroundColor: darkMode ? "transparent" : "white" }}
-            defaultValue={"88 - 250"}
+            defaultValue={Number(boosting_estimated_users).toLocaleString()}
             placeholder="Select your business category"
             type={"default"}
             autoCapitalize={"none"}

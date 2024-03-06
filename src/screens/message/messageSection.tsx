@@ -52,6 +52,7 @@ const MessageSection = ({
       (response) => {
         mainLoad && dispatch(SET_LOADER(false));
         setMessagesList(response.chatted_users);
+        // console.log(response.chatted_users);
         setLoaded(true);
       },
       (error) => {
@@ -200,6 +201,7 @@ const MessageSection = ({
                   {item?.friend?.name}
                 </SmallText>
                 <SmallText
+                numberOfLine={1}
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
                   className="text-left p-0 text-[14px] text-[#696969]"
                 >

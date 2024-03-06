@@ -45,6 +45,7 @@ import {
 import Toast from "react-native-toast-message";
 import { Feather } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
+import moment from "moment";
 
 const MyWallet = ({
   navigation,
@@ -252,10 +253,11 @@ const MyWallet = ({
             <Pressable className="w-full">
               <View className="flex-row justify-between items-center w-full mb-1">
                 <SmallText
+                  numberOfLine={1}
                   style={{ color: darkMode ? "#BDB7C5" : "#0f0f0f" }}
-                  className="text-[#BDB7C5] text-left p-0 text-[18px]"
+                  className="text-[#BDB7C5] text-left p-0 text-[18px] w-[75%]"
                 >
-                  {FirstLetterUppercase(item.purpose)}
+                  {item.description}
                 </SmallText>
                 <SmallText
                   style={{ color: darkMode ? "#BDB7C5" : "#0f0f0f" }}
@@ -266,7 +268,7 @@ const MyWallet = ({
               </View>
               <View className="flex-row justify-between items-center w-full">
                 <SmallText className="text-[#696969] text-left p-0 text-[15px]">
-                  {item.description}
+                  {moment(item.created_at).format("DD-MM-YYYY")}
                 </SmallText>
                 <SmallText
                   style={{
@@ -282,7 +284,7 @@ const MyWallet = ({
           )}
         />
       </SafeAreaView>
-      <BottomSheet ref={withdrawRef} duration={3000} height={100}>
+      <BottomSheet ref={withdrawRef} duration={3000} height={H("50%")}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
@@ -454,7 +456,7 @@ const MyWallet = ({
         </ScrollView>
       </BottomSheet>
 
-      <BottomSheet ref={fundRef} duration={3000} height={100}>
+      <BottomSheet ref={fundRef} duration={3000} height={H("50%")}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}

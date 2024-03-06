@@ -2,7 +2,7 @@
   "expo": {
     "name": "9jajob",
     "slug": "9jajob",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "orientation": "portrait",
     "owner": "9jajob",
     "privacy": "unlisted",
@@ -24,11 +24,14 @@
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
-      "buildNumber": "0.1.2",
+      "buildNumber": "0.1.4",
       "usesIcloudStorage": true,
       "config": {
         "usesNonExemptEncryption": false,
         "googleMapsApiKey": "AIzaSyDADxCsbzRzu3czMCsOURExEQrZSewTaEM"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location to get businesses around you."
       }
     },
     "android": {
@@ -38,7 +41,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.job.ng",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "config": {
         "googleMaps": {

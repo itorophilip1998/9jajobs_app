@@ -31,7 +31,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { COLORS } from "../../utility/colors";
 import Checkbox from "expo-checkbox";
-import { toggleStringInArray } from "../../utility/helpers";
+import { FirstLetterUppercase, convertToWords, toggleStringInArray } from "../../utility/helpers";
 import { FONTS } from "../../utility/fonts";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -74,6 +74,9 @@ const Verification = ({
   const [services, setServices] = React.useState<string[]>([]);
   const [isChecked, setChecked] = React.useState<boolean>(false);
   const { darkMode } = useSelector((state: RootState) => state.auth);
+  const { verification_amount: amount } = useSelector(
+    (state: RootState) => state.formData.dynamicForm
+  );
 
   const pickFile = async () => {
     const freeSpace = await getFreeDiskStorageAsync();
@@ -175,10 +178,10 @@ const Verification = ({
         type: "error",
         text1: "Enter Business Registration Number",
       });
-    } else if (!idFront || !idBack) {
+    } else if (!idFront) {
       Toast.show({
         type: "error",
-        text1: "Please upload the front and back of your ID card",
+        text1: "Please upload the front of your ID card",
       });
     } else if (!isChecked) {
       Toast.show({
@@ -295,6 +298,7 @@ const Verification = ({
               listing.find((item) => item.id === detail?.id)?.listing_name || ""
             }
             placeholder="Select Business"
+            placeholderTextColor={darkMode ? "#fff" : "#000"}
             type={"default"}
             containerStyle={{ width: "100%" }}
             autoCapitalize={"none"}
@@ -311,6 +315,7 @@ const Verification = ({
             onTextChange={(value) => setRegNo(value)}
             defaultValue={regNo}
             placeholder="Registration Number"
+            placeholderTextColor={darkMode ? "#c6c6c6" : "#000"}
             type={"default"}
             autoCapitalize={"words"}
             containerStyle={{ width: "100%" }}
@@ -560,12 +565,12 @@ const Verification = ({
           />
           <Spacer value={H("1%")} axis="vertical" />
           <SmallText className="text-[15px] !text-[#696969] text-left !pl-3">
-            <Text className="font-RedHatDisplayBold">NOTE:</Text> A Thousand
-            naira{" "}
+            <Text className="font-RedHatDisplayBold">NOTE:</Text>{" "}
+            {FirstLetterUppercase(convertToWords(Number(amount)))}{" naira "}
             <Text className="font-RedHatDisplaySemiBold text-primary">
-              (₦1,000)
+              (₦{Number(amount).toLocaleString()})
             </Text>{" "}
-            amount will be deducted from your wallet for verification.
+            will be deducted from your wallet for verification.
           </SmallText>
           <Spacer value={H("3%")} axis="vertical" />
         </ScrollView>

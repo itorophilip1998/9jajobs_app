@@ -115,7 +115,7 @@ const Dashboard = ({
       className="flex-1 bg-black"
       style={{ backgroundColor: darkMode ? "black" : "white" }}
     >
-      <SafeAreaView className="flex-1">
+      <SafeAreaView edges={["top", "left", "right"]} className="flex-1">
         <ScrollView
           className="flex-1 bg-black px-3"
           style={{ backgroundColor: darkMode ? "black" : "white" }}

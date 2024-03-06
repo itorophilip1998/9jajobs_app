@@ -534,6 +534,9 @@ const EditProfile = ({
             placeholder="Search Location"
             enableHighAccuracyLocation
             debounce={400}
+            textInputProps={{
+              placeholderTextColor: darkMode ? "#c6c6c6" : "#000",
+            }}
             onPress={(data, details = null) => {
               const city = details?.address_components.find(
                 (item) => item.types[0] === "locality"

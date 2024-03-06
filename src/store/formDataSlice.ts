@@ -11,7 +11,7 @@ export interface IFormData {
     messages: number;
     notifications: number;
   };
-
+  dynamicForm: any;
   authData: {
     fullName: string;
     email: string;
@@ -26,6 +26,7 @@ const initialState: IFormData = {
   errorModal: false,
   errorMessage: "",
   loader: false,
+  dynamicForm: null,
   successModal: false,
   successMessage: "",
   notification: {
@@ -85,10 +86,14 @@ export const formDataSlice = createSlice({
     },
     SET_NOTIFICATION: (
       state,
-      action: PayloadAction<Partial<{ messages: number; notifications: number }>>
+      action: PayloadAction<
+        Partial<{ messages: number; notifications: number }>
+      >
     ) => {
-      
       state.notification = { ...state.notification, ...action.payload };
+    },
+    SET_DYNAMIC_FORM: (state, action: PayloadAction<any>) => {
+      state.dynamicForm = action.payload;
     },
   },
 });
@@ -99,6 +104,7 @@ export const {
   SET_LOADER,
   SET_PASSWORD,
   SET_CONFIRM_PASSWORD,
+  SET_DYNAMIC_FORM,
   SET_PHONE_NUMBER,
   SET_EMAIL,
   SET_REFERRAL_CODE,

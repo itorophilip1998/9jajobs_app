@@ -192,13 +192,15 @@ const FreelancerProfile = ({
                   style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
                   className="text-[#696969] text-left p-0 text-[15px]"
                 >
-                  {FirstLetterUppercase(route.params?.data.km + " Km Away")}
+                  {FirstLetterUppercase(
+                    `${route.params?.data?.km || 0} Km Away`
+                  )}
                 </SmallText>
 
                 <View className="flex-row items-center">
                   <AntDesign name="star" size={15} color={COLORS.primary} />
                   <SmallText className="text-primary p-0 text-[15px] pl-1">
-                    {route.params?.data.rate_star}
+                    {route.params?.data?.rate_star}
                   </SmallText>
                 </View>
               </View>
@@ -891,6 +893,8 @@ const FreelancerProfile = ({
             enableHighAccuracyLocation
             debounce={400}
             textInputProps={{
+              placeholderTextColor: darkMode ? "#c6c6c6" : "#000",
+              returnKeyLabel: "search",
               onFocus: () => {
                 setLocationFocus(true);
               },

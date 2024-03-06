@@ -1227,6 +1227,9 @@ const EditListing = ({
           <GooglePlacesAutocomplete
             placeholder="Search location"
             enableHighAccuracyLocation
+            textInputProps={{
+              placeholderTextColor: darkMode ? "#c6c6c6" : "#000",
+            }}
             debounce={400}
             onPress={(data, details = null) => {
               setLocation(details?.formatted_address || "");
