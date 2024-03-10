@@ -52,7 +52,7 @@ const MessageSection = ({
       (response) => {
         mainLoad && dispatch(SET_LOADER(false));
         setMessagesList(response.chatted_users);
-        // console.log(response.chatted_users);
+        console.log(response.chatted_users);
         setLoaded(true);
       },
       (error) => {

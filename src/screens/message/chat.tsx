@@ -47,6 +47,7 @@ const Chat = ({
   const { darkMode, profile, loggedIn, access_token } = useSelector(
     (state: RootState) => state.auth
   );
+  const scrollRef = React.useRef<FlatList>();
   const [chats, setChats] = React.useState<any>(null);
   const [loader, setLoader] = React.useState<boolean>(false);
   const [visible, setVisible] = React.useState<boolean>(false);
@@ -65,6 +66,8 @@ const Chat = ({
             { friend_id: route.params?.data?.friend?.id },
             (response) => {
               setChats(response);
+              scrollRef.current?.scrollToEnd();
+              // console.log(response?.chats[response?.chats?.length - 1]?.chatted_user);
               if (
                 response?.chats[response?.chats?.length - 1]?.chatted_user
                   ?.status === "unread"
@@ -293,6 +296,7 @@ const Chat = ({
         </View>
         {/* SCROLLVIEW */}
         <FlatList
+          ref={scrollRef}
           className="px-3 py-4"
           style={{
             backgroundColor: darkMode ? "black" : "#D4E1D2",

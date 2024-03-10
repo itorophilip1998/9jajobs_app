@@ -2,7 +2,7 @@
   "expo": {
     "name": "9jajob",
     "slug": "9jajob",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "orientation": "portrait",
     "owner": "9jajob",
     "privacy": "unlisted",
@@ -24,7 +24,7 @@
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
-      "buildNumber": "0.1.4",
+      "buildNumber": "0.1.5",
       "usesIcloudStorage": true,
       "config": {
         "usesNonExemptEncryption": false,
@@ -41,7 +41,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.job.ng",
-      "versionCode": 4,
+      "versionCode": 5,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "config": {
         "googleMaps": {
@@ -53,8 +53,7 @@
       "favicon": "./assets/favicon.png"
     },
     "notification": {
-      "icon": "./assets/images/logo.png",
-      "color": "#ffffff",
+      "icon": "./assets/notification.png",
       "androidMode": "default",
       "androidCollapsedTitle": "9jajob",
       "iosDisplayInForeground": true
@@ -69,7 +68,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/logo.png",
+          "icon": "./assets/notification.png",
           "color": "#ffffff",
           "androidMode": "default",
           "iosDisplayInForeground": true

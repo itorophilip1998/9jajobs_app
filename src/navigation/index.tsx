@@ -21,7 +21,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-
+import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Alert, Platform, View } from "react-native";
 import Welcome from "../screens/onbodyScreen/welcome";
@@ -54,6 +54,7 @@ import {
 import Forgot from "../screens/auth/forgot";
 import BoostDetail from "../screens/profile/boostDetail";
 import { getNotificationCount } from "../api/notification";
+import Constants from "expo-constants";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -78,21 +79,11 @@ const NavigationSetup = () => {
   const notificationListener = React.useRef<Notifications.Subscription>();
   const responseListener = React.useRef<Notifications.Subscription>();
 
-  async function schedulePushNotification() {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "You've got mail! 📬",
-        body: "Here is the notification body",
-      },
-      trigger: null,
-    });
-  }
-
   async function registerForPushNotificationsAsync() {
     let token;
 
     if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
+      Notifications.setNotificationChannelAsync("default", {
         name: "default",
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
@@ -100,26 +91,31 @@ const NavigationSetup = () => {
       });
     }
 
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
+    if (Device.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      token = await Notifications.getExpoPushTokenAsync({
+        projectId: Constants?.expoConfig?.extra?.eas.projectId,
+      });
+      // console.log(token);
+    } else {
+      alert("Must use physical device for Push Notifications");
     }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    // console.log(token);
-
     return token;
   }
 
   React.useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token || "")
+      setExpoPushToken(token?.data || "")
     );
 
     notificationListener.current =
@@ -194,12 +190,12 @@ const NavigationSetup = () => {
 
   React.useEffect(() => {
     const getFetchData = () => {
-      if (Boolean(LoggedIn === true && authToken !== null)) {
+      if (Boolean(LoggedIn === true && authToken !== null && expoPushToken)) {
         expoTokenApi(
           { expo_token: expoPushToken },
           (response) => {
             // console.log("expo-token", expoPushToken);
-            // console.log("expo-token-response", response);
+            console.log("expo-token-response", response);
           },
           (error) => {
             console.log(error);
@@ -210,7 +206,7 @@ const NavigationSetup = () => {
 
     getFetchData();
 
-    const intervalId = setInterval(getFetchData, 10 * 1000);
+    const intervalId = setInterval(getFetchData, 5 * 1000);
 
     return () => clearTimeout(intervalId);
   }, [LoggedIn, authToken, expoPushToken]);
