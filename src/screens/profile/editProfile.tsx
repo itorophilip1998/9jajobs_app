@@ -142,6 +142,8 @@ const EditProfile = ({
     }
   };
 
+  console.log(profile?.expo_token);
+
   React.useEffect(() => {
     setName(profile?.name || "");
     setEmail(profile?.email || "");
@@ -289,7 +291,7 @@ const EditProfile = ({
         backgroundColor: darkMode ? "black" : "#D4E1D2",
       }}
     >
-      <SafeAreaView className="flex-1 w-full pb-4">
+      <SafeAreaView edges={["top"]} className="flex-1 w-full pb-4">
         <ScrollView className="flex-1">
           <View className="w-full h-[170px] items-center mb-[40px]">
             <Image
@@ -409,6 +411,13 @@ const EditProfile = ({
           >
             Edit Profile
           </SmallText>
+          <SmallText
+            style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
+            className="text-left p-0 text-[#D4E1D2] text-[20px] py-3 px-3"
+          >
+            {profile?.expo_token}
+          </SmallText>
+
           <View className="w-full px-3">
             <SmallText className="text-left p-0 text-[#696969] text-[15px]">
               Name

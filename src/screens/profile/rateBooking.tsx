@@ -55,10 +55,14 @@ const RateBooking = ({
     }
   }, [focused, loggedIn, access_token]);
 
+  // console.log();
+
   const addReview = () => {
     dispatch(SET_LOADER(true));
     postRate(
       {
+        user_id: route.params?.data?.listings?.user?.id,
+        listing_id: route.params?.data.listing_id,
         booking_id: route.params?.data?.id,
         review: review,
         rating: rating.toString(),

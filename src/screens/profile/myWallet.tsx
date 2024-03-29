@@ -340,6 +340,11 @@ const MyWallet = ({
               onSelect={(selectedItem, index) => {
                 setBank(selectedItem);
               }}
+              search
+              searchPlaceHolder="Search..."
+              renderSearchInputLeftIcon={() => (
+                <Feather name="search" size={20} color="gray" />
+              )}
               defaultValue={bank?.name || ""}
               buttonStyle={{
                 width: "100%",
@@ -348,7 +353,11 @@ const MyWallet = ({
                 borderWidth: 1,
                 borderColor: "#696969",
               }}
-              buttonTextStyle={{ textAlign: "left", fontSize: 16 }}
+              buttonTextStyle={{
+                textAlign: "left",
+                fontSize: 16,
+                color: darkMode ? "#c6c6c6" : "#000",
+              }}
               buttonTextAfterSelection={(selectedItem, index) => {
                 return selectedItem.name;
               }}

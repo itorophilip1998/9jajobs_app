@@ -33,6 +33,7 @@ import Toast from "react-native-toast-message";
 import SendPhotoSheet from "../modals/sendPhotoSheet";
 import { DropdownMenu } from "../../components/dropdownModal";
 import { getNotificationCount } from "../../api/notification";
+import { DelayFor } from "../../utility/helpers";
 
 const Chat = ({
   navigation,
@@ -47,7 +48,7 @@ const Chat = ({
   const { darkMode, profile, loggedIn, access_token } = useSelector(
     (state: RootState) => state.auth
   );
-  const scrollRef = React.useRef<FlatList>();
+  const scrollRef = React.useRef<FlatList>(null);
   const [chats, setChats] = React.useState<any>(null);
   const [loader, setLoader] = React.useState<boolean>(false);
   const [visible, setVisible] = React.useState<boolean>(false);
@@ -66,8 +67,9 @@ const Chat = ({
             { friend_id: route.params?.data?.friend?.id },
             (response) => {
               setChats(response);
-              scrollRef.current?.scrollToEnd();
-              // console.log(response?.chats[response?.chats?.length - 1]?.chatted_user);
+              console.log(
+                response?.chats[response?.chats?.length - 1]?.chatted_user
+              );
               if (
                 response?.chats[response?.chats?.length - 1]?.chatted_user
                   ?.status === "unread"
@@ -123,7 +125,7 @@ const Chat = ({
           );
         };
 
-        getFetchData(true);
+        getFetchData(false);
 
         timer = setInterval(() => getFetchData(false), 5000);
       }
@@ -148,25 +150,13 @@ const Chat = ({
       },
       (response1) => {
         setMessage("");
-        markRead(
+        dispatch(SET_NOTIFICATION({ messages: 0 }));
+        getChats(
           { friend_id: route.params?.data?.friend?.id },
-          (response2) => {
-            dispatch(SET_NOTIFICATION({ messages: 0 }));
-            getChats(
-              { friend_id: route.params?.data?.friend?.id },
-              (response) => {
-                setLoader(false);
-                setChats(response);
-                setMessage("");
-              },
-              (error) => {
-                setLoader(false);
-                Toast.show({
-                  type: "error",
-                  text1: error,
-                });
-              }
-            );
+          (response) => {
+            setLoader(false);
+            setChats(response);
+            setMessage("");
           },
           (error) => {
             setLoader(false);
@@ -176,6 +166,19 @@ const Chat = ({
             });
           }
         );
+        // markRead(
+        //   { friend_id: route.params?.data?.friend?.id },
+        //   (response2) => {
+
+        //   },
+        //   (error) => {
+        //     setLoader(false);
+        //     Toast.show({
+        //       type: "error",
+        //       text1: error,
+        //     });
+        //   }
+        // );
       },
       (error) => {
         Toast.show({
@@ -297,16 +300,24 @@ const Chat = ({
         {/* SCROLLVIEW */}
         <FlatList
           ref={scrollRef}
-          className="px-3 py-4"
+          className="px-3 py-4 flex-1"
           style={{
             backgroundColor: darkMode ? "black" : "#D4E1D2",
           }}
           showsVerticalScrollIndicator={false}
           data={chats?.chats}
           keyExtractor={(item) => item.id.toString()}
+          // ListEmptyComponent={() => (
+          //   <View className="flex-1 justify-center items-center mt-5">
+          //     <ActivityIndicator size="large" color={COLORS.primary} />
+          //   </View>
+          // )}
           ItemSeparatorComponent={() => (
             <Spacer value={H("3%")} axis="vertical" />
           )}
+          onContentSizeChange={() =>
+            scrollRef.current?.scrollToEnd({ animated: true })
+          }
           ListFooterComponent={<Spacer value={H("5%")} axis="vertical" />}
           renderItem={({ item }) =>
             item.user_id === profile?.id ? (

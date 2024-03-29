@@ -471,7 +471,7 @@ const FreelancerProfile = ({
             />
             {darkMode ? (
               <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
-                Opening Days
+                Opening Hours
               </SmallText>
             ) : (
               <GradientText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
@@ -511,7 +511,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_tuesday || "N/A"}
+              {route.params?.data?.listing_oh_tuesday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -528,7 +528,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_wednesday || "N/A"}
+              {route.params?.data?.listing_oh_wednesday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -545,7 +545,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_thursday || "N/A"}
+              {route.params?.data?.listing_oh_thursday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -562,7 +562,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_friday || "N/A"}
+              {route.params?.data?.listing_oh_friday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -579,7 +579,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_saturday || "N/A"}
+              {route.params?.data?.listing_oh_saturday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -596,7 +596,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_sunday || "N/A"}
+              {route.params?.data?.listing_oh_sunday || "N/A"}
             </SmallText>
           </View>
           <Spacer value={H("2%")} axis="vertical" />
@@ -668,11 +668,11 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
               onPress={() =>
-                route.params?.data.listing_email &&
-                Linking.openURL(`mailto:${route.params?.data.listing_email}`)
+                route.params?.data?.listing_email &&
+                Linking.openURL(`mailto:${route.params?.data?.listing_email}`)
               }
             >
-              {route.params?.data.listing_email || "N/A"}
+              {route.params?.data?.listing_email || "N/A"}
             </SmallText>
           </View>
           <View

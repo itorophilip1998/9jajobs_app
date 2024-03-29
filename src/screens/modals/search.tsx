@@ -271,6 +271,7 @@ const Search = ({
                   )
                 ) {
                   dispatch(SET_LOADER(true));
+                  console.log(item);
                   getAllListing(
                     { listing_name: item },
                     (newData) => {

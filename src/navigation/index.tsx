@@ -59,8 +59,8 @@ import Constants from "expo-constants";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
   }),
 });
 
@@ -106,17 +106,17 @@ const NavigationSetup = () => {
       token = await Notifications.getExpoPushTokenAsync({
         projectId: Constants?.expoConfig?.extra?.eas.projectId,
       });
-      // console.log(token);
+      Alert.alert(token?.data || "No expo token");
     } else {
       alert("Must use physical device for Push Notifications");
     }
-    return token;
+    return token?.data;
   }
 
   React.useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token?.data || "")
-    );
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token || "");
+    });
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
@@ -190,7 +190,7 @@ const NavigationSetup = () => {
 
   React.useEffect(() => {
     const getFetchData = () => {
-      if (Boolean(LoggedIn === true && authToken !== null && expoPushToken)) {
+      if (Boolean(LoggedIn === true && authToken !== null)) {
         expoTokenApi(
           { expo_token: expoPushToken },
           (response) => {
@@ -210,29 +210,6 @@ const NavigationSetup = () => {
 
     return () => clearTimeout(intervalId);
   }, [LoggedIn, authToken, expoPushToken]);
-
-  // React.useEffect(() => {
-  //   const getFetchData = () => {
-  //     if (Boolean(LoggedIn === true && authToken !== null)) {
-  //       refreshToken(
-  //         { expo_token: expoPushToken },
-  //         (response) => {
-  //           console.log("expo-token", expoPushToken);
-  //           dispatch(SET_TOKEN(response.access_token));
-  //         },
-  //         (error) => {
-  //           console.log(error);
-  //         }
-  //       );
-  //     }
-  //   };
-
-  //   getFetchData();
-
-  //   const intervalId = setInterval(getFetchData, 10 * 1000);
-
-  //   return () => clearTimeout(intervalId);
-  // }, []);
 
   React.useEffect(() => {
     (async () => {

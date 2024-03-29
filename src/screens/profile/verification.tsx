@@ -298,7 +298,7 @@ const Verification = ({
               listing.find((item) => item.id === detail?.id)?.listing_name || ""
             }
             placeholder="Select Business"
-            placeholderTextColor={darkMode ? "#fff" : "#000"}
+            // placeholderTextColor={darkMode ? "#fff" : "#000"}
             type={"default"}
             containerStyle={{ width: "100%" }}
             autoCapitalize={"none"}
@@ -315,7 +315,7 @@ const Verification = ({
             onTextChange={(value) => setRegNo(value)}
             defaultValue={regNo}
             placeholder="Registration Number"
-            placeholderTextColor={darkMode ? "#c6c6c6" : "#000"}
+            // placeholderTextColor={darkMode ? "#c6c6c6" : "#000"}
             type={"default"}
             autoCapitalize={"words"}
             containerStyle={{ width: "100%" }}

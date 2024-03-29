@@ -47,6 +47,7 @@ const Referrals = ({
         (response) => {
           setLoaded(true);
           dispatch(SET_LOADER(false));
+          console.log(response?.referral);
           setReferral(response?.referral);
         },
         (error) => {
@@ -212,7 +213,7 @@ const Referrals = ({
                     style={{ color: darkMode ? "#BDB7C5" : "#0f0f0f" }}
                     className="text-[#BDB7C5] text-right p-0 text-[18px]"
                   >
-                    ₦{item.amount_earn.toLocaleString()}
+                    ₦{item?.amount_earn?.toLocaleString()}
                   </SmallText>
                 </View>
                 <View className="flex-row justify-between items-center w-full">

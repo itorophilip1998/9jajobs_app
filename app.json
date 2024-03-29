@@ -31,7 +31,8 @@
         "googleMapsApiKey": "AIzaSyDADxCsbzRzu3czMCsOURExEQrZSewTaEM"
       },
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location to get businesses around you."
+        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location to get businesses around you.",
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
@@ -55,7 +56,6 @@
     "notification": {
       "icon": "./assets/notification.png",
       "androidMode": "default",
-      "androidCollapsedTitle": "9jajob",
       "iosDisplayInForeground": true
     },
     "plugins": [

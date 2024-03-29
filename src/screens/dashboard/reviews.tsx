@@ -101,7 +101,7 @@ const Reviews = ({
                 <SmallText
                   numberOfLine={1}
                   style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-                  className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2 font-RedHatDisplayMedium"
+                  className="text-[#D4E1D2] text-left p-0 text-[18px] pr-2  font-RedHatDisplayMedium"
                 >
                   {FirstLetterUppercase(route.params?.data?.listing_name || "")}
                 </SmallText>

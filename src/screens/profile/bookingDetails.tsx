@@ -67,7 +67,9 @@ const BookingDetails = ({
             data: route.params?.data,
             two_step: true,
           });
-        } else navigation.goBack();
+        } else {
+          navigation.goBack();
+        }
         dispatch(SET_LOADER(false));
       },
       (error) => {

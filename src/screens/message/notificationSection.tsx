@@ -123,7 +123,7 @@ const NotificationSection = ({
             <View className="h-[60px] justify-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
-                className="text-[#D4E1D2] text-left p-0 text-[18px] mb-2"
+                className="text-[#D4E1D2] font-RedHatDisplaySemiBold text-left p-0 text-[18px] mb-2"
               >
                 {item.title || "Notification"}
               </SmallText>
