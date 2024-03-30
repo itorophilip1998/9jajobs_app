@@ -2,7 +2,7 @@
   "expo": {
     "name": "9jajob",
     "slug": "9jajob",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "orientation": "portrait",
     "owner": "9jajob",
     "privacy": "unlisted",
@@ -24,7 +24,7 @@
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
-      "buildNumber": "0.1.5",
+      "buildNumber": "0.1.6",
       "usesIcloudStorage": true,
       "config": {
         "usesNonExemptEncryption": false,
@@ -42,7 +42,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.job.ng",
-      "versionCode": 5,
+      "versionCode": 6,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "config": {
         "googleMaps": {
