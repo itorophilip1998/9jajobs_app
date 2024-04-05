@@ -276,7 +276,7 @@ const MyListing = ({
                 numberOfLine={1}
                 className="text-[#D4E1D2] text-[19px] flex-1 text-left p-0"
               >
-                {item.listing_name}({item?.listing_subscription?.status})
+                {item.listing_name}
               </SmallText>
               <View className=" flex-row justify-between items-center">
                 {item?.listing_subscription?.status !== "active" && (
