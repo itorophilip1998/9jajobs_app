@@ -20,7 +20,7 @@ export const dynamicForm = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -59,7 +59,7 @@ export const expoTokenApi = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -98,7 +98,7 @@ export const refreshToken = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -146,7 +146,7 @@ export const signUp = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -186,7 +186,7 @@ export const signIn = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -224,7 +224,7 @@ export const forgot = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -268,7 +268,7 @@ export const verifyAndReset = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -301,7 +301,7 @@ export const logout = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -345,7 +345,7 @@ export const deleteAccount = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -379,7 +379,7 @@ export const getData = async (
     execute(eval(response.data));
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }

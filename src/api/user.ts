@@ -20,7 +20,7 @@ export const getUser = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -80,7 +80,7 @@ export const editUser = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -132,7 +132,7 @@ export const sendContactForm = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }

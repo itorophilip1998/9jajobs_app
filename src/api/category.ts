@@ -17,7 +17,7 @@ export const getAmenities = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -46,7 +46,7 @@ export const getCategories = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -75,7 +75,7 @@ export const getCategoryListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -129,7 +129,7 @@ export const getAllListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -178,7 +178,7 @@ export const getUserListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }

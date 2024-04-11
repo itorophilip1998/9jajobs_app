@@ -83,10 +83,11 @@ const MyWallet = ({
 
   React.useEffect(() => {
     if (acctNo.length === 10 && bank) {
+      console.log(bank?.code);
       setLoading(true);
       getAccountName(
         {
-          acct_no: Number(acctNo),
+          acct_no: acctNo,
           bank_code: bank?.code,
         },
         (response) => {
@@ -95,6 +96,7 @@ const MyWallet = ({
         },
         (error) => {
           setLoading(false);
+          console.log(error);
           Toast.show({
             type: "error",
             text1: error,

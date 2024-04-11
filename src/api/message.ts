@@ -33,7 +33,7 @@ export const chatUser = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -80,7 +80,7 @@ export const spamUser = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -124,7 +124,7 @@ export const markRead = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -165,7 +165,7 @@ export const getChats = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -208,7 +208,7 @@ export const getFriendList = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }

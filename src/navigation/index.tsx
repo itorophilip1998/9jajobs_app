@@ -106,7 +106,6 @@ const NavigationSetup = () => {
       token = await Notifications.getExpoPushTokenAsync({
         projectId: Constants?.expoConfig?.extra?.eas.projectId,
       });
-      Alert.alert(token?.data || "No expo token");
     } else {
       alert("Must use physical device for Push Notifications");
     }

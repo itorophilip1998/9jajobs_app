@@ -49,7 +49,7 @@
     "react-native-google-places-autocomplete": "^2.5.2",
     "react-native-maps": "1.7.1",
     "react-native-modal-datetime-picker": "^17.1.0",
-    "react-native-paystack-webview": "^4.0.3",
+    "react-native-paystack-webview": "git+https://github.com/codrexy/React-Native-Paystack-WebView.git#master",
     "react-native-raw-bottom-sheet": "~2.2.0",
     "react-native-reanimated": "~3.3.0",
     "react-native-responsive-screen": "^1.4.2",

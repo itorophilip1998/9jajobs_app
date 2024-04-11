@@ -411,13 +411,6 @@ const EditProfile = ({
           >
             Edit Profile
           </SmallText>
-          <SmallText
-            style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
-            className="text-left p-0 text-[#D4E1D2] text-[20px] py-3 px-3"
-          >
-            {profile?.expo_token}
-          </SmallText>
-
           <View className="w-full px-3">
             <SmallText className="text-left p-0 text-[#696969] text-[15px]">
               Name
