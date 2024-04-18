@@ -260,7 +260,7 @@ const Search = ({
                 ) {
                   navigation.navigate("SearchResult", {
                     data: {
-                      search: search,
+                      search: item,
                       location,
                     },
                   });

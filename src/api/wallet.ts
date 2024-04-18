@@ -195,6 +195,8 @@ export const transfer = async (
     bank_code: string;
     currency: "NGN";
     amount: number;
+    email: string;
+    description: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void

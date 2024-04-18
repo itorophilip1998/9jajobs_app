@@ -419,6 +419,8 @@ const MyWallet = ({
                     bank_code: bank?.code,
                     amount: Number(amount + "00"),
                     currency: "NGN",
+                    email: profile?.email,
+                    description: `${profile?.email} Recipient`,
                   },
                   (response) => {
                     initiateWalletTransaction(
