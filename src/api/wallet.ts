@@ -205,7 +205,7 @@ export const transfer = async (
     method: "post",
     url: `https://api.paystack.co/transferrecipient`,
     headers: {
-      Authorization: "Bearer sk_test_1a0d4738e93f6f24d394945aa3e29077adc196bf",
+      Authorization: "Bearer sk_live_4ea30be95138d3466d4136d999154aa9966c81e6",
       "Content-Type": "application/json",
     },
     data,
@@ -228,7 +228,7 @@ export const transfer = async (
       {
         headers: {
           Authorization:
-            "Bearer sk_test_1a0d4738e93f6f24d394945aa3e29077adc196bf",
+            "Bearer sk_live_4ea30be95138d3466d4136d999154aa9966c81e6",
           "Content-Type": "application/json",
         },
       }
