@@ -72,6 +72,12 @@ const Post = ({
   const { loggedIn, access_token, darkMode, profile } = useSelector(
     (state: RootState) => state.auth
   );
+  const {
+    listing_amount,
+    listing_expiration_duration,
+    listing_pictures_number,
+    listing_videos_number,
+  } = useSelector((state: RootState) => state.formData.dynamicForm);
   const [walletDetails, setWalletDetails] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -281,7 +287,7 @@ const Post = ({
     navigation.navigate("Dashboard");
     addListing(
       {
-        listing_creation_amount: profile?.listing_creation_amount?.toString(),
+        listing_creation_amount: Number(listing_amount)?.toString(),
         listing_name: business,
         listing_address: location,
         listing_category_id: category?.id,
@@ -383,11 +389,11 @@ const Post = ({
   };
 
   const submit = () => {
-    if (walletDetails?.balance > profile?.listing_creation_amount) {
+    if (walletDetails?.balance > Number(listing_amount)) {
       createListing();
     } else {
       navigation.navigate("Paystack", {
-        amount: profile?.listing_creation_amount || 0,
+        amount: Number(listing_amount) || 0,
         callback: createListing,
       });
     }
@@ -481,6 +487,20 @@ const Post = ({
         type: "error",
         text1: "Upload Business Logo.",
       });
+    } else if (selectedImages.length > Number(listing_pictures_number)) {
+      Toast.show({
+        type: "error",
+        text1:
+          "Pictures cannot be more than " +
+          Number(listing_pictures_number).toLocaleString(),
+      });
+    } else if (selectedVideos.length > Number(listing_videos_number)) {
+      Toast.show({
+        type: "error",
+        text1:
+          "Videos cannot be more than " +
+          Number(listing_videos_number).toLocaleString(),
+      });
     } else {
       setModalVisible(true);
     }
@@ -496,7 +516,10 @@ const Post = ({
           backgroundColor: darkMode ? "black" : "#D4E1D2",
         }}
       >
-        <SafeAreaView className="flex-1 w-full">
+        <SafeAreaView
+          edges={["top", "left", "right"]}
+          className="flex-1 w-full"
+        >
           <View
             style={{ backgroundColor: darkMode ? "black" : "#FFFFFF" }}
             className="relative flex flex-row items-center w-full justify-between px-3 mb-3 bg-[#0f0f0f]"
@@ -1235,6 +1258,9 @@ const Post = ({
           <GooglePlacesAutocomplete
             placeholder="Search location"
             enableHighAccuracyLocation
+            textInputProps={{
+              placeholderTextColor: darkMode ? "#c6c6c6" : "#000",
+            }}
             debounce={400}
             onPress={(data, details = null) => {
               setLocation(details?.formatted_address || "");
@@ -1294,7 +1320,11 @@ const Post = ({
       <ErrorVerifyModalContent
         message={{
           title: "Confirm",
-          message: `You will be charged the sum of ₦${profile?.listing_creation_amount?.toLocaleString()} to create this listing. Payment will last for a year. Do you want to proceed?`,
+          message: `You will be charged the sum of ₦${Number(
+            listing_amount
+          )?.toLocaleString()} to create this listing. Payment will last for ${Number(
+            listing_expiration_duration
+          ).toLocaleString()} month(s). Do you want to proceed?`,
         }}
         color={COLORS.primary}
         visible={modalVisible}

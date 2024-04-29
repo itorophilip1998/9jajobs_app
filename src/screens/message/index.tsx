@@ -38,7 +38,7 @@ const Message = ({
         backgroundColor: darkMode ? "black" : "#D4E1D2",
       }}
     >
-      <SafeAreaView className="flex-1 w-full">
+      <SafeAreaView edges={["top", "left", "right"]} className="flex-1 w-full">
         <View className="relative flex flex-row items-center w-full justify-center px-3 py-4">
           <Pressable
             onPress={() => navigation.goBack()}

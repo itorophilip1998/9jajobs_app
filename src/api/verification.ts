@@ -42,7 +42,7 @@ export const verifyListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }

@@ -36,6 +36,7 @@ import { deleteListing, renewListing } from "../../api/listings";
 import { GradientText } from "../../components/gradientText";
 import ErrorVerifyModalContent from "../../components/errorVerifyModalContent";
 import { DelayFor } from "../../utility/helpers";
+import { getWalletDetails } from "../../api/wallet";
 
 const MyListing = ({
   navigation,
@@ -44,7 +45,6 @@ const MyListing = ({
 }) => {
   const focus = useIsFocused();
   const dispatch = useDispatch();
-  const { darkMode, profile } = useSelector((state: RootState) => state.auth);
   const [listings, setListings] = React.useState<any[]>([]);
   const [details, setDetails] = React.useState<any>(null);
   const [search, setSearch] = React.useState<string>("");
@@ -52,6 +52,54 @@ const MyListing = ({
   const [loaded, setLoaded] = React.useState<boolean>(false);
 
   const [rating, setRating] = React.useState<any[]>([]);
+
+  const { loggedIn, access_token, darkMode, profile } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const [walletDetails, setWalletDetails] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    if (focus) {
+      if (!Boolean(loggedIn && access_token)) {
+        navigation.navigate("Signin", { two_step: true });
+      } else {
+        dispatch(SET_LOADER(true));
+        getWalletDetails(
+          null,
+          (response) => {
+            setWalletDetails(response);
+            getUserListing(
+              {
+                listing_name: search,
+              },
+              (response) => {
+                dispatch(SET_LOADER(false));
+                setListings(response);
+                setLoaded(true);
+              },
+              (error) => {
+                dispatch(SET_LOADER(false));
+                setLoaded(true);
+                Toast.show({
+                  type: "error",
+                  text1: error,
+                });
+              }
+            );
+          },
+          (error) => {
+            Toast.show({
+              type: "error",
+              text1: error,
+            });
+            dispatch(SET_LOADER(false));
+          }
+        );
+      }
+    }
+  }, [focus, loggedIn, access_token]);
+
+  console.log(listings)
 
   React.useEffect(() => {
     if (focus && details?.id) {
@@ -69,35 +117,6 @@ const MyListing = ({
       );
     }
   }, [details?.id, focus]);
-
-  const handleSearch = () => {
-    dispatch(SET_LOADER(true));
-    getUserListing(
-      {
-        listing_name: search,
-      },
-      (response) => {
-        dispatch(SET_LOADER(false));
-        setListings(response);
-        console.log(response);
-        setLoaded(true);
-      },
-      (error) => {
-        dispatch(SET_LOADER(false));
-        setLoaded(true);
-        Toast.show({
-          type: "error",
-          text1: error,
-        });
-      }
-    );
-  };
-
-  React.useEffect(() => {
-    if (focus) {
-      handleSearch();
-    }
-  }, [focus]);
 
   const reactivate = (id: string, amount: string) => {
     dispatch(SET_LOADER(true));
@@ -257,7 +276,7 @@ const MyListing = ({
                 numberOfLine={1}
                 className="text-[#D4E1D2] text-[19px] flex-1 text-left p-0"
               >
-                {item.listing_name}({item?.listing_subscription?.status})
+                {item.listing_name}
               </SmallText>
               <View className=" flex-row justify-between items-center">
                 {item?.listing_subscription?.status !== "active" && (
@@ -269,11 +288,22 @@ const MyListing = ({
                       },
                     ]}
                     onPress={() =>
-                      reactivate(
-                        item.id,
-                        item?.listing_subscription?.amount ||
-                          profile?.listing_creation_amount
-                      )
+                      walletDetails?.balance >
+                      item?.listing_subscription?.amount
+                        ? reactivate(
+                            item.id,
+                            item?.listing_subscription?.amount ||
+                              profile?.listing_creation_amount
+                          )
+                        : navigation.navigate("Paystack", {
+                            amount: profile?.listing_creation_amount || 0,
+                            callback: () =>
+                              reactivate(
+                                item.id,
+                                item?.listing_subscription?.amount ||
+                                  profile?.listing_creation_amount
+                              ),
+                          })
                     }
                     className="bg-[#0F0F0F] py-2 px-3 w-auto flex-row justify-between items-center rounded-lg"
                   >

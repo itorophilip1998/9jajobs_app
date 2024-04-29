@@ -8,6 +8,7 @@ import {
   Pressable,
   Alert,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -32,6 +33,7 @@ import Toast from "react-native-toast-message";
 import SendPhotoSheet from "../modals/sendPhotoSheet";
 import { DropdownMenu } from "../../components/dropdownModal";
 import { getNotificationCount } from "../../api/notification";
+import { DelayFor } from "../../utility/helpers";
 
 const Chat = ({
   navigation,
@@ -46,11 +48,13 @@ const Chat = ({
   const { darkMode, profile, loggedIn, access_token } = useSelector(
     (state: RootState) => state.auth
   );
+  const scrollRef = React.useRef<FlatList>(null);
   const [chats, setChats] = React.useState<any>(null);
   const [loader, setLoader] = React.useState<boolean>(false);
   const [visible, setVisible] = React.useState<boolean>(false);
   const [visible1, setVisible1] = React.useState<boolean>(false);
   const [selectedImages, setSelectedImages] = React.useState<any[]>([]);
+
   React.useEffect(() => {
     let timer: any;
     if (focus) {
@@ -63,8 +67,12 @@ const Chat = ({
             { friend_id: route.params?.data?.friend?.id },
             (response) => {
               setChats(response);
+              console.log(
+                response?.chats[response?.chats?.length - 1]?.chatted_user
+              );
               if (
-                response?.chats[response?.chats?.length - 1].status === "read"
+                response?.chats[response?.chats?.length - 1]?.chatted_user
+                  ?.status === "unread"
               ) {
                 markRead(
                   { friend_id: route.params?.data?.friend?.id },
@@ -117,7 +125,7 @@ const Chat = ({
           );
         };
 
-        getFetchData(true);
+        getFetchData(false);
 
         timer = setInterval(() => getFetchData(false), 5000);
       }
@@ -142,25 +150,13 @@ const Chat = ({
       },
       (response1) => {
         setMessage("");
-        markRead(
+        dispatch(SET_NOTIFICATION({ messages: 0 }));
+        getChats(
           { friend_id: route.params?.data?.friend?.id },
-          (response2) => {
-            dispatch(SET_NOTIFICATION({ messages: 0 }));
-            getChats(
-              { friend_id: route.params?.data?.friend?.id },
-              (response) => {
-                setLoader(false);
-                setChats(response);
-                setMessage("");
-              },
-              (error) => {
-                setLoader(false);
-                Toast.show({
-                  type: "error",
-                  text1: error,
-                });
-              }
-            );
+          (response) => {
+            setLoader(false);
+            setChats(response);
+            setMessage("");
           },
           (error) => {
             setLoader(false);
@@ -170,6 +166,19 @@ const Chat = ({
             });
           }
         );
+        // markRead(
+        //   { friend_id: route.params?.data?.friend?.id },
+        //   (response2) => {
+
+        //   },
+        //   (error) => {
+        //     setLoader(false);
+        //     Toast.show({
+        //       type: "error",
+        //       text1: error,
+        //     });
+        //   }
+        // );
       },
       (error) => {
         Toast.show({
@@ -257,21 +266,27 @@ const Chat = ({
             </View>
           </View>
           <View className="flex-row items-center">
-            {route.params?.data?.friend?.phone && (
-              <Pressable
-                onPress={() =>
+            <Pressable
+              onPress={() => {
+                if (route.params?.data?.friend?.phone) {
                   Linking.openURL(
                     `tel:${route.params?.data?.friend?.phone?.replace(
                       /[()[\]{}<>+=.,;:'"_\-!@#$%^&*|\\/?`~\s]/g,
                       ""
                     )}`
-                  )
+                  );
+                } else {
+                  Toast.show({
+                    type: "error",
+                    text1: "This user does not have a phone number",
+                  });
                 }
-                className="mr-3"
-              >
-                <Ionicons name="ios-call" size={24} color={COLORS.primary} />
-              </Pressable>
-            )}
+              }}
+              className="mr-3"
+            >
+              <Ionicons name="ios-call" size={24} color={COLORS.primary} />
+            </Pressable>
+
             {chats?.chats?.length > 0 && (
               <Entypo
                 name="dots-three-vertical"
@@ -284,16 +299,25 @@ const Chat = ({
         </View>
         {/* SCROLLVIEW */}
         <FlatList
-          className="px-3 py-4"
+          ref={scrollRef}
+          className="px-3 py-4 flex-1"
           style={{
             backgroundColor: darkMode ? "black" : "#D4E1D2",
           }}
           showsVerticalScrollIndicator={false}
           data={chats?.chats}
           keyExtractor={(item) => item.id.toString()}
+          // ListEmptyComponent={() => (
+          //   <View className="flex-1 justify-center items-center mt-5">
+          //     <ActivityIndicator size="large" color={COLORS.primary} />
+          //   </View>
+          // )}
           ItemSeparatorComponent={() => (
             <Spacer value={H("3%")} axis="vertical" />
           )}
+          onContentSizeChange={() =>
+            scrollRef.current?.scrollToEnd({ animated: true })
+          }
           ListFooterComponent={<Spacer value={H("5%")} axis="vertical" />}
           renderItem={({ item }) =>
             item.user_id === profile?.id ? (
@@ -311,14 +335,18 @@ const Chat = ({
             style={{ backgroundColor: darkMode ? "#0f0f0f" : "white" }}
             className="flex flex-row items-center w-full justify-between px-3 py-4 bg-[#0f0f0f]"
           >
-            <InputField
-              onTextChange={(value) => setMessage(value)}
-              defaultValue={message}
-              placeholder="Write your message here"
-              type={"default"}
-              autoCapitalize={"none"}
-              containerStyle={{ width: "80%" }}
-              className="border-[#626262] focus:border-primary border rounded-full p-0 px-3 w-full"
+            <TextInput
+              value={message}
+              onChangeText={(text) => setMessage(text)}
+              placeholder="Type your message..."
+              placeholderTextColor={darkMode ? "#c6c6c6" : "#000"}
+              className="border-[#626262] focus:border-primary border rounded-full text-[15px] py-3 px-3 w-[80%]"
+              style={{
+                color: darkMode ? "white" : "black",
+              }}
+              multiline
+              numberOfLines={1}
+              onSubmitEditing={sendMessage}
             />
             <Pressable onPress={pickImages}>
               <Feather name="paperclip" size={24} color={COLORS.primary} />

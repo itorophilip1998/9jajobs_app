@@ -192,13 +192,15 @@ const FreelancerProfile = ({
                   style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
                   className="text-[#696969] text-left p-0 text-[15px]"
                 >
-                  {FirstLetterUppercase(route.params?.data.km + " Km Away")}
+                  {FirstLetterUppercase(
+                    `${route.params?.data?.km || 0} Km Away`
+                  )}
                 </SmallText>
 
                 <View className="flex-row items-center">
                   <AntDesign name="star" size={15} color={COLORS.primary} />
                   <SmallText className="text-primary p-0 text-[15px] pl-1">
-                    {route.params?.data.rate_star}
+                    {route.params?.data?.rate_star}
                   </SmallText>
                 </View>
               </View>
@@ -469,7 +471,7 @@ const FreelancerProfile = ({
             />
             {darkMode ? (
               <SmallText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
-                Opening Days
+                Opening Hours
               </SmallText>
             ) : (
               <GradientText className="text-[#D4E1D2] text-left p-0 text-[19px] pl-2 font-RedHatDisplaySemiBold">
@@ -509,7 +511,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_tuesday || "N/A"}
+              {route.params?.data?.listing_oh_tuesday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -526,7 +528,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_wednesday || "N/A"}
+              {route.params?.data?.listing_oh_wednesday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -543,7 +545,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_thursday || "N/A"}
+              {route.params?.data?.listing_oh_thursday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -560,7 +562,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_friday || "N/A"}
+              {route.params?.data?.listing_oh_friday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -577,7 +579,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_saturday || "N/A"}
+              {route.params?.data?.listing_oh_saturday || "N/A"}
             </SmallText>
           </View>
           <View
@@ -594,7 +596,7 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
             >
-              {route.params?.data.listing_oh_sunday || "N/A"}
+              {route.params?.data?.listing_oh_sunday || "N/A"}
             </SmallText>
           </View>
           <Spacer value={H("2%")} axis="vertical" />
@@ -666,11 +668,11 @@ const FreelancerProfile = ({
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
               className="text-[#D4E1D2] text-right p-0 text-[15px] w-[70%]"
               onPress={() =>
-                route.params?.data.listing_email &&
-                Linking.openURL(`mailto:${route.params?.data.listing_email}`)
+                route.params?.data?.listing_email &&
+                Linking.openURL(`mailto:${route.params?.data?.listing_email}`)
               }
             >
-              {route.params?.data.listing_email || "N/A"}
+              {route.params?.data?.listing_email || "N/A"}
             </SmallText>
           </View>
           <View
@@ -891,6 +893,8 @@ const FreelancerProfile = ({
             enableHighAccuracyLocation
             debounce={400}
             textInputProps={{
+              placeholderTextColor: darkMode ? "#c6c6c6" : "#000",
+              returnKeyLabel: "search",
               onFocus: () => {
                 setLocationFocus(true);
               },

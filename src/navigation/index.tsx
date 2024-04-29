@@ -12,6 +12,7 @@ import {
   SuccessModalContent,
 } from "../components";
 import {
+  SET_DYNAMIC_FORM,
   SET_LOADER,
   SET_NOTIFICATION,
   UNSET_ERROR,
@@ -20,7 +21,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-
+import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Alert, Platform, View } from "react-native";
 import Welcome from "../screens/onbodyScreen/welcome";
@@ -42,7 +43,7 @@ import { FONTS } from "../utility/fonts";
 import Terms from "../screens/dashboard/terms";
 import Privacy from "../screens/dashboard/privacy";
 import PaystackScreen from "../screens/profile/paystack";
-import { getData, refreshToken } from "../api/auth";
+import { dynamicForm, expoTokenApi, getData, refreshToken } from "../api/auth";
 import { getUser } from "../api/user";
 import {
   SET_COORDINATE,
@@ -53,12 +54,13 @@ import {
 import Forgot from "../screens/auth/forgot";
 import BoostDetail from "../screens/profile/boostDetail";
 import { getNotificationCount } from "../api/notification";
+import Constants from "expo-constants";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
   }),
 });
 
@@ -77,21 +79,11 @@ const NavigationSetup = () => {
   const notificationListener = React.useRef<Notifications.Subscription>();
   const responseListener = React.useRef<Notifications.Subscription>();
 
-  async function schedulePushNotification() {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "You've got mail! 📬",
-        body: "Here is the notification body",
-      },
-      trigger: null,
-    });
-  }
-
   async function registerForPushNotificationsAsync() {
     let token;
 
     if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
+      Notifications.setNotificationChannelAsync("default", {
         name: "default",
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
@@ -99,27 +91,31 @@ const NavigationSetup = () => {
       });
     }
 
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
+    if (Device.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      token = await Notifications.getExpoPushTokenAsync({
+        projectId: Constants?.expoConfig?.extra?.eas.projectId,
+      });
+    } else {
+      alert("Must use physical device for Push Notifications");
     }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    // console.log(token);
-
-    return token;
+    return token?.data;
   }
 
   React.useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token || "")
-    );
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token || "");
+    });
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
@@ -147,6 +143,7 @@ const NavigationSetup = () => {
         getNotificationCount(
           (response) => {
             dispatch(SET_NOTIFICATION(response));
+            // console.log(response);
           },
           (error) => {
             console.log(error);
@@ -171,28 +168,47 @@ const NavigationSetup = () => {
     );
   }, []);
 
-  // React.useEffect(() => {
-  //   const getFetchData = () => {
-  //     if (Boolean(LoggedIn === true && authToken !== null)) {
-  //       refreshToken(
-  //         { expo_token: expoPushToken.length > 0 ? expoPushToken : null },
-  //         (response) => {
-  //           dispatch(SET_TOKEN(response.access_token));
-  //         },
-  //         (error) => {
-  //           console.log(error);
-  //         }
-  //       );
-  //     }
-  //   };
+  React.useEffect(() => {
+    const getFetchData = () => {
+      dynamicForm(
+        (response) => {
+          dispatch(SET_DYNAMIC_FORM(response.dynamic_forms));
+        },
+        (error) => {
+          console.group(error);
+        }
+      );
+    };
 
-  //   getFetchData();
+    getFetchData();
 
-  //   const intervalId = setInterval(getFetchData, 30 * 60 * 1000);
+    const intervalId = setInterval(getFetchData, 10 * 1000);
 
-  //   return () => clearTimeout(intervalId);
+    return () => clearTimeout(intervalId);
+  }, []);
 
-  // }, [LoggedIn, authToken, expoPushToken]);
+  React.useEffect(() => {
+    const getFetchData = () => {
+      if (Boolean(LoggedIn === true && authToken !== null)) {
+        expoTokenApi(
+          { expo_token: expoPushToken },
+          (response) => {
+            // console.log("expo-token", expoPushToken);
+            console.log("expo-token-response", response);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    };
+
+    getFetchData();
+
+    const intervalId = setInterval(getFetchData, 5 * 1000);
+
+    return () => clearTimeout(intervalId);
+  }, [LoggedIn, authToken, expoPushToken]);
 
   React.useEffect(() => {
     (async () => {

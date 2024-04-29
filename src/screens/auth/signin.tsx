@@ -148,13 +148,13 @@ const Signin = ({
             re_password: confirmPassword,
           },
           (response) => {
-            dispatch(SET_TOKEN(response.access_token));
-            dispatch(LOGIN(true));
+            // dispatch(SET_TOKEN(response.access_token));
+            setAuthState("login")
+            dispatch(LOGIN(false));
             Toast.show({
               type: "success",
-              text1: response.message,
+              text1: "Created. Check your mail to verify your account.",
             });
-            navigation.goBack();
             dispatch(SET_LOADER(false));
           },
           (error) => {

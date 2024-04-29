@@ -18,8 +18,6 @@ import { width, height } from "../../utility/constant";
 import { shadowBox, shadowBoxDark } from "../../style/Typography";
 import { COLORS } from "../../utility/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { REFERRAL_HISTORY } from "../../data/transactions";
-import { FirstLetterUppercase } from "../../utility/helpers";
 import * as Clipboard from "expo-clipboard";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
@@ -49,6 +47,7 @@ const Referrals = ({
         (response) => {
           setLoaded(true);
           dispatch(SET_LOADER(false));
+          console.log(response?.referral);
           setReferral(response?.referral);
         },
         (error) => {
@@ -134,8 +133,10 @@ const Referrals = ({
                 size={24}
                 color={COLORS.primary}
                 onPress={async () => {
-                  if (referral?.code) {
-                    const set = await Clipboard.setStringAsync(referral?.code);
+                  if (profile?.ref_code) {
+                    const set = await Clipboard.setStringAsync(
+                      profile?.ref_code
+                    );
                     if (set) {
                       Toast.show({
                         type: "success",
@@ -212,7 +213,7 @@ const Referrals = ({
                     style={{ color: darkMode ? "#BDB7C5" : "#0f0f0f" }}
                     className="text-[#BDB7C5] text-right p-0 text-[18px]"
                   >
-                    ₦{item.amount_earn.toLocaleString()}
+                    ₦{item?.amount_earn?.toLocaleString()}
                   </SmallText>
                 </View>
                 <View className="flex-row justify-between items-center w-full">

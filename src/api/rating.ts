@@ -21,7 +21,7 @@ export const getRating = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -43,6 +43,7 @@ export const getRating = async (
 
 export const postRate = async (
   data: {
+    user_id: string;
     booking_id?: string;
     listing_id?: string;
     review: string;
@@ -52,6 +53,7 @@ export const postRate = async (
   error: (e: string) => void
 ) => {
   const formData = new FormData();
+  formData.append("user_id", data.user_id || "0");
   formData.append("listing_id", data.listing_id || "0");
   formData.append("booking_id", data.booking_id || "0");
   formData.append("review", data.review);
@@ -71,7 +73,7 @@ export const postRate = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -117,7 +119,7 @@ export const postReport = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }

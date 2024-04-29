@@ -68,17 +68,17 @@ const Dashboard = ({
 
   React.useEffect(() => {
     if (focus) {
-      dispatch(SET_LOADER(true));
+      // dispatch(SET_LOADER(true));
       getAllListing(
         {
           is_trending: true,
         },
         (response) => {
           setTrending(response.listing);
-          dispatch(SET_LOADER(false));
+          // dispatch(SET_LOADER(false));
         },
         (error) => {
-          dispatch(SET_LOADER(false));
+          // dispatch(SET_LOADER(false));
           Toast.show({
             type: "error",
             text1: error,
@@ -90,7 +90,7 @@ const Dashboard = ({
 
   React.useEffect(() => {
     if (focus) {
-      dispatch(SET_LOADER(true));
+      // dispatch(SET_LOADER(true));
       getAllListing(
         {
           listing_city: profile?.city || "",
@@ -98,10 +98,10 @@ const Dashboard = ({
         },
         (response) => {
           setNearest(response.listing);
-          dispatch(SET_LOADER(false));
+          // dispatch(SET_LOADER(false));
         },
         (error) => {
-          dispatch(SET_LOADER(false));
+          // dispatch(SET_LOADER(false));
           Toast.show({
             type: "error",
             text1: error,
@@ -115,7 +115,7 @@ const Dashboard = ({
       className="flex-1 bg-black"
       style={{ backgroundColor: darkMode ? "black" : "white" }}
     >
-      <SafeAreaView className="flex-1">
+      <SafeAreaView edges={["top", "left", "right"]} className="flex-1">
         <ScrollView
           className="flex-1 bg-black px-3"
           style={{ backgroundColor: darkMode ? "black" : "white" }}

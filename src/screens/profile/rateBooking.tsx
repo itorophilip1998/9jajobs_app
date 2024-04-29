@@ -55,10 +55,14 @@ const RateBooking = ({
     }
   }, [focused, loggedIn, access_token]);
 
+  // console.log();
+
   const addReview = () => {
     dispatch(SET_LOADER(true));
     postRate(
       {
+        user_id: route.params?.data?.listings?.user?.id,
+        listing_id: route.params?.data.listing_id,
         booking_id: route.params?.data?.id,
         review: review,
         rating: rating.toString(),
@@ -69,7 +73,11 @@ const RateBooking = ({
           type: "success",
           text1: response.message,
         });
-        navigation.goBack();
+        if (route.params?.two_step) {
+          navigation.pop(2);
+        } else {
+          navigation.goBack();
+        }
       },
       (error) => {
         dispatch(SET_LOADER(false));

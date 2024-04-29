@@ -324,7 +324,7 @@ const Notification = ({
             // buttonStyleClassName="bg-[#C93636]"
             onPress={() => {
               setModalVisible(false);
-              // DelayFor(500, submit);
+              DelayFor(500, () => updateStatus("declined"));
             }}
           />
           <Button

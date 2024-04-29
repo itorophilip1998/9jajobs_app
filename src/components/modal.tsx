@@ -21,15 +21,15 @@ const Modal: React.FC<IProps> = ({
       <NativeModal transparent={true} visible={true}>
         <View
           className="flex flex-1 justify-center items-center z-[999]"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+          // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
         >
           <View
-            className="flex h-auto bg-white  flex-col"
+            className="flex h-auto flex-col"
             style={{
               width: full ? width : width - 50,
               zIndex: 9999999,
               borderRadius: full ? 0 : 15,
-              backgroundColor: darkMode ? "#0F0F0F" : "white",
+              backgroundColor: darkMode ? "black" : "white",
               ...shadowBox,
             }}
           >

@@ -12,7 +12,20 @@
           "package_name": "com.job.ng"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "576653944433-91r009d6iq3m6ul14818sn6bo7bgr91v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.job.ng",
+            "certificate_hash": "6c409e7bb1c0b1f2c79b5ac9384b6eb26b82e85a"
+          }
+        },
+        {
+          "client_id": "576653944433-hif70u930oq9gdom3gvl5urmnsffm6np.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCmFKr9vWNnn33c3Dh1YSejHz_i_2r1fq0"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576653944433-hif70u930oq9gdom3gvl5urmnsffm6np.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "576653944433-bc46d1ja08f9u1novh0rg5i7o2oh22n0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.job.ng"
+              }
+            }
+          ]
         }
       }
     }

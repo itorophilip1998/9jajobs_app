@@ -2,7 +2,7 @@
   "expo": {
     "name": "9jajob",
     "slug": "9jajob",
-    "version": "0.1.0",
+    "version": "0.1.9",
     "orientation": "portrait",
     "owner": "9jajob",
     "privacy": "unlisted",
@@ -24,10 +24,15 @@
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
-      "buildNumber": "0.1.0",
+      "buildNumber": "0.1.9",
       "usesIcloudStorage": true,
       "config": {
+        "usesNonExemptEncryption": false,
         "googleMapsApiKey": "AIzaSyDADxCsbzRzu3czMCsOURExEQrZSewTaEM"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location to get businesses around you.",
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
@@ -37,7 +42,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.job.ng",
-      "versionCode": 1,
+      "versionCode": 9,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "config": {
         "googleMaps": {
@@ -47,6 +52,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "notification": {
+      "icon": "./assets/notification.png",
+      "androidMode": "default",
+      "iosDisplayInForeground": true
     },
     "plugins": [
       [
@@ -58,8 +68,10 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/logo.png",
-          "color": "#ffffff"
+          "icon": "./assets/notification.png",
+          "color": "#ffffff",
+          "androidMode": "default",
+          "iosDisplayInForeground": true
         }
       ],
       [
@@ -71,7 +83,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to get businesses around you."
         }
       ]
     ],

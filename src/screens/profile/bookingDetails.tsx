@@ -62,7 +62,14 @@ const BookingDetails = ({
           type: "success",
           text1: response.message,
         });
-        navigation.goBack();
+        if (status === "completed") {
+          navigation.navigate("RateBooking", {
+            data: route.params?.data,
+            two_step: true,
+          });
+        } else {
+          navigation.goBack();
+        }
         dispatch(SET_LOADER(false));
       },
       (error) => {
@@ -223,6 +230,7 @@ const BookingDetails = ({
                   route.params?.client
                     ? navigation.navigate("RateBooking", {
                         data: route.params?.data,
+                        two_step: false,
                       })
                     : Toast.show({
                         type: "error",

@@ -238,16 +238,52 @@ export function isInstagramLink(url: string) {
 
 export function convertTo12HourFormat(time24: string) {
   // Split the input time into hours, minutes, and seconds
-  let [hours, minutes, seconds] = time24.split(':').map(Number);
+  let [hours, minutes, seconds] = time24.split(":").map(Number);
 
   // Determine whether it's AM or PM
-  let period = hours >= 12 ? 'PM' : 'AM';
+  let period = hours >= 12 ? "PM" : "AM";
 
   // Convert to 12-hour format
   hours = hours % 12 || 12; // If hours is 0, set it to 12
 
   // Format the result
-  let time12 = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+  let time12 = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")} ${period}`;
 
   return time12;
+}
+
+export function convertToWords(number: number): string {
+  const ones: string[] = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const teens: string[] = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  const tens: string[] = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+  if (number === 0) return 'zero';
+
+  function convertLessThanOneThousand(num: number): string {
+      if (num >= 100) {
+          return ones[Math.floor(num / 100)] + ' hundred ' + convertLessThanOneThousand(num % 100);
+      } else if (num >= 20) {
+          return tens[Math.floor(num / 10)] + ' ' + ones[num % 10];
+      } else if (num >= 10) {
+          return teens[num - 10];
+      } else {
+          return ones[num];
+      }
+  }
+
+  let result: string = '';
+  if (number >= 1000000) {
+      result += convertLessThanOneThousand(Math.floor(number / 1000000)) + ' million ';
+      number %= 1000000;
+  }
+  if (number >= 1000) {
+      result += convertLessThanOneThousand(Math.floor(number / 1000)) + ' thousand ';
+      number %= 1000;
+  }
+  if (number > 0) {
+      result += convertLessThanOneThousand(number);
+  }
+  return result.trim();
 }

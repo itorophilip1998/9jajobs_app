@@ -28,8 +28,9 @@ const ReviewCard = ({ item }: { item: any }) => {
           />
           <View className="pr-2">
             <SmallText
+              numberOfLine={1}
               style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
-              className="text-[#D4E1D2] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
+              className="text-[#D4E1D2] w-[95%] text-left p-0 text-[19px] font-RedHatDisplaySemiBold"
             >
               {FirstLetterUppercase(item?.user?.name || "")}
             </SmallText>

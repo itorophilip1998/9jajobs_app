@@ -95,7 +95,7 @@ export const addListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -146,7 +146,7 @@ export const editListing = async (
   error: (e: string) => void
 ) => {
   const formData = new FormData();
-  formData.append("listing_id", data.listing_id);
+  // formData.append("listing_id", data.listing_id);
   formData.append("listing_name", data.listing_name);
   formData.append("listing_description", data.listing_description);
   formData.append("listing_phone", data.listing_phone);
@@ -197,11 +197,11 @@ export const editListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("report-listing", err?.response?.data);
+    console.log("edit-listing", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
@@ -237,7 +237,7 @@ export const deleteListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -292,7 +292,7 @@ export const renewListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }

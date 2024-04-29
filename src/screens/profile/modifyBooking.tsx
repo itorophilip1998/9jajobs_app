@@ -163,11 +163,11 @@ const ModifyBooking = ({
               enableHighAccuracyLocation
               debounce={400}
               textInputProps={{
+                placeholderTextColor: darkMode ? "#c6c6c6" : "#000",
                 value: location,
                 onChangeText: (text) => {
                   setLocation(text);
                 },
-                placeholderTextColor: darkMode ? "#c6c6c6" : "#0f0f0f",
                 onFocus: () => {
                   setLocationFocus(true);
                 },

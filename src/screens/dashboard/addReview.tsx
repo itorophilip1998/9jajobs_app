@@ -43,6 +43,8 @@ const AddReview = ({
   );
   const focused = useIsFocused();
 
+  // console.log();
+
   React.useEffect(() => {
     if (focused) {
       if (!Boolean(loggedIn && access_token)) {
@@ -59,7 +61,8 @@ const AddReview = ({
     dispatch(SET_LOADER(true));
     postRate(
       {
-        listing_id: route.params?.data.id,
+        user_id: route.params?.data?.user?.id,
+        listing_id: route.params?.data?.id,
         review: review,
         rating: String(rating),
       },

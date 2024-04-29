@@ -3,6 +3,77 @@ import { BASE_URL } from "./config";
 import { store } from "../store";
 import { LOGIN, SET_PROFILE, SET_TOKEN } from "../store/authSlice";
 
+export const dynamicForm = async (
+  execute: (arg: any) => void,
+  error: (arg: string) => void
+) => {
+  var config = {
+    method: "get",
+    url: `${BASE_URL}/dynamic-forms`,
+    headers: {
+      Authorization: `Bearer ${store.getState().auth.access_token}`,
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("Network error");
+      return;
+      // Handle the case when there is no internet connection
+    }
+    console.log("refresh", err?.response?.data);
+    if (typeof err?.response?.data === "string") {
+      error(err?.response?.data);
+    } else if (!err?.response?.data || err?.response?.status === 500) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data === "object") {
+      error(Object.values(err?.response?.data).flat().join("\n"));
+    }
+  }
+};
+
+export const expoTokenApi = async (
+  data: {
+    expo_token: string;
+  },
+  execute: (arg: any) => void,
+  error: (arg: string) => void
+) => {
+  const formData = new FormData();
+  formData.append("expo_token", data.expo_token);
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/update-expo-token`,
+    headers: {
+      Authorization: `Bearer ${store.getState().auth.access_token}`,
+      "Content-Type": "multipart/form-data",
+    },
+    data: formData,
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("Network error");
+      return;
+      // Handle the case when there is no internet connection
+    }
+    console.log("refresh", err?.response?.data);
+    if (typeof err?.response?.data === "string") {
+      error(err?.response?.data);
+    } else if (!err?.response?.data || err?.response?.status === 500) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data === "object") {
+      error(Object.values(err?.response?.data).flat().join("\n"));
+    }
+  }
+};
+
 export const refreshToken = async (
   data: {
     expo_token?: string | null;
@@ -27,7 +98,7 @@ export const refreshToken = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -75,7 +146,7 @@ export const signUp = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -115,7 +186,7 @@ export const signIn = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -153,7 +224,7 @@ export const forgot = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -197,7 +268,7 @@ export const verifyAndReset = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -230,11 +301,55 @@ export const logout = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
     console.log("logout", err?.response?.data);
+    if (err?.response?.status === 401) {
+      store.dispatch(LOGIN(false));
+      store.dispatch(SET_TOKEN(null));
+      store.dispatch(SET_PROFILE(null));
+    }
+    if (typeof err?.response?.data === "string") {
+      error(err?.response?.data || "Something went wrong. Try again.");
+    } else if (!err?.response?.data || err?.response?.status === 500) {
+      error("Something went wrong. Try again.");
+    } else if (typeof err?.response?.data === "object") {
+      error(Object.values(err?.response?.data).flat().join("\n"));
+    }
+  }
+};
+
+export const deleteAccount = async (
+  data: { user_id: string; status: "active" | "inactive" },
+  execute: (e: any) => void,
+  error: (e: string) => void
+) => {
+  const formData = new FormData();
+  formData.append("user_id", data.user_id);
+  formData.append("status", data.status);
+
+  var config = {
+    method: "post",
+    url: `${BASE_URL}/auth/de-activate-account`,
+    headers: {
+      Authorization: `Bearer ${store.getState().auth.access_token}`,
+      "Content-Type": "multipart/form-data",
+    },
+    data: formData,
+  };
+
+  try {
+    const response = await axios(config);
+    execute(response.data);
+  } catch (err: any) {
+    if (err?.message === "Network Error") {
+      error("Network error");
+      return;
+      // Handle the case when there is no internet connection
+    }
+    console.log("delete", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
@@ -264,7 +379,7 @@ export const getData = async (
     execute(eval(response.data));
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }

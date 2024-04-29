@@ -87,6 +87,7 @@ const NotificationSection = ({
       data={notificationList}
       keyExtractor={(item) => item.id.toString()}
       ItemSeparatorComponent={() => <Spacer value={H("1%")} axis="vertical" />}
+      ListFooterComponent={() => <Spacer value={H("1%")} axis="vertical" />}
       ListEmptyComponent={
         loaded ? (
           <>
@@ -116,17 +117,18 @@ const NotificationSection = ({
             navigation.navigate("Notification", { data: item })
           }
           style={{ backgroundColor: darkMode ? "#0F0F0F" : "white" }}
-          className="bg-[#0F0F0F] py-2 px-3 flex-row justify-between"
+          className="bg-[#0F0F0F] py-4 px-3 flex-row justify-between"
         >
-          <View className="flex-1 pr-2 flex-row items-center">
+          <View className="flex-1 pr-6 flex-row items-center">
             <View className="h-[60px] justify-center">
               <SmallText
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
-                className="text-[#D4E1D2] text-left p-0 text-[18px] mb-1"
+                className="text-[#D4E1D2] font-RedHatDisplaySemiBold text-left p-0 text-[18px] mb-2"
               >
                 {item.title || "Notification"}
               </SmallText>
               <SmallText
+                // numberOfLine={1}
                 style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
                 className="text-left p-0 text-[14px] text-[#696969]"
               >
@@ -135,7 +137,7 @@ const NotificationSection = ({
             </View>
           </View>
           <View className="h-[60px] justify-center items-end">
-            <SmallText className="text-right p-0 text-[14px] text-[#696969] mb-2">
+            <SmallText className="text-right p-0 text-[14px] text-[#696969]">
               {moment(item.created_at).format("DD/MM/YYYY")}
             </SmallText>
           </View>

@@ -29,7 +29,7 @@ export const getWalletDetails = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -97,7 +97,7 @@ export const initiateWalletTransaction = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -124,11 +124,9 @@ export const getBanks = async (
 ) => {
   var config = {
     method: "get",
-    url: `https://api.paystack.co/bank`,
+    url: `https://api.paystack.co/bank?country=nigeria`,
     headers: {
       Authorization: "Bearer sk_test_1a0d4738e93f6f24d394945aa3e29077adc196bf",
-      Cookie:
-        "sails.sid=s%3A8exw8r7gj6fAkOvtpi-BJ34NxHJBUpL2.YX57UzS1XnykCTLJYirFHTboqPkqmh8GcoUYMqFxQFw",
     },
   };
 
@@ -137,7 +135,7 @@ export const getBanks = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -155,8 +153,8 @@ export const getBanks = async (
 
 export const getAccountName = async (
   data: {
-    acct_no: number;
-    bank_code: number;
+    acct_no: string;
+    bank_code: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void
@@ -174,7 +172,7 @@ export const getAccountName = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
@@ -197,6 +195,8 @@ export const transfer = async (
     bank_code: string;
     currency: "NGN";
     amount: number;
+    email: string;
+    description: string;
   },
   execute: (e: any) => void,
   error: (e: string) => void
@@ -205,7 +205,7 @@ export const transfer = async (
     method: "post",
     url: `https://api.paystack.co/transferrecipient`,
     headers: {
-      Authorization: "Bearer sk_test_1a0d4738e93f6f24d394945aa3e29077adc196bf",
+      Authorization: "Bearer sk_live_4ea30be95138d3466d4136d999154aa9966c81e6",
       "Content-Type": "application/json",
     },
     data,
@@ -228,7 +228,7 @@ export const transfer = async (
       {
         headers: {
           Authorization:
-            "Bearer sk_test_1a0d4738e93f6f24d394945aa3e29077adc196bf",
+            "Bearer sk_live_4ea30be95138d3466d4136d999154aa9966c81e6",
           "Content-Type": "application/json",
         },
       }
@@ -237,7 +237,7 @@ export const transfer = async (
     execute(response1.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("No internet connection");
+      error("Network error");
       return;
       // Handle the case when there is no internet connection
     }
