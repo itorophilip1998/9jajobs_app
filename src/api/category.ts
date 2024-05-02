@@ -182,7 +182,7 @@ export const getUserListing = async (
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("user-listings", err?.response?.data);
+    // console.log("user-listings", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));

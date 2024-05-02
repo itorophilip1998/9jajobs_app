@@ -44,7 +44,7 @@ const routes = [
   { path: "Referrals", name: "Referrals", icon: ReferralIcon },
   // { path: "Packages", name: "Packages", icon: PackageIcon },
   { path: "Verification", name: "Verification", icon: VerifyIcon },
-  { path: "MyListing", name: "My Listing", icon: ListingIcon },
+  { path: "MyListing", name: "My Services", icon: ListingIcon },
   { path: "BoostPost", name: "Boost Post", icon: BoostIcon },
   { path: "EditProfile", name: "Settings", icon: SettingsIcon },
   {

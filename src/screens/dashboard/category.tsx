@@ -21,6 +21,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { RouteProp } from "@react-navigation/native";
 import { GradientText } from "../../components/gradientText";
+import { useDispatch } from "react-redux";
+import { SET_TYPE } from "../../store/searchSlice";
+import { AntDesign } from "@expo/vector-icons";
 
 const Category = ({
   navigation,
@@ -30,6 +33,10 @@ const Category = ({
   route: RouteProp<any>;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
+
+  const dispatch = useDispatch();
+  const { location, search } = useSelector((state: RootState) => state.search);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -42,6 +49,26 @@ const Category = ({
     >
       <SafeAreaView className="flex-1 w-full">
         <TitleWithButton title="Categories" fire={() => navigation.goBack()} />
+        <Pressable
+              onPress={() => {
+                dispatch(SET_TYPE("name"));
+                navigation.navigate("Search");
+              }}
+              style={{ backgroundColor: darkMode ? "#1b1b1b" : "#D4E1D2" }}
+              className="w-[100%] mx-auto px-3 py-3 border border-primary rounded-full flex-row items-center"
+            >
+              <AntDesign
+                name="search1"
+                size={24}
+                color={darkMode ? "#D4E1D2" : "#696969"}
+              />
+              <SmallText
+                style={{ color: darkMode ? "#D4E1D2" : "#0F0F0F" }}
+                className="text-[#D4E1D2] text-left p-0 pl-3"
+              >
+                {search === "" ? "Search here" : search}
+              </SmallText>
+            </Pressable>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={route.params?.data}

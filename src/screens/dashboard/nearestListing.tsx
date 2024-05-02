@@ -88,7 +88,7 @@ const NearestListing = ({
           className="relative flex flex-row items-center w-full justify-between px-3 mb-5 bg-[#0f0f0f]"
         >
           <TitleWithButton
-            title="Nearest Listing"
+            title="Nearest Services"
             fire={() => navigation.goBack()}
           />
         </View>
