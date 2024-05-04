@@ -24,7 +24,7 @@
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.job.ng",
-      "buildNumber": "0.1.9",
+      "buildNumber": "2.0.0",
       "usesIcloudStorage": true,
       "config": {
         "usesNonExemptEncryption": false,
@@ -42,7 +42,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.job.ng",
-      "versionCode": 9,
+      "versionCode": 10,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "config": {
         "googleMaps": {
