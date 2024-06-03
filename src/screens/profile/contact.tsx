@@ -289,7 +289,7 @@ const Contact = ({
           </SmallText>
           <Spacer value={H("1%")} axis="vertical" />
           <InputField
-            onTextChange={(value) => setMessage(value.trim())}
+            onTextChange={(value) => setMessage(value)}
             defaultValue={message}
             placeholder="Enter your message here"
             containerStyle={{

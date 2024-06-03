@@ -211,7 +211,7 @@ const MyListing = ({
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
                   className="text-[#696969] text-[20px] text-center p-0 w-[50%]"
                 >
-                  My Listings
+                  My Services
                 </SmallText>
                 <SmallText
                   style={{ color: darkMode ? "#696969" : "#0f0f0f" }}
