@@ -33,7 +33,7 @@ export const bookListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -70,7 +70,7 @@ export const getAllBookings = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -125,7 +125,7 @@ export const updateBooking = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }

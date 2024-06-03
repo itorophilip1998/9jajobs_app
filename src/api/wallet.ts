@@ -29,7 +29,7 @@ export const getWalletDetails = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -97,7 +97,7 @@ export const initiateWalletTransaction = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -135,7 +135,7 @@ export const getBanks = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -172,7 +172,7 @@ export const getAccountName = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -237,7 +237,7 @@ export const transfer = async (
     execute(response1.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }

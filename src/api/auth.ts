@@ -19,12 +19,7 @@ export const dynamicForm = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
-    console.log("refresh", err?.response?.data);
+   
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
     } else if (!err?.response?.data || err?.response?.status === 500) {
@@ -32,6 +27,7 @@ export const dynamicForm = async (
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
     }
+    
   }
 };
 
@@ -59,11 +55,11 @@ export const expoTokenApi = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("refresh", err?.response?.data);
+    // ;
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
     } else if (!err?.response?.data || err?.response?.status === 500) {
@@ -97,12 +93,12 @@ export const refreshToken = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
-    console.log("refresh", err?.response?.data);
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
+    // ;
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
     } else if (!err?.response?.data || err?.response?.status === 500) {
@@ -146,11 +142,11 @@ export const signUp = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("register", err?.response?.data);
+    // console.log("register", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || "Something went wrong. Try again.");
     } else if (!err?.response?.data?.error || err?.response?.status === 500) {
@@ -186,11 +182,11 @@ export const signIn = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("login", err?.response?.data);
+    // console.log("login", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || err?.response?.status === 500);
     } else if (!err?.response?.data?.error) {
@@ -224,11 +220,11 @@ export const forgot = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("forgot-password", err?.response?.data);
+    // console.log("forgot-password", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || err?.response?.status === 500);
     } else if (!err?.response?.data?.error) {
@@ -268,11 +264,11 @@ export const verifyAndReset = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("verify-reset-error", err?.response?.data);
+    // console.log("verify-reset-error", err?.response?.data);
     if (typeof err?.response?.data?.error === "string") {
       error(err?.response?.data?.error || err?.response?.status === 500);
     } else if (!err?.response?.data?.error) {
@@ -301,11 +297,11 @@ export const logout = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("logout", err?.response?.data);
+    // console.log("logout", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
@@ -345,11 +341,11 @@ export const deleteAccount = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("delete", err?.response?.data);
+    // console.log("delete", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
@@ -379,11 +375,11 @@ export const getData = async (
     execute(eval(response.data));
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("data", err?.response?.data);
+    // console.log("data", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
