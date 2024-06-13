@@ -78,10 +78,10 @@ const Listing = ({
       }}
     >
       <SafeAreaView className="flex-1 w-full">
-        <View
+        {/* <View
           style={{ backgroundColor: darkMode ? "#0f0f0f" : "#FFFFFF" }}
           className="relative flex flex-row items-center w-full justify-between px-3 mb-5 bg-[#0f0f0f]"
-        >
+        > */}
           <TitleWithButton
             title="All Services"
             fire={() => navigation.goBack()}
@@ -106,7 +106,7 @@ const Listing = ({
                 {search === "" ? "Search here" : search}
               </SmallText>
             </Pressable>
-        </View>
+        {/* </View> */}
         <FlatList
           showsVerticalScrollIndicator={false}
           data={allListing}
