@@ -57,7 +57,7 @@
         lng: 7.4801,
       },
       address: ["Amechi junction Agbani Road Enugu Nigeria"],
-      email: ["info@9jajob.com", "9jajobconnect@gmail.com"],
+      email: ["support@9jajob.com"],
       phone: ["+2349151987637"],
     },
     terms: `9JAJOB.COM INT’L SERVICE LIMITED TERMS AND CONDITIONS 
@@ -321,13 +321,13 @@ The Company may update these terms at any time. You are responsible for reviewin
   
 . Contact
 
-For any questions or concerns regarding this Agreement, please contact info@9jajob.com
+For any questions or concerns regarding this Agreement, please contact support@9jajob.com
   
 By using the Platform, you agree to these terms and conditions. If you do not agree, please refrain from using the Platform.
   
 9jajob.com int’l service limited 
 Website: www.9jajob.com
-Contact: info@9jajob.com`,
+Contact: support@9jajob.com`,
     privacy: `PRIVACY POLICY FOR 9JAJOB.COM INT’l SERVICES LIMITED (MOBILE APP/WEBSITE) 
 Last Updated: [25/1/2024]
 This Privacy Policy details how 9JAJOB.COM ("we," "our," or "us") collects, utilizes, and protects your personal information when you use the 9JAJOB.COM Business Listing Platform.  Please carefully read this policy to understand the treatment of your personal data.
@@ -370,10 +370,10 @@ The Platform is not intended for users under 13. Parents or guardians believing 
 8. Changes to this Policy
 This Privacy Policy may be updated to reflect information practice changes. Significant updates will be notified.
 9. Contact Us
-Questions or concerns about this Privacy Policy? Contact us at info@9jajob.com or visit our contact us page 
+Questions or concerns about this Privacy Policy? Contact us at support@9jajob.com or visit our contact us page 
 By using 9JAJOB.COM, you agree to this Privacy Policy. If you disagree, please do not use the Platform.
 9JAJOB.COM
-Info@9jajob.com`,
+support@9jajob.com`,
     about: `Welcome to 9JAJOB.COM – Where Service Discovery Meets Simplicity!
 
 Our startup journey at 9JAJOB.COM began with a simple yet powerful idea: to ease the struggle of finding services quickly, especially in urgent situations or when the usual options fall short. Inspired by TXE Africa, an organization dedicated to eradicating unemployment and underemployment in Nigeria, we embarked on this mission.

@@ -223,11 +223,11 @@ const Dashboard = ({
           <View className="w-full flex-row justify-between items-center">
             {darkMode ? (
               <SmallText className="!text-white p-0 text-left font-RedHatDisplaySemiBold text-[20px]">
-                Trending
+                Trending Services
               </SmallText>
             ) : (
               <GradientText className="!text-[#626262] text-[20px] font-RedHatDisplaySemiBold mt-3">
-                Trending
+                Trending Services
               </GradientText>
             )}
             <Pressable onPress={() => navigation.navigate("TrendingListing")}>
@@ -260,11 +260,11 @@ const Dashboard = ({
           <View className="w-full flex-row justify-between items-center">
             {darkMode ? (
               <SmallText className="!text-white p-0 text-left font-RedHatDisplaySemiBold text-[20px]">
-                Nearest Listing
+                Nearest Services
               </SmallText>
             ) : (
               <GradientText className="!text-[#626262] text-[20px] font-RedHatDisplaySemiBold mt-3">
-                Nearest Listing
+                Nearest Services
               </GradientText>
             )}
             <Pressable onPress={() => navigation.navigate("NearestListing")}>

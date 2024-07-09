@@ -16,11 +16,11 @@ export const getAmenities = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
     console.log("categories", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
@@ -45,12 +45,12 @@ export const getCategories = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
-    console.log("categories", err?.response?.data);
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
+    // console.log("categories", err?.response?.data);
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
     } else if (!err?.response?.data || err?.response?.status === 500) {
@@ -75,7 +75,7 @@ export const getCategoryListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -129,7 +129,7 @@ export const getAllListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -178,11 +178,11 @@ export const getUserListing = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
-    console.log("user-listings", err?.response?.data);
+    // console.log("user-listings", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));

@@ -19,12 +19,12 @@ export const getUser = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
-    console.log("auth-user", err?.response?.data);
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
+    // console.log("auth-user", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
@@ -79,12 +79,12 @@ export const editUser = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
-    console.log("edit-user", err?.response?.data);
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
+    // console.log("edit-user", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
@@ -131,12 +131,12 @@ export const sendContactForm = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
-    console.log("contact-us", err?.response?.data);
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
+    // console.log("contact-us", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));

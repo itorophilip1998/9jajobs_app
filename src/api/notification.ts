@@ -20,11 +20,11 @@ export const getNotification = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
     console.log("get-notification", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
@@ -58,12 +58,12 @@ export const getNotificationCount = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
-    console.log("get-notification-count", err?.response?.data);
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
+    // console.log("get-notification-count", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));
@@ -96,12 +96,12 @@ export const markReadNotification = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-    if (err?.message === "Network Error") {
-      error("Network error");
-      return;
-      // Handle the case when there is no internet connection
-    }
-    console.log("mark-notification", err?.response?.data);
+    // if (err?.message === "Network Error") {
+    //  
+    //   return;
+    //   // Handle the case when there is no internet connection
+    // }
+    // console.log("mark-notification", err?.response?.data);
     if (err?.response?.status === 401) {
       store.dispatch(LOGIN(false));
       store.dispatch(SET_TOKEN(null));

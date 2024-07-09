@@ -171,7 +171,7 @@ const UserProfileCard = ({
                   ? navigation.navigate("Chat", { data: item.user })
                   : Toast.show({
                       type: "error",
-                      text1: "This listing does not have a user.",
+                      text1: "This Services does not have a user.",
                     })
               }
               style={[

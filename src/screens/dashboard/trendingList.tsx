@@ -82,7 +82,7 @@ const TrendingListing = ({
           style={{ backgroundColor: darkMode ? "#0f0f0f" : "#FFFFFF" }}
           className="relative flex flex-row items-center w-full justify-between px-3 mb-5 bg-[#0f0f0f]"
         >
-          <TitleWithButton title="Trending" fire={() => navigation.goBack()} />
+          <TitleWithButton title="Trending Services" fire={() => navigation.goBack()} />
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}

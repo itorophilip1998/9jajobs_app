@@ -72,7 +72,7 @@ const TabNavigation = () => {
       />
       <Tab.Screen
         name="Listing"
-        options={{ tabBarLabel: "Listings" }}
+        options={{ tabBarLabel: "Services" }}
         component={Listing}
       />
       <Tab.Screen

@@ -183,7 +183,7 @@ const BoostDetail = ({
             editable={false}
             suffixIcon={
               <SmallText className="p-0 text-[#696969]">
-                People reached
+               Total Users reached
               </SmallText>
             }
           />

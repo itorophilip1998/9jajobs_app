@@ -21,7 +21,7 @@ export const getRating = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -73,7 +73,7 @@ export const postRate = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
@@ -119,7 +119,7 @@ export const postReport = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-      error("Network error");
+     
       return;
       // Handle the case when there is no internet connection
     }
