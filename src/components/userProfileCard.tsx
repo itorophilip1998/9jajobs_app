@@ -168,7 +168,7 @@ const UserProfileCard = ({
             <TouchableOpacity
               onPress={() =>
                 item?.user
-                  ? navigation.navigate("Chat", { data: item.user })
+                  ? navigation.navigate("Chat", { data:{ friend:item?.user }})
                   : Toast.show({
                       type: "error",
                       text1: "This Services does not have a user.",
