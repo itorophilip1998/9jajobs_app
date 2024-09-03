@@ -17,6 +17,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#023215"
     },
+   "jsEngine": "hermes",
+    "typescript": {
+      "enableHermes": true
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "entitlements": {
