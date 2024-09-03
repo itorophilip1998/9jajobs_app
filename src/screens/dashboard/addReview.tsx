@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { LinearGradient } from "expo-linear-gradient";
 // @ts-ignore
-import StarRating from "react-native-star-rating";
+// import StarRating from "react-native-star-rating";
 import { COLORS } from "../../utility/colors";
 import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { SET_LOADER } from "../../store/formDataSlice";
@@ -109,14 +109,14 @@ const AddReview = ({
           </SmallText>
           <Spacer axis="vertical" value={H("3%")} />
           <View className="w-[70%] mx-auto">
-            <StarRating
+            {/* <StarRating
               disabled={false}
               maxStars={5}
               rating={rating}
               selectedStar={(rating: number) => setRating(rating)}
               fullStarColor={COLORS.primary} // Adjust colors based on mode
               emptyStarColor={COLORS.primary}
-            />
+            /> */}
           </View>
           <Spacer axis="vertical" value={H("3%")} />
           {darkMode ? (

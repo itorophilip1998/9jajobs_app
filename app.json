@@ -7,7 +7,7 @@
     "owner": "9jajob",
     "privacy": "unlisted",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "automatic", 
     "scheme": [
       "job",
       "com.googleusercontent.apps.576653944433-bc46d1ja08f9u1novh0rg5i7o2oh22n0"
@@ -16,11 +16,7 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#023215"
-    },
-   "jsEngine": "hermes",
-    "typescript": {
-      "enableHermes": true
-    },
+    }, 
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "entitlements": {

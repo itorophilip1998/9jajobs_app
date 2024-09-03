@@ -1,1 +1,5 @@
 eas build -p android --profile preview1
+
+
+
+    "react-native-star-rating": "^1.1.0",
