@@ -79,8 +79,7 @@ const Forgot = ({
       dispatch(SET_LOADER(true));
       forgot(
         { email },
-        (response) => {
-          console.log(response);
+        (response) => { 
           setPassedEmail(true);
           Toast.show({
             type: "success",
@@ -104,11 +103,6 @@ const Forgot = ({
       Toast.show({
         type: "error",
         text1: "Invalid Email Address",
-      });
-    } else if (token.length !== 5) {
-      Toast.show({
-        type: "error",
-        text1: "OTP must be 5 digits.",
       });
     } else if (password.length < 8) {
       Toast.show({

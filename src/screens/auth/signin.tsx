@@ -83,12 +83,7 @@ const Signin = ({
         type: "error",
         text1: "Invalid Email Address",
       });
-    } else if (password.length < 8) {
-      Toast.show({
-        type: "error",
-        text1: "Password must not be less than 8 characters.",
-      });
-    } else {
+    }  else {
       dispatch(SET_LOADER(true));
       signIn(
         { email, password },
@@ -149,7 +144,7 @@ const Signin = ({
           },
           (response) => {
             // dispatch(SET_TOKEN(response.access_token));
-            setAuthState("login")
+            setAuthState("login");
             dispatch(LOGIN(false));
             Toast.show({
               type: "success",
@@ -177,7 +172,6 @@ const Signin = ({
     return true;
   };
 
- 
   React.useEffect(() => {
     navigation.addListener("beforeRemove", handleBackPress);
   }, []);
