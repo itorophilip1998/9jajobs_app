@@ -230,7 +230,7 @@ const FreelancerProfile = ({
                   className="p-2 rounded-full bg-[#121212] mb-2"
                 >
                   <Ionicons
-                    name="md-chatbox-ellipses-outline"
+                    name="chatbox-ellipses-outline"
                     size={23}
                     color={COLORS.primary}
                   />

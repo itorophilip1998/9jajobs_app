@@ -54,7 +54,7 @@ const TabNavigation = () => {
           } else if (route.name === "Message") {
             return (
               <Ionicons
-                name="md-chatbox-ellipses-outline"
+                name="chatbox-ellipses-outline"
                 size={size}
                 color={color}
               />

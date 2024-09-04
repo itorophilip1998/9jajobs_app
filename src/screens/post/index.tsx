@@ -78,7 +78,7 @@ const Post = ({
     listing_pictures_number,
     listing_videos_number,
   } = useSelector((state: RootState) => state.formData.dynamicForm);
-  const [walletDetails, setWalletDetails] = React.useState<any>(null);
+  const [walletDetails, setWalletDetails] = React.useState<any | null>(null);
 
   React.useEffect(() => {
     if (focused) {
