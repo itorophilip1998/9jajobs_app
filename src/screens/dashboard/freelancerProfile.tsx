@@ -921,7 +921,7 @@ const FreelancerProfile = ({
                 }}
               >
                 <Ionicons
-                  name="ios-location-sharp"
+                  name="location-sharp"
                   size={24}
                   color={COLORS.primary}
                   style={{ marginRight: 10 }}

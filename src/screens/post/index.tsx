@@ -935,7 +935,7 @@ const Post = ({
                       className="w-full h-full object-cover"
                     />
                     <Ionicons
-                      name="ios-close-circle"
+                      name="close-circle"
                       size={24}
                       color="black"
                       style={{
@@ -983,7 +983,7 @@ const Post = ({
                       className="w-full h-full object-cover"
                     />
                     <Ionicons
-                      name="ios-close-circle"
+                      name="close-circle"
                       size={24}
                       color="black"
                       style={{
@@ -1038,7 +1038,7 @@ const Post = ({
                       style={{ width: "100%", height: "100%" }}
                     />
                     <Ionicons
-                      name="ios-close-circle"
+                      name="close-circle"
                       size={24}
                       color="black"
                       style={{
@@ -1288,7 +1288,7 @@ const Post = ({
                 }}
               >
                 <Ionicons
-                  name="ios-location-sharp"
+                  name="location-sharp"
                   size={24}
                   color={COLORS.primary}
                   style={{ marginRight: 10 }}
