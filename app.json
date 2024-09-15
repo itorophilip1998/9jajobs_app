@@ -5,9 +5,10 @@
     "version": "2.0.0",
     "orientation": "portrait",
     "owner": "9jajob",
-    "privacy": "unlisted",
+    "privacy": "public",
+    "privacyPolicyUrl": "https://9jajob.com/privacy-policy",   
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic", 
+    "userInterfaceStyle": "automatic",
     "scheme": [
       "job",
       "com.googleusercontent.apps.576653944433-bc46d1ja08f9u1novh0rg5i7o2oh22n0"
@@ -16,7 +17,7 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#023215"
-    }, 
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "entitlements": {
@@ -42,7 +43,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.job.ng",
-      "versionCode": 17,
+      "versionCode": 20,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "config": {
         "googleMaps": {
