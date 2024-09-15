@@ -77,6 +77,7 @@ const Post = ({
     listing_expiration_duration,
     listing_pictures_number,
     listing_videos_number,
+    system_payment_mode: paymentMode,
   } = useSelector((state: RootState) => state.formData.dynamicForm);
   const [walletDetails, setWalletDetails] = React.useState<any | null>(null);
 
@@ -395,10 +396,11 @@ const Post = ({
       navigation.navigate("Paystack", {
         amount: Number(listing_amount) || 0,
         callback: createListing,
+        paymentMode,
       });
     }
   };
-
+// console.log(paymentMode);
   const validate = () => {
     if (!category) {
       Toast.show({
@@ -525,7 +527,7 @@ const Post = ({
             className="relative flex flex-row items-center w-full justify-between px-3 mb-3 bg-[#0f0f0f]"
           >
             <TitleWithButton
-              title="Post New Ad"
+              title="Register New Service"
               fire={() => navigation.goBack()}
               //   right
               //   rightFire={() => {}}
@@ -1075,7 +1077,7 @@ const Post = ({
             </View>
             <Spacer axis="vertical" value={H(3)} />
             <Button
-              text="Post Ad"
+              text="Register"
               buttonStyle={{ width: "100%" }}
               onPress={validate}
             />
@@ -1320,11 +1322,16 @@ const Post = ({
       <ErrorVerifyModalContent
         message={{
           title: "Confirm",
-          message: `You will be charged the sum of ₦${Number(
-            listing_amount
-          )?.toLocaleString()} to create this listing. Payment will last for ${Number(
-            listing_expiration_duration
-          ).toLocaleString()} month(s). Do you want to proceed?`,
+          message:
+            paymentMode === "free"
+              ? `
+         You are about to confirm a free payment mode for creating a service. Be aware that it is a promo period, and you will not be charged!
+          `
+              : `You will be charged the sum of ₦${Number(
+                  listing_amount
+                )?.toLocaleString()} to create this listing. Payment will last for ${Number(
+                  listing_expiration_duration
+                ).toLocaleString()} month(s). Do you want to proceed?`,
         }}
         color={COLORS.primary}
         visible={modalVisible}

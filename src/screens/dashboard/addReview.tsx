@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import TitleWithButton from "../../components/titleWithButton";
-
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   widthPercentageToDP as W,
   heightPercentageToDP as H,
@@ -20,13 +20,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { LinearGradient } from "expo-linear-gradient";
 // @ts-ignore
-// import StarRating from "react-native-star-rating";
+import StarView from "react-native-star-view";
 import { COLORS } from "../../utility/colors";
 import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { SET_LOADER } from "../../store/formDataSlice";
 import { postRate } from "../../api/rating";
 import { useDispatch } from "react-redux";
 import Toast from "react-native-toast-message";
+import Stars from "react-native-stars"; 
 
 const AddReview = ({
   navigation,
@@ -108,15 +109,19 @@ const AddReview = ({
             Add a review by typing inside the box
           </SmallText>
           <Spacer axis="vertical" value={H("3%")} />
-          <View className="w-[70%] mx-auto">
-            {/* <StarRating
-              disabled={false}
-              maxStars={5}
-              rating={rating}
-              selectedStar={(rating: number) => setRating(rating)}
-              fullStarColor={COLORS.primary} // Adjust colors based on mode
-              emptyStarColor={COLORS.primary}
-            /> */}
+          <View className=" mx-auto">
+          
+            <Stars
+              default={rating} // Current rating value
+              count={5} // Total number of stars
+              half={false} // Disable half-star ratings (optional)
+              starSize={50} // Size of the stars
+              fullStar={<Icon name={"star"} size={50} color={COLORS.primary} />} // Full star (yellow color)
+              emptyStar={
+                <Icon name={"star-outline"} size={50} color={COLORS.primary} />
+              } // Empty star (yellow color)
+              update={(newRating: number) => setRating(newRating)} // Function to update the rating
+            />
           </View>
           <Spacer axis="vertical" value={H("3%")} />
           {darkMode ? (

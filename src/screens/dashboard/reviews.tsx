@@ -139,38 +139,6 @@ const Reviews = ({
             </View>
           </View>
           <Spacer value={H("3%")} axis="vertical" />
-          {loaded && (
-            <>
-              {rating.length === 0 ? (
-                <>
-                  <View
-                    className="flex-1 w-full h-full justify-center items-center"
-                    style={{ height: H("71%") }}
-                  >
-                    <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
-                      Oops! No Reviews Found
-                    </GradientText>
-                    <Spacer value={H("2%")} axis="vertical" />
-                    <Button
-                      text="Go Back"
-                      onPress={() => navigation.goBack()}
-                      buttonStyleClassName="rounded-md"
-                      buttonStyle={{ width: "100%" }}
-                    />
-                  </View>
-                </>
-              ) : (
-                <>
-                  {rating.map((item: any, idx: number) => (
-                    <React.Fragment key={idx}>
-                      <ReviewCard item={item} />
-                      <Spacer key={idx + 1} value={H("3%")} axis="vertical" />
-                    </React.Fragment>
-                  ))}
-                </>
-              )}
-            </>
-          )}
 
           <Button
             text="Add Review"
@@ -188,6 +156,39 @@ const Reviews = ({
             buttonStyle={{ width: "100%" }}
           />
           <Spacer value={H("3%")} axis="vertical" />
+
+          {loaded && (
+            <>
+              {rating.length === 0 ? (
+                <>
+                  <View
+                    className="flex-1 w-full h-full justify-center items-center"
+                    style={{ height: H("71%") }}
+                  >
+                    <GradientText className="!text-[#626262] text-center text-[20px] font-RedHatDisplaySemiBold mt-3">
+                      No Reviews Found
+                    </GradientText>
+                    <Spacer value={H("2%")} axis="vertical" />
+                    {/* <Button
+                      text="Go Back"
+                      onPress={() => navigation.goBack()}
+                      buttonStyleClassName="rounded-md"
+                      buttonStyle={{ width: "100%" }}
+                    /> */}
+                  </View>
+                </>
+              ) : (
+                <>
+                  {rating.map((item: any, idx: number) => (
+                    <React.Fragment key={idx}>
+                      <ReviewCard item={item} />
+                      <Spacer key={idx + 1} value={H("3%")} axis="vertical" />
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>

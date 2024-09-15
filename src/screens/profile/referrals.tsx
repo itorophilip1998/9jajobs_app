@@ -129,7 +129,7 @@ const Referrals = ({
                 </SmallText>
               </SmallText>
               <Ionicons
-                name="ios-copy-outline"
+                name="copy-outline"
                 size={24}
                 color={COLORS.primary}
                 onPress={async () => {

@@ -337,7 +337,7 @@ const Verification = ({
                     className="w-full h-full object-cover"
                   />
                   <Ionicons
-                    name="ios-close-circle"
+                    name="close-circle"
                     size={24}
                     color="black"
                     style={{
@@ -377,7 +377,7 @@ const Verification = ({
                     className="w-full h-full object-cover"
                   />
                   <Ionicons
-                    name="ios-close-circle"
+                    name="close-circle"
                     size={24}
                     color="black"
                     style={{
@@ -417,7 +417,7 @@ const Verification = ({
                     className="w-full h-full object-cover"
                   />
                   <Ionicons
-                    name="ios-close-circle"
+                    name="close-circle"
                     size={24}
                     color="black"
                     style={{
@@ -457,7 +457,7 @@ const Verification = ({
                     className="w-full h-full object-cover"
                   />
                   <Ionicons
-                    name="ios-close-circle"
+                    name="close-circle"
                     size={24}
                     color="black"
                     style={{
