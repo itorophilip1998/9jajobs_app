@@ -1,18 +1,13 @@
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from "react-native";
 import React from "react";
+import { View, TouchableOpacity } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSelector } from "react-redux";
-import TitleWithButton from "../../components/titleWithButton";
-import { RootState } from "../../store";
-import { width, height } from "../../utility/constant";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, SmallText, Spacer, Title } from "../../components";
+import { useSelector } from "react-redux";
+import { WebView } from "react-native-webview";
+import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Expo
+import { RootState } from "../../store";
+import { Title } from "../../components";
+import { width, height } from "../../utility/constant";
 
 const Privacy = ({
   navigation,
@@ -20,40 +15,45 @@ const Privacy = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const { darkMode } = useSelector((state: RootState) => state.auth);
-  const { data } = useSelector((state: RootState) => state.auth);
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 items-center bg-black"
+    <SafeAreaView
       style={{
+        flex: 1,
         width: width,
         height: height,
         backgroundColor: darkMode ? "black" : "#FFFFFF",
       }}
     >
-      <SafeAreaView className="flex-1 w-full">
-        <Title
-          style={{ color: darkMode ? "white" : "#0f0f0f" }}
-          className="text-white px-3 py-3"
-        >
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingHorizontal: 16,
+          paddingVertical: 8,
+        }}
+      >
+        <Title style={{ color: darkMode ? "white" : "#0f0f0f" }}>
           Privacy Policy
         </Title>
-        <ScrollView className="w-full flex-1">
-          <SmallText
-            style={{ color: darkMode ? "#696969" : "#0f0f0f0" }}
-            className="text-[#696969] text-left text-lg"
-          >
-            {data?.privacy}
-          </SmallText>
-        </ScrollView>
 
-        <Button
-          text={"Close"}
-          onPress={() => navigation.goBack()}
-          buttonStyleClassName="mx-auto my-3"
-        />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+        {/* Close Icon */}
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons
+            name="close"
+            size={24}
+            color={darkMode ? "white" : "black"}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <WebView
+        source={{ uri: "https://9jajob.com/privacy-policy" }}
+        startInLoadingState={true}
+        style={{ flex: 1 }}
+      />
+    </SafeAreaView>
   );
 };
 
