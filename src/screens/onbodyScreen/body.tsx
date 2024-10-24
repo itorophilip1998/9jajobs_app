@@ -35,11 +35,11 @@ const Body = ({
       </View>
       {/* <View className="w-full items-center">
         <Image source={logo} alt="" className="h-[100px] w-[100px]" />
-        <SmallText className="!text-white text-[30px]">9jajob</SmallText>
+        <SmallText className="!text-white text-[30px]">Sabifix</SmallText>
       </View> */}
       <View>
         <SmallText className="text-[18px] !text-white px-9">
-          Refer and earn with 9jajob today
+          Refer and earn with Sabifix today
         </SmallText>
         <View className="flex-row justify-center my-5">
           <View className="border-2 mx-1 border-white rounded-full h-[10px] w-[10px]" />

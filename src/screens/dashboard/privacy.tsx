@@ -49,7 +49,7 @@ const Privacy = ({
       </View>
 
       <WebView
-        source={{ uri: "https://9jajob.com/privacy-policy" }}
+        source={{ uri: "https://sabifix.biz/privacy-policy" }}
         startInLoadingState={true}
         style={{ flex: 1 }}
       />

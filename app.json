@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "9jajob",
-    "slug": "9jajob",
+    "name": "Sabifix",
+    "slug": "Sabifix",
     "version": "2.0.0",
     "orientation": "portrait",
-    "owner": "9jajob",
+    "owner": "Sabifix",
     "privacy": "public",
-    "privacyPolicyUrl": "https://9jajob.com/privacy-policy",   
+    "privacyPolicyUrl": "https://sabifix.biz/privacy-policy",   
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": [

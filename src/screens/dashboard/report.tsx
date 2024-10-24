@@ -59,7 +59,7 @@ const Report = ({
             style={{ color: darkMode ? "#696969" : "#0F0F0F" }}
             className="text-[#696969] text-center p-0 text-[17px] pr-2 font-RedHatDisplayRegular"
           >
-            Report any issue or concern to 9jajob, type your report below
+            Report any issue or concern to Sabifix, type your report below
           </SmallText>
           <Spacer axis="vertical" value={H("3%")} />
           {darkMode ? (

@@ -1,1 +1,1 @@
-export const BASE_URL = "https://api.9jajob.com/api";
+export const BASE_URL = "https://api.sabifix.biz/api";

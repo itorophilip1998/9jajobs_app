@@ -36,7 +36,7 @@ const Transfer = () => {
         <SmallText className="text-[20px] text-[#696969] p-0 font-RedHatDisplayBold mb-2">
           Name:{" "}
           <SmallText className="text-[20px] text-primary p-0 font-RedHatDisplayRegular ">
-            9jajob Inc
+            Sabifix Inc
           </SmallText>
         </SmallText>
         <SmallText className="text-[20px] text-[#696969] p-0 font-RedHatDisplayBold">

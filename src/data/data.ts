@@ -2,16 +2,16 @@
   return {
     faq: [
       {
-        title: "What is 9jajob?",
-        body: "9JAJOB is Nigerian’s leading business and service listing platform where businesses and services can be easily found. It links service providers with clients, allowing for hassle-free bookings. You'll know how far a service provider is in kilometers, making it super convenient. Plus, there are easy ways to contact and chat directly on the platform, ensuring a straightforward and efficient experience for everyone involved",
+        title: "What is Sabifix?",
+        body: "Sabifix is Nigerian’s leading business and service listing platform where businesses and services can be easily found. It links service providers with clients, allowing for hassle-free bookings. You'll know how far a service provider is in kilometers, making it super convenient. Plus, there are easy ways to contact and chat directly on the platform, ensuring a straightforward and efficient experience for everyone involved",
       },
       {
-        title: "Is 9jajob a registered company?",
-        body: "Yes, 9JAJOB is officially registered as 9jajob Int’l Service Limited with the Nigerian Corporate Affairs Commission. All our activities are monitored by the commission to ensure transparency and reliability.",
+        title: "Is Sabifix a registered company?",
+        body: "Yes, Sabifix is officially registered as Sabifix Int’l Service Limited with the Nigerian Corporate Affairs Commission. All our activities are monitored by the commission to ensure transparency and reliability.",
       },
       {
-        title: "Who can join 9jajob?",
-        body: "9JAJOB is open to all Nigerians, whether you're a non-business owner, a business owner, or a service provider. It's designed to simplify the way people find businesses in their area and offers a platform for service providers to own an online shop, making it inclusive for everyone.",
+        title: "Who can join Sabifix?",
+        body: "Sabifix is open to all Nigerians, whether you're a non-business owner, a business owner, or a service provider. It's designed to simplify the way people find businesses in their area and offers a platform for service providers to own an online shop, making it inclusive for everyone.",
       },
       {
         title: "Is registration required?",
@@ -22,12 +22,12 @@
         body: "Users are allowed only one account, but you can list different businesses or services under that single account for easy management.",
       },
       {
-        title: "How can I earn from 9jajob?",
-        body: "Earning on 9jajob is twofold. Firstly, by offering your services to individuals. Secondly, by referring legitimate business or skill owners to join the platform. Earn through the utilization of your services or when your referrals become part of the 9jajob community.",
+        title: "How can I earn from Sabifix?",
+        body: "Earning on Sabifix is twofold. Firstly, by offering your services to individuals. Secondly, by referring legitimate business or skill owners to join the platform. Earn through the utilization of your services or when your referrals become part of the Sabifix community.",
       },
       {
         title: "How can I add my business/skill (handwork)?",
-        body: "To showcase your business or skill on 9jajob, simply log in to your 9jajob app, select 'Post,' fill in your accurate details, and click 'Submit' to complete the process. It's an easy way to connect with potential clients!",
+        body: "To showcase your business or skill on Sabifix, simply log in to your Sabifix app, select 'Post,' fill in your accurate details, and click 'Submit' to complete the process. It's an easy way to connect with potential clients!",
       },
       {
         title: "How does the referral program work?",
@@ -39,32 +39,32 @@
       },
       {
         title: "Are partnerships available?",
-        body: "Absolutely! If you're interested in partnering with 9jajob.com Int'l Service Limited, please contact the Admin through our 'Contact Us' page. Detailed information about partnership opportunities will be provided to you promptly.",
+        body: "Absolutely! If you're interested in partnering with Sabifix.biz Int'l Service Limited, please contact the Admin through our 'Contact Us' page. Detailed information about partnership opportunities will be provided to you promptly.",
       },
       {
-        title: "9jajob Email verification?",
+        title: "Sabifix Email verification?",
         body: "If you've received an account verification email by mistake, it's likely someone entered your email in error. No worries, if you didn't initiate the request, just ignore the email, and your account won't be verified. If you accidentally clicked the link, you can choose to use or delete the account. To sign in afterward, reset the password.",
       },
       {
         title: "Our support unit?",
-        body: "For any inquiries about 9JAJOB, reach out to our support unit through the contact page. We're here to assist you!",
+        body: "For any inquiries about Sabifix, reach out to our support unit through the contact page. We're here to assist you!",
       },
     ],
     contact: {
-      business_name: "9JAJOB.COM",
+      business_name: "Sabifix.biz",
       coordinates: {
         lat: 6.4266,
         lng: 7.4801,
       },
       address: ["Amechi junction Agbani Road Enugu Nigeria"],
-      email: ["support@9jajob.com"],
+      email: ["support@Sabifix.biz"],
       phone: ["+2349151987637"],
     },
-    terms: `9JAJOB.COM INT’L SERVICE LIMITED TERMS AND CONDITIONS 
+    terms: `Sabifix.biz INT’L SERVICE LIMITED TERMS AND CONDITIONS 
 
 Last Updated: [25/1/2024]
   
-These terms and conditions ("Agreement") are entered into by and between the users of 9jajob mobile application/website and 9jajob.com int’l service limited. By accessing or using the Platform, you agree to comply with and be bound by these terms and conditions. If you do not agree to these terms, please do not use the Platform.
+These terms and conditions ("Agreement") are entered into by and between the users of Sabifix mobile application/website and Sabifix.biz int’l service limited. By accessing or using the Platform, you agree to comply with and be bound by these terms and conditions. If you do not agree to these terms, please do not use the Platform.
   
 Table of contents:
   
@@ -118,16 +118,16 @@ PART TWO: Account verification policy
   
 1. Purpose:
   
-The account verification process is designed to ensure the authenticity of businesses and service providers on 9JAJOB.COM, promoting trust and reliability within our community.
+The account verification process is designed to ensure the authenticity of businesses and service providers on Sabifix.biz, promoting trust and reliability within our community.
   
 2. Eligibility:
   
-All businesses and service providers on 9JAJOB.COM are eligible for account verification.
+All businesses and service providers on Sabifix.biz are eligible for account verification.
 Accurate and up-to-date information in the business profile is a prerequisite.
   
 3. Initiation:
   
-Account verification can be initiated by the user through the verification page section of the 9JAJOB mobile app.
+Account verification can be initiated by the user through the verification page section of the Sabifix mobile app.
 Submission of necessary documentation or information which includes National ID cards Driving license or Voters card may be required for the verification process.
   
 4. Documentation:
@@ -137,7 +137,7 @@ Submission of false or misleading documents will result in immediate rejection o
   
 5. Review Process:
   
-All verification requests are subject to review by 9JAJOB.COM.
+All verification requests are subject to review by Sabifix.biz.
 The review process aims to verify the accuracy of the provided information and ensure compliance with platform policies.
 6. Duration:
   
@@ -152,11 +152,11 @@ Users will receive clear explanations for rejection, allowing them to address an
 8. Confidentiality:
   
 Any documentation or information submitted during the verification process is treated with utmost confidentiality.
-9JAJOB.COM does not disclose sensitive information to third parties without user consent, except where required by law.
+Sabifix.biz does not disclose sensitive information to third parties without user consent, except where required by law.
   
 9. Revocation of Verification:
   
-9JAJOB.COM reserves the right to revoke account verification if a user violates platform policies or engages in fraudulent activities.
+Sabifix.biz reserves the right to revoke account verification if a user violates platform policies or engages in fraudulent activities.
 Users will be notified of the revocation, and they may appeal the decision.
   
 10. Appeal Process:
@@ -168,24 +168,24 @@ Users will be notified of the revocation, and they may appeal the decision.
 - Users must promptly update any changes to their information after verification.
 - Failure to update information may result in the suspension of account privileges.
   
-By initiating the account verification process, users agree to comply with these policies. 9JAJOB.COM reserves the right to modify these policies as necessary and will communicate any changes to users
+By initiating the account verification process, users agree to comply with these policies. Sabifix.biz reserves the right to modify these policies as necessary and will communicate any changes to users
   
   
 PART THREE:Referral Program Policy 
   
 1. Program Overview:
   
-The referral program encourages users to refer businesses and service providers to 9JAJOB.COM.
+The referral program encourages users to refer businesses and service providers to Sabifix.biz.
 Referrers earn rewards based on the referred businesses' activities on the platform.
   
 2. Eligibility:
   
-All registered users of 9JAJOB.COM are eligible to participate in the referral program.
+All registered users of Sabifix.biz are eligible to participate in the referral program.
 Users must adhere to the platform's terms of service and guidelines.
   
 3. Referral Process:
   
-Referrers can invite businesses and service providers through a unique referral link provided by 9JAJOB.COM.
+Referrers can invite businesses and service providers through a unique referral link provided by Sabifix.biz.
 Referred businesses must sign up and complete the necessary onboarding steps for the referrer to receive rewards.
   
 4. Reward Structure:
@@ -201,48 +201,48 @@ Note: the name attached to your bank account mist match the name on our platform
    
 6. Valid Referrals:
   
-To be considered a valid referral, the referred business must be new to 9JAJOB.COM.
+To be considered a valid referral, the referred business must be new to Sabifix.biz.
 Businesses previously registered or associated with the referrer will not qualify as valid referrals.
   
 7. Program Abuse:
   
 Any attempt to manipulate or abuse the referral program, including fraudulent activities, will result in immediate disqualification.
-9JAJOB.COM reserves the right to take appropriate action, including the suspension of accounts involved in abuse.
+Sabifix.biz reserves the right to take appropriate action, including the suspension of accounts involved in abuse.
   
 8. Program Changes:
   
-9JAJOB.COM reserves the right to modify or terminate the referral program at any time.
+Sabifix.biz reserves the right to modify or terminate the referral program at any time.
 Users will be notified of any changes to the program through the platform.
   
 9. Communication:
   
 Referrers are responsible for clearly communicating the referral process and any potential rewards to the referred businesses.
-9JAJOB.COM may provide promotional materials to assist referrers in explaining the program.
+Sabifix.biz may provide promotional materials to assist referrers in explaining the program.
   
 10. Disputes:
-- Any disputes regarding referral rewards or the validity of referrals should be reported to 9JAJOB.COM through the designated support channel.
-- Decisions made by 9JAJOB.COM regarding disputes are final.
+- Any disputes regarding referral rewards or the validity of referrals should be reported to Sabifix.biz through the designated support channel.
+- Decisions made by Sabifix.biz regarding disputes are final.
   
 11. Compliance:
   
 - Users participating in the referral program must comply with all applicable laws and regulations.
 - Non-compliance may result in the suspension of account privileges.
   
-By participating in the referral program, users agree to abide by these policies. 9JAJOB.COM reserves the right to enforce these policies and take corrective actions as necessary.
+By participating in the referral program, users agree to abide by these policies. Sabifix.biz reserves the right to enforce these policies and take corrective actions as necessary.
   
 PART FOUR: Promotional offer(business boosting)
   
-Promotional Offer(business boosting) Policy for 9JAJOB.COM
+Promotional Offer(business boosting) Policy for Sabifix.biz
   
 1. Eligibility:
   
-Promotional offers are available to all registered businesses on 9JAJOB.COM.
+Promotional offers are available to all registered businesses on Sabifix.biz.
 Only businesses with completed profiles and accurate information are eligible to participate.
   
 2. Duration:
   
 The duration of the promotional offer is  clearly specified upon activation.
-Extensions or modifications to the duration require prior approval from 9JAJOB.COM.
+Extensions or modifications to the duration require prior approval from Sabifix.biz.
   
 3. Offer Details:
   
@@ -251,7 +251,7 @@ Any conditions, limitations, or exclusions must be transparently communicated.
   
 4. Approval Process:
   
-All promotional offers are subject to approval by 9JAJOB.COM.
+All promotional offers are subject to approval by Sabifix.biz.
 Offers deemed misleading, fraudulent, or in violation of our platform's policies will be rejected.
   
 5. Fair and Equal Treatment:
@@ -276,15 +276,15 @@ Any disputes or issues arising from the offer must be addressed promptly and pro
   
 9. Platform Guidelines:
   
-Promotional offers must comply with 9JAJOB.COM's overall guidelines and policies.
+Promotional offers must comply with Sabifix.biz's overall guidelines and policies.
 Violation of platform policies may result in the removal of the promotional offer and potential account suspension.
   
 10. Termination:
   
-- 9JAJOB.COM reserves the right to terminate any promotional offer at its discretion.
+- Sabifix.biz reserves the right to terminate any promotional offer at its discretion.
 - Businesses violating the terms of this policy may face penalties, including temporary or permanent suspension.
   
-By activating a promotional offer on 9JAJOB.COM, businesses agree to adhere to these policies. Any deviations may lead to the removal of the offer and potential account consequences. We encourage businesses to create exciting and genuine promotions that contribute positively to the user experience on our platform.
+By activating a promotional offer on Sabifix.biz, businesses agree to adhere to these policies. Any deviations may lead to the removal of the offer and potential account consequences. We encourage businesses to create exciting and genuine promotions that contribute positively to the user experience on our platform.
   
 PART FIVE:  Intellectual Property and Disclaimers and limitations of liability 
   
@@ -301,14 +301,14 @@ The Company owns all rights, title, and interest in the Platform, including trad
 2.3 In no event shall the Company be liable for any indirect, consequential, or punitive damages. 
   
 2.4 Financial Transactions Disclaimer
-9JAJOB.COM ("we," "our," or "us") provides a platform for business listings and services. We do not participate in or act as a third party for any monetary transactions between users unless explicitly agreed upon by both parties involved.
+Sabifix.biz ("we," "our," or "us") provides a platform for business listings and services. We do not participate in or act as a third party for any monetary transactions between users unless explicitly agreed upon by both parties involved.
 . User Responsibility:
 All financial transactions conducted through the platform are solely the responsibility of the users involved.
 Users are encouraged to exercise due diligence and caution when engaging in financial transactions.
 . No Third-Party Involvement:
-9JAJOB.COM does not act as a mediator, intermediary, or facilitator in any monetary exchanges unless a specific agreement is established between the involved parties.
+Sabifix.biz does not act as a mediator, intermediary, or facilitator in any monetary exchanges unless a specific agreement is established between the involved parties.
 Users are urged to be vigilant and cautious of potential scams or fraudulent activities related to financial transactions 
-Any financial agreements or arrangements between users should be documented and agreed upon independently outside 9jajob platform. 
+Any financial agreements or arrangements between users should be documented and agreed upon independently outside Sabifix platform. 
 Report any suspicious behavior to us through the contact us page.
 PART SIX: Changes to terms, Governing laws and Contracts 
   
@@ -321,16 +321,16 @@ The Company may update these terms at any time. You are responsible for reviewin
   
 . Contact
 
-For any questions or concerns regarding this Agreement, please contact support@9jajob.com
+For any questions or concerns regarding this Agreement, please contact support@Sabifix.biz
   
 By using the Platform, you agree to these terms and conditions. If you do not agree, please refrain from using the Platform.
   
-9jajob.com int’l service limited 
-Website: www.9jajob.com
-Contact: support@9jajob.com`,
-    privacy: `PRIVACY POLICY FOR 9JAJOB.COM INT’l SERVICES LIMITED (MOBILE APP/WEBSITE) 
+Sabifix.biz int’l service limited 
+Website: www.Sabifix.biz
+Contact: support@Sabifix.biz`,
+    privacy: `PRIVACY POLICY FOR Sabifix.biz INT’l SERVICES LIMITED (MOBILE APP/WEBSITE) 
 Last Updated: [25/1/2024]
-This Privacy Policy details how 9JAJOB.COM ("we," "our," or "us") collects, utilizes, and protects your personal information when you use the 9JAJOB.COM Business Listing Platform.  Please carefully read this policy to understand the treatment of your personal data.
+This Privacy Policy details how Sabifix.biz ("we," "our," or "us") collects, utilizes, and protects your personal information when you use the Sabifix.biz Business Listing Platform.  Please carefully read this policy to understand the treatment of your personal data.
 1. Information We Collect
 1.1. Information You Provide:
 When creating an account or using the Platform, we collect data such as your name, email address, and any other information voluntarily provided.
@@ -370,24 +370,24 @@ The Platform is not intended for users under 13. Parents or guardians believing 
 8. Changes to this Policy
 This Privacy Policy may be updated to reflect information practice changes. Significant updates will be notified.
 9. Contact Us
-Questions or concerns about this Privacy Policy? Contact us at support@9jajob.com or visit our contact us page 
-By using 9JAJOB.COM, you agree to this Privacy Policy. If you disagree, please do not use the Platform.
-9JAJOB.COM
-support@9jajob.com`,
-    about: `Welcome to 9JAJOB.COM – Where Service Discovery Meets Simplicity!
+Questions or concerns about this Privacy Policy? Contact us at support@Sabifix.biz or visit our contact us page 
+By using Sabifix.biz, you agree to this Privacy Policy. If you disagree, please do not use the Platform.
+Sabifix.biz
+support@Sabifix.biz`,
+    about: `Welcome to Sabifix.biz – Where Service Discovery Meets Simplicity!
 
-Our startup journey at 9JAJOB.COM began with a simple yet powerful idea: to ease the struggle of finding services quickly, especially in urgent situations or when the usual options fall short. Inspired by TXE Africa, an organization dedicated to eradicating unemployment and underemployment in Nigeria, we embarked on this mission.
+Our startup journey at Sabifix.biz began with a simple yet powerful idea: to ease the struggle of finding services quickly, especially in urgent situations or when the usual options fall short. Inspired by TXE Africa, an organization dedicated to eradicating unemployment and underemployment in Nigeria, we embarked on this mission.
   
 Despite facing initial challenges like tight finances and the need to build trust, we persisted, driven by our commitment to addressing this common problem. Listening and learning from our experiences, we've evolved. Now, with your needs in mind, we're thrilled to announce that  our user-friendly mobile app, crafted diligently by our dedicated team is live. This step forward aligns with our mission to simplify service discovery for people in Nigeria and beyond, while also contributing to the growth of employment by promoting skill acquisition.
   
-At 9JAJOB.COM, we take pride in being a registered company, recognized by the Nigerian Corporate Affairs Commission. Our simplified system offers multiple avenues for seamless service, including in-app chat, phone calls, booking services, emails, websites, and more. This comprehensive approach ensures that connecting with services is not only easy but also tailored to your preferences.
+At Sabifix.biz, we take pride in being a registered company, recognized by the Nigerian Corporate Affairs Commission. Our simplified system offers multiple avenues for seamless service, including in-app chat, phone calls, booking services, emails, websites, and more. This comprehensive approach ensures that connecting with services is not only easy but also tailored to your preferences.
   
-We want to applaud our dedicated team whose tireless efforts have transformed our vision into reality. Their commitment to excellence has played a pivotal role in shaping 9JAJOB.COM into the user-centric platform it is today.
+We want to applaud our dedicated team whose tireless efforts have transformed our vision into reality. Their commitment to excellence has played a pivotal role in shaping Sabifix.biz into the user-centric platform it is today.
   
 Our journey is an ongoing quest to make service discovery simple, and we invite investors and partners to join us on this exciting path. As we continue to overcome challenges and refining of  our platform. We are also seeking valuable mentorship to guide us through this dynamic landscape.
   
-At 9JAJOB.COM, our solution is a user-centric service discovery platform aimed at simplifying the process of finding services, especially in urgent situations. Our  mobile app  enhances accessibility, ensuring a seamless experience for users. This innovative solution not only connects service seekers with providers but also builds a community united in the pursuit of eradicating unemployment and underemployment. We're excited to introduce a referral program, fostering a sense of oneness within our community and creating a network of shared experiences and reliable service connections.
+At Sabifix.biz, our solution is a user-centric service discovery platform aimed at simplifying the process of finding services, especially in urgent situations. Our  mobile app  enhances accessibility, ensuring a seamless experience for users. This innovative solution not only connects service seekers with providers but also builds a community united in the pursuit of eradicating unemployment and underemployment. We're excited to introduce a referral program, fostering a sense of oneness within our community and creating a network of shared experiences and reliable service connections.
   
-Join us as we redefine the landscape of service accessibility, offering a platform that not only connects individuals with services but also contributes to building a stronger, more connected community. Welcome to the 9JAJOB.COM experience – Where Every Connection Matters!`,
+Join us as we redefine the landscape of service accessibility, offering a platform that not only connects individuals with services but also contributes to building a stronger, more connected community. Welcome to the Sabifix.biz experience – Where Every Connection Matters!`,
   };
 })();

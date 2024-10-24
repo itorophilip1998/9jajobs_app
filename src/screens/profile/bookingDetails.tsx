@@ -38,7 +38,7 @@ import { SET_LOADER } from "../../store/formDataSlice";
 import { updateBooking } from "../../api/booking";
 
 // [{"created_at": "2024-01-15T10:28:21.000000Z", "date": "2024-01-09", "id": 26, "listing_id": 214, "listings": {"id":
-// 214, "listing_address": "Port Harcourt, Rivers, Nigeria", "listing_featured_photo": "https://9jajob.sfo3.digitaloceanspaces.com/uploads/listing_featured_photos/", "listing_name": "luxelook", "listing_phone": "07041528380", "rate_star": 0, "verified": null}, "status": "pending", "time": "07:00:00", "updated_at": "2024-01-15T10:28:21.000000Z", "user_id": 525}]
+// 214, "listing_address": "Port Harcourt, Rivers, Nigeria", "listing_featured_photo": "https://Sabifix.sfo3.digitaloceanspaces.com/uploads/listing_featured_photos/", "listing_name": "luxelook", "listing_phone": "07041528380", "rate_star": 0, "verified": null}, "status": "pending", "time": "07:00:00", "updated_at": "2024-01-15T10:28:21.000000Z", "user_id": 525}]
 
 const BookingDetails = ({
   navigation,

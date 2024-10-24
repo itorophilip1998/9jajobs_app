@@ -197,7 +197,7 @@ const Signin = ({
             className="!text-white font-RedHatDisplayBold"
             style={{ color: darkMode ? "white" : "black" }}
           >
-            9JAJOB
+            Sabifix
           </Title>
         </View>
         <Spacer axis="vertical" value={H(12)} />
