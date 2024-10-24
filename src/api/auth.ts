@@ -368,7 +368,7 @@ export const getData = async (
   var config = {
     method: "get",
     // url: `https://9jajob.sfo3.cdn.digitaloceanspaces.com/assets/data.ts`,
-    url: "https://space.9jajob.com/assets/data.ts",
+    url: "https://space.sabifix.biz/assets/data.ts",
   };
 
   try {

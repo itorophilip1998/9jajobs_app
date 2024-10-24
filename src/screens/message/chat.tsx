@@ -284,7 +284,7 @@ const Chat = ({
               }}
               className="mr-3"
             >
-              <Ionicons name="ios-call" size={24} color={COLORS.primary} />
+              <Ionicons name="call" size={24} color={COLORS.primary} />
             </Pressable>
 
             {chats?.chats?.length > 0 && (
