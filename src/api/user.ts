@@ -116,7 +116,7 @@ export const sendContactForm = async (
   formData.append("name", data.name);
   formData.append("phone", data.phone);
   formData.append("email", data.email);
-  formData.append("message", data.email);
+  formData.append("message", data.message);
   var config = {
     method: "post",
     url: `${BASE_URL}/contact-us`,

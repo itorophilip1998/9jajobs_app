@@ -43,7 +43,7 @@ const Contact = ({
   const { data } = useSelector((state: RootState) => state.auth);
   const validate = () => {
     if (!name) {
-      Toast.show({ 
+      Toast.show({
         type: "error",
         text1: "Name is required.",
       });
@@ -52,14 +52,12 @@ const Contact = ({
         type: "error",
         text1: "Email is Invalid.",
       });
-    }
-    // else if (!validatePhone(phone, 11)) {
-    //   Toast.show({
-    //     type: "error",
-    //     text1: "Phone number must be 11 digits",
-    //   });
-    // }
-    else if (!message) {
+    } else if (!validatePhone(phone, 11)) {
+      Toast.show({
+        type: "error",
+        text1: "Phone number must be 11 digits",
+      });
+    } else if (!message) {
       Toast.show({
         type: "error",
         text1: "Message is required.",
@@ -81,7 +79,8 @@ const Contact = ({
           navigation.goBack();
           dispatch(SET_LOADER(false));
         },
-        (error) => {
+        (error) => { 
+
           Toast.show({
             type: "error",
             text1: error,
@@ -261,7 +260,7 @@ const Contact = ({
             style={{ backgroundColor: darkMode ? "transparent" : "white" }}
             className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
           />
-          {/* <Spacer value={H("2%")} axis="vertical" />
+          <Spacer value={H("2%")} axis="vertical" />
           <SmallText
             style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}
             className="text-[#D4E1D2] text-left p-0"
@@ -281,7 +280,7 @@ const Contact = ({
             autoCapitalize={"sentences"}
             style={{ backgroundColor: darkMode ? "transparent" : "white" }}
             className="border-[#626262] focus:border-primary border rounded-full p-0 px-3"
-          /> */}
+          />
           <Spacer value={H("2%")} axis="vertical" />
           <SmallText
             style={{ color: darkMode ? "#D4E1D2" : "#0f0f0f" }}

@@ -39,7 +39,7 @@
     "expo-status-bar": "~1.12.1",
     "expo-updates": "~0.25.24",
     "expo-video-thumbnails": "~8.0.0",
-    "firebase": "^10.4.0",
+    "firebase": "^10.4.0", 
     "has": "^1.0.4",
     "moment": "^2.29.4",
     "nativewind": "^2.0.11",
