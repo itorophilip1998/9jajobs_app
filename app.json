@@ -46,7 +46,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.job.ng",
-      "versionCode": 24,
+      "versionCode": 25,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "config": {
         "googleMaps": {
