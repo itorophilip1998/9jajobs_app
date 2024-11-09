@@ -108,7 +108,6 @@ const Post = ({
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [categorySearch, setCategorySearch] = React.useState<string>("");
   const [amenitySearch, setAmenitySearch] = React.useState<string>("");
-
   const [business, setBusiness] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
   const [category, setCategory] = React.useState<any>(null);
@@ -134,7 +133,6 @@ const Post = ({
   const [selectedVideos, setSelectedVideos] = React.useState<any[]>([]);
   const [selectedImages, setSelectedImages] = React.useState<any[]>([]);
   const [logo, setLogo] = React.useState<any>(null);
-
   const [allCategory, setAllCategory] = React.useState<any[]>([]);
   const [allAmenities, setAllAmenities] = React.useState<any[]>([]);
 
@@ -392,6 +390,8 @@ const Post = ({
   const submit = () => {
     if (walletDetails?.balance > Number(listing_amount)) {
       createListing();
+    } else if (paymentMode === "free") {
+      createListing(); 
     } else {
       navigation.navigate("Paystack", {
         amount: Number(listing_amount) || 0,
@@ -400,7 +400,7 @@ const Post = ({
       });
     }
   };
-// console.log(paymentMode);
+  // console.log(paymentMode);
   const validate = () => {
     if (!category) {
       Toast.show({
@@ -1325,7 +1325,7 @@ const Post = ({
           message:
             paymentMode === "free"
               ? `
-         You are about to confirm a free payment mode for creating a service. Be aware that it is a promo period, and you will not be charged!
+              You are about to confirm a free payment mode for creating a service. Be aware that it is a promo period, and you will not be charged!
           `
               : `You will be charged the sum of ₦${Number(
                   listing_amount

@@ -76,7 +76,7 @@ const Listing = ({
         height: height,
         backgroundColor: darkMode ? "black" : "#D4E1D2",
       }}
-    >
+    > 
       <SafeAreaView className="flex-1 w-full">
         {/* <View
           style={{ backgroundColor: darkMode ? "#0f0f0f" : "#FFFFFF" }}

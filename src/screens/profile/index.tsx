@@ -153,8 +153,7 @@ const Profile = ({
             alignItems: "center",
             flexWrap: "wrap",
           }}
-          className="w-full px-3 pb-3"
-        >
+          className="w-full px-3 pb-3">
           {routes.map((item, idx) => (
             <ProfileMenuCard navigation={navigation} item={item} key={idx} />
           ))}
