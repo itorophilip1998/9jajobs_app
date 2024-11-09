@@ -48,7 +48,7 @@
     "react-native-collapsible": "^1.6.1",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-google-places-autocomplete": "^2.5.2",
-    "react-native-maps": "1.14.0",
+    "react-native-maps": "^1.18.2",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-paystack-webview": "git+https://github.com/codrexy/React-Native-Paystack-WebView.git#master",
     "react-native-raw-bottom-sheet": "~2.2.0",

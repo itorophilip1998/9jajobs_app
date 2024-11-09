@@ -31,9 +31,12 @@
         "usesNonExemptEncryption": false,
         "googleMapsApiKey": "AIzaSyDADxCsbzRzu3czMCsOURExEQrZSewTaEM"
       },
+        "googleMapsApiKey": "AIzaSyDADxCsbzRzu3czMCsOURExEQrZSewTaEM",
+
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location to get businesses around you.",
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": ["remote-notification"],
+        "GMSApiKey": "AIzaSyDADxCsbzRzu3czMCsOURExEQrZSewTaEM"
       }
     },
     "android": {
