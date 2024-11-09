@@ -286,7 +286,8 @@ const Post = ({
     navigation.navigate("Dashboard");
     addListing(
       {
-        listing_creation_amount: Number(listing_amount)?.toString(),
+        listing_creation_amount:
+          paymentMode === "free" ? "0" : Number(listing_amount)?.toString(),
         listing_name: business,
         listing_address: location,
         listing_category_id: category?.id,
@@ -391,7 +392,7 @@ const Post = ({
     if (walletDetails?.balance > Number(listing_amount)) {
       createListing();
     } else if (paymentMode === "free") {
-      createListing(); 
+      createListing();
     } else {
       navigation.navigate("Paystack", {
         amount: Number(listing_amount) || 0,
@@ -1325,7 +1326,7 @@ const Post = ({
           message:
             paymentMode === "free"
               ? `
-              You are about to confirm a free payment mode for creating a service. Be aware that it is a promo period, and you will not be charged!
+              You are about to confirm a Free-Mode for creating a service. Be aware that it is a promo period, and you will not be charged!
           `
               : `You will be charged the sum of ₦${Number(
                   listing_amount
