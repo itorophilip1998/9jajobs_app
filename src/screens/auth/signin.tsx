@@ -95,7 +95,7 @@ const Signin = ({
         (response) => {
           dispatch(SET_TOKEN(response.access_token));
           dispatch(LOGIN(true));
-          console.log(response);
+
           Toast.show({
             type: "success",
             text1: response.message,
@@ -149,7 +149,7 @@ const Signin = ({
           },
           (response) => {
             // dispatch(SET_TOKEN(response.access_token));
-            setAuthState("login")
+            setAuthState("login");
             dispatch(LOGIN(false));
             Toast.show({
               type: "success",
@@ -177,7 +177,6 @@ const Signin = ({
     return true;
   };
 
- 
   React.useEffect(() => {
     navigation.addListener("beforeRemove", handleBackPress);
   }, []);
