@@ -19,7 +19,6 @@ export const dynamicForm = async (
     const response = await axios(config);
     execute(response.data);
   } catch (err: any) {
-   
     if (typeof err?.response?.data === "string") {
       error(err?.response?.data);
     } else if (!err?.response?.data || err?.response?.status === 500) {
@@ -27,7 +26,6 @@ export const dynamicForm = async (
     } else if (typeof err?.response?.data === "object") {
       error(Object.values(err?.response?.data).flat().join("\n"));
     }
-    
   }
 };
 
@@ -55,7 +53,6 @@ export const expoTokenApi = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-     
       return;
       // Handle the case when there is no internet connection
     }
@@ -94,7 +91,7 @@ export const refreshToken = async (
     execute(response.data);
   } catch (err: any) {
     // if (err?.message === "Network Error") {
-    //  
+    //
     //   return;
     //   // Handle the case when there is no internet connection
     // }
@@ -142,7 +139,6 @@ export const signUp = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-     
       return;
       // Handle the case when there is no internet connection
     }
@@ -182,7 +178,6 @@ export const signIn = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-     
       return;
       // Handle the case when there is no internet connection
     }
@@ -220,7 +215,6 @@ export const forgot = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-     
       return;
       // Handle the case when there is no internet connection
     }
@@ -264,7 +258,6 @@ export const verifyAndReset = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-     
       return;
       // Handle the case when there is no internet connection
     }
@@ -297,7 +290,6 @@ export const logout = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-     
       return;
       // Handle the case when there is no internet connection
     }
@@ -341,7 +333,6 @@ export const deleteAccount = async (
     execute(response.data);
   } catch (err: any) {
     if (err?.message === "Network Error") {
-     
       return;
       // Handle the case when there is no internet connection
     }
@@ -376,7 +367,6 @@ export const getData = async (
     execute(eval(response.data));
   } catch (err: any) {
     if (err?.message === "Network Error") {
-     
       return;
       // Handle the case when there is no internet connection
     }

@@ -83,7 +83,7 @@ const Signin = ({
         type: "error",
         text1: "Invalid Email Address",
       });
-    }  else {
+    } else {
       dispatch(SET_LOADER(true));
       signIn(
         { email, password },
@@ -143,14 +143,16 @@ const Signin = ({
             re_password: confirmPassword,
           },
           (response) => {
-            // dispatch(SET_TOKEN(response.access_token));
-            setAuthState("login");
-            dispatch(LOGIN(false));
-            Toast.show({
-              type: "success",
-              text1: "Created. Check your mail to verify your account.",
-            });
-            dispatch(SET_LOADER(false));
+            if (response) {
+              // dispatch(SET_TOKEN(response.access_token));
+              setAuthState("login");
+              dispatch(LOGIN(false));
+              Toast.show({
+                type: "success",
+                text1: "Created. Check your mail to verify your account.",
+              });
+              dispatch(SET_LOADER(false));
+            }
           },
           (error) => {
             Toast.show({
